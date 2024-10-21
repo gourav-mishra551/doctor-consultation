@@ -29,8 +29,8 @@ function CategoriesDetails() {
     },[])
     const FetchCategory =async()=>{
       try {
-        const res=await axios.get(`https://api.assetorix.com/ah/api/v1/dc/user/getSingleCategory/${id}`)
-        setResult(res.data.checkCategory);
+        const res=await axios.get(`https://api.assetorix.com/ah/api/v1/dc/user/category/${id}`)
+        setResult(res.data.data);
         
       } catch (error) {
         
@@ -40,7 +40,7 @@ function CategoriesDetails() {
 
     const FetchDoctersData=async()=>{
         try {
-            const res=await axios.get("https://api.assetorix.com/ah/api/v1/dc/user/getdoctor")
+            const res=await axios.get("https://api.assetorix.com/ah/api/v1/dc/user/doctors")
             setDoctersData(res.data.data);
         } catch (error) {
             
