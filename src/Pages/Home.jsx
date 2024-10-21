@@ -15,6 +15,7 @@ import { MdOutlineEmail } from "react-icons/md";
 import { VscSave } from "react-icons/vsc";
 import { CiPhone } from "react-icons/ci";
 import OurServices from "../Components/OurServices";
+import MegaMenu from "../Components/MegaMenu";
 const Home = () => {
   const settings = {
     dots: false,
@@ -32,6 +33,7 @@ const Home = () => {
       <header className="App-header">
         <TopHeader />
         <Navbar />
+        <MegaMenu/>
         <Headers />
         <OurServices />
         <div className="py-10">
