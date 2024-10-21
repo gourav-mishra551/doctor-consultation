@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate, useParams } from 'react-router-dom';
-import Navbar from './Navbar';
-import Footer from './Footer';
 import axios from 'axios';
 
 const Categories = () => {
@@ -15,10 +13,12 @@ const Categories = () => {
 
     const FetchData = async () => {
         try {
-            const res = await axios.get("https://api.assetorix.com/ah/api/v1/dc/user/getCategory")
-            SetResult(res.data.getdata)
+            const res = await axios.get("https://api.assetorix.com/ah/api/v1/dc/user/Category")
+            SetResult(res.data.data)
         } catch (error) {
-
+                if(error){
+                    setError(error.message)
+                }
         }
     }
 
@@ -26,13 +26,6 @@ const Categories = () => {
         FetchData()
        
     }, [])
-
- 
-   
-
-
-
-
     return (
         <>
 
@@ -47,7 +40,7 @@ const Categories = () => {
                 </div>
 
                 <div className='grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-8'>
-                    {result.map((item) => (
+                    {result?.map((item) => (
 
                         <div key={item._id} className="categories mt-[50px] cursor-pointer"
                             onClick={() => navigate(`/CategoriesDetails/${item._id}`, { state: { title: item.title } })}>

@@ -52,7 +52,7 @@ const DoctorForm = () => {
 
     const SelectSpecialty = async () => {
         try {
-            const array = await fetch("https://api.assetorix.com/ah/api/v1/dc/user/getCategory")
+            const array = await fetch("https://api.assetorix.com/ah/api/v1/dc/user/Category")
             const result = await array.json()
             const specialty = result.getdata.map((ele) => ({
                 _id: ele._id,  // Extract _id
