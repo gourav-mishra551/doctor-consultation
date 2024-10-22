@@ -8,6 +8,7 @@ import axios from 'axios';
 import TopHeader from './TopHeader';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const DoctorForm = () => {
     const [formValues, setFormValues] = useState({
@@ -27,7 +28,29 @@ const DoctorForm = () => {
         aboutDoctor: "",
         councilName: "",
         RegistrationNumber: '',
-        language: []
+        language: [],
+        qualifications: [{
+            sequenceNumber: 1,
+            instituteName: '',
+            degree: '',
+            fieldOfStudy: '',
+            startDate: { month: '', year: '' },
+            endDate: { month: '', year: '' },
+            description: '',
+            skills: []
+        }],
+        years_of_experience: [{
+            sequenceNumber: 1,
+            jobTitle: '',
+            employmentType: 'Work from Office',
+            organizationName: '',
+            organizationLocation: '',
+            startDate: { month: '', year: '' },
+            endDate: { month: '', year: '' },
+            isPresent: false,
+            description: '',
+            skills: []
+        }]
     });
 
     const [isOpen, setIsOpen] = useState(false);
@@ -75,44 +98,56 @@ const DoctorForm = () => {
 
         }
     }
-    console.log(specialtyoptions);
 
-
-
-
-    const handleSpecialtyChange = (event) => {
-        const selectedOptions = Array.from(event.target.selectedOptions).map(option => option.value);
-        setFormValues((prev) => ({
-            ...prev,
-            specialitycategories: selectedOptions, // Store the selected specialty IDs
-        }));
-    };
-    const [showSpecialization, setShowSpecialization] = useState([true]);
-
-    const handlePlusClick = () => {
-        setShowSpecialization((prev) => [...prev, true]);
-        setFormValues((prev) => ({
-            ...prev,
-            specialitycategories: [...prev.specialitycategories, ""],
-        }));
+    const handleInputChange = (e, index, arrayName, fieldName) => {
+        const newArray = [...formValues[arrayName]];
+        newArray[index][fieldName] = e.target.value;
+        setFormValues({ ...formValues, [arrayName]: newArray });
     };
 
-    const handleMinusClick = (index) => {
-        setShowSpecialization((prev) => prev.filter((_, i) => i !== index));
-        setFormValues((prev) => ({
-            ...prev,
-            specialitycategories: prev.specialitycategories.filter((_, i) => i !== index),
-        }));
+    // Add new qualification entry
+    const addQualification = () => {
+        setFormValues({
+            ...formValues,
+            qualifications: [
+                ...formValues.qualifications,
+                {
+                    sequenceNumber: formValues.qualifications.length + 1,
+                    instituteName: '',
+                    degree: '',
+                    fieldOfStudy: '',
+                    startDate: { month: '', year: '' },
+                    endDate: { month: '', year: '' },
+                    description: '',
+                    skills: []
+                }
+            ]
+        });
     };
 
-    const handleInputChange = (index) => (event) => {
-        const newSpecializations = [...formValues.specialitycategories];
-        newSpecializations[index] = event.target.value;
-        setFormValues((prev) => ({
-            ...prev,
-            specialitycategories: newSpecializations,
-        }));
+    // Add new experience entry
+    const addExperience = () => {
+        setFormValues({
+            ...formValues,
+            years_of_experience: [
+                ...formValues.years_of_experience,
+                {
+                    sequenceNumber: formValues.years_of_experience.length + 1,
+                    jobTitle: '',
+                    employmentType: 'Work from Office',
+                    organizationName: '',
+                    organizationLocation: '',
+                    startDate: { month: '', year: '' },
+                    endDate: { month: '', year: '' },
+                    isPresent: false,
+                    description: '',
+                    skills: []
+                }
+            ]
+        });
     };
+
+
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -177,8 +212,6 @@ const DoctorForm = () => {
             setSpecialityError(false);
             SetVisitingModeError(false);
             // proceed with form submission
-            console.log("Form submitted successfully");
-            console.log(formValues); // Show form values in console
             toast.success('Doctor information submitted successfully!');
         }
 
@@ -253,9 +286,6 @@ const DoctorForm = () => {
         });
     };
 
-    // const [languageOptions] = useState(language)
-
-    //specialization
 
     const CouncilName = ["Punjab Medical Council", "Bihar Medical Council", "Gujarat Medical Council", "Andhra Pradesh Medical Council", "Maharashtra Medical Council", "Rajasthan Medical Council", "Travancore Cochin Medical Council, Trivandrum", "Vidharba Medical Council", "Assam Medical Council", "karnataka Medical Council", "Orissa Council of Medical Registration", "Bombay Medical Council", "Madhya Pradesh Medical Council", "West Bengal Medical Council", "Uttar Pradesh Medical Council", "Madras Medical Council", "Tamil Nadu Medical Council", "Indian Medical Council"]
 
@@ -269,6 +299,7 @@ const DoctorForm = () => {
                     <div className="w-1/2 flex justify-between">
                         <div className={`h-2 w-full rounded-full ${step >= 1 ? 'bg-[#00768A]' : 'bg-gray-300'}`} />
                         <div className={`h-2 w-full rounded-full ${step >= 2 ? 'bg-[#00768A]' : 'bg-gray-300'}`} />
+                        <div className={`h-2 w-full rounded-full ${step >= 3 ? 'bg-[#00768A]' : 'bg-gray-300'}`} />
                     </div>
                 </div>
 
@@ -339,7 +370,7 @@ const DoctorForm = () => {
 
                                 {/* Visiting Mode */}
                                 <div>
-                                    <label  htmlFor="visitingMode" className="text-[#00768A]">Select Visiting Mode:</label>
+                                    <label htmlFor="visitingMode" className="text-[#00768A]">Select Visiting Mode:</label>
                                     <select name="visitingMode" value={formValues.visitingMode} onChange={handleChange} className="border border-gray-300 w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A]" required>
                                         <option>Select Visit Mode</option>
                                         <option value="Offline">Offline</option>
@@ -392,7 +423,7 @@ const DoctorForm = () => {
                                     />
                                 </div>
                                 <div className="gap-5">
-                                    <label className="text-[#00768A]"  htmlFor="DoctorDescription">Doctor's Description</label>
+                                    <label className="text-[#00768A]" htmlFor="DoctorDescription">Doctor's Description</label>
                                     <textarea className="border border-gray-300 w-full h-18 p-3 rounded-md focus:outline-none focus:border-[#00768A]" placeholder='Enter Description' name="aboutDoctor" value={formValues.aboutDoctor} onChange={handleChange} required>
 
                                     </textarea>
@@ -472,10 +503,151 @@ const DoctorForm = () => {
                             {/* Navigation Buttons */}
                             <div className="flex justify-between mt-6">
                                 <button type="button" onClick={handlePreviousStep} className="bg-gray-400 text-white px-6 py-2 rounded-md hover:bg-gray-500">Back</button>
-                                <button type="submit" className="bg-[#00768A] text-white px-6 py-2 rounded-md hover:bg-[#00607A]">Submit</button>
+                                <button type="button" onClick={handleNextStep} className="bg-[#00768A] text-white px-6 py-2 rounded-md hover:bg-[#00607A]">Next</button>
                             </div>
                         </div>
                     )}
+                    {step === 3 && (
+                        <div className="p-6 bg-white rounded-lg shadow-md">
+                            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Doctor Profile Form</h2>
+
+                            {/* Qualifications Section */}
+                            <h3 className="text-xl font-semibold text-gray-700 mb-4">Qualifications</h3>
+                            <DragDropContext onDragEnd={(result) => onDragEnd(result, 'qualifications')}>
+                                <Droppable droppableId="qualifications">
+                                    {(provided) => (
+                                        <div
+                                            {...provided.droppableProps}
+                                            ref={provided.innerRef}
+                                            className="border border-dashed border-gray-400 p-4 rounded-md"
+                                        >
+                                            {formValues.qualifications.map((qual, index) => (
+                                                <Draggable key={qual.id || `qual-${index}`} draggableId={`qual-${index}`} index={index}>
+                                                    {(provided, snapshot) => (
+                                                        <div
+                                                            ref={provided.innerRef}
+                                                            {...provided.draggableProps}
+                                                            {...provided.dragHandleProps}
+                                                            className={`qualification-item mb-4 p-4 bg-gray-50 rounded-lg border border-gray-300 transition-transform duration-300 ${snapshot.isDragging ? "shadow-lg transform scale-105" : ""
+                                                                }`}
+                                                        >
+                                                            <div className="mb-3">
+                                                                <label className="block text-sm font-medium text-gray-600">Institute Name:</label>
+                                                                <input
+                                                                    type="text"
+                                                                    className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                                    value={qual.instituteName}
+                                                                    onChange={(e) => handleInputChange(e, index, 'qualifications', 'instituteName')}
+                                                                />
+                                                            </div>
+
+                                                            <div className="mb-3">
+                                                                <label className="block text-sm font-medium text-gray-600">Degree:</label>
+                                                                <input
+                                                                    type="text"
+                                                                    className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                                    value={qual.degree}
+                                                                    onChange={(e) => handleInputChange(e, index, 'qualifications', 'degree')}
+                                                                />
+                                                            </div>
+
+                                                            <div className="mb-3">
+                                                                <label className="block text-sm font-medium text-gray-600">Field of Study:</label>
+                                                                <input
+                                                                    type="text"
+                                                                    className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                                    value={qual.fieldOfStudy}
+                                                                    onChange={(e) => handleInputChange(e, index, 'qualifications', 'fieldOfStudy')}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </Draggable>
+                                            ))}
+                                            {provided.placeholder}
+                                        </div>
+                                    )}
+                                </Droppable>
+                            </DragDropContext>
+
+                            <button
+                                type="button"
+                                onClick={addQualification}
+                                className="mb-6 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500 transition duration-300"
+                            >
+                                Add Qualification
+                            </button>
+
+                            {/* Experience Section */}
+                            <h3 className="text-xl font-semibold text-gray-700 mb-4">Years of Experience</h3>
+                            <DragDropContext onDragEnd={(result) => onDragEnd(result, 'years_of_experience')}>
+                                <Droppable droppableId="years_of_experience">
+                                    {(provided) => (
+                                        <div
+                                            {...provided.droppableProps}
+                                            ref={provided.innerRef}
+                                            className="border border-dashed border-gray-400 p-4 rounded-md"
+                                        >
+                                            {formValues.years_of_experience.map((exp, index) => (
+                                                <Draggable key={exp.id || `exp-${index}`} draggableId={`exp-${index}`} index={index}>
+                                                    {(provided, snapshot) => (
+                                                        <div
+                                                            ref={provided.innerRef}
+                                                            {...provided.draggableProps}
+                                                            {...provided.dragHandleProps}
+                                                            className={`experience-item mb-4 p-4 bg-gray-50 rounded-lg border border-gray-300 transition-transform duration-300 ${snapshot.isDragging ? "shadow-lg transform scale-105" : ""
+                                                                }`}
+                                                        >
+                                                            <div className="mb-3">
+                                                                <label className="block text-sm font-medium text-gray-600">Job Title:</label>
+                                                                <input
+                                                                    type="text"
+                                                                    className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                                    value={exp.jobTitle}
+                                                                    onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'jobTitle')}
+                                                                />
+                                                            </div>
+
+                                                            <div className="mb-3">
+                                                                <label className="block text-sm font-medium text-gray-600">Employment Type:</label>
+                                                                <select
+                                                                    className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                                    value={exp.employmentType}
+                                                                    onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'employmentType')}
+                                                                >
+                                                                    <option value="Work from Office">Work from Office</option>
+                                                                    <option value="Work from Home">Work from Home</option>
+                                                                    <option value="Hybrid work">Hybrid work</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </Draggable>
+                                            ))}
+                                            {provided.placeholder}
+                                        </div>
+                                    )}
+                                </Droppable>
+                            </DragDropContext>
+
+                            <button
+                                type="button"
+                                onClick={addExperience}
+                                className="mb-6 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500 transition duration-300"
+                            >
+                                Add Experience
+                            </button>
+
+                            {/* Submit Button */}
+                            <button
+                                type="submit"
+                                className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500 transition duration-300"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    )}
+
                 </form>
             </div >
 
