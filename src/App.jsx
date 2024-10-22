@@ -55,9 +55,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path='/DrExam' element={<DrExam/>}/>
+          <Route path='/doctor-slots-generation' element={<DrExam/>}/>
           <Route path="/auth" element={<SignupLogin />} />
-          <Route path='/dr-form' element={<DoctorForm />} />
+          <Route path='/doctor-onboarding-form' element={<DoctorForm />} />
           <Route path='/categories' element={<Categories />} />
           <Route path='/CategoriesDetails/:id' element={<CategoriesDetails/>}/>
           <Route path='/doctors' element={<DoctorsCrew />} />
