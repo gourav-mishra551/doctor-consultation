@@ -15,7 +15,9 @@ import { MdOutlineEmail } from "react-icons/md";
 import { VscSave } from "react-icons/vsc";
 import { CiPhone } from "react-icons/ci";
 import MegaMenu from "../Components/MegaMenu";
+import { useState } from "react";
 const Home = () => {
+  const [MegaMenubtn,setMegaMenubtn]=useState(false)
   const settings = {
     dots: false,
     infinite: true,
@@ -31,8 +33,11 @@ const Home = () => {
     <div>
       <header className="App-header">
         <TopHeader />
-        <Navbar />
-        <MegaMenu/>
+        <Navbar  />
+        {/* {
+          MegaMenubtn ? <MegaMenu /> :null
+        } */}
+        
         <Headers />
      
         <div className="py-10">
