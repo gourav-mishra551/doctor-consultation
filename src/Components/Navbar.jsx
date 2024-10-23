@@ -435,12 +435,12 @@ const Navbar = () => {
         <div className="flex items-center">
           <div className="hidden sm:flex justify-end gap-10">
             <div className="relative cursor-pointer group">
-              <span className="relative z-10">Home</span>
+              <span className="relative z-10"><Link to="/">Home</Link></span>
               <span className="absolute left-0 bottom-0 h-0.5 w-full bg-blue-500 scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
             </div>
 
             <div className="relative cursor-pointer group">
-              <span className="relative z-10">About</span>
+              <span className="relative z-10"><Link to="/about">About</Link></span>
               <span className="absolute left-0 bottom-0 h-0.5 w-full bg-blue-500 scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
             </div>
 
@@ -458,12 +458,12 @@ const Navbar = () => {
             </div>
 
             <div className="relative cursor-pointer group">
-              <span className="relative z-10">Doctors</span>
+              <span className="relative z-10"><Link to="/CategoriesDetails/:id">Doctors</Link></span>
               <span className="absolute left-0 bottom-0 h-0.5 w-full bg-blue-500 scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
             </div>
 
             <div className="relative cursor-pointer group">
-              <span className="relative z-10">Contact</span>
+              <span className="relative z-10"><Link to="/contact-us">Contact</Link></span>
               <span className="absolute left-0 bottom-0 h-0.5 w-full bg-blue-500 scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
             </div>
           </div>
@@ -497,7 +497,7 @@ const Navbar = () => {
             Home
           </Link>
 
-          <Link to="/" className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white">
+          <Link to="/about" className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white">
             About
           </Link>
 
@@ -531,11 +531,11 @@ const Navbar = () => {
             </div>
           
 
-          <Link to="/" className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white">
+          <Link to="/CategoriesDetails/:id" className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white">
             Doctors
           </Link>
 
-          <Link to="/" className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white">
+          <Link to="/contact-us" className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white">
             Contact
           </Link>
         </div>
