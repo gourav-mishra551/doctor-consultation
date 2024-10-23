@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FaGraduationCap } from "react-icons/fa";
 import { FaCommentDots } from "react-icons/fa";
 import { MdOutlineAddLocation } from "react-icons/md";
+import Calendar from './Calender';
 import DrAppointmentBooking from './DrApointmentBooking';
 
 const DrIndividualProfileOverview = () => {
