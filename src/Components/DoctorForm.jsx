@@ -22,7 +22,6 @@ const DoctorForm = () => {
             PinCode: "",
         },
         hospital_contact: "",
-        qualifications: [],
         hospital_email: "",
         visitingMode: "offline",
         aboutDoctor: "",
@@ -638,24 +637,7 @@ const DoctorForm = () => {
                                         required
                                     />
                                 </div>
-                                <div>
-                                    <label className="text-[#00768A]" htmlFor="YearsOfExperience">Years of Experience</label>
-                                    <input
-                                        type="month"
-                                        className="border border-gray-300 w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A]"
-                                        placeholder="Years of Experience"
-                                        // name="years_of_experience"
-                                        name="experienceYear"
-                                        value={formValues.experienceYear}
-                                        onChange={(e) => handleInputChange(e, 'experienceYear')}
-                                        // value={formValues.years_of_experience}
-                                        // onChange={handleChange}
 
-
-                                        required
-                                        min="2018-03"
-                                    />
-                                </div>
                                 <div className="gap-5">
                                     <label className="text-[#00768A]" htmlFor="DoctorDescription">Doctor's Description</label>
                                     <textarea className="border border-gray-300 w-full h-18 p-3 rounded-md focus:outline-none focus:border-[#00768A]" placeholder='Enter Description' name="aboutDoctor" value={formValues.aboutDoctor} onChange={handleChange} required>

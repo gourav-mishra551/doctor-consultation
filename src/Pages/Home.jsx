@@ -27,7 +27,37 @@ const Home = () => {
     speed: 4000,
     autoplaySpeed: 2000,
     cssEase: "linear",
+    responsive: [
+      {
+        breakpoint: 1024, // Screens smaller than 1024px
+        settings: {
+          slidesToShow: 2, // Show 2 slides on medium screens
+          slidesToScroll: 1,
+          infinite: true,
+          dots: false,
+        },
+      },
+      {
+        breakpoint: 768, // Screens smaller than 768px
+        settings: {
+          slidesToShow: 1, // Show 1 slide on small screens
+          slidesToScroll: 1,
+          infinite: true,
+          dots: false,
+        },
+      },
+      {
+        breakpoint: 480, // Screens smaller than 480px
+        settings: {
+          slidesToShow: 1, // Show 1 slide on very small screens
+          slidesToScroll: 1,
+          infinite: true,
+          dots: false,
+        },
+      },
+    ],
   };
+  
 
   return (
     <div>
