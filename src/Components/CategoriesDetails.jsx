@@ -59,7 +59,7 @@ function CategoriesDetails() {
             <div
                 className="relative h-[40vh] flex justify-center items-center "
                 style={{
-                    backgroundImage: `url(${result.image})`,
+                    backgroundImage: `url(${result?.banner})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                 }}
