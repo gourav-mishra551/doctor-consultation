@@ -200,7 +200,7 @@ function CategoriesDetails() {
 
             <div style={{ marginTop: "30px", height: "auto", backgroundColor: "rgb(249,250,251)", padding: "60px" }}>
 
-                <p style={{ textAlign: "center", width: "80%", alignItems: "center", margin: "auto", justifyContent: "center", textAlign: "justify" }}>{result.longDescription} </p>  </div>
+                <p style={{ textAlign: "center", width: "80%", alignItems: "center", margin: "auto", justifyContent: "center" }}>{result.longDescription} </p>  </div>
             {/* <Faq /> */}
 
 
