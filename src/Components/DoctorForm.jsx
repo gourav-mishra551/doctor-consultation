@@ -637,7 +637,11 @@ const DoctorForm = () => {
                                         required
                                     />
                                 </div>
+<<<<<<< HEAD
+                               
+=======
 
+>>>>>>> 25c38cc27dcfdd27fa08ca77c6c7420bca2afe2f
                                 <div className="gap-5">
                                     <label className="text-[#00768A]" htmlFor="DoctorDescription">Doctor's Description</label>
                                     <textarea className="border border-gray-300 w-full h-18 p-3 rounded-md focus:outline-none focus:border-[#00768A]" placeholder='Enter Description' name="aboutDoctor" value={formValues.aboutDoctor} onChange={handleChange} required>
@@ -992,6 +996,7 @@ const DoctorForm = () => {
                                                                 !exp.isPresent && (  // If `isPresent` is false, show End Date inputs
                                                                     <div className="mb-3 flex gap-4">
                                                                         <div>
+                                                                            
                                                                             <label className="block text-sm font-medium text-[#00768A]">End Month:</label>
                                                                             <input
                                                                                 type="text"
