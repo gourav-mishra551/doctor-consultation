@@ -748,7 +748,7 @@ const DoctorForm = () => {
                                                 name="instituteName"
                                                 required
                                                 className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
-                                                value={qual.instituteName}
+                                                value={qual?.instituteName}
                                                 onChange={(e) => handleInputChange(e, index, 'qualifications', 'instituteName')}
                                             />
                                         </div>
