@@ -894,172 +894,166 @@ const DoctorForm = () => {
 
                             {/* Experience Section */}
                             <h3 className="text-xl font-semibold text-[#00768A] mb-4">Years of Experience</h3>
-                            <DragDropContext onDragEnd={(result) => onDragEnd(result, 'years_of_experience')}>
-                                <Droppable droppableId="years_of_experience">
-                                    {(provided) => (
-                                        <div
-                                            {...provided.droppableProps}
-                                            ref={provided.innerRef}
-                                            className="border border-dashed border-gray-400 p-4 rounded-md"
-                                        >
-                                            {formValues.years_of_experience.map((exp, index) => (
-                                                <Draggable key={exp.id || `exp-${index}`} draggableId={`exp-${index}`} index={index}>
-                                                    {(provided, snapshot) => (
-                                                        <div
-                                                            ref={provided.innerRef}
-                                                            {...provided.draggableProps}
-                                                            {...provided.dragHandleProps}
-                                                            className={`experience-item mb-4 p-4 bg-gray-50 rounded-lg border border-gray-300 transition-transform duration-300 ${snapshot.isDragging ? "shadow-lg transform scale-105" : ""
-                                                                }`}
-                                                        >
-                                                            {
-                                                                index >= 1 ? <div className='flex justify-end'><MdDelete onClick={() => HandleDeleteExperience(index)} /></div> : null
-                                                            }
+                            <div className="border border-dashed border-gray-400 p-4 rounded-md">
+                                {formValues.years_of_experience.map((exp, index) => (
+                                    <div
+                                        key={exp.id || `exp-${index}`}
+                                        className="experience-item mb-4 p-4 bg-gray-50 rounded-lg border border-gray-300 transition-transform duration-300"
+                                    >
+                                        {index >= 1 ? (
+                                            <div className="flex justify-end">
+                                                <MdDelete onClick={() => HandleDeleteExperience(index)} />
+                                            </div>
+                                        ) : null}
 
-
-                                                            <div className="mb-3">
-                                                                <label className="block text-sm font-medium text-[#00768A]">Job Title:</label>
-                                                                <input
-                                                                    type="text"
-                                                                    className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
-                                                                    value={exp.jobTitle}
-                                                                    onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'jobTitle')}
-                                                                />
-                                                            </div>
-
-                                                            <div className="mb-3">
-                                                                <label className="block text-sm font-medium text-[#00768A]">Employment Type:</label>
-                                                                <select
-                                                                    className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                                                    value={exp.employmentType}
-                                                                    onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'employmentType')}
-                                                                >
-                                                                    <option value="Work from Office">Work from Office</option>
-                                                                    <option value="Work from Home">Work from Home</option>
-                                                                    <option value="Hybrid work">Hybrid work</option>
-                                                                </select>
-                                                            </div>
-
-                                                            <div className='mb-3'>
-                                                                <label className="block text-sm font-medium text-[#00768A]">Organisation Name</label>
-                                                                <input
-                                                                    type="text"
-                                                                    className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
-                                                                    value={exp.organizationName}
-                                                                    onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'organizationName')}
-                                                                />
-                                                            </div>
-
-                                                            <div className='mb-3'>
-                                                                <label className="block text-sm font-medium text-[#00768A]">Organisation Location</label>
-                                                                <input
-                                                                    type="text"
-                                                                    className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
-                                                                    value={exp.organizationLocation}
-                                                                    onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'organizationLocation')}
-                                                                />
-                                                            </div>
-
-                                                            {/* start Month ,Year */}
-                                                            <div className="mb-3 flex gap-4">
-                                                                <div>
-                                                                    <label className="block text-sm font-medium text-[#00768A]">Start Month:</label>
-                                                                    <input
-                                                                        type="text"
-                                                                        name="startMonth"
-                                                                        placeholder="MM"
-                                                                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
-                                                                        value={exp.startDate?.month || ''} // Use optional chaining
-                                                                        onChange={(e) => handleInputChange(e, index, 'startDate', 'month')}
-                                                                    />
-                                                                </div>
-                                                                <div>
-                                                                    <label className="block text-sm font-medium text-[#00768A]">Start Year:</label>
-                                                                    <input
-                                                                        type="text"
-                                                                        name="startYear"
-                                                                        placeholder="YYYY"
-                                                                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
-                                                                        value={exp.startDate?.year || ''} // Use optional chaining
-                                                                        onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'startDate')}
-                                                                    />
-                                                                </div>
-                                                                <input type="checkbox" value="exp.isPresent" name='isPresent'
-                                                                    onChange={() => handleIsPresentChange(index)} />
-                                                            </div>
-
-                                                            {
-                                                                !exp.isPresent && (  // If `isPresent` is false, show End Date inputs
-                                                                    <div className="mb-3 flex gap-4">
-                                                                        <div>
-                                                                            <label className="block text-sm font-medium text-[#00768A]">End Month:</label>
-                                                                            <input
-                                                                                type="text"
-                                                                                name="endMonth"
-                                                                                placeholder="MM"
-                                                                                className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
-                                                                                value={exp.endDate?.month}
-                                                                                onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'endDate')}
-                                                                            />
-                                                                        </div>
-                                                                        <div>
-                                                                            <label className="block text-sm font-medium text-[#00768A]">End Year:</label>
-                                                                            <input
-                                                                                type="text"
-                                                                                name="endYear"
-                                                                                placeholder="YYYY"
-                                                                                className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
-                                                                                value={exp.endDate?.year}
-                                                                                onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'endDate')}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                )
-                                                            }
-
-
-                                                            <div className="mb-3">
-                                                                <label className="block text-sm font-medium text-[#00768A]">Description</label>
-                                                                <textarea value={exp.description} onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'description')} className="border border-gray-300 w-full h-18 p-3 rounded-md focus:outline-none focus:border-[#00768A]" placeholder='Enter Description' required>
-
-                                                                </textarea>
-                                                            </div>
-
-                                                            <div className='mb-3 flex gap-3'>
-                                                                <div className='w-[80%]'>
-                                                                    <label className="block text-sm font-medium text-[#00768A]">Skills</label>
-                                                                    <input type="text"
-                                                                        placeholder='Skills'
-                                                                        value={skillInput} // Bind the input value to state
-                                                                        onChange={(e) => setSkillInput(e.target.value)}
-                                                                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
-
-                                                                    />
-                                                                </div>
-                                                                <button type='button' onClick={() => HandleSkillOfExperience(index)} className='mb-6 px-4 py-2 mt-6 bg-[#00607A] text-white rounded-md hover:bg-[#306978] transition duration-300'>Add</button>
-                                                            </div>
-
-                                                            {
-                                                                formValues.years_of_experience.map((exp, index) => (
-                                                                    <div className='flex flex-wrap gap-2' key={index}>
-                                                                        {exp.skills.map((skill, skillIndex) => (
-                                                                            <div className='flex items-center gap-2 bg-[#00768A]  p-2 rounded-md' key={skillIndex}>
-                                                                                <p className='text-[white]'>{skill}</p> <ImCross style={{ fontSize: "10px", color: "white", marginTop: "5px" }} onClick={() => HandleExperienceSkillDelete(index, skillIndex)} />
-                                                                            </div>
-                                                                        ))}
-                                                                    </div>
-                                                                ))
-                                                            }
-
-                                                        </div>
-                                                    )}
-                                                </Draggable>
-                                            ))}
-                                            {provided.placeholder}
+                                        <div className="mb-3">
+                                            <label className="block text-sm font-medium text-[#00768A]">Job Title:</label>
+                                            <input
+                                                type="text"
+                                                className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                                                value={exp.jobTitle}
+                                                onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'jobTitle')}
+                                            />
                                         </div>
-                                    )}
-                                </Droppable>
-                            </DragDropContext>
+
+                                        <div className="mb-3">
+                                            <label className="block text-sm font-medium text-[#00768A]">Employment Type:</label>
+                                            <select
+                                                className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                value={exp.employmentType}
+                                                onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'employmentType')}
+                                            >
+                                                <option value="Work from Office">Work from Office</option>
+                                                <option value="Work from Home">Work from Home</option>
+                                                <option value="Hybrid work">Hybrid work</option>
+                                            </select>
+                                        </div>
+
+                                        <div className="mb-3">
+                                            <label className="block text-sm font-medium text-[#00768A]">Organisation Name:</label>
+                                            <input
+                                                type="text"
+                                                className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                                                value={exp.organizationName}
+                                                onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'organizationName')}
+                                            />
+                                        </div>
+
+                                        <div className="mb-3">
+                                            <label className="block text-sm font-medium text-[#00768A]">Organisation Location:</label>
+                                            <input
+                                                type="text"
+                                                className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                                                value={exp.organizationLocation}
+                                                onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'organizationLocation')}
+                                            />
+                                        </div>
+
+                                        {/* Start Month, Year */}
+                                        <div className="mb-3 flex gap-4">
+                                            <div>
+                                                <label className="block text-sm font-medium text-[#00768A]">Start Month:</label>
+                                                <input
+                                                    type="text"
+                                                    name="startMonth"
+                                                    placeholder="MM"
+                                                    className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                                                    value={exp.startDate?.month || ''}
+                                                    onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'startDate')}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-[#00768A]">Start Year:</label>
+                                                <input
+                                                    type="text"
+                                                    name="startYear"
+                                                    placeholder="YYYY"
+                                                    className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                                                    value={exp.startDate?.year || ''}
+                                                    onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'startDate')}
+                                                />
+                                            </div>
+                                            <input
+                                                type="checkbox"
+                                                checked={exp.isPresent}
+                                                name="isPresent"
+                                                onChange={() => handleIsPresentChange(index)}
+                                            />
+                                        </div>
+
+                                        {!exp.isPresent && (
+                                            <div className="mb-3 flex gap-4">
+                                                <div>
+                                                    <label className="block text-sm font-medium text-[#00768A]">End Month:</label>
+                                                    <input
+                                                        type="text"
+                                                        name="endMonth"
+                                                        placeholder="MM"
+                                                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                                                        value={exp.endDate?.month}
+                                                        onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'endDate')}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium text-[#00768A]">End Year:</label>
+                                                    <input
+                                                        type="text"
+                                                        name="endYear"
+                                                        placeholder="YYYY"
+                                                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                                                        value={exp.endDate?.year}
+                                                        onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'endDate')}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        <div className="mb-3">
+                                            <label className="block text-sm font-medium text-[#00768A]">Description:</label>
+                                            <textarea
+                                                value={exp.description}
+                                                onChange={(e) => handleInputChange(e, index, 'years_of_experience', 'description')}
+                                                className="border border-gray-300 w-full h-18 p-3 rounded-md focus:outline-none focus:border-[#00768A]"
+                                                placeholder="Enter Description"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="mb-3 flex gap-3">
+                                            <div className="w-[80%]">
+                                                <label className="block text-sm font-medium text-[#00768A]">Skills:</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Skills"
+                                                    value={skillInput}
+                                                    onChange={(e) => setSkillInput(e.target.value)}
+                                                    className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                                                />
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => HandleSkillOfExperience(index)}
+                                                className="mb-6 px-4 py-2 mt-6 bg-[#00607A] text-white rounded-md hover:bg-[#306978] transition duration-300"
+                                            >
+                                                Add
+                                            </button>
+                                        </div>
+
+                                        <div className="flex flex-wrap gap-2">
+                                            {exp.skills.map((skill, skillIndex) => (
+                                                <div className="flex items-center gap-2 bg-[#00768A] p-2 rounded-md" key={skillIndex}>
+                                                    <p className="text-white">{skill}</p>
+                                                    <ImCross
+                                                        style={{ fontSize: '10px', color: 'white', marginTop: '5px' }}
+                                                        onClick={() => HandleExperienceSkillDelete(index, skillIndex)}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
                             <div className='flex justify-between'>
                                 <button
                                     type="button"
