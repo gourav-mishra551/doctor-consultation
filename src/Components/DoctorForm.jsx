@@ -8,7 +8,6 @@ import axios from 'axios';
 import TopHeader from './TopHeader';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { ImCross } from 'react-icons/im';
 
 const DoctorForm = () => {
