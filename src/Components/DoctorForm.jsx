@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaMinus, FaPlus } from "react-icons/fa";
 import toast, { Toaster } from 'react-hot-toast';
-import Multiselect from 'multiselect-react-dropdown';
 import { MdCancel, MdDelete } from "react-icons/md";
 import { TiTickOutline } from "react-icons/ti";
 import axios from 'axios';
