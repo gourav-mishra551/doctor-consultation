@@ -170,10 +170,25 @@ const DoctorForm = () => {
 
             if (category === 'qualifications') {
                 // Update qualifications
+                // const updatedQualifications = [...prevState.qualifications];
+                // updatedQualifications[index][field] = value;
                 const updatedQualifications = [...prevState.qualifications];
+
+                if (typeof updatedQualifications[index] !== 'object') {
+                    // Initialize the qualification as an object if it's not an object
+                    updatedQualifications[index] = {
+                        instituteName: '',
+                        degree: '',
+                        fieldOfStudy: '',
+                        startDate: { month: '', year: '' },
+                        endDate: { month: '', year: '' },
+                        description: '',
+                        skills: []
+                    };
+                }
                 updatedQualifications[index][field] = value;
 
-                updatedState.qualifications = updatedQualifications;
+            updatedState.qualifications = updatedQualifications;
             } else if (category === 'years_of_experience') {
                 // Update years_of_experience
                 const updatedExperiences = [...prevState.years_of_experience];
@@ -212,17 +227,25 @@ const DoctorForm = () => {
     // Specific handler for nested fields (like startDate and endDate)
     const handleDateChange = (e, index, field, subField) => {
         const { value } = e.target;
-
+    
         setFormValues((prevState) => {
             const updatedQualifications = [...prevState.qualifications];
+    
+            // Ensure the field (e.g., startDate or endDate) exists and is initialized as an object
+            if (!updatedQualifications[index][field]) {
+                updatedQualifications[index][field] = { month: '', year: '' }; // Initialize with empty values
+            }
+    
+            // Now safely update the subField (month or year)
             updatedQualifications[index][field][subField] = value;
-
+    
             return {
                 ...prevState,
                 qualifications: updatedQualifications
             };
         });
     };
+    
 
 
     // Handling drag end (if you are using Drag and Drop context)
@@ -458,10 +481,41 @@ const DoctorForm = () => {
 
         console.log(formValues.qualifications);
 
+        const {
+            specialitycategories,
+            hospitalName,
+            clinic_hospital_address,
+            hospital_contact,
+            hospital_email,
+            visitingMode,
+            aboutDoctor,
+            councilName,
+            RegistrationNumber,
+            language,
+            qualifications,
+            years_of_experience
+        } = formValues;
+        
+        const payload = {
+            specialitycategories,
+            hospitalName,
+            clinic_hospital_address,
+            hospital_contact,
+            hospital_email,
+            visitingMode,
+            aboutDoctor,
+            councilName,
+            RegistrationNumber,
+            language,
+            qualifications,
+            years_of_experience
+        };
+        
+
         try {
-            const res = await axios.post("https://api.assetorix.com/ah/api/v1/dc/user/doctor/temp/add", {
-                formValues
-            }, {
+            const res = await axios.post("https://api.assetorix.com/ah/api/v1/dc/user/doctor/temp", 
+                payload
+            , {
                 headers: {
                     "authorization": `Bearer ${token}`,
                     "id": id
@@ -637,11 +691,8 @@ const DoctorForm = () => {
                                         required
                                     />
                                 </div>
-<<<<<<< HEAD
                                
-=======
 
->>>>>>> 25c38cc27dcfdd27fa08ca77c6c7420bca2afe2f
                                 <div className="gap-5">
                                     <label className="text-[#00768A]" htmlFor="DoctorDescription">Doctor's Description</label>
                                     <textarea className="border border-gray-300 w-full h-18 p-3 rounded-md focus:outline-none focus:border-[#00768A]" placeholder='Enter Description' name="aboutDoctor" value={formValues.aboutDoctor} onChange={handleChange} required>
@@ -755,7 +806,7 @@ const DoctorForm = () => {
                                                 name="instituteName"
                                                 required
                                                 className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
-                                                value={qual.instituteName}
+                                                value={formValues.qualifications[index]?.instituteName || ''}
                                                 onChange={(e) => handleInputChange(e, index, 'qualifications', 'instituteName')}
                                             />
                                         </div>
@@ -974,7 +1025,7 @@ const DoctorForm = () => {
                                                                         placeholder="MM"
                                                                         className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
                                                                         value={exp.startDate?.month || ''} // Use optional chaining
-                                                                        onChange={(e) => handleInputChange(e, index, 'startDate', 'month')}
+                                                                        onChange={(e) => handleInputChange(e, index, 'years_of_experience','startDate')}
                                                                     />
                                                                 </div>
                                                                 <div>
