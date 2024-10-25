@@ -28,7 +28,7 @@ const Headers = () => {
                 </p>
 
                 <button className="px-8 py-3 mt-5 text-white bg-teal-600 hover:bg-teal-700 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
-                  Learn More
+                  Find a doctor
                 </button>
               </div>
             </div>
