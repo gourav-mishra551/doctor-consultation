@@ -44,6 +44,7 @@ import DownloadApp from './Components/DownloadApp';
 import CategoriesDetails from './Components/CategoriesDetails';
 import DRProfileShow from './Components/DRProfileShow';
 import DrAppointmentCreation from './Components/DrAppoinmentCreation';
+import FirstQuestion from './Pages/AppointmentBooking/FirstQuestion';
 
 import DrExam from './Components/DrExam';
 
@@ -92,6 +93,7 @@ function App() {
           <Route path='/data-filling-form' element={<DataFillingForm />} />
           <Route path='/how-it-works' element={<HowItWorks />} />
           <Route path='/download-app' element={<DownloadApp />} />
+          <Route path='appointments' element={<FirstQuestion/>} />
           {/* <Route path='/login' element={<Login />} /> */}
         </Routes>
       </BrowserRouter>
