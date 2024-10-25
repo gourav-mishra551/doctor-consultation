@@ -65,7 +65,7 @@ function App() {
           <Route path='/about' element={<About />} />
           <Route path='/contact-us' element={<ContactPage />} />
           <Route path='/drs-profile' element={<DrProfilePage />} />
-          <Route path='/dr-indi' element={<DrIndividualProfilePage />} />
+          <Route path='/dr-indi/:id' element={<DrIndividualProfilePage />} />
           <Route path='/DrAppointmentCreation' element={<DrAppointmentCreation/>}/>
           <Route path='/DRProfileShow' element={<DRProfileShow/>}/>
           <Route path='/calender' element={<Calendar />} />
