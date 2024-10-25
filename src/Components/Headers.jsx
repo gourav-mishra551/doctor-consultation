@@ -1,5 +1,6 @@
 import image from "../Assests/hero-back.jpg"
 import OurServices from "./OurServices";
+import { Link } from "react-router-dom";
 
 const Headers = () => {
   return (
@@ -26,10 +27,12 @@ const Headers = () => {
                   We are committed to providing you with the best medical and <br />
                   healthcare services to help you live healthier and happier.
                 </p>
+                <Link to="/appointments">
+                  <button className="px-8 py-3 mt-5 text-white bg-teal-600 hover:bg-teal-700 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                    Find a doctor
+                  </button>
+                </Link>
 
-                <button className="px-8 py-3 mt-5 text-white bg-teal-600 hover:bg-teal-700 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
-                  Find a doctor
-                </button>
               </div>
             </div>
           </div>
