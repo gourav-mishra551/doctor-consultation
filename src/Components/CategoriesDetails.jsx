@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
-import { useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { FiDollarSign } from 'react-icons/fi';
 import { FaComment, FaLocationArrow, FaRegThumbsUp } from 'react-icons/fa';
 import { IoMdStar } from 'react-icons/io';
@@ -189,22 +189,22 @@ function CategoriesDetails() {
                                     </div>
                                     <p className='text-lg font-semibold text-orange-600'>Experience: {doctor.experience} years</p>
                                     {
-                                        
+
                                         doctor?.years_of_experience?.map((experience, index) => (
                                             <>
-                                            <div className='flex flex-wrap' key={index}>
-                                              {
-                                                experience.skills.map((skill)=>(
-                                                    <p  className='font-bold mr-3'> {skill} </p> 
-                                                ))
-                                              }
-                                            </div>
-                                            
+                                                <div className='flex flex-wrap' key={index}>
+                                                    {
+                                                        experience.skills.map((skill) => (
+                                                            <p className='font-bold mr-3'> {skill} </p>
+                                                        ))
+                                                    }
+                                                </div>
+
                                             </>
                                         ))
                                     }
 
-                                    
+
 
                                     <p>{doctor.aboutDoctor}</p>
 
@@ -229,8 +229,9 @@ function CategoriesDetails() {
                                     <FiDollarSign className='mt-1 text-2xl text-green-500' />
                                     <p className='ml-2 mt-1'>$20 (per hour)</p>
                                 </div>
+
                                 <div className='flex flex-col gap-2'>
-                                    <button className='h-[35px] w-[200px] border-2 rounded-lg  border-[#00768A] hover:bg-[#00768A] hover:text-white transition-all ease-in-out duration-300'>VIEW PROFILE</button>
+                                    <button className='h-[35px] w-[200px] border-2 rounded-lg  border-[#00768A] hover:bg-[#00768A] hover:text-white transition-all ease-in-out duration-300'><Link to={`/dr-indi/${doctor.doctorId}`}>VIEW PROFILE</Link></button>
                                     <button className='h-[35px] w-[200px] text-white rounded-lg bg-[#00768A] border-2 border-[#00768A] hover:scale-105'>BOOK APPOINTMENT</button>
                                 </div>
                             </div>

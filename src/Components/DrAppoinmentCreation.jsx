@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
+import { useParams } from 'react-router-dom';
 
 function DrAppointmentCreation() {
     const [Price , setPrice]  = useState('')
@@ -17,7 +18,7 @@ function DrAppointmentCreation() {
     });
 
     const [generatedPrices, setGeneratedPrices] = useState([]);
-
+ const {id}=useParams()
     const [generatedPrice, setGeneratedPrice] = useState('');  // Store the generated price
     const [editSlotIndex, setEditSlotIndex] = useState(null);  // Track the index of the slot being edited (both online/offline)
     const [isEditingOnline, setIsEditingOnline] = useState(false); // Track if we're editing online or offline slot

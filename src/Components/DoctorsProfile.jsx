@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { CiSearch } from "react-icons/ci";
 import { IoMdStar } from "react-icons/io";
 import { FaRegThumbsUp } from "react-icons/fa";
@@ -8,7 +8,24 @@ import { FiDollarSign } from "react-icons/fi";
 import { LiaSortAmountDownAltSolid } from "react-icons/lia";
 import { PiArrowsDownUpFill } from "react-icons/pi";
 import { TbChartCandle } from "react-icons/tb";
+import axios from 'axios';
 const DoctorsProfile = () => {
+
+    // const [my, setMy] = useState([])
+
+    // const data = () => {
+    //     try {
+    //         const respisnse = axios.get(`https://api.assetorix.com/ah/api/v1/dc/user/doctors/6715f4be7029bc9e2be686b0`),
+    //             setMy(respisnse.data)
+    //     }
+    //     catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
+    useEffect(() => {
+        data()
+    }, [])
 
     return (
         <div>
@@ -28,13 +45,13 @@ const DoctorsProfile = () => {
             {/* <div style={{border:"1px solid grey",width:"20%",justifyContent:"end",display:"flex",gap:"8px",marginLeft:"20px",marginTop:"10px",borderRadius:"5px",paddingRight:"8px"}}>
                   <PiArrowsDownUpFill className='text-9xl' style={{marginTop:"7px"}} /> <button className='border:none focus:outline-none' style={{fontSize:"25px"}}>Sort</button> 
                 </div> */}
-                <div className='sm:hidden  flex gap-4'>
-            <div className='flex justify-center items-center border border-black w-[100px] px-2 py-1 rounded-md gap-2 mt-[10px]'>
-                <PiArrowsDownUpFill className='text-3xl' /> <button className='border:none focus:outline-none' style={{ fontSize: "20px" }}>Sort</button>
-            </div>
-            <div className='flex justify-center items-center border border-black w-[100px] px-2 py-1 rounded-md gap-2 mt-[10px]'>
-                <TbChartCandle className='text-3xl' /> <button className='border:none focus:outline-none' style={{ fontSize: "20px" }}>Filter</button>
-            </div>
+            <div className='sm:hidden  flex gap-4'>
+                <div className='flex justify-center items-center border border-black w-[100px] px-2 py-1 rounded-md gap-2 mt-[10px]'>
+                    <PiArrowsDownUpFill className='text-3xl' /> <button className='border:none focus:outline-none' style={{ fontSize: "20px" }}>Sort</button>
+                </div>
+                <div className='flex justify-center items-center border border-black w-[100px] px-2 py-1 rounded-md gap-2 mt-[10px]'>
+                    <TbChartCandle className='text-3xl' /> <button className='border:none focus:outline-none' style={{ fontSize: "20px" }}>Filter</button>
+                </div>
             </div>
 
 
