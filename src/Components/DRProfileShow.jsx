@@ -8,25 +8,35 @@ import axios from 'axios'
 import { IoMdStopwatch } from 'react-icons/io'
 import { MdOutlineAddLocation } from 'react-icons/md'
 import { SiClockify } from 'react-icons/si'
-import Multiselect from 'multiselect-react-dropdown';
+import { TiDelete } from 'react-icons/ti'
+import EditDrProfileShow from './EditDrProfileShow'
+
 function DRProfileShow() {
     const [openIndex, setOpenIndex] = useState(null);
     const [activeSection, setActiveSection] = useState("ManageProfile");
-
+    const [selectLang, setSelectLang] = useState([])
     const dummyLanguages = [
-        { name: "English", value: "English" },
-        { name: "Hindi", value: "Hindi" },
-        { name: "Spanish", value: "Spanish" },
-        { name: "French", value: "French" },
-        { name: "German", value: "German" },
-        { name: "Mandarin", value: "Mandarin" }
+        "English",
+        "Hindi",
+        "Spanish",
+        "French",
+        "German",
+        "Mandarin",
     ];
 
-    const [selectedLanguages, setSelectedLanguages] = useState([]); // State to hold selected languages
+    const [profileShow, setProfileShow] = useState({ });
+    const [formData, setFormData] = useState({
+        name: profileShow?.userData?.name || '',
+        specialities: profileShow?.specialities || [],
+        language: profileShow?.language || [],
+        aboutDoctor: profileShow?.aboutDoctor || '',
+        hospitalName: profileShow?.hospitalName || '',
+        clinicAddress: profileShow?.clinic_hospital_address || {},
+        qualifications: profileShow?.qualifications || [],
+        experience: profileShow?.years_of_experience || []
+    });
 
 
-    const [profileShow, setProfileShow] = useState({ language: dummyLanguages });
-    const [formData, setFormData] = useState({ specialities: '', language: [] });
 
     const specialityNames = Array.isArray(profileShow.specialities)
         ? profileShow.specialities.map(speciality => speciality.specialtyName).join(', ')
@@ -42,15 +52,7 @@ function DRProfileShow() {
     }, []);
 
 
-    // Handle selection
-    const onSelect = (selectedList, selectedItem) => {
-        setSelectedLanguages(selectedList);
-    };
 
-    // Handle removal
-    const onRemove = (selectedList, removedItem) => {
-        setSelectedLanguages(selectedList);
-    };
     const ProfileFetchingData = async () => {
         const token = localStorage.getItem("token");
         const id = localStorage.getItem("id");
@@ -68,19 +70,68 @@ function DRProfileShow() {
             console.error("Failed to fetch profile data:", error);
         }
     };
-
-
+   
+    console.log("profile",profileShow);
+    
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-        // If the name is 'language', split the input value into an array
-        const newValue = name === 'language' ? value.split(',').map(lang => lang.trim()) : value;
-
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: newValue // Set the new value (array for 'language' or string for other fields)
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value
         }));
+    };
+
+    const handleSpecialityChange = (index, value) => {
+        const updatedSpecialities = [...formData.specialities];
+        updatedSpecialities[index] = value;
+        setFormData({ ...formData, specialities: updatedSpecialities });
+    };
+
+    const handleQualificationChange = (index, field, value) => {
+        const updatedQualifications = [...formData.qualifications];
+        updatedQualifications[index][field] = value;
+        setFormData({ ...formData, qualifications: updatedQualifications });
+    };
+
+    const handleExperienceChange = (index, field, value) => {
+        const updatedExperience = [...formData.experience];
+        updatedExperience[index][field] = value;
+        setFormData({ ...formData, experience: updatedExperience });
+    };
+
+
+    // Additional logic to handle when the language is changed
+    const handleAdditionalLogic = (value) => {
+        console.log(`Selected Language: ${value}`);
+        // Add any other logic you want here
+        setSelectLang(prevLangs => [...prevLangs, value]);
+    };
+    console.log(selectLang);
+
+
+    // Combined handleChange function
+    const combinedHandleChange = (e) => {
+        handleChange(e); // Call original handleChange
+        handleAdditionalLogic(e.target.value); // Call additional logic
+    };
+
+    const languageRemove = (languageToRemove) => {
+        setSelectLang(prevLangs => prevLangs.filter(lang => lang !== languageToRemove));
+        setFormData(prevData => ({
+            ...prevData,
+            language: prevData.language.filter(lang => lang !== languageToRemove) // Update formData language
+        }));
+    };
+
+    const handleSelectLanguage = (value) => {
+        if (!selectLang.includes(value)) {
+            setSelectLang(prevLangs => [...prevLangs, value]);
+            setFormData(prevData => ({
+                ...prevData,
+                language: [...prevData.language, value] // Update formData language
+            }));
+        }
     };
 
     // Function to submit updated data
@@ -108,275 +159,147 @@ function DRProfileShow() {
 
     return (
         <div className="flex flex-col bg-[#DAF5F3] min-h-screen">
-            <div className="flex flex-1">
-                <div className='btn-sections h-max w-[20%] m-12 sticky top-[20px] bg-white border border-gray-200 rounded-lg shadow-lg'>
-                    <button
-                        type='button'
-                        onClick={() => setActiveSection("ManageProfile")}
-                        className='w-[60%] m-10 p-2 rounded-[10px] flex justify-between bg-[#F9F9F9] hover:bg-[#E5E5E5] transition'
-                        style={{ border: "1px solid #1A5B6A" }}
-                    >
-                        <Link className='flex gap-2 text-[#1A5B6A]'>
-                            <CgProfile className='mt-1' /> My Profile
-                        </Link>
-                    </button>
-                    <button
-                        type='button'
-                        onClick={() => setActiveSection("NeedHelp")}
-                        className='w-[60%] m-10 p-2 rounded-[10px] flex justify-between bg-[#F9F9F9] hover:bg-[#E5E5E5] transition'
-                        style={{ border: "1px solid #1A5B6A" }}
-                    >
-                        <span className='flex gap-2 text-[#1A5B6A]'>
-                            <RiQuestionnaireFill className='mt-1' /> Need Help
-                        </span>
-                    </button>
-                    <button
-                        type='button'
-                        onClick={() => setActiveSection("EditProfile")}
-                        className='w-[60%] m-10 p-2 rounded-[10px] flex justify-between bg-[#F9F9F9] hover:bg-[#E5E5E5] transition'
-                        style={{ border: "1px solid #1A5B6A" }}
-                    >
-                        <span className='flex gap-2 text-[#1A5B6A]'>
-                            <FaEdit className='mt-1' /> Edit Profile
-                        </span>
-                    </button>
-                </div>
-                <div className='sections-show w-[60%] m-12 bg-white rounded-lg shadow-lg p-6'>
-                    {activeSection === "ManageProfile" && profileShow.userData && (
-                        <div style={{ border: "1px solid red" }}>
-                            <div className="border border-gray-300 rounded-xl p-6 max-w-5xl mx-auto bg-white shadow-lg">
-                                <div className="flex gap-8 items-start">
-                                    <div className="w-44 h-44 rounded-full overflow-hidden border border-gray-200">
-                                        <img
-                                            src={profileShow.userData.avatar}
-                                            alt={profileShow.userData.name}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-                                    <div className="flex-1">
-                                        <div className="mb-4">
-                                            <p className="text-3xl font-bold text-gray-800">{profileShow.userData.name}</p>
-                                            <p className="text-gray-500 text-lg">5+ years experience</p>
-                                        </div>
-                                        <div className="flex items-center gap-4 mb-4">
-                                            <span className="font-semibold text-gray-600">Specialty:</span>
-                                            <div className="flex flex-wrap gap-1">
-                                                {profileShow.specialities?.map((speciality, index) => (
-                                                    <span className="font-semibold text-gray-700" key={index}>
-                                                        {speciality.specialtyName}
-                                                        {index < profileShow.specialities.length - 1 && ","}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center gap-4 mb-4">
-                                            <FaCommentDots className="text-gray-500" />
-                                            <div className="flex flex-wrap gap-2">
-                                                {profileShow.language?.map((lang, index) => (
-                                                    <span className="font-semibold text-gray-700" key={index}>{lang}</span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg mb-6">
-                                            <MdOutlineAddLocation className="text-gray-500" />
-                                            <div className="text-gray-700">
-                                                <p className="font-bold">{profileShow.hospitalName}</p>
-                                                <p>{profileShow.clinic_hospital_address?.permanentAddress}</p>
-                                                <p>{profileShow.clinic_hospital_address?.state}, {profileShow.clinic_hospital_address?.city}, {profileShow.clinic_hospital_address?.PinCode}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="mt-6">
-                                    <h2 className="flex items-center gap-2 text-3xl font-bold text-gray-800 mb-4">
-                                        <FaGraduationCap /> Education
-                                    </h2>
-                                    {profileShow.qualifications?.map((qual, index) => (
-                                        <div className="mb-4" key={index}>
-                                            <h3 className="text-xl font-bold text-gray-800">{qual.degree}</h3>
-                                            <p className="text-gray-600">{qual.instituteName}</p>
-                                            <p className="text-gray-500">{qual.startDate.month} {qual.startDate.year} - {qual.endDate.month} {qual.endDate.year}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                                <hr className="my-6" />
-                                <div>
-                                    <h2 className="flex items-center gap-2 text-3xl font-bold text-gray-800 mb-4">
-                                        <SiClockify /> Experience
-                                    </h2>
-                                    {profileShow.years_of_experience?.map((exp, index) => (
-                                        <div className="mb-4" key={index}>
-                                            <h3 className="text-xl font-bold text-gray-800">{exp.organizationName}, {exp.organizationLocation}</h3>
-                                            <p className="text-gray-600">{exp.jobTitle} - {exp.employmentType}</p>
-                                            <p className="text-gray-500">{exp.startDate.month} {exp.startDate.year} - {exp.endDate.month} {exp.endDate.year}</p>
-                                            <hr className="my-3" />
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="about-dr mt-8">
-                                    <h2 className="text-3xl font-bold text-gray-800 mb-4">About Doctor</h2>
-                                    <p className="text-gray-600">{profileShow.aboutDoctor}</p>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                    {activeSection === "NeedHelp" && <ContactUs />}
-                    {activeSection === "EditProfile" && (
-                        <div>
-                            {/* Profile Display Section */}
-                            {activeSection === "EditProfile" ? (
-                                <div className="edit-profile-section p-6 border rounded-lg shadow-lg max-w-3xl mx-auto bg-white">
-                                    <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
-                                    <div>
-                                        {/* Name Field */}
-                                        <label className="block text-sm font-medium text-gray-700">Name</label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            value={formData.name || profileShow.userData.name}
-                                            onChange={handleChange}
-                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm  focus:border-none"
-                                        />
-                                    </div>
-                                    {/* {speciality} */}
-                                    <label>Speciality</label>
-                                    <input
-                                        type="text"
-                                        name='specialities' // Make sure this matches the key in formData
-                                        value={formData.specialities || specialityNames}
-                                        onChange={handleChange}
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-none"
-                                    />
-
-                                    {/* <input type="text" 
-                                    name='language'
-                                    value={formData.language || language}
-                                    onChange={handleChange}
-                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-none"
-                                    /> */}
-                                    <Multiselect
-                                        options={dummyLanguages} 
-                                        selectedValues={selectedLanguages} 
-                                        onSelect={onSelect} 
-                                        onRemove={onRemove}
-                                        displayValue="name" 
-                                        showCheckbox
-                                        placeholder="Select languages"
-                                    />
-                                    {/* Save Button */}
-                                    <br />
-                                    <button
-                                        onClick={handleUpdate}
-                                        className="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                                    >
-                                        Save Changes
-                                    </button>
-                                </div>
-                            ) : (
-                                // Profile Display Code
-                                <div>
-                                    <div style={{ border: "1px solid red" }}>
-                                        <div className="border border-gray-300 rounded-xl p-6 max-w-5xl mx-auto bg-white shadow-lg">
-                                            <div className="flex gap-8 items-start">
-                                                <div className="w-44 h-44 rounded-full overflow-hidden border border-gray-200">
-                                                    <img
-                                                        src={profileShow.userData.avatar}
-                                                        alt={profileShow.userData.name}
-                                                        className="w-full h-full object-cover"
-                                                    />
-                                                </div>
-                                                <div className="flex-1">
-                                                    <div className="mb-4">
-                                                        <p className="text-3xl font-bold text-gray-800">{profileShow.userData.name}</p>
-                                                        <p className="text-gray-500 text-lg">5+ years experience</p>
-                                                    </div>
-                                                    <div className="flex items-center gap-4 mb-4">
-                                                        <span className="font-semibold text-gray-600">Specialty:</span>
-                                                        <div className="flex flex-wrap gap-1">
-                                                            {profileShow.specialities?.map((speciality, index) => (
-                                                                <span className="font-semibold text-gray-700" key={index}>
-                                                                    {speciality.specialtyName}
-                                                                    {index < profileShow.specialities.length - 1 && ","}
-                                                                </span>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex items-center gap-4 mb-4">
-                                                        <FaCommentDots className="text-gray-500" />
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {profileShow.language?.map((lang, index) => (
-                                                                <span className="font-semibold text-gray-700" key={index}>{lang}</span>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                    <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg mb-6">
-                                                        <MdOutlineAddLocation className="text-gray-500" />
-                                                        <div className="text-gray-700">
-                                                            <p className="font-bold">{profileShow.hospitalName}</p>
-                                                            <p>{profileShow.clinic_hospital_address?.permanentAddress}</p>
-                                                            <p>{profileShow.clinic_hospital_address?.state}, {profileShow.clinic_hospital_address?.city}, {profileShow.clinic_hospital_address?.PinCode}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="mt-6">
-                                                <h2 className="flex items-center gap-2 text-3xl font-bold text-gray-800 mb-4">
-                                                    <FaGraduationCap /> Education
-                                                </h2>
-                                                {profileShow.qualifications?.map((qual, index) => (
-                                                    <div className="mb-4" key={index}>
-                                                        <h3 className="text-xl font-bold text-gray-800">{qual.degree}</h3>
-                                                        <p className="text-gray-600">{qual.instituteName}</p>
-                                                        <p className="text-gray-500">{qual.startDate.month} {qual.startDate.year} - {qual.endDate.month} {qual.endDate.year}</p>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <hr className="my-6" />
-                                            <div>
-                                                <h2 className="flex items-center gap-2 text-3xl font-bold text-gray-800 mb-4">
-                                                    <SiClockify /> Experience
-                                                </h2>
-                                                {profileShow.years_of_experience?.map((exp, index) => (
-                                                    <div className="mb-4" key={index}>
-                                                        <h3 className="text-xl font-bold text-gray-800">{exp.organizationName}, {exp.organizationLocation}</h3>
-                                                        <p className="text-gray-600">{exp.jobTitle} - {exp.employmentType}</p>
-                                                        <p className="text-gray-500">{exp.startDate.month} {exp.startDate.year} - {exp.endDate.month} {exp.endDate.year}</p>
-                                                        <hr className="my-3" />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <div className="about-dr mt-8">
-                                                <h2 className="text-3xl font-bold text-gray-800 mb-4">About Doctor</h2>
-                                                <p className="text-gray-600">{profileShow.aboutDoctor}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
+        <div className="flex flex-1" >
+            <div className='btn-sections h-max w-[20%] m-12 sticky top-[20px] bg-white border border-gray-200 rounded-lg shadow-lg p-4'>
+                <button
+                    type='button'
+                    onClick={() => setActiveSection("ManageProfile")}
+                    className='w-full mb-4 p-3 rounded-lg flex justify-between bg-[#F9F9F9] hover:bg-[#E5E5E5] transition-colors'
+                    style={{ border: "1px solid #1A5B6A" }}
+                >
+                    <Link className='flex items-center gap-2 text-[#1A5B6A]'>
+                        <CgProfile className='text-xl' /> My Profile
+                    </Link>
+                </button>
+                <button
+                    type='button'
+                    onClick={() => setActiveSection("NeedHelp")}
+                    className='w-full mb-4 p-3 rounded-lg flex justify-between bg-[#F9F9F9] hover:bg-[#E5E5E5] transition-colors'
+                    style={{ border: "1px solid #1A5B6A" }}
+                >
+                    <span className='flex items-center gap-2 text-[#1A5B6A]'>
+                        <RiQuestionnaireFill className='text-xl' /> Need Help
+                    </span>
+                </button>
+                <button
+                    type='button'
+                    onClick={() => setActiveSection("EditProfile")}
+                    className='w-full mb-4 p-3 rounded-lg flex justify-between bg-[#F9F9F9] hover:bg-[#E5E5E5] transition-colors'
+                    style={{ border: "1px solid #1A5B6A" }}
+                >
+                    <span className='flex items-center gap-2 text-[#1A5B6A]'>
+                        <FaEdit className='text-xl' /> Edit Profile
+                    </span>
+                </button>
             </div>
-
-            <div className="w-full border-t border-gray-200 p-6 bg-white">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">FAQ’s</h2>
-                {profileShow.specialities?.map((faq, index) => (
-                    faq.FAQ?.map((faqin, faqIndex) => (
-                        <div key={faqIndex} className="mb-4">
-                            <div className="bg-gray-100 p-4 rounded-lg shadow-md">
-                                <div className="flex justify-between items-center cursor-pointer" onClick={() => setOpenIndex(openIndex === faqIndex ? null : faqIndex)}>
-                                    <h3 className="font-bold text-gray-800">{faqin.title}</h3>
-                                    <span>{openIndex === faqIndex ? '-' : '+'}</span>
+    
+            <div className='sections-show w-[65%] m-12 bg-white rounded-lg shadow-lg p-6'>
+                {activeSection === "ManageProfile" && profileShow.userData && (
+                    <div>
+                        <div className="border border-gray-300 rounded-xl p-6 max-w-5xl mx-auto bg-white shadow-lg">
+                            <div className="flex gap-8 items-start">
+                                <div className="w-44 h-44 rounded-full overflow-hidden border border-gray-200">
+                                    <img
+                                        src={profileShow.userData.avatar}
+                                        alt={profileShow.userData.name}
+                                        className="w-full h-full object-cover"
+                                    />
                                 </div>
-                                {openIndex === faqIndex && (
-                                    <p className="mt-2 text-gray-600">{faqin.value}</p>
-                                )}
+                                <div className="flex-1">
+                                    <div className="mb-4">
+                                        <p className="text-3xl font-bold text-gray-800">{profileShow.userData.name}</p>
+                                        <p className="text-gray-500 text-lg">5+ years experience</p>
+                                    </div>
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <span className="font-semibold text-gray-600">Specialty:</span>
+                                        <div className="flex flex-wrap gap-1">
+                                            {profileShow.specialities?.map((speciality, index) => (
+                                                <span className="font-semibold text-gray-700" key={index}>
+                                                    {speciality.specialtyName}
+                                                    {index < profileShow.specialities.length - 1 && ","}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <FaCommentDots className="text-gray-500" />
+                                        <div className="flex flex-wrap gap-2">
+                                            {profileShow.language?.map((lang, index) => (
+                                                <span className="font-semibold text-gray-700" key={index}>{lang}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg mb-6">
+                                        <MdOutlineAddLocation className="text-gray-500" />
+                                        <div className="text-gray-700">
+                                            <p className="font-bold">{profileShow.hospitalName}</p>
+                                            <p>{profileShow.clinic_hospital_address?.permanentAddress}</p>
+                                            <p>{profileShow.clinic_hospital_address?.state}, {profileShow.clinic_hospital_address?.city}, {profileShow.clinic_hospital_address?.PinCode}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div className="mt-6">
+                                <h2 className="flex items-center gap-2 text-3xl font-bold text-gray-800 mb-4">
+                                    <FaGraduationCap /> Education
+                                </h2>
+                                {profileShow.qualifications?.map((qual, index) => (
+                                    <div className="mb-4" key={index}>
+                                        <h3 className="text-xl font-bold text-gray-800">{qual.degree}</h3>
+                                        <p className="text-gray-600">{qual.instituteName}</p>
+                                        <p className="text-gray-500">{qual.startDate.month} {qual.startDate.year} - {qual.endDate.month} {qual.endDate.year}</p>
+                                    </div>
+                                ))}
+                            </div>
+                            
+                            <hr className="my-6" />
+    
+                            <div>
+                                <h2 className="flex items-center gap-2 text-3xl font-bold text-gray-800 mb-4">
+                                    <SiClockify /> Experience
+                                </h2>
+                                {profileShow.years_of_experience?.map((exp, index) => (
+                                    <div className="mb-4" key={index}>
+                                        <h3 className="text-xl font-bold text-gray-800">{exp.organizationName}, {exp.organizationLocation}</h3>
+                                        <p className="text-gray-600">{exp.jobTitle} - {exp.employmentType}</p>
+                                        <p className="text-gray-500">{exp.startDate.month} {exp.startDate.year} - {exp.endDate.month} {exp.endDate.year}</p>
+                                        <hr className="my-3" />
+                                    </div>
+                                ))}
+                            </div>
+    
+                            <div className="about-dr mt-8">
+                                <h2 className="text-3xl font-bold text-gray-800 mb-4">About Doctor</h2>
+                                <p className="text-gray-600">{profileShow.aboutDoctor}</p>
                             </div>
                         </div>
-                    ))
-                ))}
+                    </div>
+                )}
+                {activeSection === "NeedHelp" && <ContactUs />}
+                {activeSection === "EditProfile" && <EditDrProfileShow profileShow={profileShow} setProfileShow={setProfileShow} />}
             </div>
         </div>
+    
+        <div className="w-full border-t border-gray-200 p-6 bg-white">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">FAQ’s</h2>
+            {profileShow?.FAQ?.map((faq, index) => (
+                <div key={index} className="mb-4">
+                    <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+                        <div className="flex justify-between items-center cursor-pointer" onClick={() => setOpenIndex(openIndex === index ? null : index)}>
+                            <h3 className="font-bold text-gray-800">{faq.title}</h3>
+                            <span>{openIndex === index ? '-' : '+'}</span>
+                        </div>
+                        {openIndex === index && (
+                            <p className="mt-2 text-gray-600">{faq.value}</p>
+                        )}
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+    
+
 
     );
 }
