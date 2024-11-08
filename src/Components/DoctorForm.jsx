@@ -214,13 +214,6 @@ const DoctorForm = () => {
         });
     };
 
-
-
-
-
-
-
-
     // Specific handler for nested fields (like startDate and endDate)
     const handleDateChange = (e, index, field, subField) => {
         const { value } = e.target;
