@@ -52,7 +52,7 @@ const DoctorForm = () => {
       },
     ],
   });
-console.log(formValues.qualifications)
+  console.log(formValues.qualifications);
 
   const [skillInput, setSkillInput] = useState("");
   const [QualificationSkill, setQualificationSkill] = useState("");
@@ -148,19 +148,7 @@ console.log(formValues.qualifications)
     setIsOpen(false); // Close the dropdown after selection
   };
 
-  const SelectSpecialty = async () => {
-    try {
-      const array = await fetch(
-        "https://api.assetorix.com/ah/api/v1/dc/user/Category"
-      );
-      const result = await array.json();
-      const specialty = result.data.map((ele) => ({
-        _id: ele._id, // Extract _id
-        specialtyName: ele.specialtyName, // Extract specialtyName
-      }));
-      setSpecialityOptions(specialty);
-    } catch (error) {}
-  };
+ 
 
   // const handleInputChange = (e, index, arrayName, fieldName) => {
   //     const newArray = [...formValues[arrayName]];
@@ -176,8 +164,6 @@ console.log(formValues.qualifications)
 
       if (category === "qualifications") {
         // Update qualifications
-        // const updatedQualifications = [...prevState.qualifications];
-        // updatedQualifications[index][field] = value;
         const updatedQualifications = [...prevState.qualifications];
 
         if (typeof updatedQualifications[index] !== "object") {
@@ -199,7 +185,7 @@ console.log(formValues.qualifications)
         // Update years_of_experience
         const updatedExperiences = [...prevState.years_of_experience];
 
-        // Determine if we are updating startDate or endDate
+        // Handle startDate or endDate fields
         if (field === "startDate" || field === "endDate") {
           const dateField = field;
           const dateSubField = e.target.name.includes("Month")
@@ -213,183 +199,8 @@ console.log(formValues.qualifications)
 
           // Update the respective month or year
           updatedExperiences[index][dateField][dateSubField] = value;
-        setIsOpen(false); // Close the dropdown after selection
-    };
-
-
-    const SelectSpecialty = async () => {
-        try {
-            const array = await fetch("https://api.assetorix.com/ah/api/v1/dc/user/Category")
-            const result = await array.json()
-            const specialty = result.data.map((ele) => ({
-                _id: ele._id,  // Extract _id
-                specialtyName: ele.specialtyName  // Extract specialtyName
-            }));
-            setSpecialityOptions(specialty);
-        } catch (error) {
-
-        }
-    }
-
-    // const handleInputChange = (e, index, arrayName, fieldName) => {
-    //     const newArray = [...formValues[arrayName]];
-    //     newArray[index][fieldName] = e.target.value;
-    //     setFormValues({ ...formValues, [arrayName]: newArray });
-    // };
-
-    const handleInputChange = (e, index, category, field) => {
-        const { value } = e.target;
-
-        setFormValues((prevState) => {
-            const updatedState = { ...prevState };
-
-            if (category === 'qualifications') {
-                // Update qualifications
-                // const updatedQualifications = [...prevState.qualifications];
-                // updatedQualifications[index][field] = value;
-                const updatedQualifications = [...prevState.qualifications];
-
-                if (typeof updatedQualifications[index] !== 'object') {
-                    // Initialize the qualification as an object if it's not an object
-                    updatedQualifications[index] = {
-                        instituteName: '',
-                        degree: '',
-                        fieldOfStudy: '',
-                        startDate: { month: '', year: '' },
-                        endDate: { month: '', year: '' },
-                        description: '',
-                        skills: []
-                    };
-                }
-                updatedQualifications[index][field] = value;
-
-            updatedState.qualifications = updatedQualifications;
-            } else if (category === 'years_of_experience') {
-                // Update years_of_experience
-                const updatedExperiences = [...prevState.years_of_experience];
-
-                // Determine if we are updating startDate or endDate
-                if (field === 'startDate' || field === 'endDate') {
-                    const dateField = field;
-                    const dateSubField = e.target.name.includes('Month') ? 'month' : 'year';
-
-                    // Ensure the date object is initialized
-                    if (!updatedExperiences[index][dateField]) {
-                        updatedExperiences[index][dateField] = { month: '', year: '' };
-                    }
-
-                    // Update the respective month or year
-                    updatedExperiences[index][dateField][dateSubField] = value;
-                } else {
-                    // For other fields (like organizationName)
-                    updatedExperiences[index][field] = value;
-                }
-
-                updatedState.years_of_experience = updatedExperiences;
-            }
-
-            return updatedState;
-        });
-    };
-
-    // Specific handler for nested fields (like startDate and endDate)
-    const handleDateChange = (e, index, field, subField) => {
-        const { value } = e.target;
-    
-        setFormValues((prevState) => {
-            const updatedQualifications = [...prevState.qualifications];
-    
-            // Ensure the field (e.g., startDate or endDate) exists and is initialized as an object
-            if (!updatedQualifications[index][field]) {
-                updatedQualifications[index][field] = { month: '', year: '' }; // Initialize with empty values
-            }
-    
-            // Now safely update the subField (month or year)
-            updatedQualifications[index][field][subField] = value;
-    
-            return {
-                ...prevState,
-                qualifications: updatedQualifications
-            };
-        });
-    };
-    
-
-
-    // Handling drag end (if you are using Drag and Drop context)
-    const onDragEnd = (result) => {
-        if (!result.destination) return;
-
-        const items = Array.from(formValues.qualifications);
-        const [reorderedItem] = items.splice(result.source.index, 1);
-        items.splice(result.destination.index, 0, reorderedItem);
-
-        setFormValues((prevState) => ({
-            ...prevState,
-            qualifications: items
-        }));
-    };
-
-
-
-    // Add new qualification entry
-    const addQualification = () => {
-        setFormValues({
-            ...formValues,
-            qualifications: [
-                ...formValues.qualifications,
-                {
-                    sequenceNumber: formValues.qualifications.length + 1,
-                    instituteName: '',
-                    degree: '',
-                    fieldOfStudy: '',
-                    startDate: { month: '', year: '' },
-                    endDate: { month: '', year: '' },
-                    description: '',
-                    skills: []
-                }
-            ]
-        });
-    };
-
-    // Add new experience entry
-    const addExperience = () => {
-        setFormValues({
-            ...formValues,
-            years_of_experience: [
-                ...formValues.years_of_experience,
-                {
-                    sequenceNumber: formValues.years_of_experience.length + 1,
-                    jobTitle: '',
-                    employmentType: 'Work from Office',
-                    organizationName: '',
-                    organizationLocation: '',
-                    startDate: { month: '', year: '' },
-                    endDate: { month: '', year: '' },
-                    isPresent: false,
-                    description: '',
-                    skills: []
-                }
-            ]
-        });
-    };
-
-
-
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        if (name.startsWith("clinic_hospital_address.")) {
-            const fieldName = name.split(".")[1];
-            setFormValues((prev) => ({
-                ...prev,
-                clinic_hospital_address: {
-                    ...prev.clinic_hospital_address,
-                    [fieldName]: value,
-                },
-            }));
-
         } else {
-          // For other fields (like organizationName)
+          // Update other fields (like jobTitle)
           updatedExperiences[index][field] = value;
         }
 
@@ -399,6 +210,30 @@ console.log(formValues.qualifications)
       return updatedState;
     });
   };
+
+
+
+
+  const SelectSpecialty = async () => {
+    try {
+      const response = await fetch(
+        "https://api.assetorix.com/ah/api/v1/dc/user/Category"
+      );
+      const result = await response.json();
+      const specialty = result.data.map((ele) => ({
+        _id: ele._id,
+        specialtyName: ele.specialtyName,
+      }));
+      setSpecialityOptions(specialty);
+    } catch (error) {
+      console.error("Error fetching specialties:", error);
+    }
+  };
+
+  // Handling drag end for reordering qualifications
+
+
+ 
 
   // Specific handler for nested fields (like startDate and endDate)
   const handleDateChange = (e, index, field, subField) => {
@@ -499,19 +334,7 @@ console.log(formValues.qualifications)
 
   // Handle change in qualification selection
   const handleQualificationChange = (e) => {
-    // const selectedQualification = event.target.value;
-
-
-    // // Update qualifications array, ensuring no duplicates
-    // if (
-    //   selectedQualification &&
-    //   !formValues.qualifications.includes(selectedQualification)
-    // ) {
-    //   setFormValues((prev) => ({
-    //     ...prev,
-    //     qualifications: [...prev.qualifications, selectedQualification], // Add selected qualification
-    //   }));
-    // }
+  
 
     const { value } = e.target;
     setFormValues({
@@ -554,23 +377,7 @@ console.log(formValues.qualifications)
     });
   };
 
-  // Function to handle input change for skills
-  // const handleSkillsChange = (e, index) => {
-  //     const { value } = e.target;
-  //     const skillsArray = value.split(',').map(skill => skill.trim()); // Split input by commas and trim whitespace
-
-  //     const updatedQualifications = [...formValues.qualifications];
-  //     updatedQualifications[index] = {
-  //         ...updatedQualifications[index],
-  //         skills: skillsArray, // Update skills array
-  //     };
-
-  //     setFormValues((prevState) => ({
-  //         ...prevState,
-  //         qualifications: updatedQualifications,
-  //     }));
-  // };
-
+ 
   const handleLanguageChange = (event) => {
     const selectedLanguage = event.target.value;
 

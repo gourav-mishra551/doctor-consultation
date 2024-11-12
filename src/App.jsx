@@ -48,6 +48,8 @@ import FirstQuestion from "./Pages/AppointmentBooking/FirstQuestion";
 import NewPatient from "./Pages/AppointmentBooking/NewPatient/NewPatient";
 
 import DrExam from "./Components/DrExam";
+import ProfilePage from "./Pages/ProfilePage";
+import PrescriptionMakerPage from "./Pages/PrescriptionMakerPage";
 
 function App() {
   return (

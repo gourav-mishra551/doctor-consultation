@@ -75,7 +75,7 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
           </div>
 
           <div className="bg-white rounded-xl">
-            <DrAppointmentBooking />
+            <DrAppointmentBooking  IndiProfile={IndiProfile}/>
           </div>
         </div>
 
