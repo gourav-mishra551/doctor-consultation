@@ -116,7 +116,7 @@ const SignupLogin = () => {
                                     <div className="mt-6">
 
 
-                                        <div className="mt-3 md:flex md:items-center md:-mx-2">
+                                        <div className="mt-3 md:flex md:items-center md:-mx-2 flex flex-col gap-4 sm:flex-row">
                                             <button
                                                 className="flex justify-center w-full px-6 py-3 text-white bg-[#1c8e81] rounded-md md:w-auto md:mx-2 focus:outline-none">
                                                 <CiLogin className="w-6 h-6" />
@@ -220,9 +220,9 @@ const SignupLogin = () => {
                                         Let’s get you all set up so you can verify your personal account and begin setting up your profile.
                                     </p>
 
-                                    <div className="mt-6">
+                                    <div className="mt-6 flex flex-col sm:flex-row  gap-2">
 
-                                        <div className="mt-3 md:flex md:items-center md:-mx-2 sm:gap-0">
+                                        <div className=" md:flex md:items-center md:-mx-2  flex flex-col sm:flex-row sm:gap-4">
                                             <button
                                                 onClick={handleBtnClick}
                                                 className="flex justify-center w-full px-6 py-3 text-[#1c8e81] border border-blue-500 rounded-md md:mt-0 md:w-auto md:mx-2 dark:border-[#1c8e81] dark:text-[#1c8e81]-400 focus:outline-none">
@@ -234,7 +234,7 @@ const SignupLogin = () => {
                                             </button>
 
                                             <button
-                                                className="flex justify-center w-full px-6 py-3 text-white bg-[#1c8e81] rounded-md md:w-auto md:mx-2 focus:outline-none">
+                                                className="flex sm:mt-0 mt-4 justify-center w-full px-6 py-3 text-white bg-[#1c8e81] rounded-md md:w-auto md:mx-2 focus:outline-none">
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                                 </svg>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CiSearch } from "react-icons/ci";
 import { IoMdStar } from "react-icons/io";
 import { FaRegThumbsUp } from "react-icons/fa";
@@ -9,13 +9,32 @@ import DrIndividualProfileOverview from './DrIndividualProfileOverview';
 import DrIndividualprofileLocation from './DrIndividualprofileLocation';
 import DrIndividualProfileReviews from './DrIndividualProfileReviews';
 import DrIndividualProfileAvailibility from './DrIndividualProfileAvailibility';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const DrIndividualProfile = () => {
-
+    const [IndiProfile,setIndiProfile]=useState({})
     const [activeNav, setActiveNav] = useState(1)
 
     const handleNavClick = (navNumber) => {
         setActiveNav(navNumber)
+    }
+
+    const {id}=useParams()
+     console.log(id);
+     
+    useEffect(()=>{
+  DrIndiProfile()
+    },[])
+
+    const DrIndiProfile=async()=>{
+        try {
+            const res=await axios.get(`https://api.assetorix.com/ah/api/v1/dc/user/doctors/${id}`)
+            setIndiProfile(res.data.data)
+            
+        } catch (error) {
+            
+        }
     }
 
     return (
@@ -97,7 +116,7 @@ const DrIndividualProfile = () => {
 
                             onClick={() => handleNavClick(4)}>Availability</li>
                     </ul>
-                    {activeNav === 1 && <DrIndividualProfileOverview />}
+                    {activeNav === 1 && <DrIndividualProfileOverview IndiProfile={IndiProfile} />}
                     {activeNav === 2 && <DrIndividualprofileLocation />}
                     {activeNav === 3 && <DrIndividualProfileReviews />}
                     {activeNav === 4 && <DrIndividualProfileAvailibility />}

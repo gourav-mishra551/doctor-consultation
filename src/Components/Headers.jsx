@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const Headers = () => {
   return (
     <>
-      <div className="relative mb-32"> {/* Adjust bottom margin for spacing */}
+      <div className="relative mb-32">  
         <div
           className="background bg-teal-100 -z-10 h-screen flex items-center"
           style={{
