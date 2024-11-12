@@ -10,7 +10,6 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
     return <div>Loading...</div>; // You can show a loading message or spinner
   }
 
-
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleDescription = () => {
@@ -19,62 +18,69 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
 
   return (
     <div>
-      <div
-        className="bg-[white] w-full h-auto"
-        style={{ border: "1px solid red" }}
-      >
-        <div className="dr-profile flex sm:flex-row flex-col gap-10 mt-5  p-5 rounded-xl">
-          <div className="border-2 border-gray-300 rounded-xl p-5">
+      <div className="bg-white w-full h-auto p-5">
+        <div className="dr-profile flex sm:flex-row flex-col gap-10 mt-5 p-5 rounded-xl shadow-lg bg-gray-50">
+          {/* Left Section: Doctor Profile */}
+          <div className="border-2 border-gray-300 rounded-xl p-6 flex-1 h-[350px]">
             <div>
-              {/* Render IndiProfile.name safely */}
-              <p className="font-bold text-3xl">{IndiProfile?.name}</p>
-              <div className="flex">
-                {/* Safely map specialties */}
+              {/* Doctor's Name */}
+              <p className="font-bold text-3xl text-[#00768A]">
+                {IndiProfile?.name}
+              </p>
+
+              {/* Specialties */}
+              <div className="flex gap-3 mt-2">
                 {IndiProfile?.specialties?.map((spe, index) => (
-                  <p key={index} className="font-semibold">
+                  <p
+                    key={index}
+                    className="font-semibold text-lg text-gray-700"
+                  >
                     {spe.specialtyName}
-                    {/* Render a comma after each item except the last one */}
                     {index < IndiProfile.specialties.length - 1 && ","}
                   </p>
                 ))}
               </div>
 
-              <p className="font-semibold">
+              {/* Experience */}
+              <p className="font-semibold text-gray-600 mt-2">
                 {IndiProfile.experience}+ years experience
               </p>
-              <div className="flex gap-2">
-                <FaGraduationCap className="mt-[5px]" />
-                {/* Check if qualifications exists and is an array before mapping */}
+
+              {/* Qualifications */}
+              <div className="flex gap-2 mt-3 items-center">
+                <FaGraduationCap className="text-[#00768A]" />
                 {Array.isArray(IndiProfile.qualifications) &&
                 IndiProfile.qualifications.length > 0 ? (
                   IndiProfile.qualifications.map((deg, index) => (
-                    <p key={index} className="font-semibold">
+                    <p key={index} className="font-semibold text-gray-600">
                       {deg.degree}
                     </p>
                   ))
                 ) : (
-                  <p>No qualifications available</p>
+                  <p className="text-gray-500">No qualifications available</p>
                 )}
               </div>
 
-              <div className="flex gap-2">
-                <FaCommentDots className="mt-[5px]" />
-                <p className="font-semibold">
+              {/* Languages */}
+              <div className="flex gap-2 mt-3 items-center">
+                <FaCommentDots className="text-[#00768A]" />
+                <p className="font-semibold text-gray-600">
                   {(IndiProfile.language || []).join(", ")}
                 </p>
               </div>
 
-              <div className="flex gap-2">
-                <MdOutlineAddLocation className="mt-[5px]" />
+              {/* Location */}
+              <div className="flex gap-2 mt-3 items-start">
+                <MdOutlineAddLocation className="text-[#00768A]" />
                 <div>
-                  <p className="font-semibold">
+                  <p className="font-semibold text-gray-600">
                     {IndiProfile.hospitalName},{" "}
-                    {IndiProfile.clinic_hospital_address?.permanentAddress}{" "}
+                    {IndiProfile.clinic_hospital_address?.permanentAddress}
                   </p>
-                  <p>
-                    {IndiProfile.clinic_hospital_address?.permanentAddress} ,{" "}
-                    {IndiProfile.clinic_hospital_address?.state}
-                    {IndiProfile.clinic_hospital_address?.city}{" "}
+                  <p className="text-gray-500">
+                    {IndiProfile.clinic_hospital_address?.permanentAddress},{" "}
+                    {IndiProfile.clinic_hospital_address?.state},
+                    {IndiProfile.clinic_hospital_address?.city}
                     {IndiProfile.clinic_hospital_address?.PinCode}
                   </p>
                 </div>
@@ -82,31 +88,32 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl">
+          {/* Right Section: Appointment Booking */}
+          <div className="bg-white rounded-xl p-5 shadow-lg flex-1">
             <DrAppointmentBooking IndiProfile={IndiProfile} />
           </div>
         </div>
 
-        <div className="about-dr mt-5">
-          <p className="font-bold text-3xl">About Doctor</p>
-          <p>
-            Dr Ritika Bhatt is an experienced ENT/Otorhinolaryngologist in
+        {/* About Doctor Section */}
+        <div className="about-dr mt-5 p-5 bg-gray-50 rounded-xl">
+          <p className="font-bold text-3xl text-[#00768A]">About Doctor</p>
+          <p className="text-gray-700 mt-3">
+            Dr. Ritika Bhatt is an experienced ENT/Otorhinolaryngologist in
             Bangalore with over 5 years of expertise in diagnosing and treating
-            a wide range of ear, nose and throat disorders. Dr Bhatt is
+            a wide range of ear, nose, and throat disorders. Dr. Bhatt is
             considered one of the best ENT specialists in Bangalore and has
             gained a reputation for her compassionate care and successful
-            treatment outcomes. As an ENT specialist, Dr Ritika provides care
+            treatment outcomes. As an ENT specialist, Dr. Ritika provides care
             for both common and complex conditions affecting the ears, nose,
             throat, head, and neck. She diagnoses and treats various conditions
             like tonsillitis, nasal polyps, ear infections, hearing loss,
-            sinusitis, snoring problems and more. Dr Bhatt's services extend to
-            advanced treatments such as Tonsillectomy, Tympanoplasty (eardrum
-            repair), Nasal Septum Surgery and Ear Reconstruction surgeries. Her
+            sinusitis, snoring problems, and more. Dr. Bhatt's services extend
+            to advanced treatments such as Tonsillectomy, Tympanoplasty (eardrum
+            repair), Nasal Septum Surgery, and Ear Reconstruction surgeries. Her
             expertise in treating congenital ear problems is highly sought after
-            by parents seeking specialised treatment for their children.
+            by parents seeking specialized treatment for their children.
           </p>
-
-          <div className="w-full bg-gray-300 h-[2px] mt-5"></div>
+          <div className="w-full bg-[#00768A] h-[2px] mt-5"></div>
         </div>
       </div>
     </div>

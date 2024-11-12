@@ -11,7 +11,6 @@ import "./Navbar.css"; // Import the CSS file
 import Image from "../../src/Assests/ametheus.webp";
 import { FaChevronDown } from "react-icons/fa6";
 
-
 const Navbar = () => {
   const cart = useSelector((state) => state.cart);
   const [isOpen, setIsOpen] = useState(false);
@@ -115,7 +114,6 @@ const Navbar = () => {
     setSubmenuPosition({
       top: menuItemRect.bottom + window.scrollY, // Position it just below the hovered item
       left: menuItemRect.left + window.scrollX, // Position it aligned to the left of the hovered item
-
     });
   };
 
@@ -272,16 +270,16 @@ const Navbar = () => {
   };
 
   return (
-    <div>
-      <nav className="text-black sticky top-0 z-50 bg-white sm:w-full w-[auto]">
-        <div className="sm:max-w-7xl max-w-[100%] mx-auto px-4 sm:px-6 lg:px-8">
-
+    <div >
+      <nav className="text-black sticky top-0 z-50 bg-white w-full">
+        <div className="sm:max-w-7xl w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link to="/" className="text-xl font-bold flex-shrink-0">
-              <img className="h-14 w-auto" src={Image} alt="logo" />
+            {/* Logo */}
+            <Link to="/" className="text-xl font-bold flex-shrink-0 ">
+              <img className="h-14 w-[50vw] sm:w-[20vw]" src={Image} alt="logo" />
             </Link>
 
-            {/* Search Input Section (Hidden on Small Screens) */}
+            {/* Search Input Section */}
             <div className="relative flex-grow mx-4 hidden sm:block">
               {noResults && (
                 <div
@@ -324,8 +322,8 @@ const Navbar = () => {
             </div>
 
             {/* Menu Items */}
-            <div className="flex items-center">
-              <div className="hidden sm:flex justify-end gap-10">
+            <div className="flex items-center space-x-4">
+              <div className="hidden sm:flex gap-10">
                 <div className="relative cursor-pointer group">
                   <span className="relative z-10">
                     <Link to="/">Home</Link>
@@ -344,7 +342,7 @@ const Navbar = () => {
                   className="relative cursor-pointer group"
                   ref={megaMenuRef}
                   onMouseEnter={() => {
-                    setMegaMenubtn(true); // Activate Mega Menu on hover
+                    setMegaMenubtn(true);
                     setIsHoveringServices(true);
                   }}
                   onMouseLeave={() => {
@@ -378,10 +376,11 @@ const Navbar = () => {
                 <option value="AED">د.إ. AED</option>
               </select>
 
-              {/* profile section is here */}
+              {/* Profile section */}
               <div
-                className="hover:cursor-pointer px-3 py-2 rounded-md text-2xl relative"
+                className="hover:cursor-pointer px-3 py-2 rounded-md text-2xl relative hidden sm:block"
                 onClick={dropdownOpen}
+                
               >
                 <FiUser />
                 <div
@@ -413,7 +412,6 @@ const Navbar = () => {
                             Report a problem
                           </h4>
                         </Link>
-
                         <Link to="/contact">
                           <h4 className="sm:text-[16px] text-[14px] my-1">
                             Bulk Buy
@@ -422,7 +420,7 @@ const Navbar = () => {
                       </div>
                       <div className="float-end ">
                         <button
-                          className="text-lg font-semibold text-gray-600 rounded-md border w-full   text-center mx-auto"
+                          className="text-lg font-semibold text-gray-600 rounded-md border w-full text-center mx-auto"
                           onClick={logout}
                         >
                           Logout
@@ -457,7 +455,7 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="md:hidden">
+            <div className="block sm:hidden">
               <button
                 onClick={toggleMenu}
                 className="text-black p-2 rounded-md"
@@ -471,9 +469,10 @@ const Navbar = () => {
             </div>
           </div>
         </div>
+
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden bg-white-200 text-black h-max pb-32 overflow-y-auto">
+          <div className="md:hidden bg-white-200 text-black h-max pb-32 ">
             <div className="px-2 pt-2 space-y-1">
               <Link
                 to="/"
@@ -490,13 +489,6 @@ const Navbar = () => {
               </Link>
 
               {/* MegaMenu Dropdown */}
-              {/* <div className="px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white flex" onClick={toggleMegaMenu}>
-            Services
-            {isMegaMenuOpen ? <span className="ml-2 pt-1"><FaChevronUp /></span> : <span className="ml-2 p-1"><FaChevronDown /></span>}
-          </div> */}
-
-              {/* SubMenu Items for MegaMenu */}
-
               <div className="pl-4 space-y-1">
                 {Object.keys(submenuData).map((menu, index) => (
                   <div key={index}>
@@ -550,112 +542,24 @@ const Navbar = () => {
       </nav>
 
       {/* MegaMenu for Desktop */}
-      {MegaMenubtn == true ? (
-        <div>
-          <div
-            className="bg-[#F7F6F9] bg-opacity-40 z-50"
-            ref={setBothRefs}
-            onMouseEnter={() => {
-              setMegaMenubtn(true); // Activate Mega Menu on hover
-              setIsHoveringServices(true);
-            }}
-            onMouseLeave={() => {
-              setIsHoveringServices(false);
-            }}
-          >
-            <div
-              className="flex justify-center gap-8  py-4 bg-[#00768A] text-white flex-wrap md:flex-nowrap" // Reduced gap here
-              
-            >
-              {Object.keys(submenuData).map((menu, index) => (
-                <div className="relative cursor-pointer group">
-                  <span
-                    key={index}
-                    className="cursor-pointer px-4 py-2 font-medium hover:scale-110 duration-300 relative z-10"
-                    onMouseEnter={(e) => handleMouseEnter(menu, e)}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    {menu.replace(/([A-Z])/g, " $1")}
-                  </span>
-                  <span className="absolute left-0 bottom-0 h-0.5 w-full bg-[white] scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100 group-hover:origin-left origin-left"></span>
-                </div>
-              ))}
-            </div>
+      {MegaMenubtn && (
+        <div className="bg-[#F7F6F9] bg-opacity-40 z-50">
+          <div className="flex justify-center gap-8 py-4 bg-[#00768A] text-white flex-wrap md:flex-nowrap">
+            {Object.keys(submenuData).map((menu, index) => (
+              <div key={index} className="relative cursor-pointer group">
+                <span
+                  className="cursor-pointer px-4 py-2 font-medium hover:scale-110 duration-300 relative z-10"
+                  onMouseEnter={(e) => handleMouseEnter(menu, e)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  {menu.replace(/([A-Z])/g, " $1")}
+                </span>
+                <span className="absolute left-0 bottom-0 h-0.5 w-full bg-white scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100 group-hover:origin-left origin-left"></span>
+              </div>
+            ))}
           </div>
-
-          {hoveredItem && (
-            <div
-              className={`absolute p-4 bg-white rounded-lg shadow-lg flex justify-center gap-18 z-50 transition-all duration-300 ${
-                hoveredItem === "CenterOfExcellence"
-
-                  ? "w-full  mr-[450px]"
-                  : "w-auto" // Full width for Center of Excellence, auto for others
-              }`}
-              style={{
-                top: `${submenuPosition.top}px`,
-                left:
-                  hoveredItem === "CenterOfExcellence"
-                    ? "0" // Ensure it aligns to the left
-                    : `${
-                        submenuPosition.left < 0 ? 0 : submenuPosition.left
-                      }px`, // If left is negative, set it to 0
-                transform:
-                  hoveredItem === "CenterOfExcellence"
-                    ? "translateX(0)" // Use transform to align properly
-                    : "translateX(0)", // Make sure other items are aligned correctly too
-              }}
-              ref={setBothRefs}
-              onMouseEnter={() => {
-                setHoveredItem(hoveredItem);
-                setIsHoveringServices(true);
-              }}
-              onMouseLeave={() => {
-                setIsHoveringServices(false);
-                handleMouseLeave();
-              }}
-            >
-              {hoveredItem === "CenterOfExcellence" ? (
-                <div className="grid grid-cols-2 sm:grid-cols-4 justify-items-start items-center gap-4 sm:gap-10 w-[90%] mx-auto cursor-pointer">
-                  {Categoriesdata.map((subItem, index) => (
-                    <div key={index} className="flex align-top">
-                      <div className="flex items-center justify-center">
-                        
-                        
-                          <img
-                            src={subItem.image}
-                            className="h-8 w-8 sm:h-10 sm:w-10"
-                          />
-                        
-                      </div>
-                      <div className="ml-2">
-                        <div className="text-black-1000 hover:text-blue-700 transition-colors duration-200 mt-1 sm:mt-2 font-semibold">
-                          {subItem.specialtyName}
-
-                        </div>
-                        <span className="text-gray-800 text-xs sm:text-sm">
-                          See all Doctors
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <ul className="flex flex-col gap-2 cursor-pointer" >
-
-                  {submenuData[hoveredItem].map((subItem, index) => (
-                    <li
-                      key={index}
-                      className="text-gray-800 hover:bg-blue-100 px-3 py-2 rounded-lg transition-all duration-200"
-                    >
-                      {subItem}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          )}
         </div>
-      ) : null}
+      )}
     </div>
   );
 };
