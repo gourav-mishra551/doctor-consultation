@@ -66,8 +66,8 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
                     {IndiProfile.clinic_hospital_address?.permanentAddress}{" "}
                   </p>
                   <p>
-                    GYR CHAMBER, Sarjapur Main Road Bengaluru Urban
-                    Kaikondrahalli, Bengaluru Karnataka
+                    {IndiProfile.clinic_hospital_address?.permanentAddress} , {IndiProfile.clinic_hospital_address?.state}
+                    {IndiProfile.clinic_hospital_address?.city} {IndiProfile.clinic_hospital_address?.PinCode}
                   </p>
                 </div>
               </div>
