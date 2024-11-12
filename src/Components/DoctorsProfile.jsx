@@ -25,7 +25,6 @@ const DoctorsProfile = () => {
     } catch (error) {}
   };
 
-
   return (
     <div>
       <div
@@ -294,280 +293,103 @@ const DoctorsProfile = () => {
             </div>
           </div>
 
-          <div>
-      
-          </div>
+          <div></div>
 
           <div className="w-full md:w-[75%] flex flex-wrap gap-10">
-          {DoctorData.map((doctor, index) => (
-            <div
-              key={index}
-              className="dr-profile-section w-full sm:w-[48%] md:w-full bg-white p-8 flex flex-col md:flex-row justify-between rounded-lg shadow-lg"
-              style={{ border: "1px solid #e1e1e1" }}
-            >
-              <div className="flex flex-col sm:flex-row gap-6">
-                {/* Profile Image */}
-                <div className="img bg-[#f3f3f3] flex justify-center items-center h-[160px] w-[160px] sm:h-[160px] sm:w-[160px] rounded-full border-2 border-[#00768A] mx-auto sm:mx-0">
-                  <img
-                    src={doctor.avatar}
-                    alt={doctor.name}
-                    className="h-[150px] w-[150px] sm:h-[150px] sm:w-[150px] rounded-full object-cover"
-                  />
-                </div>
-
-                {/* Doctor Info */}
-                <div className="dr-profilee text-[#333333] text-center sm:text-left">
-                  <p className="text-[#00768A] text-2xl font-bold">
-                    {doctor.name}
-                  </p>
-                  <div className="flex gap-4 flex-wrap mt-2 justify-center sm:justify-start">
-                    {doctor.services_offered.map((service, idx) => (
-                      <div key={idx} className="bg-[#f0f9f9] p-2 rounded-lg">
-                        <p className="text-[#00768A] font-semibold">
-                          {service}
-                        </p>
-                      </div>
-                    ))}
+            {DoctorData.map((doctor, index) => (
+              <div
+                key={index}
+                className="dr-profile-section w-full sm:w-[48%] md:w-full bg-white p-8 flex flex-col md:flex-row justify-between rounded-lg shadow-lg"
+                style={{ border: "1px solid #e1e1e1" }}
+              >
+                <div className="flex flex-col sm:flex-row gap-6">
+                  {/* Profile Image */}
+                  <div className="img bg-[#f3f3f3] flex justify-center items-center h-[160px] w-[160px] sm:h-[160px] sm:w-[160px] rounded-full border-2 border-[#00768A] mx-auto sm:mx-0">
+                    <img
+                      src={doctor.avatar}
+                      alt={doctor.name}
+                      className="h-[150px] w-[150px] sm:h-[150px] sm:w-[150px] rounded-full object-cover"
+                    />
                   </div>
 
-                  {/* Experience */}
-                  <p className="text-lg font-semibold text-orange-600 mt-2">
-                    Experience: {doctor.experience} years
-                  </p>
-
-                  {/* Skills */}
-                  {doctor?.years_of_experience?.map((experience, index) => (
-                    <div
-                      className="flex flex-wrap mt-2 justify-center sm:justify-start"
-                      key={index}
-                    >
-                      {experience.skills.map((skill, skillIndex) => (
-                        <p
-                          key={skillIndex}
-                          className="font-bold mr-3 text-sm text-gray-600"
-                        >
-                          {skill}
-                        </p>
+                  {/* Doctor Info */}
+                  <div className="dr-profilee text-[#333333] text-center sm:text-left">
+                    <p className="text-[#00768A] text-2xl font-bold">
+                      {doctor.name}
+                    </p>
+                    <div className="flex gap-4 flex-wrap mt-2 justify-center sm:justify-start">
+                      {doctor.services_offered.map((service, idx) => (
+                        <div key={idx} className="bg-[#f0f9f9] p-2 rounded-lg">
+                          <p className="text-[#00768A] font-semibold">
+                            {service}
+                          </p>
+                        </div>
                       ))}
                     </div>
-                  ))}
 
-                  {/* About Doctor */}
-                  <p className="mt-4 text-sm text-gray-600">
-                    {doctor.aboutDoctor}
-                  </p>
-                </div>
-              </div>
+                    {/* Experience */}
+                    <p className="text-lg font-semibold text-orange-600 mt-2">
+                      Experience: {doctor.experience} years
+                    </p>
 
-              {/* Price and Action Buttons */}
-              <div className="ratings flex flex-col sm:justify-start sm:items-start justify-center  items-center gap-4 mt-6 md:items-start">
-                {/* Ratings */}
-                <div className="flex items-center justify-center mt-2">
-                  {[...Array(4)].map((_, i) => (
-                    <IoMdStar key={i} className="text-yellow-500 text-3xl" />
-                  ))}
-                  <span className="ml-2 text-gray-500">4.0</span>
+                    {/* Skills */}
+                    {doctor?.years_of_experience?.map((experience, index) => (
+                      <div
+                        className="flex flex-wrap mt-2 justify-center sm:justify-start"
+                        key={index}
+                      >
+                        {experience.skills.map((skill, skillIndex) => (
+                          <p
+                            key={skillIndex}
+                            className="font-bold mr-3 text-sm text-gray-600"
+                          >
+                            {skill}
+                          </p>
+                        ))}
+                      </div>
+                    ))}
+
+                    {/* About Doctor */}
+                    <p className="mt-4 text-sm text-gray-600">
+                      {doctor.aboutDoctor}
+                    </p>
+                  </div>
                 </div>
-                {/* Price */}
-                <div className="flex gap-2 items-center">
-                  Price:
-                  <p className="ml-2 mt-1 text-lg font-semibold">
-                    
+
+                {/* Price and Action Buttons */}
+                <div className="ratings flex flex-col sm:justify-start sm:items-start justify-center items-center gap-4 mt-6 md:items-start">
+                  {/* Ratings */}
+                  <div className="flex items-center justify-center mt-2">
+                    {[...Array(4)].map((_, i) => (
+                      <IoMdStar key={i} className="text-yellow-500 text-3xl" />
+                    ))}
+                    <span className="ml-2 text-gray-500">4.0</span>
+                  </div>
+                  {/* Price */}
+                  <div className="flex gap-2 items-center">
+                    Price:
+                    <p className="ml-2 mt-1 text-lg font-semibold">
                       <span className="text-green-600">{`INR ${doctor.price}`}</span>
-                    
-                      
-                
-                  </p>
+                    </p>
+                  </div>
+
+                  {/* Buttons */}
+                  <div className="flex flex-col gap-4 mt-6">
+                    <button className="h-[40px] w-[220px] border-2 rounded-lg border-[#00768A] hover:bg-[#00768A] hover:text-white transition-all ease-in-out duration-300">
+                      <Link
+                        to={`/dr-indi/${doctor._id}`}
+                        className="flex justify-center items-center"
+                      >
+                        VIEW PROFILE
+                      </Link>
+                    </button>
+                    <button className="h-[40px] w-[220px] text-white rounded-lg bg-[#00768A] border-2 border-[#00768A] hover:scale-105">
+                      BOOK APPOINTMENT
+                    </button>
+                  </div>
                 </div>
-
-                {/* Buttons */}
-                <div className="flex flex-col gap-4 mt-6">
-                  <button className="h-[40px] w-[220px] border-2 rounded-lg border-[#00768A] hover:bg-[#00768A] hover:text-white transition-all ease-in-out duration-300">
-                    <Link
-                      to={`/dr-indi/${doctor._id}`}
-                      className="flex justify-center items-center"
-                    >
-                      VIEW PROFILE
-                    </Link>
-                  </button>
-                  <button className="h-[40px] w-[220px] text-white rounded-lg bg-[#00768A] border-2 border-[#00768A] hover:scale-105">
-                    BOOK APPOINTMENT
-                  </button>
-                </div>
-            </div>
-          </div>
-
-          <div className="dr-profile-section  h-[280px] bg-[#f3f3f3] p-10 flex justify-between">
-            <div className="flex gap-5">
-              <div className="img bg-[#f3f3f3] flex justify-center items-center h-[150px] w-[150px] rounded-full">
-                <img
-                  src="image.png"
-                  alt="dr-image"
-                  className="h-[130px] w-[130px] rounded-full"
-                />
               </div>
-              <div className="dr-profilee">
-                <p className="text-blue-800 font-bold">Dr Aashu m</p>
-                <p className="text-blue-800 font-semibold">hgt</p>
-                <p>Urology</p>
-                <div className="flex">
-                  <IoMdStar className="text-yellow-500" />
-                  <IoMdStar className="text-yellow-500" />
-                  <IoMdStar className="text-yellow-500" />
-                  <IoMdStar className="text-yellow-500" />
-                </div>
-
-                <p>hft,htd</p>
-                <p>Dermatologist</p>
-              </div>
-            </div>
-
-            <div className="ratings">
-              <div className="thumbs flex gap-1">
-                <FaRegThumbsUp className="mt-1" />
-                <p>97%</p>
-              </div>
-
-              <div className="feedback flex gap-1">
-                <FaComment className="mt-1" />
-                <p>4 Feedback</p>
-              </div>
-
-              <div className="flex gap-1">
-                <FaLocationArrow className="mt-1" />
-                <p>ht</p>
-              </div>
-
-              <div className="flex gap-1">
-                <FiDollarSign className="mt-1" />
-                <p>20 (per hour)</p>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <button className="h-[35px] w-[200px] border-2 border-blue-700 hover:bg-[#1977cc] hover:text-white transition-all ease-in-out duration-300 delay-150">
-                  VIEW PROFILE
-                </button>
-                <button className="h-[35px] w-[200px] text-white bg-[#1977cc] border-2 border-blue-700">
-                  BOOK APPOINTMENT
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="dr-profile-section  h-[280px] bg-[#f3f3f3] p-10 flex justify-between">
-            <div className="flex gap-5">
-              <div className="img bg-[#f3f3f3] flex justify-center items-center h-[150px] w-[150px] rounded-full">
-                <img
-                  src="image.png"
-                  alt="dr-image"
-                  className="h-[130px] w-[130px] rounded-full"
-                />
-              </div>
-              <div className="dr-profilee">
-                <p className="text-blue-800 font-bold">Dr Aashu m</p>
-                <p className="text-blue-800 font-semibold">hgt</p>
-                <p>Urology</p>
-                <div className="flex">
-                  <IoMdStar className="text-yellow-500" />
-                  <IoMdStar className="text-yellow-500" />
-                  <IoMdStar className="text-yellow-500" />
-                  <IoMdStar className="text-yellow-500" />
-                </div>
-
-                <p>hft,htd</p>
-                <p>Dermatologist</p>
-              </div>
-            </div>
-
-            <div className="ratings">
-              <div className="thumbs flex gap-1">
-                <FaRegThumbsUp className="mt-1" />
-                <p>97%</p>
-              </div>
-
-              <div className="feedback flex gap-1">
-                <FaComment className="mt-1" />
-                <p>4 Feedback</p>
-              </div>
-
-              <div className="flex gap-1">
-                <FaLocationArrow className="mt-1" />
-                <p>ht</p>
-              </div>
-
-              <div className="flex gap-1">
-                <FiDollarSign className="mt-1" />
-                <p>20 (per hour)</p>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <button className="h-[35px] w-[200px] border-2 border-blue-700 hover:bg-[#1977cc] hover:text-white transition-all ease-in-out duration-300 delay-150">
-                  VIEW PROFILE
-                </button>
-                <button className="h-[35px] w-[200px] text-white bg-[#1977cc] border-2 border-blue-700">
-                  BOOK APPOINTMENT
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="dr-profile-section  h-[280px] bg-[#f3f3f3] p-10 flex justify-between">
-            <div className="flex gap-5">
-              <div className="img bg-[#f3f3f3] flex justify-center items-center h-[150px] w-[150px] rounded-full">
-                <img
-                  src="image.png"
-                  alt="dr-image"
-                  className="h-[130px] w-[130px] rounded-full"
-                />
-              </div>
-              <div className="dr-profilee">
-                <p className="text-blue-800 font-bold">Dr Aashu m</p>
-                <p className="text-blue-800 font-semibold">hgt</p>
-                <p>Urology</p>
-                <div className="flex">
-                  <IoMdStar className="text-yellow-500" />
-                  <IoMdStar className="text-yellow-500" />
-                  <IoMdStar className="text-yellow-500" />
-                  <IoMdStar className="text-yellow-500" />
-                </div>
-
-                <p>hft,htd</p>
-                <p>Dermatologist</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-            <div className="ratings">
-              <div className="thumbs flex gap-1">
-                <FaRegThumbsUp className="mt-1" />
-                <p>97%</p>
-              </div>
-
-              <div className="feedback flex gap-1">
-                <FaComment className="mt-1" />
-                <p>4 Feedback</p>
-              </div>
-
-              <div className="flex gap-1">
-                <FaLocationArrow className="mt-1" />
-                <p>ht</p>
-              </div>
-
-              <div className="flex gap-1">
-                <FiDollarSign className="mt-1" />
-                <p>20 (per hour)</p>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <button className="h-[35px] w-[200px] border-2 border-blue-700 hover:bg-[#1977cc] hover:text-white transition-all ease-in-out duration-300 delay-150">
-                  VIEW PROFILE
-                </button>
-                <button className="h-[35px] w-[200px] text-white bg-[#1977cc] border-2 border-blue-700">
-                  BOOK APPOINTMENT
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
