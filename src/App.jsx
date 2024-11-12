@@ -52,6 +52,7 @@ import DrExam from "./Components/DrExam";
 function App() {
   return (
     <div className="App w-[100%] overflow-x-hidden">
+
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -103,6 +104,12 @@ function App() {
           <Route path="/download-app" element={<DownloadApp />} />
           <Route path="/appointments" element={<FirstQuestion />} />
           <Route path="/appointments/location" element={<NewPatient />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route
+            path="/prescription-maker"
+            element={<PrescriptionMakerPage />}
+          />
+
           {/* <Route path='/login' element={<Login />} /> */}
         </Routes>
       </BrowserRouter>

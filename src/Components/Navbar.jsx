@@ -5,13 +5,12 @@ import axios from "axios";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
 import { useSelector } from "react-redux";
 import { FaChevronUp } from "react-icons/fa";
-// import SubNavbar from "../SubNavbar/SubNavbar";
 import { BsCart3, BsCartPlus } from "react-icons/bs";
 import { gsap } from "gsap";
 import "./Navbar.css"; // Import the CSS file
 import Image from "../../src/Assests/ametheus.webp";
 import { FaChevronDown } from "react-icons/fa6";
-// import SubNavMobile from "../SubNavbar/SubNavMobile";
+
 
 const Navbar = () => {
   const cart = useSelector((state) => state.cart);
@@ -109,7 +108,6 @@ const Navbar = () => {
     console.log(Categoriesdata);
   };
   handleCategoryClick();
-
   const handleMouseEnter = (item, event) => {
     setHoveredItem(item);
     const menuItemRect = event.target.getBoundingClientRect();
@@ -117,6 +115,7 @@ const Navbar = () => {
     setSubmenuPosition({
       top: menuItemRect.bottom + window.scrollY, // Position it just below the hovered item
       left: menuItemRect.left + window.scrollX, // Position it aligned to the left of the hovered item
+
     });
   };
 
@@ -127,7 +126,6 @@ const Navbar = () => {
   const toggleMegaMenu = () => {
     setIsMegaMenuOpen(!isMegaMenuOpen);
   };
-
   const containerRef = useRef(null);
   const megaMenuRef = useRef(null);
   const handleClickOutside = (event) => {
@@ -189,9 +187,9 @@ const Navbar = () => {
 
   useEffect(() => {
     if (
-      localStorage.getItem("Id") &&
-      localStorage.getItem("user") &&
-      localStorage.getItem("token")
+      localStorage.getItem("id") &&
+      localStorage.getItem("token") &&
+      localStorage.getItem("user")
     ) {
       setIsLogin(true);
     } else {
@@ -277,6 +275,7 @@ const Navbar = () => {
     <div>
       <nav className="text-black sticky top-0 z-50 bg-white sm:w-full w-[auto]">
         <div className="sm:max-w-7xl max-w-[100%] mx-auto px-4 sm:px-6 lg:px-8">
+
           <div className="flex items-center justify-between h-16">
             <Link to="/" className="text-xl font-bold flex-shrink-0">
               <img className="h-14 w-auto" src={Image} alt="logo" />
@@ -358,23 +357,15 @@ const Navbar = () => {
 
                 <div className="relative cursor-pointer group">
                   <span className="relative z-10">
-                    <Link to="/CategoriesDetails/:id">Doctors</Link>
-                  </span>
-                  <span className="absolute left-0 bottom-0 h-0.5 w-full bg-[#00768A] scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
-                </div>
-
-                <div className="relative cursor-pointer group">
-                  <span className="relative z-10">
                     <Link to="/contact-us">Contact</Link>
                   </span>
-                  <span className="absolute left-0 bottom-0 h-0.5 w-full bg-[#00768A] scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
+                  <span className="absolute left-0 bottom-0 h-0.5 w-full bg-blue-500 scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
                 </div>
               </div>
 
               {/* Currency Selector */}
-
               <select
-                className="border rounded-md p-2  text-sm"
+                className="border p-2 rounded-md ml-4 text-sm"
                 defaultValue={localStorage.getItem("currency")}
                 onChange={handleCurrencyChange}
               >
@@ -387,20 +378,99 @@ const Navbar = () => {
                 <option value="AED">د.إ. AED</option>
               </select>
 
-              {/* Mobile Menu Button */}
-              <div className="md:hidden ml-auto px-3">
-                <button onClick={toggleMenu} className="text-black  rounded-md">
-                  {isOpen ? (
-                    <RxCross1 size={24} />
+              {/* profile section is here */}
+              <div
+                className="hover:cursor-pointer px-3 py-2 rounded-md text-2xl relative"
+                onClick={dropdownOpen}
+              >
+                <FiUser />
+                <div
+                  ref={dropdownRef}
+                  className={`absolute bg-white rounded-xl shadow-lg p-4 z-50 flex -left-[6rem] flex-col w-[15vw] h-max ${
+                    dropdown ? "block" : "hidden"
+                  }`}
+                >
+                  {isLogin ? (
+                    <div className="flex flex-col justify-between">
+                      <div className="border rounded-lg ">
+                        <p className="text-semibold text-gray-400 text-[16px] capitalize text-center ">
+                          Welcome {localStorage.getItem("user")}
+                        </p>
+                      </div>
+                      <div>
+                        <Link to="/profile">
+                          <h4 className="sm:text-[16px] text-[14px] my-1">
+                            Profile
+                          </h4>
+                        </Link>
+                        <Link to="/profile">
+                          <h4 className="sm:text-[16px] text-[14px] my-1">
+                            Your Order
+                          </h4>
+                        </Link>
+                        <Link to="/support-center">
+                          <h4 className="sm:text-[16px] text-[14px] my-1">
+                            Report a problem
+                          </h4>
+                        </Link>
+
+                        <Link to="/contact">
+                          <h4 className="sm:text-[16px] text-[14px] my-1">
+                            Bulk Buy
+                          </h4>
+                        </Link>
+                      </div>
+                      <div className="float-end ">
+                        <button
+                          className="text-lg font-semibold text-gray-600 rounded-md border w-full   text-center mx-auto"
+                          onClick={logout}
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    </div>
                   ) : (
-                    <RxHamburgerMenu size={24} />
+                    <div>
+                      <h4
+                        className="sm:text-[16px] text-[14px] my-1 cursor-pointer"
+                        onClick={() => navigate("/auth")}
+                      >
+                        Login
+                      </h4>
+                      <Link to="/profile">
+                        <h4 className="sm:text-[16px] text-[14px] my-1">
+                          Your Order
+                        </h4>
+                      </Link>
+                      <Link to="/support-center">
+                        <h4 className="sm:text-[16px] text-[14px] my-1">
+                          Report a problem
+                        </h4>
+                      </Link>
+                      <h4 className="sm:text-[16px] text-[14px] my-1">
+                        Bulk Buy
+                      </h4>
+                    </div>
                   )}
-                </button>
+                </div>
               </div>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button
+                onClick={toggleMenu}
+                className="text-black p-2 rounded-md"
+              >
+                {isOpen ? (
+                  <RxCross1 size={24} />
+                ) : (
+                  <RxHamburgerMenu size={24} />
+                )}
+              </button>
             </div>
           </div>
         </div>
-
         {/* Mobile Menu */}
         {isOpen && (
           <div className="md:hidden bg-white-200 text-black h-max pb-32 overflow-y-auto">
@@ -468,7 +538,6 @@ const Navbar = () => {
               >
                 Doctors
               </Link>
-
               <Link
                 to="/contact-us"
                 className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white"
@@ -518,8 +587,9 @@ const Navbar = () => {
             <div
               className={`absolute p-4 bg-white rounded-lg shadow-lg flex justify-center gap-18 z-50 transition-all duration-300 ${
                 hoveredItem === "CenterOfExcellence"
-                  ? "w-full" // Keep full width for Center of Excellence
-                  : "w-auto" // Auto width for other items
+
+                  ? "w-full  mr-[450px]"
+                  : "w-auto" // Full width for Center of Excellence, auto for others
               }`}
               style={{
                 top: `${submenuPosition.top}px`,
@@ -560,6 +630,7 @@ const Navbar = () => {
                       <div className="ml-2">
                         <div className="text-black-1000 hover:text-blue-700 transition-colors duration-200 mt-1 sm:mt-2 font-semibold">
                           {subItem.specialtyName}
+
                         </div>
                         <span className="text-gray-800 text-xs sm:text-sm">
                           See all Doctors
@@ -570,6 +641,7 @@ const Navbar = () => {
                 </div>
               ) : (
                 <ul className="flex flex-col gap-2 cursor-pointer" >
+
                   {submenuData[hoveredItem].map((subItem, index) => (
                     <li
                       key={index}

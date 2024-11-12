@@ -9,6 +9,7 @@ import { LiaSortAmountDownAltSolid } from "react-icons/lia";
 import { PiArrowsDownUpFill } from "react-icons/pi";
 import { TbChartCandle } from "react-icons/tb";
 import axios from "axios";
+
 import { Link } from "react-router-dom";
 const DoctorsProfile = () => {
   const [DoctorData, setDoctorData] = useState([]);
@@ -23,6 +24,7 @@ const DoctorsProfile = () => {
       setDoctorData(res.data.data);
     } catch (error) {}
   };
+
 
   return (
     <div>
@@ -115,6 +117,7 @@ const DoctorsProfile = () => {
                 name="Gender"
               />
               <span className="ml-1">others</span>
+              <span className="ml-1">Shemale</span>
             </label>
           </div>
 
@@ -292,82 +295,7 @@ const DoctorsProfile = () => {
           </div>
 
           <div>
-            {/* <div className="sm:hidden block" style={{border:"1px solid red"}}>
-              <div className="flex justify-center items-center p-2 space-x-10" >
-                <div className="img bg-[#f3f3f3] flex justify-center items-center h-[150px] w-[150px] rounded-full">
-                  <img
-                    src="image.png"
-                    alt="dr-image"
-                    className="h-[130px] w-[130px] rounded-full"
-                  />
-                </div>
-                <div className="dr-profilee">
-                  <p className="text-blue-800 font-bold text-[27px]">
-                    Dr Tripti Deb
-                  </p>
-                  <p
-                    className="text-blue-800 font-semibold text-[21px]"
-                    style={{ fontWeight: "bolder" }}
-                  >
-                    Cardiologist
-                  </p>
-                  <p
-                    style={{ fontWeight: "bold" }}
-                    className="text-[21px] text-gray-500"
-                  >
-                    Urology
-                  </p>
-                  <p
-                    style={{ fontWeight: "bold" }}
-                    className="text-[21px] text-gray-500"
-                  >
-                    40 Years MBBS,MD,DM,FACC
-                  </p>
-                  <p style={{ fontWeight: "bold" }} className="text-[21px]">
-                    Dermatologist
-                  </p>
-                </div>
-              </div>
-
-              <div
-                className="mb-3"
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "30px",
-                  gap: "60px",
-                }}
-              >
-                <button
-                  style={{
-                    border: "1px solid black",
-                    padding: "10px",
-                    fontWeight: "bolder",
-                    borderRadius: "10px",
-                    height: "70px",
-                    width: "200px",
-                    fontSize: "23px",
-                  }}
-                >
-                  Digital Consult
-                </button>
-                <button
-                  className="bg-[#1977CC] hover:bg-[#2c91e9] transition-all duration-300 ease-in-out"
-                  style={{
-                    border: "1px solid black",
-                    padding: "10px",
-                    fontWeight: "bolder",
-                    borderRadius: "10px",
-                    color: "white",
-                    height: "70px",
-                    width: "200px",
-                    fontSize: "23px",
-                  }}
-                >
-                  Hospital Visit
-                </button>
-              </div>
-            </div> */}
+      
           </div>
 
           <div className="w-full md:w-[75%] flex flex-wrap gap-10">
@@ -466,12 +394,181 @@ const DoctorsProfile = () => {
                     BOOK APPOINTMENT
                   </button>
                 </div>
+            </div>
+          </div>
+
+          <div className="dr-profile-section  h-[280px] bg-[#f3f3f3] p-10 flex justify-between">
+            <div className="flex gap-5">
+              <div className="img bg-[#f3f3f3] flex justify-center items-center h-[150px] w-[150px] rounded-full">
+                <img
+                  src="image.png"
+                  alt="dr-image"
+                  className="h-[130px] w-[130px] rounded-full"
+                />
+              </div>
+              <div className="dr-profilee">
+                <p className="text-blue-800 font-bold">Dr Aashu m</p>
+                <p className="text-blue-800 font-semibold">hgt</p>
+                <p>Urology</p>
+                <div className="flex">
+                  <IoMdStar className="text-yellow-500" />
+                  <IoMdStar className="text-yellow-500" />
+                  <IoMdStar className="text-yellow-500" />
+                  <IoMdStar className="text-yellow-500" />
+                </div>
+
+                <p>hft,htd</p>
+                <p>Dermatologist</p>
+              </div>
+            </div>
+
+            <div className="ratings">
+              <div className="thumbs flex gap-1">
+                <FaRegThumbsUp className="mt-1" />
+                <p>97%</p>
+              </div>
+
+              <div className="feedback flex gap-1">
+                <FaComment className="mt-1" />
+                <p>4 Feedback</p>
+              </div>
+
+              <div className="flex gap-1">
+                <FaLocationArrow className="mt-1" />
+                <p>ht</p>
+              </div>
+
+              <div className="flex gap-1">
+                <FiDollarSign className="mt-1" />
+                <p>20 (per hour)</p>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <button className="h-[35px] w-[200px] border-2 border-blue-700 hover:bg-[#1977cc] hover:text-white transition-all ease-in-out duration-300 delay-150">
+                  VIEW PROFILE
+                </button>
+                <button className="h-[35px] w-[200px] text-white bg-[#1977cc] border-2 border-blue-700">
+                  BOOK APPOINTMENT
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="dr-profile-section  h-[280px] bg-[#f3f3f3] p-10 flex justify-between">
+            <div className="flex gap-5">
+              <div className="img bg-[#f3f3f3] flex justify-center items-center h-[150px] w-[150px] rounded-full">
+                <img
+                  src="image.png"
+                  alt="dr-image"
+                  className="h-[130px] w-[130px] rounded-full"
+                />
+              </div>
+              <div className="dr-profilee">
+                <p className="text-blue-800 font-bold">Dr Aashu m</p>
+                <p className="text-blue-800 font-semibold">hgt</p>
+                <p>Urology</p>
+                <div className="flex">
+                  <IoMdStar className="text-yellow-500" />
+                  <IoMdStar className="text-yellow-500" />
+                  <IoMdStar className="text-yellow-500" />
+                  <IoMdStar className="text-yellow-500" />
+                </div>
+
+                <p>hft,htd</p>
+                <p>Dermatologist</p>
+              </div>
+            </div>
+
+            <div className="ratings">
+              <div className="thumbs flex gap-1">
+                <FaRegThumbsUp className="mt-1" />
+                <p>97%</p>
+              </div>
+
+              <div className="feedback flex gap-1">
+                <FaComment className="mt-1" />
+                <p>4 Feedback</p>
+              </div>
+
+              <div className="flex gap-1">
+                <FaLocationArrow className="mt-1" />
+                <p>ht</p>
+              </div>
+
+              <div className="flex gap-1">
+                <FiDollarSign className="mt-1" />
+                <p>20 (per hour)</p>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <button className="h-[35px] w-[200px] border-2 border-blue-700 hover:bg-[#1977cc] hover:text-white transition-all ease-in-out duration-300 delay-150">
+                  VIEW PROFILE
+                </button>
+                <button className="h-[35px] w-[200px] text-white bg-[#1977cc] border-2 border-blue-700">
+                  BOOK APPOINTMENT
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="dr-profile-section  h-[280px] bg-[#f3f3f3] p-10 flex justify-between">
+            <div className="flex gap-5">
+              <div className="img bg-[#f3f3f3] flex justify-center items-center h-[150px] w-[150px] rounded-full">
+                <img
+                  src="image.png"
+                  alt="dr-image"
+                  className="h-[130px] w-[130px] rounded-full"
+                />
+              </div>
+              <div className="dr-profilee">
+                <p className="text-blue-800 font-bold">Dr Aashu m</p>
+                <p className="text-blue-800 font-semibold">hgt</p>
+                <p>Urology</p>
+                <div className="flex">
+                  <IoMdStar className="text-yellow-500" />
+                  <IoMdStar className="text-yellow-500" />
+                  <IoMdStar className="text-yellow-500" />
+                  <IoMdStar className="text-yellow-500" />
+                </div>
+
+                <p>hft,htd</p>
+                <p>Dermatologist</p>
               </div>
             </div>
           ))}
         </div>
 
-         
+            <div className="ratings">
+              <div className="thumbs flex gap-1">
+                <FaRegThumbsUp className="mt-1" />
+                <p>97%</p>
+              </div>
+
+              <div className="feedback flex gap-1">
+                <FaComment className="mt-1" />
+                <p>4 Feedback</p>
+              </div>
+
+              <div className="flex gap-1">
+                <FaLocationArrow className="mt-1" />
+                <p>ht</p>
+              </div>
+
+              <div className="flex gap-1">
+                <FiDollarSign className="mt-1" />
+                <p>20 (per hour)</p>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <button className="h-[35px] w-[200px] border-2 border-blue-700 hover:bg-[#1977cc] hover:text-white transition-all ease-in-out duration-300 delay-150">
+                  VIEW PROFILE
+                </button>
+                <button className="h-[35px] w-[200px] text-white bg-[#1977cc] border-2 border-blue-700">
+                  BOOK APPOINTMENT
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

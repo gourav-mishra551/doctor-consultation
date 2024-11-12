@@ -7,69 +7,83 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { IoHomeOutline } from "react-icons/io5";
 
 const initialValues = {
-    name: "",
-    gender: "",
-    mobile: "",
-    email: "",
-    password: "",
-    confirm_password: ""
-}
+  name: "",
+  gender: "",
+  mobile: "",
+  email: "",
+  password: "",
+  confirm_password: "",
+};
 
 const SignupLogin = () => {
+  const [showLoginPage, setShowLoginPage] = useState(true);
+  const [signupData, setSignupData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
 
-    const [showLoginPage, setShowLoginPage] = useState(true)
-    const [signupData, setSignupData] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
+  const navigate = useNavigate();
 
-    const navigate = useNavigate()
+  const handleBtnClick = () => {
+    setShowLoginPage(!showLoginPage);
+  };
 
-    const handleBtnClick = () => {
-        setShowLoginPage(!showLoginPage)
+  const handleLoginChange = (e) => {
+    const { name, value } = e.target;
+    setLoginData({
+      ...loginData,
+      [name]: value,
+    });
+  };
+
+  const loginHandle = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "https://api.assetorix.com/ah/api/v1/user/login",
+        loginData
+      );
+      console.log(response);
+      if (response.status === 200) {
+        navigate("/");
+        localStorage.setItem("token", response.data.x_auth_token);
+        localStorage.setItem("id", response.data.x_userid);
+        localStorage.setItem("user", response.data.x_user);
+      }
+    } catch (err) {
+      console.log(err);
     }
+  };
 
-    const loginHandle = async (e) => {
-        e.preventDefault()
+  const { values, errors, handleChange, handleBlur, handleSubmit, touched } =
+    useFormik({
+      initialValues,
+      validationSchema: SignUpSchema,
+      onSubmit: async (values) => {
         try {
-            const response = await axios.post('https://api.assetorix.com/ah/api/v1/user/login', values)
-            console.log(response)
-            if (response.status === 200) {
-                navigate('/')
-                localStorage.setItem("token", response.data.x_auth_token)
-                localStorage.setItem("id", response.data.x_userid)
-            }
+          console.log(values);
+          setLoading(true);
+          const response = await axios.post(
+            "https://api.assetorix.com/ah/user/register",
+            values
+          );
+          setSignupData(response.data);
+          console.log(response.data);
+          if (response.status === 200) {
+            navigate("/dr-otp");
+          }
+        } catch (error) {
+          setError(error);
+          console.error("Error signing up:", error);
+        } finally {
+          setLoading(false);
         }
-        catch (err) {
-            console.log(err)
-        }
-    }
-
-    const { values, errors, handleChange, handleBlur, handleSubmit, touched, } = useFormik({
-        initialValues,
-        validationSchema: SignUpSchema,
-        onSubmit: async (values) => {
-            try {
-
-                console.log(values);
-                setLoading(true);
-                const response = await axios.post(
-                    'https://api.assetorix.com/ah/user/register',
-                    values
-                );
-                setSignupData(response.data);
-                console.log(response.data);
-                if (response.status === 200) {
-                    navigate('/dr-otp')
-                }
-            } catch (error) {
-                setError(error);
-                console.error('Error signing up:', error);
-            } finally {
-                setLoading(false);
-            }
-            localStorage.setItem('signupemail', values.email)
-            console.log(values)
-        },
+        localStorage.setItem("signupemail", values.email);
+        console.log(values);
+      },
     });
 
     // if (loading) return <div>loading...</div>
@@ -372,3 +386,4 @@ const SignupLogin = () => {
 }
 
 export default SignupLogin
+
