@@ -82,7 +82,7 @@ const DrIndividualProfile = () => {
             </li>
           </ul>
 
-          {activeNav === 1 && <DrIndividualProfileOverview profile={IndiProfile} />}
+          {activeNav === 1 && <DrIndividualProfileOverview IndiProfile={IndiProfile} />}
           {activeNav === 2 && <DrIndividualprofileLocation profile={IndiProfile} />}
           {activeNav === 3 && <DrIndividualProfileReviews profile={IndiProfile} />}
           {activeNav === 4 && <DrIndividualProfileAvailibility profile={IndiProfile} />}

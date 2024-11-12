@@ -5,7 +5,11 @@ import { MdOutlineAddLocation } from "react-icons/md";
 import DrAppointmentBooking from "./DrApointmentBooking";
 
 const DrIndividualProfileOverview = ({ IndiProfile }) => {
-  console.log(IndiProfile);
+  // Check if IndiProfile exists before using it
+  if (!IndiProfile) {
+    return <div>Loading...</div>; // You can show a loading message or spinner
+  }
+
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -22,8 +26,10 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
         <div className="dr-profile flex sm:flex-row flex-col gap-10 mt-5  p-5 rounded-xl">
           <div className="border-2 border-gray-300 rounded-xl p-5">
             <div>
-              <p className="font-bold text-3xl">{IndiProfile.name}</p>
+              {/* Render IndiProfile.name safely */}
+              <p className="font-bold text-3xl">{IndiProfile?.name}</p>
               <div className="flex">
+                {/* Safely map specialties */}
                 {IndiProfile?.specialties?.map((spe, index) => (
                   <p key={index} className="font-semibold">
                     {spe.specialtyName}
@@ -66,8 +72,10 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
                     {IndiProfile.clinic_hospital_address?.permanentAddress}{" "}
                   </p>
                   <p>
-                    {IndiProfile.clinic_hospital_address?.permanentAddress} , {IndiProfile.clinic_hospital_address?.state}
-                    {IndiProfile.clinic_hospital_address?.city} {IndiProfile.clinic_hospital_address?.PinCode}
+                    {IndiProfile.clinic_hospital_address?.permanentAddress} ,{" "}
+                    {IndiProfile.clinic_hospital_address?.state}
+                    {IndiProfile.clinic_hospital_address?.city}{" "}
+                    {IndiProfile.clinic_hospital_address?.PinCode}
                   </p>
                 </div>
               </div>
@@ -75,7 +83,7 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
           </div>
 
           <div className="bg-white rounded-xl">
-            <DrAppointmentBooking  IndiProfile={IndiProfile}/>
+            <DrAppointmentBooking IndiProfile={IndiProfile} />
           </div>
         </div>
 
