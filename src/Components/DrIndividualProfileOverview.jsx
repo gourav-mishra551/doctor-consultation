@@ -1,77 +1,123 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import { FaGraduationCap } from "react-icons/fa";
 import { FaCommentDots } from "react-icons/fa";
 import { MdOutlineAddLocation } from "react-icons/md";
-import DrAppointmentBooking from './DrApointmentBooking';
+import DrAppointmentBooking from "./DrApointmentBooking";
 
-const DrIndividualProfileOverview = () => {
+const DrIndividualProfileOverview = ({ IndiProfile }) => {
+  // Check if IndiProfile exists before using it
+  if (!IndiProfile) {
+    return <div>Loading...</div>; // You can show a loading message or spinner
+  }
 
-    const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
-    const toggleDescription = () => {
-        setIsExpanded(!isExpanded);
-    };
+  const toggleDescription = () => {
+    setIsExpanded(!isExpanded);
+  };
 
-    return (
-        <div>
-            <div className='bg-[white] w-full h-auto' >
+  return (
+    <div>
+      <div className="bg-white w-full h-auto p-5">
+        <div className="dr-profile flex sm:flex-row flex-col gap-10 mt-5 p-5 rounded-xl shadow-lg bg-gray-50">
+          {/* Left Section: Doctor Profile */}
+          <div className="border-2 border-gray-300 rounded-xl p-6 flex-1 h-[350px]">
+            <div>
+              {/* Doctor's Name */}
+              <p className="font-bold text-3xl text-[#00768A]">
+                {IndiProfile?.name}
+              </p>
 
-                <div className='dr-profile flex sm:flex-row flex-col gap-10 mt-5  p-5 rounded-xl'>
-                    <div  className='border-2 border-gray-300 rounded-xl p-5'>
-                    <div className='flex justify-center items-center sm:justify-normal sm:items-start'>
-                        <img src="dr-prof-1.webp" alt="dr-img" />
-                    </div>
+              {/* Specialties */}
+              <div className="flex gap-3 mt-2">
+                {IndiProfile?.specialties?.map((spe, index) => (
+                  <p
+                    key={index}
+                    className="font-semibold text-lg text-gray-700"
+                  >
+                    {spe.specialtyName}
+                    {index < IndiProfile.specialties.length - 1 && ","}
+                  </p>
+                ))}
+              </div>
 
-                    <div>
-                        <p className='font-bold text-3xl'>Dr. Ritika Bhatt</p>
-                        <p className='font-semibold'>ENT</p>
-                        <p className='font-semibold'>5+ years experience</p>
-                        <div className='flex gap-2'>
-                            <FaGraduationCap className='mt-[5px]' />
-                            <p className='font-semibold'>MBBS, MS(ENT)</p>
-                        </div>
+              {/* Experience */}
+              <p className="font-semibold text-gray-600 mt-2">
+                {IndiProfile.experience}+ years experience
+              </p>
 
-                        <div className='flex gap-2'>
-                            <FaCommentDots className='mt-[5px]' />
-                            <p className='font-semibold'>English, Hindi</p>
-                        </div>
-
-                        <div className='flex gap-2'>
-                            <MdOutlineAddLocation className='mt-[5px]' />
-                            <div>
-                                <p className='font-semibold'>Apollo Clinic, Sarjapur Road</p>
-                                <p>GYR CHAMBER, Sarjapur Main Road Bengaluru Urban Kaikondrahalli, Bengaluru Karnataka</p>
-                            </div>
-
-                        </div>
-                    </div>
-                    </div>
-
-                    <div className='bg-white rounded-xl'>
-                     {/* <Calendar style={{ height: '10%' }} /> */}
-                     <DrAppointmentBooking/>
-                    </div>
-
-
-
-
-                </div>
-
-                <div className="about-dr mt-5">
-                    <p className='font-bold text-3xl'>About Doctor</p>
-                    <p>Dr Ritika Bhatt is an experienced ENT/Otorhinolaryngologist in Bangalore with over 5 years of expertise in diagnosing and treating a wide range of ear, nose and throat disorders. Dr Bhatt is considered one of the best ENT specialists in Bangalore and has gained a reputation for her compassionate care and successful treatment outcomes.
-
-                        As an ENT specialist, Dr Ritika provides care for both common and complex conditions affecting the ears, nose, throat, head, and neck. She diagnoses and treats various conditions like tonsillitis, nasal polyps, ear infections, hearing loss, sinusitis, snoring problems and more. Dr Bhatt's services extend to advanced treatments such as Tonsillectomy, Tympanoplasty (eardrum repair), Nasal Septum Surgery and Ear Reconstruction surgeries. Her expertise in treating congenital ear problems is highly sought after by parents seeking specialised treatment for their children.
-
+              {/* Qualifications */}
+              <div className="flex gap-2 mt-3 items-center">
+                <FaGraduationCap className="text-[#00768A]" />
+                {Array.isArray(IndiProfile.qualifications) &&
+                IndiProfile.qualifications.length > 0 ? (
+                  IndiProfile.qualifications.map((deg, index) => (
+                    <p key={index} className="font-semibold text-gray-600">
+                      {deg.degree}
                     </p>
+                  ))
+                ) : (
+                  <p className="text-gray-500">No qualifications available</p>
+                )}
+              </div>
 
-                    <div className='w-full bg-gray-300 h-[2px] mt-5'></div>
+              {/* Languages */}
+              <div className="flex gap-2 mt-3 items-center">
+                <FaCommentDots className="text-[#00768A]" />
+                <p className="font-semibold text-gray-600">
+                  {(IndiProfile.language || []).join(", ")}
+                </p>
+              </div>
 
+              {/* Location */}
+              <div className="flex gap-2 mt-3 items-start">
+                <MdOutlineAddLocation className="text-[#00768A]" />
+                <div>
+                  <p className="font-semibold text-gray-600">
+                    {IndiProfile.hospitalName},{" "}
+                    {IndiProfile.clinic_hospital_address?.permanentAddress}
+                  </p>
+                  <p className="text-gray-500">
+                    {IndiProfile.clinic_hospital_address?.permanentAddress},{" "}
+                    {IndiProfile.clinic_hospital_address?.state},
+                    {IndiProfile.clinic_hospital_address?.city}
+                    {IndiProfile.clinic_hospital_address?.PinCode}
+                  </p>
                 </div>
-
+              </div>
             </div>
-        </div>
-    )
-}
+          </div>
 
-export default DrIndividualProfileOverview
+          {/* Right Section: Appointment Booking */}
+          <div className="bg-white rounded-xl p-5 shadow-lg flex-1">
+            <DrAppointmentBooking IndiProfile={IndiProfile} />
+          </div>
+        </div>
+
+        {/* About Doctor Section */}
+        <div className="about-dr mt-5 p-5 bg-gray-50 rounded-xl">
+          <p className="font-bold text-3xl text-[#00768A]">About Doctor</p>
+          <p className="text-gray-700 mt-3">
+            Dr. Ritika Bhatt is an experienced ENT/Otorhinolaryngologist in
+            Bangalore with over 5 years of expertise in diagnosing and treating
+            a wide range of ear, nose, and throat disorders. Dr. Bhatt is
+            considered one of the best ENT specialists in Bangalore and has
+            gained a reputation for her compassionate care and successful
+            treatment outcomes. As an ENT specialist, Dr. Ritika provides care
+            for both common and complex conditions affecting the ears, nose,
+            throat, head, and neck. She diagnoses and treats various conditions
+            like tonsillitis, nasal polyps, ear infections, hearing loss,
+            sinusitis, snoring problems, and more. Dr. Bhatt's services extend
+            to advanced treatments such as Tonsillectomy, Tympanoplasty (eardrum
+            repair), Nasal Septum Surgery, and Ear Reconstruction surgeries. Her
+            expertise in treating congenital ear problems is highly sought after
+            by parents seeking specialized treatment for their children.
+          </p>
+          <div className="w-full bg-[#00768A] h-[2px] mt-5"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DrIndividualProfileOverview;

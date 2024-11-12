@@ -257,10 +257,10 @@ const DrExam = () => {
     }));
   };
   return (
-    <div className="bg-[#E1EAEF]">
+    <div className="bg-[#E1EAEF]" >
       <TopHeader />
       <Navbar />
-      <div className="relative max-w-[1200px] shadow-md shadow-[#00768A]  mx-auto flex flex-col lg:flex-row  mb-20 mt-10">
+      <div className="relative sm:max-w-[1200px] w-[100%] shadow-md shadow-[#00768A]  mx-auto flex flex-col lg:flex-row  mb-20 mt-10" >
         {/* Image Section */}
         <div className="lg:w-1/2  h-min w-full  sticky top-0 hidden lg:block">
           <img

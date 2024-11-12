@@ -17,7 +17,7 @@ import { CiPhone } from "react-icons/ci";
 import MegaMenu from "../Components/MegaMenu";
 import { useState } from "react";
 const Home = () => {
-  const [MegaMenubtn,setMegaMenubtn]=useState(false)
+  const [MegaMenubtn, setMegaMenubtn] = useState(false);
   const settings = {
     dots: false,
     infinite: true,
@@ -57,19 +57,18 @@ const Home = () => {
       },
     ],
   };
-  
 
   return (
-    <div>
+    <div className="">
       <header className="App-header">
         <TopHeader />
-        <Navbar  />
+        <Navbar />
         {/* {
           MegaMenubtn ? <MegaMenu /> :null
         } */}
-        
+
         <Headers />
-     
+
         <div className="py-10">
           <Categories />
         </div>

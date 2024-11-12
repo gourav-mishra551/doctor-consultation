@@ -112,6 +112,7 @@ function App() {
             element={<PrescriptionMakerPage />}
           />
           <Route path="/edit-profile" element={<EditProfilePage />} />
+
           {/* <Route path='/login' element={<Login />} /> */}
         </Routes>
       </BrowserRouter>
