@@ -50,6 +50,7 @@ import NewPatient from "./Pages/AppointmentBooking/NewPatient/NewPatient";
 import DrExam from "./Components/DrExam";
 import ProfilePage from "./Pages/ProfilePage";
 import PrescriptionMakerPage from "./Pages/PrescriptionMakerPage";
+import EditProfilePage from "./Pages/EditProfilePage";
 
 function App() {
   return (
@@ -110,6 +111,7 @@ function App() {
             path="/prescription-maker"
             element={<PrescriptionMakerPage />}
           />
+          <Route path="/edit-profile" element={<EditProfilePage />} />
 
           {/* <Route path='/login' element={<Login />} /> */}
         </Routes>

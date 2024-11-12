@@ -17,6 +17,8 @@ const PrescriptionMaker = () => {
   const [medicineSelected, setMedicineSelected] = useState(false);
   const [editForm, setEditForm] = useState(false);
   const [medicineName, setMedicineName] = useState("");
+  const [deleteAlert, setDeleteAlert] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const [editMedicineData, setEditMedicineData] = useState({
     medicineSelected: "",
     frequency: "",
@@ -30,8 +32,10 @@ const PrescriptionMaker = () => {
   const id = localStorage.getItem("id");
 
   const loadEditData = (data) => {
+    console.log("data", data);
     setEditMedicineData({
-      medicine: data.medicine,
+      id: data.id, // Store the ID for tracking edits
+      medicineName: data.medicineName,
       frequency: data.frequency,
       duration: data.duration,
       instruction: data.instruction,
@@ -49,13 +53,23 @@ const PrescriptionMaker = () => {
   };
 
   // Function to submit the edited data
-  const handleEditSubmit = (e, editedData) => {
+  const handleEditSubmit = (e) => {
     e.preventDefault();
-    setTableData((prevData) =>
+    setMedicineData((prevData) =>
       prevData.map((item) =>
-        item.id === editedData.id ? { ...item, ...editedData } : item
+        item.id === editMedicineData.id
+          ? { ...item, ...editMedicineData }
+          : item
       )
     );
+    setEditForm(false); // Close the form popup after submission
+    setEditMedicineData({
+      id: "",
+      medicineName: "",
+      frequency: "",
+      duration: "",
+      instruction: "",
+    });
   };
 
   const addSection = () => {
@@ -129,24 +143,30 @@ const PrescriptionMaker = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    const medicineName = searchTerm; // Whether typed manually or selected from search
-    if (medicineName) {
-      // Add data to the table
-      setMedicineData([
-        ...medicineData,
-        { medicineName, frequency, duration, instruction },
-      ]);
-      // Clear fields after submission
-      setSearchTerm("");
-      setFrequency("");
-      setDuration("");
-      setInstruction("");
-      setMedicineSelected(false); // Reset the flag after submission
-      setPopUp(false);
-    }
+    const newMedicine = {
+      id: Date.now(),
+      medicineName: searchTerm,
+      frequency,
+      duration,
+      instruction,
+    };
+    setMedicineData([...medicineData, newMedicine]);
+    setSearchTerm("");
+    setFrequency("");
+    setDuration("");
+    setInstruction("");
+    setMedicineSelected(false);
+    setPopUp(false);
   };
 
-  console.log(medicineName);
+  const handleDeleteClick = (id) => {
+    setDeleteAlert(true);
+    setDeleteId(id);
+  };
+
+  const deleteProduct = (id) => {
+    setMedicineData((prevData) => prevData.filter((item) => item.id !== id));
+  };
 
   return (
     <div className="bg-gray-100 p-5 flex gap-5">
@@ -322,7 +342,10 @@ const PrescriptionMaker = () => {
                             onClick={() => loadEditData(data)}
                             className="text-[#00768A] cursor-pointer"
                           />
-                          <MdDelete className="text-red-500 cursor-pointer" />
+                          <MdDelete
+                            onClick={() => handleDeleteClick(data.id)}
+                            className="text-red-500 cursor-pointer"
+                          />
                         </div>
                       </td>
                     </tr>
@@ -445,16 +468,20 @@ const PrescriptionMaker = () => {
                     className="cursor-pointer text-gray-500 hover:text-gray-800"
                   />
                 </div>
-
                 <form onSubmit={handleEditSubmit} className="space-y-5">
                   <div className="relative flex gap-4">
                     <div className="w-full">
                       <input
-                        name="medicineSelected"
+                        name="medicineName"
                         placeholder="Enter medicine name"
                         type="text"
-                        value={medicineName}
-                        onChange={(e) => setMedicineName(e.target.value)}
+                        value={editMedicineData.medicineName}
+                        onChange={(e) =>
+                          setEditMedicineData({
+                            ...editMedicineData,
+                            medicineName: e.target.value,
+                          })
+                        }
                         className="px-4 py-2 rounded-lg border w-full focus:outline-none focus:border-[#1495AB] focus:ring-2 focus:ring-[#1495AB] h-[68px]"
                       />
                     </div>
@@ -462,7 +489,12 @@ const PrescriptionMaker = () => {
                       name="frequency"
                       placeholder="Frequency"
                       value={editMedicineData.frequency}
-                      onChange={(e) => setFrequency(e.target.validationMessage)}
+                      onChange={(e) =>
+                        setEditMedicineData({
+                          ...editMedicineData,
+                          frequency: e.target.value,
+                        })
+                      }
                       className="px-4 py-2 rounded-lg border w-full resize-none focus:outline-none focus:border-[#1495AB] focus:ring-[#1495AB]"
                     />
                   </div>
@@ -504,6 +536,33 @@ const PrescriptionMaker = () => {
                     </button>
                   </div>
                 </form>
+              </div>
+            </div>
+          )}
+          {deleteAlert && (
+            <div className="fixed inset-0 flex items-center justify-center z-50">
+              <div className="absolute inset-0 bg-gray-900 opacity-50"></div>
+              <div className="bg-white p-6 rounded-lg border-2 z-10">
+                <p className="text-lg mb-4">
+                  Are you sure you want to delete this item?
+                </p>
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => {
+                      deleteProduct(deleteId);
+                      setDeleteAlert(false);
+                    }}
+                    className="bg-red-500 text-white px-4 py-2 rounded-md mr-2"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => setDeleteAlert(false)}
+                    className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
           )}
