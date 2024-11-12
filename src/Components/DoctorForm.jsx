@@ -7,7 +7,7 @@ import TopHeader from "./TopHeader";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { ImCross } from "react-icons/im";
-
+import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Import icons
 const DoctorForm = () => {
   const [formValues, setFormValues] = useState({
     specialitycategories: [],
@@ -19,24 +19,10 @@ const DoctorForm = () => {
       PinCode: "",
     },
     hospital_contact: "",
-    hospital_email: "",
-    visitingMode: "offline",
     aboutDoctor: "",
     councilName: "",
     RegistrationNumber: "",
     language: [],
-    qualifications: [
-      {
-        sequenceNumber: 1,
-        instituteName: "",
-        degree: "",
-        fieldOfStudy: "",
-        startDate: { month: "", year: "" },
-        endDate: { month: "", year: "" },
-        description: "",
-        skills: [],
-      },
-    ],
     years_of_experience: [
       {
         sequenceNumber: 1,
@@ -52,15 +38,73 @@ const DoctorForm = () => {
       },
     ],
   });
-  console.log(formValues.qualifications);
 
+  const [customCouncil, setCustomCouncil] = useState("");
   const [skillInput, setSkillInput] = useState("");
+  const [customLanguage, setCustomLanguage] = useState("");
+  const [CustomLangOpen, CustomLangSetOpen] = useState(false);
   const [QualificationSkill, setQualificationSkill] = useState("");
+  const [Language, setLanguage] = useState("");
+  const handleCustomCouncilSubmit = () => {
+    if (customCouncil) {
+      // Update formValues with custom council name
+      setFormValues({
+        ...formValues,
+        councilName: customCouncil,
+      });
+      setCustomCouncil(""); // Clear the input field after submission
+    }
+  };
+
+  const handleCustomLanguageSubmit = () => {
+    if (customLanguage) {
+      // If the custom language is not empty, add it to the form values and close the dropdown
+      setFormValues({ ...formValues, language: customLanguage });
+      setLanguage([...language, customLanguage]); // Add custom language to the predefined list
+      setCustomLanguage(""); // Clear the input field
+      CustomLangSetOpen(false); // Close the dropdown
+    }
+    console.log(formValues.language);
+  };
+
+  const LangtoggleDropdown = () => {
+    CustomLangSetOpen(!CustomLangOpen); // Toggle dropdown state
+  };
+
+  const handleLanguageSelect = (lang) => {
+    setFormValues({ ...formValues, language: lang });
+    CustomLangSetOpen(false); // Close dropdown after selection
+  };
+
+  useEffect(() => {
+    console.log(formValues.language); // Logs the updated language value
+  }, [formValues.language]);
+
+  const handleLanguageChange = (event) => {
+    const selectedLanguage = event.target.value;
+
+    // Update language array without duplicates
+    if (selectedLanguage && !formValues.language.includes(selectedLanguage)) {
+      setFormValues((prev) => ({
+        ...prev,
+        language: [...prev.language, selectedLanguage], // Add selected language
+      }));
+    }
+  };
+
+  // This useEffect will trigger when formValues.councilName changes
+  useEffect(() => {
+    if (formValues.councilName) {
+      console.log("Updated Council Name:", formValues.councilName);
+    }
+  }, [formValues.councilName]); // Only triggers when councilName changes
 
   const HandleSkillOfQualification = (index) => {
     if (!QualificationSkill.trim()) return; // Prevent empty skill submission
 
     console.log("Adding skill: ", QualificationSkill); // Check if this logs twice
+
+    // Handle the submission of the custom input value
 
     setFormValues((prevState) => {
       // Copy the previous state
@@ -116,6 +160,7 @@ const DoctorForm = () => {
   };
 
   const [isOpen, setIsOpen] = useState(false);
+  const [CustomOpen, CustomSetOpen] = useState(false);
   const [step, setStep] = useState(1);
 
   const handleNextStep = () => {
@@ -129,6 +174,10 @@ const DoctorForm = () => {
   // Toggle function to open/close dropdown
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
+  };
+
+  const CustomtoggleDropdown = () => {
+    CustomSetOpen(!CustomOpen);
   };
 
   const [specialtyoptions, setSpecialityOptions] = useState([]);
@@ -147,8 +196,6 @@ const DoctorForm = () => {
     }
     setIsOpen(false); // Close the dropdown after selection
   };
-
- 
 
   // const handleInputChange = (e, index, arrayName, fieldName) => {
   //     const newArray = [...formValues[arrayName]];
@@ -211,9 +258,6 @@ const DoctorForm = () => {
     });
   };
 
-
-
-
   const SelectSpecialty = async () => {
     try {
       const response = await fetch(
@@ -231,9 +275,6 @@ const DoctorForm = () => {
   };
 
   // Handling drag end for reordering qualifications
-
-
- 
 
   // Specific handler for nested fields (like startDate and endDate)
   const handleDateChange = (e, index, field, subField) => {
@@ -334,8 +375,6 @@ const DoctorForm = () => {
 
   // Handle change in qualification selection
   const handleQualificationChange = (e) => {
-  
-
     const { value } = e.target;
     setFormValues({
       ...formValues,
@@ -375,19 +414,6 @@ const DoctorForm = () => {
         years_of_experience: updatedExperiences,
       };
     });
-  };
-
- 
-  const handleLanguageChange = (event) => {
-    const selectedLanguage = event.target.value;
-
-    // Update language array without duplicates
-    if (selectedLanguage && !formValues.language.includes(selectedLanguage)) {
-      setFormValues((prev) => ({
-        ...prev,
-        language: [...prev.language, selectedLanguage], // Add selected language
-      }));
-    }
   };
 
   //qualification skill delete
@@ -465,12 +491,10 @@ const DoctorForm = () => {
       clinic_hospital_address,
       hospital_contact,
       hospital_email,
-      visitingMode,
       aboutDoctor,
       councilName,
       RegistrationNumber,
       language,
-      qualifications,
       years_of_experience,
     } = formValues;
 
@@ -480,12 +504,10 @@ const DoctorForm = () => {
       clinic_hospital_address,
       hospital_contact,
       hospital_email,
-      visitingMode,
       aboutDoctor,
       councilName,
       RegistrationNumber,
       language,
-      qualifications,
       years_of_experience,
     };
 
@@ -596,12 +618,18 @@ const DoctorForm = () => {
               </p>
               <div className="input-group flex flex-col gap-5">
                 {/* Specialist Toggle */}
+
                 <div className="relative inline-block text-left">
+                  <label htmlFor="qualifications" className="text-[#00768A]">
+                    Select Specialties:
+                  </label>
                   <button
                     type="button"
                     onClick={toggleDropdown}
-                    className="bg-[#00768A] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 border-2 bg-opacity-70 border-gray-300 text-white px-4 py-2 rounded-md w-full text-start focus:outline-none"
+                    className="items-center justify-between bg-[#ffff] grid grid-cols-1 sm:grid-cols-2 gap-2 md:grid-cols-3 border-2 bg-opacity-70 border-gray-300 text-black px-4 py-2 rounded-md w-full text-start focus:outline-none"
                   >
+                    {/* Display selected specialties */}
+
                     {formValues.specialitycategories.length > 0
                       ? specialtyoptions
                           .filter((option) =>
@@ -610,7 +638,7 @@ const DoctorForm = () => {
                           .map((option) => (
                             <span
                               key={option._id}
-                              className="flex  items-center mr-2"
+                              className="flex items-center mr-2 gap-2"
                             >
                               {option.specialtyName}
                               <MdCancel
@@ -622,7 +650,18 @@ const DoctorForm = () => {
                             </span>
                           ))
                       : "Select Specialties"}
+
+                    {/* Arrow at the end of the button */}
+                    {/* <div className="flex  ml-2 w-[20px]" style={{border:"1px solid red"}}>
+                      {isOpen ? (
+                        <FaChevronUp className="ml-2" />
+                      ) : (
+                        <FaChevronDown className="ml-2" />
+                      )}
+                    </div> */}
                   </button>
+
+                  {/* Dropdown content */}
                   {isOpen && (
                     <div className="absolute mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                       <div className="py-1">
@@ -630,9 +669,10 @@ const DoctorForm = () => {
                           <div
                             key={ele._id}
                             onClick={() => handleSelectSpecialty(ele._id)}
-                            className="flex items-center justify-between px-4 py-2 text-gray-700 hoverder-[#00768A] cursor-pointer"
+                            className="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-[#00768A] cursor-pointer"
                           >
                             <span>{ele.specialtyName}</span>
+                            {/* Add checkmark if the option is selected */}
                             {formValues.specialitycategories.includes(
                               ele._id
                             ) && <TiTickOutline className="text-[#00768A]" />}
@@ -644,93 +684,129 @@ const DoctorForm = () => {
                 </div>
 
                 {/* Other Input Fields */}
-                {/* Qualification */}
-                <div>
-                  <label htmlFor="qualifications" className="text-[#00768A]">
-                    Select Qualification:
-                  </label>
-                  <select
-                    id="qualifications"
-                    name="qualifications"
-                    value={formValues.qualifications}
-                    onChange={handleQualificationChange}
-                    className="border border-gray-300 w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A]"
-                  >
-                    <option value="" disabled>
-                      Select a Qualification
-                    </option>
-                    {qualificationsOptions.map((option, index) => (
-                      <option key={index} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                </div>
 
                 {/* Language */}
-                <div>
+                <div className="relative">
                   <label htmlFor="language" className="text-[#00768A]">
                     Select Language:
                   </label>
-                  <select
-                    id="language"
-                    name="language"
-                    value={formValues.language}
-                    onChange={handleLanguageChange}
-                    className="border border-gray-300 w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A]"
+
+                  {/* Custom dropdown trigger */}
+                  <div
+                    className="border border-gray-300 w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A] flex items-center justify-between cursor-pointer"
+                    onClick={LangtoggleDropdown}
                   >
-                    <option value="" disabled>
-                      Select a Language
-                    </option>
-                    {language.map((option, index) => (
-                      <option key={index} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
+                    <div className="flex items-center">
+                      {/* Display selected language */}
+                      {formValues.language || "Select a Language"}
+                    </div>
+                    <div className="flex items-center">
+                      {/* Toggle arrow */}
+                      {CustomLangOpen ? <FaChevronUp /> : <FaChevronDown />}
+                    </div>
+                  </div>
+
+                  {/* Dropdown content */}
+                  {CustomLangOpen && (
+                    <div className="absolute top-full left-0 w-full bg-white shadow-lg mt-2 border border-gray-300 rounded-md z-10">
+                      {/* Container for input and button */}
+                      <div className="p-2">
+                        {/* Input field for custom language */}
+                        <input
+                          type="text"
+                          value={customLanguage}
+                          onChange={(e) => setCustomLanguage(e.target.value)}
+                          placeholder="Enter custom language"
+                          className="w-full p-2 border border-gray-300 rounded-md mb-2"
+                        />
+                        <button
+                          onClick={handleCustomLanguageSubmit}
+                          className="w-full bg-[#00768A] text-white p-2 rounded-md"
+                        >
+                          Add Custom Language
+                        </button>
+                      </div>
+
+                      {/* Render predefined language options */}
+                      <div className="max-h-60 overflow-y-auto">
+                        {language.map((lang, index) => (
+                          <div
+                            key={index}
+                            onClick={() => handleLanguageSelect(lang)} // Select language from the list
+                            className="cursor-pointer hover:bg-[#00768A] hover:text-white text-black p-2 transition-all duration-200"
+                          >
+                            {lang}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* Visiting Mode */}
-                <div>
-                  <label htmlFor="visitingMode" className="text-[#00768A]">
-                    Select Visiting Mode:
-                  </label>
-                  <select
-                    name="visitingMode"
-                    value={formValues.visitingMode}
-                    onChange={handleChange}
-                    className="border border-gray-300 w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A]"
-                    required
-                  >
-                    <option>Select Visit Mode</option>
-                    <option value="Offline">Offline</option>
-                    <option value="Online">Online</option>
-                    <option value="Both">Both</option>
-                  </select>
-                </div>
-                <div>
+                {/* Council Name */}
+                <div className="relative">
                   <label className="text-[#00768A]" htmlFor="CouncilName">
                     Select Council Name:
                   </label>
-                  <select
-                    name="councilName"
-                    value={formValues.councilName}
-                    onChange={handleChange}
-                    className="border border-gray-300 w-full max-w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A] sm:h-10 md:h-12"
-                    required
+
+                  {/* Custom dropdown */}
+                  <div
+                    className="border border-gray-300 w-full max-w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A] flex items-center justify-between cursor-pointer"
+                    onClick={CustomtoggleDropdown}
                   >
-                    {CouncilName.map((ele, index) => (
-                      <option
-                        key={index}
-                        value={ele}
-                        className="sm:w-[100%] flex flex-col justify-center"
-                      >
-                        {ele}
-                      </option>
-                    ))}
-                  </select>
+                    <div className="flex items-center">
+                      {/* Display selected council */}
+                      {formValues.councilName || "Select a Council"}
+                    </div>
+                    <div className="flex items-center">
+                      {/* Toggle arrow */}
+                      {CustomOpen ? <FaChevronUp /> : <FaChevronDown />}
+                    </div>
+                  </div>
+
+                  {/* Show custom input inside dropdown */}
+                  {CustomOpen && (
+                    <div className="absolute top-full left-0 w-full bg-white shadow-lg mt-2 border border-gray-300 rounded-md">
+                      <div className="p-2">
+                        {/* Input field for custom council */}
+                        <input
+                          type="text"
+                          value={customCouncil}
+                          onChange={(e) => setCustomCouncil(e.target.value)}
+                          placeholder="Enter custom council name"
+                          className="w-full p-2 border border-gray-300 rounded-md mb-2"
+                        />
+                        <button
+                          onClick={handleCustomCouncilSubmit}
+                          className="w-full bg-[#00768A] text-white p-2 rounded-md"
+                        >
+                          Add Custom Council
+                        </button>
+                      </div>
+
+                      {/* Render predefined council names */}
+                      <div className="max-h-60 overflow-y-auto">
+                        {CouncilName.map((ele, index) => (
+                          <div
+                            key={index}
+                            onClick={() => {
+                              setFormValues({
+                                ...formValues,
+                                councilName: ele,
+                              });
+                              CustomSetOpen(false); // Close dropdown after selection
+                            }}
+                            className="cursor-pointer hover:bg-[#00768A] text-black p-2"
+                          >
+                            {ele}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div>
+
+                {/* <div>
                   <label
                     className="text-[#00768A]"
                     htmlFor="RegistrationNumber"
@@ -746,7 +822,7 @@ const DoctorForm = () => {
                     onChange={handleChange}
                     required
                   />
-                </div>
+                </div> */}
 
                 <div className="gap-5">
                   <label className="text-[#00768A]" htmlFor="DoctorDescription">

@@ -53,8 +53,7 @@ import PrescriptionMakerPage from "./Pages/PrescriptionMakerPage";
 
 function App() {
   return (
-    <div className="App w-[100%] overflow-x-hidden">
-
+    <div className="App">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
