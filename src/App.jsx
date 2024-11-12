@@ -48,12 +48,11 @@ import FirstQuestion from "./Pages/AppointmentBooking/FirstQuestion";
 import NewPatient from "./Pages/AppointmentBooking/NewPatient/NewPatient";
 
 import DrExam from "./Components/DrExam";
-import ProfilePage from "./Pages/ProfilePage";
-import PrescriptionMakerPage from "./Pages/PrescriptionMakerPage";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App w-[100%] overflow-x-hidden">
+
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -110,6 +109,7 @@ function App() {
             path="/prescription-maker"
             element={<PrescriptionMakerPage />}
           />
+
           {/* <Route path='/login' element={<Login />} /> */}
         </Routes>
       </BrowserRouter>

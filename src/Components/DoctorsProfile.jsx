@@ -9,22 +9,22 @@ import { LiaSortAmountDownAltSolid } from "react-icons/lia";
 import { PiArrowsDownUpFill } from "react-icons/pi";
 import { TbChartCandle } from "react-icons/tb";
 import axios from "axios";
+
+import { Link } from "react-router-dom";
 const DoctorsProfile = () => {
-  // const [my, setMy] = useState([])
+  const [DoctorData, setDoctorData] = useState([]);
+  useEffect(() => {
+    FetchDrProfile();
+  }, []);
+  const FetchDrProfile = async () => {
+    try {
+      const res = await axios.get(
+        "https://api.assetorix.com/ah/api/v1/dc/user/doctors"
+      );
+      setDoctorData(res.data.data);
+    } catch (error) {}
+  };
 
-  // const data = () => {
-  //     try {
-  //         const respisnse = axios.get(`https://api.assetorix.com/ah/api/v1/dc/user/doctors/6715f4be7029bc9e2be686b0`),
-  //             setMy(respisnse.data)
-  //     }
-  //     catch (error) {
-  //         console.log(error)
-  //     }
-  // }
-
-  // useEffect(() => {
-  //     data()
-  // }, [])
 
   return (
     <div>
@@ -116,6 +116,7 @@ const DoctorsProfile = () => {
                 className="form-checkbox text-indigo-600 h-4 w-4"
                 name="Gender"
               />
+              <span className="ml-1">others</span>
               <span className="ml-1">Shemale</span>
             </label>
           </div>
@@ -294,81 +295,105 @@ const DoctorsProfile = () => {
           </div>
 
           <div>
-            <div className="sm:hidden block">
-              <div className="flex justify-center items-center p-2 space-x-10">
-                <div className="img bg-[#f3f3f3] flex justify-center items-center h-[150px] w-[150px] rounded-full">
+      
+          </div>
+
+          <div className="w-full md:w-[75%] flex flex-wrap gap-10">
+          {DoctorData.map((doctor, index) => (
+            <div
+              key={index}
+              className="dr-profile-section w-full sm:w-[48%] md:w-full bg-white p-8 flex flex-col md:flex-row justify-between rounded-lg shadow-lg"
+              style={{ border: "1px solid #e1e1e1" }}
+            >
+              <div className="flex flex-col sm:flex-row gap-6">
+                {/* Profile Image */}
+                <div className="img bg-[#f3f3f3] flex justify-center items-center h-[160px] w-[160px] sm:h-[160px] sm:w-[160px] rounded-full border-2 border-[#00768A] mx-auto sm:mx-0">
                   <img
-                    src="image.png"
-                    alt="dr-image"
-                    className="h-[130px] w-[130px] rounded-full"
+                    src={doctor.avatar}
+                    alt={doctor.name}
+                    className="h-[150px] w-[150px] sm:h-[150px] sm:w-[150px] rounded-full object-cover"
                   />
                 </div>
-                <div className="dr-profilee">
-                  <p className="text-blue-800 font-bold text-[27px]">
-                    Dr Tripti Deb
+
+                {/* Doctor Info */}
+                <div className="dr-profilee text-[#333333] text-center sm:text-left">
+                  <p className="text-[#00768A] text-2xl font-bold">
+                    {doctor.name}
                   </p>
-                  <p
-                    className="text-blue-800 font-semibold text-[21px]"
-                    style={{ fontWeight: "bolder" }}
-                  >
-                    Cardiologist
+                  <div className="flex gap-4 flex-wrap mt-2 justify-center sm:justify-start">
+                    {doctor.services_offered.map((service, idx) => (
+                      <div key={idx} className="bg-[#f0f9f9] p-2 rounded-lg">
+                        <p className="text-[#00768A] font-semibold">
+                          {service}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Experience */}
+                  <p className="text-lg font-semibold text-orange-600 mt-2">
+                    Experience: {doctor.experience} years
                   </p>
-                  <p
-                    style={{ fontWeight: "bold" }}
-                    className="text-[21px] text-gray-500"
-                  >
-                    Urology
-                  </p>
-                  <p
-                    style={{ fontWeight: "bold" }}
-                    className="text-[21px] text-gray-500"
-                  >
-                    40 Years MBBS,MD,DM,FACC
-                  </p>
-                  <p style={{ fontWeight: "bold" }} className="text-[21px]">
-                    Dermatologist
+
+                  {/* Skills */}
+                  {doctor?.years_of_experience?.map((experience, index) => (
+                    <div
+                      className="flex flex-wrap mt-2 justify-center sm:justify-start"
+                      key={index}
+                    >
+                      {experience.skills.map((skill, skillIndex) => (
+                        <p
+                          key={skillIndex}
+                          className="font-bold mr-3 text-sm text-gray-600"
+                        >
+                          {skill}
+                        </p>
+                      ))}
+                    </div>
+                  ))}
+
+                  {/* About Doctor */}
+                  <p className="mt-4 text-sm text-gray-600">
+                    {doctor.aboutDoctor}
                   </p>
                 </div>
               </div>
 
-              <div
-                className="mb-3"
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "30px",
-                  gap: "60px",
-                }}
-              >
-                <button
-                  style={{
-                    border: "1px solid black",
-                    padding: "10px",
-                    fontWeight: "bolder",
-                    borderRadius: "10px",
-                    height: "70px",
-                    width: "200px",
-                    fontSize: "23px",
-                  }}
-                >
-                  Digital Consult
-                </button>
-                <button
-                  className="bg-[#1977CC] hover:bg-[#2c91e9] transition-all duration-300 ease-in-out"
-                  style={{
-                    border: "1px solid black",
-                    padding: "10px",
-                    fontWeight: "bolder",
-                    borderRadius: "10px",
-                    color: "white",
-                    height: "70px",
-                    width: "200px",
-                    fontSize: "23px",
-                  }}
-                >
-                  Hospital Visit
-                </button>
-              </div>
+              {/* Price and Action Buttons */}
+              <div className="ratings flex flex-col sm:justify-start sm:items-start justify-center  items-center gap-4 mt-6 md:items-start">
+                {/* Ratings */}
+                <div className="flex items-center justify-center mt-2">
+                  {[...Array(4)].map((_, i) => (
+                    <IoMdStar key={i} className="text-yellow-500 text-3xl" />
+                  ))}
+                  <span className="ml-2 text-gray-500">4.0</span>
+                </div>
+                {/* Price */}
+                <div className="flex gap-2 items-center">
+                  Price:
+                  <p className="ml-2 mt-1 text-lg font-semibold">
+                    
+                      <span className="text-green-600">{`INR ${doctor.price}`}</span>
+                    
+                      
+                
+                  </p>
+                </div>
+
+                {/* Buttons */}
+                <div className="flex flex-col gap-4 mt-6">
+                  <button className="h-[40px] w-[220px] border-2 rounded-lg border-[#00768A] hover:bg-[#00768A] hover:text-white transition-all ease-in-out duration-300">
+                    <Link
+                      to={`/dr-indi/${doctor._id}`}
+                      className="flex justify-center items-center"
+                    >
+                      VIEW PROFILE
+                    </Link>
+                  </button>
+                  <button className="h-[40px] w-[220px] text-white rounded-lg bg-[#00768A] border-2 border-[#00768A] hover:scale-105">
+                    BOOK APPOINTMENT
+                  </button>
+                </div>
             </div>
           </div>
 
@@ -510,6 +535,8 @@ const DoctorsProfile = () => {
                 <p>Dermatologist</p>
               </div>
             </div>
+          ))}
+        </div>
 
             <div className="ratings">
               <div className="thumbs flex gap-1">

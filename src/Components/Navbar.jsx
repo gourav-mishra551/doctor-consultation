@@ -5,13 +5,12 @@ import axios from "axios";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
 import { useSelector } from "react-redux";
 import { FaChevronUp } from "react-icons/fa";
-// import SubNavbar from "../SubNavbar/SubNavbar";
 import { BsCart3, BsCartPlus } from "react-icons/bs";
 import { gsap } from "gsap";
 import "./Navbar.css"; // Import the CSS file
 import Image from "../../src/Assests/ametheus.webp";
 import { FaChevronDown } from "react-icons/fa6";
-// import SubNavMobile from "../SubNavbar/SubNavMobile";
+
 
 const Navbar = () => {
   const cart = useSelector((state) => state.cart);
@@ -37,8 +36,8 @@ const Navbar = () => {
 
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [openSubMenus, setOpenSubMenus] = useState({});
- 
-  const [Categoriesdata,setCategorydata]=useState([])
+
+  const [Categoriesdata, setCategorydata] = useState([]);
   const submenuData = {
     PatientCare: [
       "Find A doctor",
@@ -105,13 +104,18 @@ const Navbar = () => {
     }));
   };
 
+  const handleCategoryClick = (Categoriesdata) => {
+    console.log(Categoriesdata);
+  };
+  handleCategoryClick();
   const handleMouseEnter = (item, event) => {
     setHoveredItem(item);
     const menuItemRect = event.target.getBoundingClientRect();
     const containerRect = containerRef.current.getBoundingClientRect();
     setSubmenuPosition({
-      top: menuItemRect.bottom - containerRect.top + 90, // Adjusted for dropdown position
-      left: menuItemRect.left - containerRect.left + 10, // Align to the left edge of the hovered item
+      top: menuItemRect.bottom + window.scrollY, // Position it just below the hovered item
+      left: menuItemRect.left + window.scrollX, // Position it aligned to the left of the hovered item
+
     });
   };
 
@@ -122,6 +126,7 @@ const Navbar = () => {
   const toggleMegaMenu = () => {
     setIsMegaMenuOpen(!isMegaMenuOpen);
   };
+  const containerRef = useRef(null);
   const megaMenuRef = useRef(null);
   const handleClickOutside = (event) => {
     // If the click was outside the Mega Menu, hide it
@@ -253,12 +258,24 @@ const Navbar = () => {
     window.dispatchEvent(event);
   };
 
+  useEffect(() => {
+    FetchCategoriesData();
+  }, []);
+
+  const FetchCategoriesData = async () => {
+    try {
+      const res = await axios(
+        "https://api.assetorix.com/ah/api/v1/dc/user/Category"
+      );
+      setCategorydata(res.data.data);
+    } catch (error) {}
+  };
 
   return (
-  
     <div>
-      <nav className="text-black sticky top-0 z-50 bg-white sm:w-full w-[680px]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="text-black sticky top-0 z-50 bg-white sm:w-full w-[auto]">
+        <div className="sm:max-w-7xl max-w-[100%] mx-auto px-4 sm:px-6 lg:px-8">
+
           <div className="flex items-center justify-between h-16">
             <Link to="/" className="text-xl font-bold flex-shrink-0">
               <img className="h-14 w-auto" src={Image} alt="logo" />
@@ -272,7 +289,6 @@ const Navbar = () => {
                   className="absolute w-full left-0 border rounded-lg shadow-lg p-4 bg-white max-h-64 overflow-y-auto z-10"
                 >
                   <div className="text-sm text-red-600">No Product Found</div>
-
                 </div>
               )}
               {showResults && (
@@ -306,6 +322,7 @@ const Navbar = () => {
                 </div>
               )}
             </div>
+
             {/* Menu Items */}
             <div className="flex items-center">
               <div className="hidden sm:flex justify-end gap-10">
@@ -313,14 +330,14 @@ const Navbar = () => {
                   <span className="relative z-10">
                     <Link to="/">Home</Link>
                   </span>
-                  <span className="absolute left-0 bottom-0 h-0.5 w-full bg-blue-500 scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
+                  <span className="absolute left-0 bottom-0 h-0.5 w-full bg-[#00768A] scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
                 </div>
 
                 <div className="relative cursor-pointer group">
                   <span className="relative z-10">
                     <Link to="/about">About</Link>
                   </span>
-                  <span className="absolute left-0 bottom-0 h-0.5 w-full bg-blue-500 scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
+                  <span className="absolute left-0 bottom-0 h-0.5 w-full bg-[#00768A] scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
                 </div>
 
                 <div
@@ -335,14 +352,7 @@ const Navbar = () => {
                   }}
                 >
                   <span className="relative z-10">Service</span>
-                  <span className="absolute left-0 bottom-0 h-0.5 w-full bg-blue-500 scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
-                </div>
-
-                <div className="relative cursor-pointer group">
-                  <span className="relative z-10">
-                    <Link to="/CategoriesDetails/:id">Doctors</Link>
-                  </span>
-                  <span className="absolute left-0 bottom-0 h-0.5 w-full bg-blue-500 scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
+                  <span className="absolute left-0 bottom-0 h-0.5 w-full bg-[#00768A] scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
                 </div>
 
                 <div className="relative cursor-pointer group">
@@ -461,7 +471,6 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-
         {/* Mobile Menu */}
         {isOpen && (
           <div className="md:hidden bg-white-200 text-black h-max pb-32 overflow-y-auto">
@@ -529,8 +538,6 @@ const Navbar = () => {
               >
                 Doctors
               </Link>
-
-
               <Link
                 to="/contact-us"
                 className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white"
@@ -546,10 +553,20 @@ const Navbar = () => {
       {MegaMenubtn == true ? (
         <div>
           <div
-            className="absolute bg-[#F7F6F9] bg-opacity-40 z-50 w-[100%]"
-            ref={containerRef}
+            className="bg-[#F7F6F9] bg-opacity-40 z-50"
+            ref={setBothRefs}
+            onMouseEnter={() => {
+              setMegaMenubtn(true); // Activate Mega Menu on hover
+              setIsHoveringServices(true);
+            }}
+            onMouseLeave={() => {
+              setIsHoveringServices(false);
+            }}
           >
-            <div className="flex justify-center gap-12 py-4 bg-[#00768A] text-white flex-wrap md:flex-nowrap">
+            <div
+              className="flex justify-center gap-8  py-4 bg-[#00768A] text-white flex-wrap md:flex-nowrap" // Reduced gap here
+              
+            >
               {Object.keys(submenuData).map((menu, index) => (
                 <div className="relative cursor-pointer group">
                   <span
@@ -562,7 +579,6 @@ const Navbar = () => {
                   </span>
                   <span className="absolute left-0 bottom-0 h-0.5 w-full bg-[white] scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100 group-hover:origin-left origin-left"></span>
                 </div>
-
               ))}
             </div>
           </div>
@@ -571,6 +587,7 @@ const Navbar = () => {
             <div
               className={`absolute p-4 bg-white rounded-lg shadow-lg flex justify-center gap-18 z-50 transition-all duration-300 ${
                 hoveredItem === "CenterOfExcellence"
+
                   ? "w-full  mr-[450px]"
                   : "w-auto" // Full width for Center of Excellence, auto for others
               }`}
@@ -578,46 +595,42 @@ const Navbar = () => {
                 top: `${submenuPosition.top}px`,
                 left:
                   hoveredItem === "CenterOfExcellence"
-                    ? 0
-                    : `${submenuPosition.left}px`, // Adjust left for Center of Excellence
+                    ? "0" // Ensure it aligns to the left
+                    : `${
+                        submenuPosition.left < 0 ? 0 : submenuPosition.left
+                      }px`, // If left is negative, set it to 0
+                transform:
+                  hoveredItem === "CenterOfExcellence"
+                    ? "translateX(0)" // Use transform to align properly
+                    : "translateX(0)", // Make sure other items are aligned correctly too
               }}
-              onMouseEnter={() => setHoveredItem(hoveredItem)}
-              onMouseLeave={handleMouseLeave}
+              ref={setBothRefs}
+              onMouseEnter={() => {
+                setHoveredItem(hoveredItem);
+                setIsHoveringServices(true);
+              }}
+              onMouseLeave={() => {
+                setIsHoveringServices(false);
+                handleMouseLeave();
+              }}
             >
               {hoveredItem === "CenterOfExcellence" ? (
-                <div className="grid grid-cols-2 sm:grid-cols-4 justify-items-right items-center gap-4 sm:gap-10 w-[90%] mx-auto">
-                  {submenuData[hoveredItem].map((subItem, index) => (
+                <div className="grid grid-cols-2 sm:grid-cols-4 justify-items-start items-center gap-4 sm:gap-10 w-[90%] mx-auto cursor-pointer">
+                  {Categoriesdata.map((subItem, index) => (
                     <div key={index} className="flex align-top">
                       <div className="flex items-center justify-center">
-                        {subItem === "Cardiology" && (
+                        
+                        
                           <img
-                            src="src/Assests/heart-attack.png"
+                            src={subItem.image}
                             className="h-8 w-8 sm:h-10 sm:w-10"
                           />
-                        )}
-                        {subItem === "Orthopedics" && (
-                          <img
-                            src="src/Assests/x-ray.png"
-                            className="h-8 w-8 sm:h-10 sm:w-10"
-                          />
-                        )}
-                        {subItem === "Spine" && (
-                          <img
-                            src="src/Assests/chiropractic.png"
-                            className="h-8 w-8 sm:h-10 sm:w-10"
-                          />
-                        )}
-                        {subItem === "Neurology" && (
-                          <img
-                            src="src/Assests/neurology.png"
-                            className="h-8 w-8 sm:h-10 sm:w-10"
-                          />
-                        )}
-                        {/* Add more subItem checks and images */}
+                        
                       </div>
                       <div className="ml-2">
                         <div className="text-black-1000 hover:text-blue-700 transition-colors duration-200 mt-1 sm:mt-2 font-semibold">
-                          {subItem}
+                          {subItem.specialtyName}
+
                         </div>
                         <span className="text-gray-800 text-xs sm:text-sm">
                           See all Doctors
@@ -627,7 +640,8 @@ const Navbar = () => {
                   ))}
                 </div>
               ) : (
-                <ul className="flex flex-col gap-2">
+                <ul className="flex flex-col gap-2 cursor-pointer" >
+
                   {submenuData[hoveredItem].map((subItem, index) => (
                     <li
                       key={index}

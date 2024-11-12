@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { NavLink } from 'react-router-dom';
-
+import './UserProfile.css'
 const UserProfile = () => {
 
     const [userData, setUserData] = useState([])
