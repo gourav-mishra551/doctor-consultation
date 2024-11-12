@@ -180,18 +180,10 @@ const Profile = () => {
                     </li>
                     <li>
                       <a
-                        href="#"
+                        href="/edit-profile"
                         className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
                       >
                         Edit Profile
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
-                      >
-                        Security
                       </a>
                     </li>
                   </ul>
