@@ -16,6 +16,7 @@ import { VscSave } from "react-icons/vsc";
 import { CiPhone } from "react-icons/ci";
 import MegaMenu from "../Components/MegaMenu";
 import { useState } from "react";
+import CategoriesHome from "../Components/CategoriesHome/CategoriesHome";
 const Home = () => {
   const [MegaMenubtn, setMegaMenubtn] = useState(false);
   const settings = {
@@ -70,7 +71,8 @@ const Home = () => {
         <Headers />
 
         <div className="py-10">
-          <Categories />
+          {/* <Categories /> */}
+          <CategoriesHome/>
         </div>
         <div className="py-10">
           <HowItWorks />
