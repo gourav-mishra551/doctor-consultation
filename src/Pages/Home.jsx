@@ -62,7 +62,7 @@ const Home = () => {
   return (
     <div className="">
       <header className="App-header">
-        <TopHeader />
+        <TopHeader/>
         <Navbar />
         {/* {
           MegaMenubtn ? <MegaMenu /> :null
