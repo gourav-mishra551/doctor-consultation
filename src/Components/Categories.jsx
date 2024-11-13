@@ -1,82 +1,62 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Navbar from "./Navbar";
+import Headers from "./Headers";
+import TopHeader from "./TopHeader";
+import Footer from "./Footer";
 
 const Categories = () => {
-  const [result, setResult] = useState([]);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [hasMore, setHasMore] = useState(true);
-
+  const [result, setResult] = useState([]); // State for the categories
+  const [hasMore, setHasMore] = useState(true); // State to manage whether to show the 'View More' button
+  const [loading, setLoading] = useState(false); // State to manage the loading state
   const navigate = useNavigate();
+  const [totalCount,setTotalCount]=useState(100)
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
-  const fetchData = useCallback(async () => {
-    if (loading || !hasMore) return;
+  // Function to fetch categories (initial fetch or when "View More" is clicked)
+  const fetchCategories = async () => {
     setLoading(true);
     try {
       const res = await axios.get(
-        `https://api.assetorix.com/ah/api/v1/dc/user/Category`,
-        {
-          params: { page, limit: 10 }, // Assuming 10 items per page from backend
-        }
-      );
-      const newData = res.data.data;
-
-      // Filter out duplicates
-      setResult((prevResult) => {
-        const uniqueData = newData.filter(
-          (item) => !prevResult.some((prevItem) => prevItem._id === item._id)
-        );
-        return [...prevResult, ...uniqueData];
-      });
-
-      setHasMore(newData.length > 0); // Stop if no new data is returned
-    } catch (err) {
-      setError(err.message);
+        `https://api.assetorix.com/ah/api/v1/dc/user/Category?limit=${totalCount}`
+      ); // Fetching all the categories (100 in this case, you can adjust the limit)
+      setResult(res.data.data);
+      setTotalCount(res.data.totalCount)
+      setHasMore(false); // Once all data is loaded, hide the "View More" button
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  }, [page, hasMore, loading]);
+  };
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData, page]);
-
-  const handleScroll = useCallback(() => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 100 &&
-      !loading
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  }, [loading]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
-
+  // Function to load more categories
+  const loadMore = () => {
+    fetchCategories();
+  };
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-[320px] sm:mt-[40px]">
-      <div className="flex flex-col sm:flex-row gap-3 justify-between max-w-5xl mx-auto mb-8 ">
+    <div>
+      <TopHeader/>
+      <Navbar/>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-[320px] sm:mt-[40px] mb-8">
+      <div className="flex flex-col sm:flex-row gap-3 justify-between max-w-5xl mx-auto mb-8">
         <p className="sm:text-4xl text-2xl font-bold tracking-wider sm:text-start text-center capitalize text-[#1c8e81]">
           Top Specialties
         </p>
-        <div className="flex justify-center items-center">
+        {/* <div className="flex justify-center items-center">
           <NavLink to="/categories">
             <button className="sm:w-[250px] w-[150px] sm:h-[60px] h-[50px] rounded-lg bg-[#1c8e81] text-white font-semibold hover:bg-green-400 transition ease-in-out duration-300">
               View All Services
             </button>
           </NavLink>
-        </div>
+        </div> */}
       </div>
 
-      <div
-        className="flex justify-center items-center w-full"
-        
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-center">
+      <div className="flex justify-center items-center w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-8 justify-center">
           {result.map((item) => (
             <div
               key={item._id}
@@ -113,7 +93,21 @@ const Categories = () => {
         </div>
       </div>
 
-      {error && <p className="text-center text-red-500">{error}</p>}
+      {/* Show View More button if there is more data to load */}
+      {hasMore && !loading && (
+        <div className="text-center my-6">
+          <button
+            onClick={loadMore}
+            className="bg-[#1c8e81] text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-400 transition ease-in-out duration-300"
+          >
+            {loading ? "Loading..." : "View More"}
+          </button>
+        </div>
+      )}
+
+      {loading && <p className="text-center text-blue-500">Loading...</p>}
+    </div>
+    <Footer/>
     </div>
   );
 };

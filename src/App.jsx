@@ -54,6 +54,8 @@ import OutSideIndia from "./Pages/AppointmentBooking/NewPatient/OutSideIndia/Out
 import ReturningPatient from "./Pages/AppointmentBooking/ReturningPatient/ReturningPatient";
 import ConsultwithLastDoctor from "./Pages/AppointmentBooking/ReturningPatient/ConsultwithLast/ConsultwithLastDoctor";
 import ConsultwithNewDoctor from "./Pages/AppointmentBooking/ReturningPatient/ConsultwithNew/ConsultwithNewDoctor";
+
+import CategoriesHome from "./Components/CategoriesHome/CategoriesHome";
 import InsideIndia from "./Pages/AppointmentBooking/NewPatient/InsideIndia/InsideIndia";
 
 function App() {
@@ -70,6 +72,7 @@ function App() {
             path="/CategoriesDetails/:id"
             element={<CategoriesDetails />}
           />
+          <Route path="/CategoryHome" element={<CategoriesHome/>}/>
           <Route path="/doctors" element={<DoctorsCrew />} />
           <Route path="/user-profile" element={<UserProfile />} />
           <Route path="/about" element={<About />} />

@@ -107,20 +107,30 @@ const Navbar = () => {
     console.log(Categoriesdata);
   };
   handleCategoryClick();
+
   const handleMouseEnter = (item, event) => {
-    setHoveredItem(item);
+    setHoveredItem(item); // Set the hovered item
     const menuItemRect = event.target.getBoundingClientRect();
-    const containerRect = containerRef.current.getBoundingClientRect();
     setSubmenuPosition({
-      top: menuItemRect.bottom + window.scrollY, // Position it just below the hovered item
-      left: menuItemRect.left + window.scrollX, // Position it aligned to the left of the hovered item
+      top: menuItemRect.bottom + window.scrollY, // Position the submenu below the hovered item
+      left: menuItemRect.left + window.scrollX, // Position the submenu aligned to the left of the hovered item
     });
+    // Open the corresponding submenu when hovering
+    setOpenSubMenus((prevState) => ({
+      ...prevState,
+      [item]: true,
+    }));
   };
 
-  const handleMouseLeave = () => {
-    setHoveredItem(null);
-  };
 
+  const handleMouseLeave = (item) => {
+  setHoveredItem(null); // Reset the hovered item
+  // Close the submenu when mouse leaves the item
+  setOpenSubMenus((prevState) => ({
+    ...prevState,
+    [item]: false,
+  }));
+};
   const toggleMegaMenu = () => {
     setIsMegaMenuOpen(!isMegaMenuOpen);
   };
@@ -270,13 +280,17 @@ const Navbar = () => {
   };
 
   return (
-    <div >
+    <div>
       <nav className="text-black sticky top-0 z-50 bg-white w-full">
         <div className="sm:max-w-7xl w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link to="/" className="text-xl font-bold flex-shrink-0 ">
-              <img className="h-14 w-[50vw] sm:w-[20vw]" src={Image} alt="logo" />
+              <img
+                className="h-14 w-[50vw] sm:w-[20vw]"
+                src={Image}
+                alt="logo"
+              />
             </Link>
 
           
@@ -340,7 +354,6 @@ const Navbar = () => {
               <div
                 className="hover:cursor-pointer px-3 py-2 rounded-md text-2xl relative hidden sm:block"
                 onClick={dropdownOpen}
-                
               >
                 <FiUser />
                 <div

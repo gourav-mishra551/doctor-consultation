@@ -23,6 +23,7 @@ const DoctorForm = () => {
     councilName: "",
     RegistrationNumber: "",
     language: [],
+    qualifications: [],
     years_of_experience: [
       {
         sequenceNumber: 1,
@@ -38,6 +39,9 @@ const DoctorForm = () => {
       },
     ],
   });
+
+  const yearsOfExperience = formValues?.years_of_experience || [];
+  const qualifications = formValues?.qualifications || [];
 
   const [customCouncil, setCustomCouncil] = useState("");
   const [skillInput, setSkillInput] = useState("");
@@ -83,17 +87,38 @@ const DoctorForm = () => {
     console.log(formValues.language);
   };
 
+  // Remove selected language from the list
+  const handleLanguageRemove = (lang) => {
+    setFormValues((prev) => ({
+      ...prev,
+      language: prev.language.filter((language) => language !== lang),
+    }));
+  };
+
+  const handleCouncilNameRemove = (council) => {
+    setFormValues((prev) => ({
+      ...prev,
+      councilName: prev.councilName.filter(
+        (CouncilName) => CouncilName !== council
+      ),
+    }));
+  };
+
   const LangtoggleDropdown = () => {
     CustomLangSetOpen(!CustomLangOpen); // Toggle dropdown state
   };
 
-  const handleLanguageSelect = (selectedLanguage) => {
-    setFormValues({
-      ...formValues,
-      language: [...formValues.language, selectedLanguage], // Append to array
-    });
-    CustomLangSetOpen(false); // Close the dropdown
-  };
+ 
+    // Handle selecting a language
+    const handleLanguageSelect = (lang) => {
+      if (!formValues.language.includes(lang)) {
+        setFormValues((prevValues) => ({
+          ...prevValues,
+          language: [...prevValues.language, lang], // Add language if not already selected
+        }));
+      }
+      CustomLangSetOpen(false);
+    };
 
   useEffect(() => {
     console.log(formValues.language); // Logs the updated language value
@@ -620,11 +645,11 @@ const DoctorForm = () => {
                 step >= 2 ? "bg-[#00768A]" : "bg-gray-300"
               }`}
             />
-            <div
+            {/* <div
               className={`h-2 w-full rounded-full ${
                 step >= 3 ? "bg-[#00768A]" : "bg-gray-300"
               }`}
-            />
+            /> */}
           </div>
         </div>
 
@@ -645,10 +670,9 @@ const DoctorForm = () => {
                   <button
                     type="button"
                     onClick={toggleDropdown}
-                    className="items-center justify-between bg-[#ffff] grid grid-cols-1 sm:grid-cols-2 gap-2 md:grid-cols-3 border-2 bg-opacity-70 border-gray-300 text-black px-4 py-2 rounded-md w-full text-start focus:outline-none"
+                    className="items-center justify-between grid grid-cols-1 sm:grid-cols-2 gap-2 md:grid-cols-3 border-2 bg-[#ffffff] bg-opacity-100 border-gray-300 text-black px-4 py-2 rounded-md w-full text-start focus:outline-none"
                   >
                     {/* Display selected specialties */}
-
                     {formValues.specialitycategories.length > 0
                       ? specialtyoptions
                           .filter((option) =>
@@ -669,20 +693,11 @@ const DoctorForm = () => {
                             </span>
                           ))
                       : "Select Specialties"}
-
-                    {/* Arrow at the end of the button */}
-                    {/* <div className="flex  ml-2 w-[20px]" style={{border:"1px solid red"}}>
-                      {isOpen ? (
-                        <FaChevronUp className="ml-2" />
-                      ) : (
-                        <FaChevronDown className="ml-2" />
-                      )}
-                    </div> */}
                   </button>
 
                   {/* Dropdown content */}
                   {isOpen && (
-                    <div className="absolute mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                    <div className="absolute top-full left-0 w-full bg-white shadow-lg mt-2 border border-gray-300 rounded-md z-10">
                       <div className="py-1">
                         {specialtyoptions.map((ele) => (
                           <div
@@ -716,9 +731,10 @@ const DoctorForm = () => {
                     onClick={LangtoggleDropdown}
                   >
                     <div className="flex items-center">
-                      {formValues.language.length > 0
+                      {/* {formValues.language.length > 0
                         ? formValues.language.join(", ")
-                        : "Select a Language"}
+                        : "Select a Language"} */}
+                      {"Select Language"}
                     </div>
                     <div className="flex items-center">
                       {/* Toggle arrow */}
@@ -761,6 +777,26 @@ const DoctorForm = () => {
                       </div>
                     </div>
                   )}
+
+                  {/* Render selected languages with a cross button */}
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {formValues.language.map((lang, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-2 bg-[#00768A] p-2 rounded-md"
+                      >
+                        <p className="text-white">{lang}</p>
+                        <ImCross
+                          style={{
+                            fontSize: "10px",
+                            color: "white",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => handleLanguageRemove(lang)} // Remove language
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Council Name */}
@@ -776,9 +812,12 @@ const DoctorForm = () => {
                   >
                     <div className="flex items-center">
                       {/* Display selected councils */}
-                      {formValues.councilName.length > 0
+                      {/* {formValues.councilName.length > 0
                         ? formValues.councilName.join(", ") // Display all selected councils as a comma-separated string
-                        : "Select a Council"}
+                        : "Select a Council"} */}
+                        {
+                          "Select a Council"
+                        }
                     </div>
                     <div className="flex items-center">
                       {/* Toggle arrow */}
@@ -821,7 +860,7 @@ const DoctorForm = () => {
                       </div>
 
                       {/* Render selected council names with remove option */}
-                      {formValues.councilName.length > 0 && (
+                      {/* {formValues.councilName.length > 0 && (
                         <div className="p-2 mt-2">
                           <h4 className="text-sm font-semibold">
                             Selected Councils:
@@ -841,9 +880,31 @@ const DoctorForm = () => {
                             </div>
                           ))}
                         </div>
-                      )}
+                      )} */}
                     </div>
                   )}
+
+                  {/* Render Selected Council with cross button */}
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {Array.isArray(formValues.councilName) &&
+                      formValues.councilName.map((council, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 bg-[#00768A] p-2 rounded-md"
+                        >
+                          <p className="text-white">{council}</p>
+                          <ImCross
+                            style={{
+                              fontSize: "10px",
+                              color: "white",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => handleCouncilNameRemove(council)} // Remove council
+                          />
+                        </div>
+                      ))}
+                  </div>
                 </div>
 
                 {/* <div>
@@ -893,131 +954,8 @@ const DoctorForm = () => {
           )}
 
           {/* Step 2: Hospital Details */}
+
           {step === 2 && (
-            <div className="bg-white p-10 rounded-xl shadow-lg">
-              <p className="font-semibold text-2xl text-center text-[#00768A] mb-6">
-                Hospital Details
-              </p>
-              <div className="input-group flex flex-col gap-5">
-                <div>
-                  <label htmlFor="HospitalName" className="text-[#00768A]">
-                    Hospital Name
-                  </label>
-                  <input
-                    type="text"
-                    className="border border-gray-300 w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A]"
-                    placeholder="Hospital / Clinic Name"
-                    name="hospitalName"
-                    value={formValues.hospitalName}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                {/* Permanent Address */}
-                <div>
-                  <label htmlFor="PermanentAddress" className="text-[#00768A]">
-                    Permanent Address
-                  </label>
-                  <input
-                    type="text"
-                    className="border border-gray-300 w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A]"
-                    placeholder="Permanent Address"
-                    name="clinic_hospital_address.permanentAddress"
-                    value={formValues.clinic_hospital_address.permanentAddress}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="flex gap-5">
-                  <div>
-                    <label htmlFor="City" className="text-[#00768A]">
-                      City:
-                    </label>
-                    <input
-                      type="text"
-                      className="border border-gray-300 w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A]"
-                      placeholder="City"
-                      name="clinic_hospital_address.city"
-                      value={formValues.clinic_hospital_address.city}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="State" className="text-[#00768A]">
-                      State:
-                    </label>
-                    <input
-                      type="text"
-                      className="border border-gray-300 w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A]"
-                      placeholder="State"
-                      name="clinic_hospital_address.state"
-                      value={formValues.clinic_hospital_address.state}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="">
-                    <label htmlFor="PinCode" className="text-[#00768A]">
-                      Pin Code:
-                    </label>
-                    <input
-                      type="text"
-                      className="border border-gray-300 w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A]"
-                      placeholder="Pin Code"
-                      name="clinic_hospital_address.PinCode"
-                      value={formValues.clinic_hospital_address.PinCode}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-                <div className="mt-3">
-                  <label className="text-[#00768A]" htmlFor="Hospital Contact">
-                    Hospital Contact:
-                  </label>
-                  <input
-                    type="text"
-                    className="border border-gray-300 w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A]"
-                    placeholder="Hospital Contact"
-                    name="hospital_contact"
-                    value={formValues.hospital_contact}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="mt-3">
-                  <label className="text-[#00768A]" htmlFor="Hospital Contact">
-                    Hospital Email:
-                  </label>
-                  <input
-                    type="email"
-                    className="border border-gray-300 w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A]"
-                    placeholder="Hospital Email"
-                    name="hospital_email"
-                    value={formValues.hospital_email}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-              {/* Navigation Buttons */}
-              <div className="flex justify-between mt-6">
-                <button
-                  type="button"
-                  onClick={handlePreviousStep}
-                  className="bg-gray-400 text-white px-6 py-2 rounded-md hover:bg-gray-500"
-                >
-                  Back
-                </button>
-                <button
-                  type="button"
-                  onClick={handleNextStep}
-                  className="bg-[#00768A] text-white px-6 py-2 rounded-md hover:bg-[#00607A]"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          )}
-          {step === 3 && (
             <div className="p-6 bg-white rounded-lg shadow-md">
               <h2 className="text-2xl font-semibold text-[#00768A] mb-6">
                 Doctor Profile Form
@@ -1029,7 +967,7 @@ const DoctorForm = () => {
               </h3>
 
               <div className="border border-dashed border-gray-400 p-4 rounded-md">
-                {formValues.qualifications.map((qual, index) => (
+                {qualifications.map((qual, index) => (
                   <div
                     key={qual.sequenceNumber || `qual-${index}`}
                     className="qualification-item mb-4 p-4 bg-gray-50 rounded-lg border border-gray-300"
@@ -1224,9 +1162,9 @@ const DoctorForm = () => {
                       </button>
                     </div>
 
-                    {qual.skills && (
+                    {qual?.skills && (
                       <div className="flex flex-wrap gap-2">
-                        {qual.skills.map((skill, skillIndex) => (
+                        {qual?.skills?.map((skill, skillIndex) => (
                           <div
                             className="flex items-center gap-2 bg-[#00768A] p-2 rounded-md"
                             key={skillIndex}
@@ -1263,7 +1201,7 @@ const DoctorForm = () => {
                 Years of Experience
               </h3>
               <div className="border border-dashed border-gray-400 p-4 rounded-md">
-                {formValues.years_of_experience.map((exp, index) => (
+                {yearsOfExperience.map((exp, index) => (
                   <div
                     key={exp.id || `exp-${index}`}
                     className="experience-item mb-4 p-4 bg-gray-50 rounded-lg border border-gray-300 transition-transform duration-300"
