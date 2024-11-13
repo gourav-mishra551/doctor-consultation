@@ -50,17 +50,33 @@ const DoctorForm = () => {
       // Update formValues with custom council name
       setFormValues({
         ...formValues,
-        councilName: customCouncil,
+        councilName: [...(formValues.councilName || []), customCouncil],
       });
       setCustomCouncil(""); // Clear the input field after submission
     }
   };
 
+  const handleCouncilSelect = (council) => {
+    setFormValues((prevValues) => {
+      // Add selected council to the councilName array if not already present
+      if (!prevValues.councilName.includes(council)) {
+        return {
+          ...prevValues,
+          councilName: [...prevValues.councilName, council],
+        };
+      }
+      return prevValues;
+    });
+    CustomSetOpen(false); // Close dropdown after selection
+  };
   const handleCustomLanguageSubmit = () => {
     if (customLanguage) {
-      // If the custom language is not empty, add it to the form values and close the dropdown
-      setFormValues({ ...formValues, language: customLanguage });
-      setLanguage([...language, customLanguage]); // Add custom language to the predefined list
+      // Add custom language to the formValues' language array
+      setFormValues({
+        ...formValues,
+        language: [...(formValues.language || []), customLanguage],
+      });
+      setLanguage([...language, customLanguage]); // Add to the predefined list
       setCustomLanguage(""); // Clear the input field
       CustomLangSetOpen(false); // Close the dropdown
     }
@@ -71,9 +87,12 @@ const DoctorForm = () => {
     CustomLangSetOpen(!CustomLangOpen); // Toggle dropdown state
   };
 
-  const handleLanguageSelect = (lang) => {
-    setFormValues({ ...formValues, language: lang });
-    CustomLangSetOpen(false); // Close dropdown after selection
+  const handleLanguageSelect = (selectedLanguage) => {
+    setFormValues({
+      ...formValues,
+      language: [...formValues.language, selectedLanguage], // Append to array
+    });
+    CustomLangSetOpen(false); // Close the dropdown
   };
 
   useEffect(() => {
@@ -697,8 +716,9 @@ const DoctorForm = () => {
                     onClick={LangtoggleDropdown}
                   >
                     <div className="flex items-center">
-                      {/* Display selected language */}
-                      {formValues.language || "Select a Language"}
+                      {formValues.language.length > 0
+                        ? formValues.language.join(", ")
+                        : "Select a Language"}
                     </div>
                     <div className="flex items-center">
                       {/* Toggle arrow */}
@@ -745,18 +765,20 @@ const DoctorForm = () => {
 
                 {/* Council Name */}
                 <div className="relative">
-                  <label className="text-[#00768A]" htmlFor="CouncilName">
+                  <label htmlFor="CouncilName" className="text-[#00768A]">
                     Select Council Name:
                   </label>
 
-                  {/* Custom dropdown */}
+                  {/* Custom dropdown trigger */}
                   <div
                     className="border border-gray-300 w-full max-w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A] flex items-center justify-between cursor-pointer"
                     onClick={CustomtoggleDropdown}
                   >
                     <div className="flex items-center">
-                      {/* Display selected council */}
-                      {formValues.councilName || "Select a Council"}
+                      {/* Display selected councils */}
+                      {formValues.councilName.length > 0
+                        ? formValues.councilName.join(", ") // Display all selected councils as a comma-separated string
+                        : "Select a Council"}
                     </div>
                     <div className="flex items-center">
                       {/* Toggle arrow */}
@@ -766,7 +788,8 @@ const DoctorForm = () => {
 
                   {/* Show custom input inside dropdown */}
                   {CustomOpen && (
-                    <div className="absolute top-full left-0 w-full bg-white shadow-lg mt-2 border border-gray-300 rounded-md">
+                    <div className="absolute top-full left-0 w-full bg-white shadow-lg mt-2 border border-gray-300 rounded-md z-10">
+                      {/* Container for input and button */}
                       <div className="p-2">
                         {/* Input field for custom council */}
                         <input
@@ -784,24 +807,41 @@ const DoctorForm = () => {
                         </button>
                       </div>
 
-                      {/* Render predefined council names */}
+                      {/* Render predefined council options */}
                       <div className="max-h-60 overflow-y-auto">
                         {CouncilName.map((ele, index) => (
                           <div
                             key={index}
-                            onClick={() => {
-                              setFormValues({
-                                ...formValues,
-                                councilName: ele,
-                              });
-                              CustomSetOpen(false); // Close dropdown after selection
-                            }}
+                            onClick={() => handleCouncilSelect(ele)} // Add council to the array on selection
                             className="cursor-pointer hover:bg-[#00768A] text-black p-2"
                           >
                             {ele}
                           </div>
                         ))}
                       </div>
+
+                      {/* Render selected council names with remove option */}
+                      {formValues.councilName.length > 0 && (
+                        <div className="p-2 mt-2">
+                          <h4 className="text-sm font-semibold">
+                            Selected Councils:
+                          </h4>
+                          {formValues.councilName.map((council, idx) => (
+                            <div
+                              key={idx}
+                              className="flex items-center justify-between p-2"
+                            >
+                              <span>{council}</span>
+                              <button
+                                onClick={() => handleRemoveCouncil(council)} // Remove council from the list
+                                className="text-red-500"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
