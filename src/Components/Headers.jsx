@@ -23,7 +23,7 @@ const Headers = () => {
               </h1>
 
               <div className="relative mt-8 md:mt-12 space-y-4  sm:text-left font-semibold animate-slideIn">
-                <p className="text-lg sm:text-xl lg:text-2xl text-gray-800 text-justify sm:text-left">
+                <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 font-semibold text-justify sm:text-left">
                   We are committed to providing you with the best medical and <br />
                   healthcare services to help you live healthier and happier.
                 </p>
@@ -33,7 +33,7 @@ const Headers = () => {
                       Find a doctor
                     </button>
                   </Link>
-                  <Link className="ml-10" to="/doctor-onboarding-form">
+                  <Link className="sm:ml-10" to="/doctor-onboarding-form">
                     <button className="px-8 py-3 mt-5 text-white bg-teal-600 hover:bg-teal-700 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
                       Join as doctor
                     </button>
@@ -47,7 +47,7 @@ const Headers = () => {
         </div>
 
         {/* Centering OurServices Component */}
-        <div className="absolute left-1/2 transform  -translate-x-1/2 sm:-bottom-[6rem]  w-[85vw] bg-white shadow-lg rounded-xl sm:px-8 sm:py-5 px-2 py-2">
+        <div className="absolute left-1/2 transform bottom-[-55%]  -translate-x-1/2 sm:-bottom-[6rem] w-[95%]  sm:w-[85vw] bg-white shadow-lg rounded-xl sm:px-8 sm:py-5 px-2 py-2">
           <OurServices />
         </div>
       </div>

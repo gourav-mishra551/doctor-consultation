@@ -293,47 +293,7 @@ const Navbar = () => {
               />
             </Link>
 
-            {/* Search Input Section */}
-            <div className="relative flex-grow mx-4 hidden sm:block">
-              {noResults && (
-                <div
-                  ref={searchResultsRef}
-                  className="absolute w-full left-0 border rounded-lg shadow-lg p-4 bg-white max-h-64 overflow-y-auto z-10"
-                >
-                  <div className="text-sm text-red-600">No Product Found</div>
-                </div>
-              )}
-              {showResults && (
-                <div
-                  ref={searchResultsRef}
-                  className="absolute w-full left-0 border rounded-lg shadow-lg p-4 bg-white max-h-64 overflow-y-auto z-10"
-                >
-                  {results.map((product) => (
-                    <div
-                      key={product?._id}
-                      className="flex items-center space-x-4 mb-2 cursor-pointer"
-                      onClick={() => handleProductClick(product?.slug)}
-                    >
-                      {Array.isArray(product?.images) &&
-                      product.images.length > 0 ? (
-                        <img
-                          src={product?.images[0]?.url || "./default.jpg"}
-                          alt={product?.images[0]?.alt || product?.title}
-                          className="w-12 h-12 object-cover rounded"
-                        />
-                      ) : (
-                        <img
-                          className="w-12 h-12 object-cover rounded"
-                          src="/default.jpg"
-                          alt="default alt text"
-                        />
-                      )}
-                      <span className="text-sm">{product?.title}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+          
 
             {/* Menu Items */}
             <div className="flex items-center space-x-4">

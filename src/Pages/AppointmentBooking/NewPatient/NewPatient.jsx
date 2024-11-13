@@ -10,7 +10,7 @@ const NewPatient = () => {
         <div className='bg-[#daf5f3] w-full '>
             <Navbar />
 
-            <div className='max-w-[1200px] h-[100vh] justify-between py-32 mx-auto flex flex-wrap animate-fadeIn'>
+            <div className='max-w-[1200px] min-h-[80vh] flex flex-col lg:flex-row justify-between sm:py-32 py-16 px-6 lg:px-0 mx-auto animate-fadeIn'>
                 <div className='flex justify-start flex-col gap-8'>
                     <h1 className='sm:text-4xl text-2xl font-semibold font-serif text-justify'>
                         Where do you live?
@@ -19,8 +19,8 @@ const NewPatient = () => {
 
                     <button className='bg-[#1C8E81] text-lg flex gap-4 px-6 py-2 rounded-full text-white font-semibold shadow-md w-fit'>Book Appointment by call  <FiPhoneCall className='text-lg mt-1 ' /></button>
                 </div>
-                <div className='flex flex-col border-y-2 h-min border-gray-600 w-[40%]'>
-                    <Link to="/drs-profile">
+                <div className='flex flex-col border-y-2 h-min border-gray-600 sm:my-0 my-10 sm:w-[40%]'>
+                    <Link to="/appointment/inside-india">
                     <div className='py-6 hover:cursor-pointer'>
                         <h1 className='text-2xl font-semibold text-[#1C8E81]'>
                             Inside of the India </h1>
