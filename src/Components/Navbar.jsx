@@ -161,13 +161,6 @@ const Navbar = () => {
   const [isHoveringServices, setIsHoveringServices] = useState(false);
   const serviceRef = useRef(null);
 
-  const animateCartIcon = () => {
-    gsap.fromTo(
-      cartRef.current,
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
-    );
-  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -186,7 +179,7 @@ const Navbar = () => {
 
   const logout = () => {
     localStorage.removeItem("Id");
-    localStorage.removeItem("User");
+    localStorage.removeItem("user");
     localStorage.removeItem("signupemail");
     localStorage.removeItem("token");
     setIsLogin(false);
@@ -195,7 +188,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (
-      localStorage.getItem("id") &&
+      localStorage.getItem("Id") &&
       localStorage.getItem("token") &&
       localStorage.getItem("user")
     ) {
