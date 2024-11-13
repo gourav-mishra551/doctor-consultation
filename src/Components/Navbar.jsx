@@ -10,6 +10,8 @@ import { gsap } from "gsap";
 import "./Navbar.css"; // Import the CSS file
 import Image from "../../src/Assests/ametheus.webp";
 import { FaChevronDown } from "react-icons/fa6";
+import MegaMenu from "./MegaMenu";
+import TopHeader from "./TopHeader";
 
 const Navbar = () => {
   const cart = useSelector((state) => state.cart);
@@ -280,8 +282,9 @@ const Navbar = () => {
   };
 
   return (
-    <div>
-      <nav className="text-black sticky top-0 z-50 bg-white w-full">
+    
+    <div className="">
+      <nav className="text-black  top-0 z-50 bg-white w-full">
         <div className="sm:max-w-7xl w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -555,7 +558,8 @@ const Navbar = () => {
       </nav>
 
       {/* MegaMenu for Desktop */}
-      {MegaMenubtn && (
+      <div>
+      {/* {MegaMenubtn && (
         <div className="bg-[#F7F6F9] bg-opacity-40 z-50">
           <div className="flex justify-center gap-8 py-4 bg-[#00768A] text-white flex-wrap md:flex-nowrap">
             {Object.keys(submenuData).map((menu, index) => (
@@ -570,10 +574,14 @@ const Navbar = () => {
                 <span className="absolute left-0 bottom-0 h-0.5 w-full bg-white scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100 group-hover:origin-left origin-left"></span>
               </div>
             ))}
+            
           </div>
         </div>
-      )}
+      )} */}
+      <MegaMenu/>
+      </div>
     </div>
+    
   );
 };
 

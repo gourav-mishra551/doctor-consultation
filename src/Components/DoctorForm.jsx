@@ -23,7 +23,18 @@ const DoctorForm = () => {
     councilName: "",
     RegistrationNumber: "",
     language: [],
-    qualifications: [],
+    qualifications: [
+      {
+        sequenceNumber: 1,
+        instituteName: "",
+        degree: "",
+        fieldOfStudy: "",
+        startDate: { month: "", year: "" },
+        endDate: { month: "", year: "" },
+        description:"",
+        skills:[]
+      },
+    ],
     years_of_experience: [
       {
         sequenceNumber: 1,
@@ -108,17 +119,16 @@ const DoctorForm = () => {
     CustomLangSetOpen(!CustomLangOpen); // Toggle dropdown state
   };
 
- 
-    // Handle selecting a language
-    const handleLanguageSelect = (lang) => {
-      if (!formValues.language.includes(lang)) {
-        setFormValues((prevValues) => ({
-          ...prevValues,
-          language: [...prevValues.language, lang], // Add language if not already selected
-        }));
-      }
-      CustomLangSetOpen(false);
-    };
+  // Handle selecting a language
+  const handleLanguageSelect = (lang) => {
+    if (!formValues.language.includes(lang)) {
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        language: [...prevValues.language, lang], // Add language if not already selected
+      }));
+    }
+    CustomLangSetOpen(false);
+  };
 
   useEffect(() => {
     console.log(formValues.language); // Logs the updated language value
@@ -815,9 +825,7 @@ const DoctorForm = () => {
                       {/* {formValues.councilName.length > 0
                         ? formValues.councilName.join(", ") // Display all selected councils as a comma-separated string
                         : "Select a Council"} */}
-                        {
-                          "Select a Council"
-                        }
+                      {"Select a Council"}
                     </div>
                     <div className="flex items-center">
                       {/* Toggle arrow */}
