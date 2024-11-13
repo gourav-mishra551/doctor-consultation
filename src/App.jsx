@@ -51,6 +51,10 @@ import DrExam from "./Components/DrExam";
 import ProfilePage from "./Pages/ProfilePage";
 import PrescriptionMakerPage from "./Pages/PrescriptionMakerPage";
 import EditProfilePage from "./Pages/EditProfilePage";
+import OutSideIndia from "./Pages/AppointmentBooking/NewPatient/OutSideIndia/OutSideIndia";
+import ReturningPatient from "./Pages/AppointmentBooking/ReturningPatient/ReturningPatient";
+import ConsultwithLastDoctor from "./Pages/AppointmentBooking/ReturningPatient/ConsultwithLast/ConsultwithLastDoctor";
+import ConsultwithNewDoctor from "./Pages/AppointmentBooking/ReturningPatient/ConsultwithNew/ConsultwithNewDoctor";
 
 function App() {
   return (
@@ -114,7 +118,12 @@ function App() {
           <Route path="/edit-profile" element={<EditProfilePage />} />
 
           {/* <Route path='/login' element={<Login />} /> */}
+          <Route path="/OutSideIndia" element={<OutSideIndia/>}/>
+          <Route path="/ReturningPatientPage" element={<ReturningPatient/>} />
+          <Route path="/ConsultWithLastDoctor" element={<ConsultwithLastDoctor/>}/>
+          <Route path="/ConsultwithNewDoctor" element={<ConsultwithNewDoctor/>}/> 
         </Routes>
+       
       </BrowserRouter>
     </div>
   );
