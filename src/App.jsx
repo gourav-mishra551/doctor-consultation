@@ -16,8 +16,6 @@ import DrIndividualProfilePage from "./Pages/DrIndividualProfilePage";
 import Calendar from "./Components/Calender";
 import FaqPage from "./Pages/FaqPage";
 import DrVerifyOtp from "./Components/DrVerifyOtp";
-import SignupLogin from "./Components/SignupLogin";
-import Login from "./Components/Login";
 import SubCategoryPage from "./Pages/SubCategoryPage";
 import BrandAmPage from "./Pages/BrandAmPage";
 import WhyWeDiffPage from "./Pages/WhyWeDiffPage";
@@ -46,6 +44,7 @@ import DRProfileShow from "./Components/DRProfileShow";
 import DrAppointmentCreation from "./Components/DrAppoinmentCreation";
 import FirstQuestion from "./Pages/AppointmentBooking/FirstQuestion";
 import NewPatient from "./Pages/AppointmentBooking/NewPatient/NewPatient";
+import Login from "./Components/Login";
 
 import DrExam from "./Components/DrExam";
 import ProfilePage from "./Pages/ProfilePage";
@@ -55,6 +54,7 @@ import OutSideIndia from "./Pages/AppointmentBooking/NewPatient/OutSideIndia/Out
 import ReturningPatient from "./Pages/AppointmentBooking/ReturningPatient/ReturningPatient";
 import ConsultwithLastDoctor from "./Pages/AppointmentBooking/ReturningPatient/ConsultwithLast/ConsultwithLastDoctor";
 import ConsultwithNewDoctor from "./Pages/AppointmentBooking/ReturningPatient/ConsultwithNew/ConsultwithNewDoctor";
+import InsideIndia from "./Pages/AppointmentBooking/NewPatient/InsideIndia/InsideIndia";
 
 function App() {
   return (
@@ -63,7 +63,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/doctor-slots-generation" element={<DrExam />} />
-          <Route path="/auth" element={<SignupLogin />} />
+          <Route path="/auth" element={<Login />} />
           <Route path="/doctor-onboarding-form" element={<DoctorForm />} />
           <Route path="/categories" element={<Categories />} />
           <Route
@@ -118,6 +118,7 @@ function App() {
           <Route path="/edit-profile" element={<EditProfilePage />} />
 
           {/* <Route path='/login' element={<Login />} /> */}
+          <Route path="/appointment/inside-india" element={<InsideIndia />} />
           <Route path="/OutSideIndia" element={<OutSideIndia/>}/>
           <Route path="/ReturningPatientPage" element={<ReturningPatient/>} />
           <Route path="/ConsultWithLastDoctor" element={<ConsultwithLastDoctor/>}/>
