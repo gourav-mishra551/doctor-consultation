@@ -1,20 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiSearch, FiUser } from "react-icons/fi";
 import axios from "axios";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
-import { useSelector } from "react-redux";
+
 import { FaChevronUp } from "react-icons/fa";
-import { BsCart3, BsCartPlus } from "react-icons/bs";
+
 import { gsap } from "gsap";
 import "./Navbar.css"; // Import the CSS file
 import Image from "../../src/Assests/ametheus.webp";
 import { FaChevronDown } from "react-icons/fa6";
 import MegaMenu from "./MegaMenu";
-import TopHeader from "./TopHeader";
 
 const Navbar = () => {
-  const cart = useSelector((state) => state.cart);
   const [isOpen, setIsOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [query, setQuery] = useState("");
@@ -28,9 +26,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const searchResultsRef = useRef(null);
-  const [showCart, setShowCart] = useState(false);
   const cartRef = useRef(null);
-  const location = useLocation();
   const [MegaMenubtn, setMegaMenubtn] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
   const [submenuPosition, setSubmenuPosition] = useState({ top: 0, left: 0 });
@@ -126,13 +122,13 @@ const Navbar = () => {
 
 
   const handleMouseLeave = (item) => {
-  setHoveredItem(null); // Reset the hovered item
-  // Close the submenu when mouse leaves the item
-  setOpenSubMenus((prevState) => ({
-    ...prevState,
-    [item]: false,
-  }));
-};
+    setHoveredItem(null); // Reset the hovered item
+    // Close the submenu when mouse leaves the item
+    setOpenSubMenus((prevState) => ({
+      ...prevState,
+      [item]: false,
+    }));
+  };
   const toggleMegaMenu = () => {
     setIsMegaMenuOpen(!isMegaMenuOpen);
   };
@@ -271,13 +267,13 @@ const Navbar = () => {
         "https://api.assetorix.com/ah/api/v1/dc/user/Category"
       );
       setCategorydata(res.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (
-    
-    <div className="">
-      <nav className="text-black  top-0 z-50 bg-white w-full">
+
+    <div className="bg-white">
+      <nav className="text-black  max-w-[92vw] top-0 z-50 bg-white mx-auto">
         <div className="sm:max-w-7xl w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -288,8 +284,6 @@ const Navbar = () => {
                 alt="logo"
               />
             </Link>
-
-          
 
             {/* Menu Items */}
             <div className="flex items-center space-x-4">
@@ -354,9 +348,8 @@ const Navbar = () => {
                 <FiUser />
                 <div
                   ref={dropdownRef}
-                  className={`absolute bg-white rounded-xl shadow-lg p-4 z-50 flex -left-[6rem] flex-col w-[15vw] h-max ${
-                    dropdown ? "block" : "hidden"
-                  }`}
+                  className={`absolute bg-white rounded-xl shadow-lg p-4 z-50 flex -left-[6rem] flex-col w-[15vw] h-max ${dropdown ? "block" : "hidden"
+                    }`}
                 >
                   {isLogin ? (
                     <div className="flex flex-col justify-between">
@@ -512,29 +505,10 @@ const Navbar = () => {
 
       {/* MegaMenu for Desktop */}
       <div>
-      {/* {MegaMenubtn && (
-        <div className="bg-[#F7F6F9] bg-opacity-40 z-50">
-          <div className="flex justify-center gap-8 py-4 bg-[#00768A] text-white flex-wrap md:flex-nowrap">
-            {Object.keys(submenuData).map((menu, index) => (
-              <div key={index} className="relative cursor-pointer group">
-                <span
-                  className="cursor-pointer px-4 py-2 font-medium hover:scale-110 duration-300 relative z-10"
-                  onMouseEnter={(e) => handleMouseEnter(menu, e)}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  {menu.replace(/([A-Z])/g, " $1")}
-                </span>
-                <span className="absolute left-0 bottom-0 h-0.5 w-full bg-white scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100 group-hover:origin-left origin-left"></span>
-              </div>
-            ))}
-            
-          </div>
-        </div>
-      )} */}
-      <MegaMenu/>
+        <MegaMenu />
       </div>
     </div>
-    
+
   );
 };
 
