@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import TopHeader from "./TopHeader";
@@ -16,18 +16,15 @@ const DrExam = () => {
     onlineSlots: [],
     availableTimeFrom: "",
     availableTimeTo: "",
-    doctorId: ""
+    doctorId: "",
   });
-  const [ErrorShow, setErrorShow] = useState(false)
-  const [Error, setError] = useState('')
-  const [PriceData, setPriceData] = useState('')
+  const [GetDrProfile, SetDrProfile] = useState({});
+  const [ErrorShow, setErrorShow] = useState(false);
+  const [Error, setError] = useState("");
+  const [PriceData, setPriceData] = useState("");
   const [editingSlot, setEditingSlot] = useState(null); // { type: 'offline' or 'online', index: number }
 
-
   //slotDuration
-
-
-
 
   const updatedPrice = Number(PriceData);
   const generateSlots = () => {
@@ -101,7 +98,7 @@ const DrExam = () => {
     // Handle selectSlotDuration to convert string into an array of strings
     else if (name === "selectSlotDuration") {
       // Split the input by commas or spaces and leave as strings
-      const updatedSlotDuration = value.split(','); // Assuming comma-separated input like "30, 45, 60"
+      const updatedSlotDuration = value.split(","); // Assuming comma-separated input like "30, 45, 60"
 
       setData((prev) => ({
         ...prev,
@@ -116,7 +113,6 @@ const DrExam = () => {
       }));
     }
   };
-
 
   // Handle bulk update of doctorCharge for all slots
   const handleBulkPriceUpdate = (e) => {
@@ -152,46 +148,44 @@ const DrExam = () => {
     const token = localStorage.getItem("token");
     const id = localStorage.getItem("id");
     try {
-      const res = await axios.post("https://api.assetorix.com/ah/api/v1/dc/doctor/availbility", {
-        selectDate: data.selectDate,
-        selectSlotDuration: data.selectSlotDuration,
-        visitingMode: data.visitingMode,
-        offlineSlots: data.offlineSlots,
-        onlineSlots: data.onlineSlots,
-        availableTimeFrom: data.availableTimeFrom,
-        availableTimeTo: data.availableTimeTo,
-        doctorId: data.doctorId
-      },
+      const res = await axios.post(
+        "https://api.assetorix.com/ah/api/v1/dc/doctor/availbility",
+        {
+          selectDate: data.selectDate,
+          selectSlotDuration: data.selectSlotDuration,
+          visitingMode: data.visitingMode,
+          offlineSlots: data.offlineSlots,
+          onlineSlots: data.onlineSlots,
+          availableTimeFrom: data.availableTimeFrom,
+          availableTimeTo: data.availableTimeTo,
+          doctorId: data.doctorId,
+        },
         {
           headers: {
-            "authorization": `Bearer ${token}`,
-            "id": id
-          }
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
         }
-
-      )
+      );
       console.log("result", res.data);
     } catch (error) {
-      setErrorShow(true)
+      setErrorShow(true);
       toast.success(error.message, {
         position: "top-right",
       });
-
-
     }
   };
-
 
   // Submit function
   function Submit() {
     const updatedPrice = Number(PriceData); // Convert PriceData to a number
 
-    const updatedOfflineSlots = data.offlineSlots.map(slot => ({
+    const updatedOfflineSlots = data.offlineSlots.map((slot) => ({
       ...slot,
       doctorCharge: updatedPrice,
     }));
 
-    const updatedOnlineSlots = data.onlineSlots.map(slot => ({
+    const updatedOnlineSlots = data.onlineSlots.map((slot) => ({
       ...slot,
       doctorCharge: updatedPrice,
     }));
@@ -205,11 +199,11 @@ const DrExam = () => {
 
   // Rest of your component code...
 
-
   //Edit Function
 
   const handleEditSlot = (type, index) => {
-    const slot = type === 'offline' ? data.offlineSlots[index] : data.onlineSlots[index];
+    const slot =
+      type === "offline" ? data.offlineSlots[index] : data.onlineSlots[index];
     setEditingSlot({ type, index });
     setPriceData(slot.doctorCharge); // Set initial doctorCharge for the input
     setData((prev) => ({
@@ -219,7 +213,6 @@ const DrExam = () => {
     }));
   };
 
-
   const handleSaveSlot = () => {
     const updatedSlot = {
       startTime: data.editingStartTime,
@@ -228,19 +221,18 @@ const DrExam = () => {
     };
 
     setData((prev) => {
-      const updatedSlots = prev[editingSlot.type + 'Slots'].map((slot, index) =>
+      const updatedSlots = prev[editingSlot.type + "Slots"].map((slot, index) =>
         index === editingSlot.index ? updatedSlot : slot
       );
 
       return {
         ...prev,
-        [editingSlot.type + 'Slots']: updatedSlots,
+        [editingSlot.type + "Slots"]: updatedSlots,
       };
     });
 
     setEditingSlot(null); // Reset editing state
   };
-
 
   const handleOfflineDeleteSlot = (index) => {
     setData((prev) => ({
@@ -249,18 +241,41 @@ const DrExam = () => {
     }));
   };
 
-
   const handleOnlineDeleteSlot = (index) => {
     setData((prev) => ({
       ...prev,
       onlineSlots: prev.onlineSlots.filter((_, i) => i !== index),
     }));
   };
+
+  const FetchGetProfile = async () => {
+    const id = localStorage.getItem("id");
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.get(
+        "https://api.assetorix.com/ah/api/v1/dc/doctor",
+        {
+          headers: {
+            id: id,
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      SetDrProfile(res.data.data);
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  };
+
+  useEffect(() => {
+    FetchGetProfile();
+  }, []);
+
   return (
-    <div className="bg-[#E1EAEF]" >
+    <div className="bg-[#E1EAEF]">
       <TopHeader />
       <Navbar />
-      <div className="relative sm:max-w-[1200px] w-[100%] shadow-md shadow-[#00768A]  mx-auto flex flex-col lg:flex-row  mb-20 mt-10" >
+      <div className="relative sm:max-w-[1200px] w-[100%] shadow-md shadow-[#00768A]  mx-auto flex flex-col lg:flex-row  mb-20 mt-10">
         {/* Image Section */}
         <div className="lg:w-1/2  h-min w-full  sticky top-0 hidden lg:block">
           <img
@@ -275,7 +290,18 @@ const DrExam = () => {
           <h2 className="text-3xl font-bold text-center mb-8 text-gray-700">
             Appointment Creation
           </h2>
+          {(data.visitingMode === "offline" || data.visitingMode==="both") &&
+            (GetDrProfile.hospitalName === "" ||
+            GetDrProfile.clinicHospitalAddress?.permanentAddress === "" ||
+            GetDrProfile.clinicHospitalAddress?.city === "" ? (
+              <p className=" text-red-600  p-4 rounded-lg  max-w-3xl mx-auto mt-4">
+              You haven't added your hospital/clinic details Please add it first 
+              </p>
+            ) : null)}
 
+          {/* {
+            GetDrProfile.hospitalName=="" || GetDrProfile.clinicHospitalAddress?.permanentAddress=="" || GetDrProfile.clinicHospitalAddress?.city=="" ? <p className="text-center text-red-600 bg-red-100 p-4 rounded-lg shadow-md max-w-3xl mx-auto mt-4">Please First Fill Address</p>:null
+           } */}
           <form onSubmit={handleSubmit}>
             {/* Visiting Mode */}
             <div className="mb-6">
@@ -314,7 +340,9 @@ const DrExam = () => {
             {/* Time Fields */}
             <div className="mb-6 flex gap-4">
               <div className="w-1/2">
-                <label className="block text-gray-600 font-semibold mb-2">From</label>
+                <label className="block text-gray-600 font-semibold mb-2">
+                  From
+                </label>
                 <input
                   type="time"
                   required
@@ -325,7 +353,9 @@ const DrExam = () => {
                 />
               </div>
               <div className="w-1/2">
-                <label className="block text-gray-600 font-semibold mb-2">To</label>
+                <label className="block text-gray-600 font-semibold mb-2">
+                  To
+                </label>
                 <input
                   type="time"
                   required
@@ -354,7 +384,8 @@ const DrExam = () => {
               </div>
 
               {/* Bulk Price */}
-              {(data.offlineSlots.length > 0 || data.onlineSlots.length > 0) && (
+              {(data.offlineSlots.length > 0 ||
+                data.onlineSlots.length > 0) && (
                 <div className="w-full">
                   <label className="block text-gray-600 font-semibold mb-2">
                     Bulk Set Price
@@ -391,104 +422,146 @@ const DrExam = () => {
             {/* Slots Display */}
             <div className="mt-6">
               {/* Offline Slots */}
-              {data.offlineSlots.length > 0 && data.visitingMode !== "online" && (
-                <div>
-                  <h2 className="font-bold text-gray-700 mb-4">Offline Slots</h2>
-                  {data.offlineSlots.map((slot, index) => (
-                    <div key={index} className="flex justify-between items-center mb-2">
-                      {editingSlot?.type === "offline" && editingSlot.index === index ? (
-                        <>
-                          <input
-                            type="time"
-                            value={data.editingStartTime}
-                            onChange={(e) =>
-                              setData((prev) => ({ ...prev, editingStartTime: e.target.value }))
-                            }
-                            className="border p-2 rounded-md"
-                          />
-                          <input
-                            type="time"
-                            value={data.editingEndTime}
-                            onChange={(e) =>
-                              setData((prev) => ({ ...prev, editingEndTime: e.target.value }))
-                            }
-                            className="border p-2 rounded-md"
-                          />
-                          <input
-                            type="number"
-                            value={PriceData}
-                            onChange={(e) => setPriceData(e.target.value)}
-                            className="border p-2 rounded-md"
-                          />
-                          <button
-                            onClick={handleSaveSlot}
-                            className="ml-2 bg-green-500 text-white p-2 rounded-md"
-                          >
-                            Save
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <div className="text-gray-600">{`${slot.startTime} - ${slot.endTime}`}</div>
-                          <div className="text-gray-600">Price: {slot.doctorCharge}</div>
-                          <FaEdit onClick={() => handleEditSlot("offline", index)} className="text-blue-500 cursor-pointer" />
-                          <MdDelete onClick={() => handleOfflineDeleteSlot(index)} className="text-red-500 cursor-pointer" />
-                        </>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
+              {data.offlineSlots.length > 0 &&
+                data.visitingMode !== "online" && (
+                  <div>
+                    <h2 className="font-bold text-gray-700 mb-4">
+                      Offline Slots
+                    </h2>
+                    {data.offlineSlots.map((slot, index) => (
+                      <div
+                        key={index}
+                        className="flex justify-between items-center mb-2"
+                      >
+                        {editingSlot?.type === "offline" &&
+                        editingSlot.index === index ? (
+                          <>
+                            <input
+                              type="time"
+                              value={data.editingStartTime}
+                              onChange={(e) =>
+                                setData((prev) => ({
+                                  ...prev,
+                                  editingStartTime: e.target.value,
+                                }))
+                              }
+                              className="border p-2 rounded-md"
+                            />
+                            <input
+                              type="time"
+                              value={data.editingEndTime}
+                              onChange={(e) =>
+                                setData((prev) => ({
+                                  ...prev,
+                                  editingEndTime: e.target.value,
+                                }))
+                              }
+                              className="border p-2 rounded-md"
+                            />
+                            <input
+                              type="number"
+                              value={PriceData}
+                              onChange={(e) => setPriceData(e.target.value)}
+                              className="border p-2 rounded-md"
+                            />
+                            <button
+                              onClick={handleSaveSlot}
+                              className="ml-2 bg-green-500 text-white p-2 rounded-md"
+                            >
+                              Save
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <div className="text-gray-600">{`${slot.startTime} - ${slot.endTime}`}</div>
+                            <div className="text-gray-600">
+                              Price: {slot.doctorCharge}
+                            </div>
+                            <FaEdit
+                              onClick={() => handleEditSlot("offline", index)}
+                              className="text-blue-500 cursor-pointer"
+                            />
+                            <MdDelete
+                              onClick={() => handleOfflineDeleteSlot(index)}
+                              className="text-red-500 cursor-pointer"
+                            />
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
 
               {/* Online Slots */}
-              {data.onlineSlots.length > 0 && data.visitingMode !== "offline" && (
-                <div>
-                  <h2 className="font-bold text-gray-700 mb-4">Online Slots</h2>
-                  {data.onlineSlots.map((slot, index) => (
-                    <div key={index} className="flex justify-between items-center mb-2">
-                      {editingSlot?.type === "online" && editingSlot.index === index ? (
-                        <>
-                          <input
-                            type="time"
-                            value={data.editingStartTime}
-                            onChange={(e) =>
-                              setData((prev) => ({ ...prev, editingStartTime: e.target.value }))
-                            }
-                            className="border p-2 rounded-md"
-                          />
-                          <input
-                            type="time"
-                            value={data.editingEndTime}
-                            onChange={(e) =>
-                              setData((prev) => ({ ...prev, editingEndTime: e.target.value }))
-                            }
-                            className="border p-2 rounded-md"
-                          />
-                          <input
-                            type="number"
-                            value={PriceData}
-                            onChange={(e) => setPriceData(e.target.value)}
-                            className="border p-2 rounded-md"
-                          />
-                          <button
-                            onClick={handleSaveSlot}
-                            className="ml-2 bg-green-500 text-white p-2 rounded-md"
-                          >
-                            Save
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <div className="text-gray-600">{`${slot.startTime} - ${slot.endTime}`}</div>
-                          <div className="text-gray-600">Price: {slot.doctorCharge}</div>
-                          <FaEdit onClick={() => handleEditSlot("online", index)} className="text-blue-500 cursor-pointer" />
-                          <MdDelete onClick={() => handleOnlineDeleteSlot(index)} className="text-red-500 cursor-pointer" />
-                        </>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
+              {data.onlineSlots.length > 0 &&
+                data.visitingMode !== "offline" && (
+                  <div>
+                    <h2 className="font-bold text-gray-700 mb-4">
+                      Online Slots
+                    </h2>
+                    {data.onlineSlots.map((slot, index) => (
+                      <div
+                        key={index}
+                        className="flex justify-between items-center mb-2"
+                      >
+                        {editingSlot?.type === "online" &&
+                        editingSlot.index === index ? (
+                          <>
+                            <input
+                              type="time"
+                              value={data.editingStartTime}
+                              onChange={(e) =>
+                                setData((prev) => ({
+                                  ...prev,
+                                  editingStartTime: e.target.value,
+                                }))
+                              }
+                              className="border p-2 rounded-md"
+                            />
+                            <input
+                              type="time"
+                              value={data.editingEndTime}
+                              onChange={(e) =>
+                                setData((prev) => ({
+                                  ...prev,
+                                  editingEndTime: e.target.value,
+                                }))
+                              }
+                              className="border p-2 rounded-md"
+                            />
+                            <input
+                              type="number"
+                              value={PriceData}
+                              onChange={(e) => setPriceData(e.target.value)}
+                              className="border p-2 rounded-md"
+                            />
+                            <button
+                              onClick={handleSaveSlot}
+                              className="ml-2 bg-green-500 text-white p-2 rounded-md"
+                            >
+                              Save
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <div className="text-gray-600">{`${slot.startTime} - ${slot.endTime}`}</div>
+                            <div className="text-gray-600">
+                              Price: {slot.doctorCharge}
+                            </div>
+                            <FaEdit
+                              onClick={() => handleEditSlot("online", index)}
+                              className="text-blue-500 cursor-pointer"
+                            />
+                            <MdDelete
+                              onClick={() => handleOnlineDeleteSlot(index)}
+                              className="text-red-500 cursor-pointer"
+                            />
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
             </div>
             {data.offlineSlots.length > 0 || data.onlineSlots.length > 0 ? (
               <button
@@ -504,7 +577,6 @@ const DrExam = () => {
 
       <Footer />
     </div>
-
   );
 };
 

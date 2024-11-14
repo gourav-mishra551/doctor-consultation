@@ -107,21 +107,30 @@ const Navbar = () => {
   handleCategoryClick();
 
   const handleMouseEnter = (item, event) => {
-    setHoveredItem(item); // Set the hovered item
+    if (!event) return;
+  
+    setHoveredItem(item);
+  
+    // Check if submenuData for the item exists
+    if (!submenuData[item]) return;
+  
     const menuItemRect = event.target.getBoundingClientRect();
     setSubmenuPosition({
-      top: menuItemRect.bottom + window.scrollY, // Position the submenu below the hovered item
-      left: menuItemRect.left + window.scrollX, // Position the submenu aligned to the left of the hovered item
+      top: menuItemRect.bottom + window.scrollY,
+      left: menuItemRect.left + window.scrollX,
     });
-    // Open the corresponding submenu when hovering
+  
     setOpenSubMenus((prevState) => ({
       ...prevState,
       [item]: true,
     }));
   };
-
+  
+  
+  
 
   const handleMouseLeave = (item) => {
+
     setHoveredItem(null); // Reset the hovered item
     // Close the submenu when mouse leaves the item
     setOpenSubMenus((prevState) => ({
@@ -129,18 +138,23 @@ const Navbar = () => {
       [item]: false,
     }));
   };
+
   const toggleMegaMenu = () => {
     setIsMegaMenuOpen(!isMegaMenuOpen);
   };
   const containerRef = useRef(null);
   const megaMenuRef = useRef(null);
-  const handleClickOutside = (event) => {
-    // If the click was outside the Mega Menu, hide it
-    if (megaMenuRef.current && !megaMenuRef.current.contains(event.target)) {
-      setMegaMenubtn(false);
-      setIsHoveringServices(false);
-    }
-  };
+  const servicesRef = useRef(null);
+ // Detect clicks outside of Services or the mega menu
+ const handleClickOutside = (event) => {
+  if (
+    megaMenuRef.current &&
+    !megaMenuRef.current.contains(event.target) &&
+    !servicesRef.current.contains(event.target)
+  ) {
+    setIsMegaMenuOpen(false); // Close the mega menu if clicked outside
+  }
+};
 
   const setBothRefs = (node) => {
     containerRef.current = node;
@@ -285,6 +299,8 @@ const Navbar = () => {
               />
             </Link>
 
+
+
             {/* Menu Items */}
             <div className="flex items-center space-x-4">
               <div className="hidden sm:flex gap-10">
@@ -304,14 +320,10 @@ const Navbar = () => {
 
                 <div
                   className="relative cursor-pointer group"
-                  ref={megaMenuRef}
-                  onMouseEnter={() => {
-                    setMegaMenubtn(true);
-                    setIsHoveringServices(true);
-                  }}
-                  onMouseLeave={() => {
-                    setIsHoveringServices(false);
-                  }}
+                  ref={servicesRef}
+                  
+                  onMouseEnter={(e) => handleMouseEnter(menu, e)} // Pass the event as `e`
+                  onMouseLeave={() => handleMouseLeave(menu)}
                 >
                   <span className="relative z-10">Service</span>
                   <span className="absolute left-0 bottom-0 h-0.5 w-full bg-[#00768A] scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
@@ -453,7 +465,7 @@ const Navbar = () => {
               {/* MegaMenu Dropdown */}
               <div className="pl-4 space-y-1">
                 {Object.keys(submenuData).map((menu, index) => (
-                  <div key={index}>
+                  <div key={index} style={{border:"1px solid red"}}>
                     <div
                       className=" px-3 py-2 rounded-md text-sm hover:bg-blue-500 hover:text-white cursor-pointer flex"
                       onClick={() => toggleSubMenu(menu)}
@@ -505,7 +517,30 @@ const Navbar = () => {
 
       {/* MegaMenu for Desktop */}
       <div>
+
+      {/* {MegaMenubtn && (
+        <div className="bg-[#F7F6F9] bg-opacity-40 z-50">
+          <div className="flex justify-center gap-8 py-4 bg-[#00768A] text-white flex-wrap md:flex-nowrap">
+            {Object.keys(submenuData).map((menu, index) => (
+              <div key={index} className="relative cursor-pointer group">
+                <span
+                  className="cursor-pointer px-4 py-2 font-medium hover:scale-110 duration-300 relative z-10"
+                  onMouseEnter={(e) => handleMouseEnter(menu, e)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  {menu.replace(/([A-Z])/g, " $1")}
+                </span>
+                <span className="absolute left-0 bottom-0 h-0.5 w-full bg-white scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100 group-hover:origin-left origin-left"></span>
+              </div>
+            ))}
+            
+          </div>
+        </div>
+      )} */}
+     
+
         <MegaMenu />
+
       </div>
     </div>
 
