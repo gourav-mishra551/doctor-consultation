@@ -60,7 +60,7 @@ const DrIndividualProfile = () => {
         <div className="absolute inset-0 bg-cover bg-center opacity-40 bg-no-repeat" style={{ backgroundImage: "url('https://img.freepik.com/free-photo/male-working-as-paediatrician_23-2151696313.jpg?t=st=1731567133~exp=1731570733~hmac=bc61c135d8a508c9751998fed4eca4733fd4d3a07b8ef00347043b9f04628591&w=826')" }}></div>
 
         <div className="z-10 text-center sm:text-left">
-          <p className="font-bold sm:text-4xl text-3xl mb-2 capitalize text-gray-800">{IndiProfile?.name}</p>
+          <p className="font-bold sm:text-4xl text-3xl mb-2 capitalize text-gray-800">{IndiProfile?.userData.name}</p>
           <div className="h-[3px] w-[140px] bg-[#00768A] mb-2 mx-auto sm:mx-0"></div>
 
           {/* Star Rating */}
@@ -73,10 +73,10 @@ const DrIndividualProfile = () => {
           <p className="text-xl font-semibold text-white mr-2">
             Specialties In :
             <span className="font-medium ml-2">
-              {IndiProfile.specialties && IndiProfile.specialties.length > 0 ? (
-                IndiProfile.specialties.map((specialty, index) => (
+              {IndiProfile.specialitycategories && IndiProfile.specialitycategories.length > 0 ? (
+                IndiProfile.specialitycategories?.map((specialty, index) => (
                   <span key={index} className="inline-block bg-blue-100 text-[#00768A] px-3 py-1 rounded-full mr-2 text-[16px]">
-                    {specialty}
+                    {specialty.specialtyName}
                   </span>
                 ))
               ) : (

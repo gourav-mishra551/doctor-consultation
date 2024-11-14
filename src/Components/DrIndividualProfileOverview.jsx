@@ -5,7 +5,7 @@ import ExperienceCard from "./DrExperience/ExperienceCard";
 
 const DrIndividualProfileOverview = ({ IndiProfile }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-
+  console.log(IndiProfile)
   const toggleDescription = () => setIsExpanded(!isExpanded);
 
   return (
@@ -26,65 +26,71 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.2 }}
+              className="flex flex-wrap flex-row-reverse justify-between"
             >
+              <div className="w-[60%]">
 
-              {/* Doctor's Name */}
-              <p className="font-bold text-3xl text-[#00768A] mb-3 capitalize">{IndiProfile?.name}</p>
 
-              {/* Specialties */}
-              <div className="flex gap-2 flex-wrap mt-2 mb-4">
-                {IndiProfile?.specialties?.map((spe, index) => (
-                  <span
-                    key={index}
-                    className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold"
-                  >
-                    {spe}
-                  </span>
-                ))}
-              </div>
 
-              {/* Experience */}
-              <p className="font-semibold text-gray-600 mt-2 text-lg">
-                {IndiProfile.experience}+ years experience
-              </p>
+                {/* Doctor's Name */}
+                <p className="font-bold text-3xl text-[#00768A] mb-3 capitalize">{IndiProfile?.userData?.name}</p>
 
-              {/* Qualifications */}
-              <div className="flex gap-2 mt-4 items-center">
-                <FaGraduationCap className="text-[#00768A]" size={20} />
-                {Array.isArray(IndiProfile.qualifications) && IndiProfile.qualifications.length > 0 ? (
-                  <p className="font-semibold text-gray-600">
-                    {IndiProfile.qualifications.map((deg) => deg.degree).join(", ")}
-                  </p>
-                ) : (
-                  <p className="text-gray-500">No qualifications available</p>
-                )}
-              </div>
+                {/* Specialties */}
+                <div className="flex gap-2 flex-wrap mt-2 mb-4">
+                  {IndiProfile?.specialitycategories?.map((spe, index) => (
+                    <span
+                      key={index}
+                      className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold"
+                    >
+                      {spe?.specialtyName}
+                    </span>
+                  ))}
+                </div>
 
-              {/* Languages */}
-              <div className="flex gap-2 mt-4 items-center">
-                <FaCommentDots className="text-[#00768A]" size={20} />
-                <p className="font-semibold text-gray-600">
-                  {(IndiProfile.language || []).join(", ")}
+                {/* Experience */}
+                <p className="font-semibold text-gray-600 mt-2 text-lg">
+                  {IndiProfile.totalExperience}+ years experience
                 </p>
-              </div>
+                <div className="flex flex-wrap gap-5">
 
-              {/* Location */}
-              <div className="flex gap-2 mt-4 items-start">
-                <MdOutlineAddLocation className="text-[#00768A]" size={20} />
-                <div>
-                  <p className="font-semibold text-gray-600">
-                    {IndiProfile.hospitalName},{" "}
-                    {IndiProfile.clinic_hospital_address?.permanentAddress}
-                  </p>
-                  <p className="text-gray-500">
-                    {IndiProfile.clinic_hospital_address?.permanentAddress},{" "}
-                    {IndiProfile.clinic_hospital_address?.state},
-                    {IndiProfile.clinic_hospital_address?.city}{" "}
-                    {IndiProfile.clinic_hospital_address?.PinCode}
-                  </p>
+
+                  {/* Qualifications */}
+                  <div className="flex gap-2 mt-4 items-center">
+                    <FaGraduationCap className="text-[#00768A]" size={20} />
+                    {Array.isArray(IndiProfile.qualifications) && IndiProfile.qualifications.length > 0 ? (
+                      <p className="font-semibold text-gray-600">
+                        {IndiProfile.qualifications.map((deg) => deg.degree).join(", ")}
+                      </p>
+                    ) : (
+                      <p className="text-gray-500">No qualifications available</p>
+                    )}
+                  </div>
+
+                  {/* Languages */}
+                  <div className="flex gap-2 mt-4 items-center">
+                    <FaCommentDots className="text-[#00768A]" size={20} />
+                    <p className="font-semibold text-gray-600">
+                      {(IndiProfile.language || []).join(", ")}
+                    </p>
+                  </div>
+
+                  {/* Location */}
+                  <div className="flex gap-2 mt-4 items-start">
+                    <MdOutlineAddLocation className="text-[#00768A]" size={20} />
+                    <div>
+                      <p className="font-semibold text-gray-600">
+                        {IndiProfile.hospitalName},{" "}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              <div>
+                <img src={IndiProfile.userData.avatar} alt={IndiProfile.userData.name} className="w-[200px] rounded-full shadow-md" />
+              </div>
             </div>
+
             <div className="bg-gray-50 p-6 rounded-lg shadow-md">
               <h2 className="text-3xl font-bold text-[#00768A] mb-5">Work Experience</h2>
               <div className="space-y-4">
