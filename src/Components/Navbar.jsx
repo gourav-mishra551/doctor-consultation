@@ -111,40 +111,54 @@ const Navbar = () => {
   handleCategoryClick();
 
   const handleMouseEnter = (item, event) => {
-    setHoveredItem(item); // Set the hovered item
+    if (!event) return;
+  
+    setHoveredItem(item);
+  
+    // Check if submenuData for the item exists
+    if (!submenuData[item]) return;
+  
     const menuItemRect = event.target.getBoundingClientRect();
     setSubmenuPosition({
-      top: menuItemRect.bottom + window.scrollY, // Position the submenu below the hovered item
-      left: menuItemRect.left + window.scrollX, // Position the submenu aligned to the left of the hovered item
+      top: menuItemRect.bottom + window.scrollY,
+      left: menuItemRect.left + window.scrollX,
     });
-    // Open the corresponding submenu when hovering
+  
     setOpenSubMenus((prevState) => ({
       ...prevState,
       [item]: true,
     }));
   };
-
+  
+  
+  
 
   const handleMouseLeave = (item) => {
-  setHoveredItem(null); // Reset the hovered item
-  // Close the submenu when mouse leaves the item
-  setOpenSubMenus((prevState) => ({
-    ...prevState,
-    [item]: false,
-  }));
-};
+    if (!item) return; // Guard clause to avoid undefined item
+  
+    setHoveredItem(null); // Reset the hovered item
+    setOpenSubMenus((prevState) => ({
+      ...prevState,
+      [item]: false, // Close the submenu when mouse leaves the item
+    }));
+  };
+  
   const toggleMegaMenu = () => {
     setIsMegaMenuOpen(!isMegaMenuOpen);
   };
   const containerRef = useRef(null);
   const megaMenuRef = useRef(null);
-  const handleClickOutside = (event) => {
-    // If the click was outside the Mega Menu, hide it
-    if (megaMenuRef.current && !megaMenuRef.current.contains(event.target)) {
-      setMegaMenubtn(false);
-      setIsHoveringServices(false);
-    }
-  };
+  const servicesRef = useRef(null);
+ // Detect clicks outside of Services or the mega menu
+ const handleClickOutside = (event) => {
+  if (
+    megaMenuRef.current &&
+    !megaMenuRef.current.contains(event.target) &&
+    !servicesRef.current.contains(event.target)
+  ) {
+    setIsMegaMenuOpen(false); // Close the mega menu if clicked outside
+  }
+};
 
   const setBothRefs = (node) => {
     containerRef.current = node;
@@ -296,7 +310,47 @@ const Navbar = () => {
               />
             </Link>
 
-          
+            {/* Search Input Section */}
+            <div className="relative flex-grow mx-4 hidden sm:block">
+              {noResults && (
+                <div
+                  ref={searchResultsRef}
+                  className="absolute w-full left-0 border rounded-lg shadow-lg p-4 bg-white max-h-64 overflow-y-auto z-10"
+                >
+                  <div className="text-sm text-red-600">No Product Found</div>
+                </div>
+              )}
+              {showResults && (
+                <div
+                  ref={searchResultsRef}
+                  className="absolute w-full left-0 border rounded-lg shadow-lg p-4 bg-white max-h-64 overflow-y-auto z-10"
+                >
+                  {results.map((product) => (
+                    <div
+                      key={product?._id}
+                      className="flex items-center space-x-4 mb-2 cursor-pointer"
+                      onClick={() => handleProductClick(product?.slug)}
+                    >
+                      {Array.isArray(product?.images) &&
+                      product.images.length > 0 ? (
+                        <img
+                          src={product?.images[0]?.url || "./default.jpg"}
+                          alt={product?.images[0]?.alt || product?.title}
+                          className="w-12 h-12 object-cover rounded"
+                        />
+                      ) : (
+                        <img
+                          className="w-12 h-12 object-cover rounded"
+                          src="/default.jpg"
+                          alt="default alt text"
+                        />
+                      )}
+                      <span className="text-sm">{product?.title}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Menu Items */}
             <div className="flex items-center space-x-4">
@@ -317,14 +371,10 @@ const Navbar = () => {
 
                 <div
                   className="relative cursor-pointer group"
-                  ref={megaMenuRef}
-                  onMouseEnter={() => {
-                    setMegaMenubtn(true);
-                    setIsHoveringServices(true);
-                  }}
-                  onMouseLeave={() => {
-                    setIsHoveringServices(false);
-                  }}
+                  ref={servicesRef}
+                  
+                  onMouseEnter={(e) => handleMouseEnter(menu, e)} // Pass the event as `e`
+                  onMouseLeave={() => handleMouseLeave(menu)}
                 >
                   <span className="relative z-10">Service</span>
                   <span className="absolute left-0 bottom-0 h-0.5 w-full bg-[#00768A] scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
@@ -467,7 +517,7 @@ const Navbar = () => {
               {/* MegaMenu Dropdown */}
               <div className="pl-4 space-y-1">
                 {Object.keys(submenuData).map((menu, index) => (
-                  <div key={index}>
+                  <div key={index} style={{border:"1px solid red"}}>
                     <div
                       className=" px-3 py-2 rounded-md text-sm hover:bg-blue-500 hover:text-white cursor-pointer flex"
                       onClick={() => toggleSubMenu(menu)}
@@ -538,6 +588,7 @@ const Navbar = () => {
           </div>
         </div>
       )} */}
+     
       <MegaMenu/>
       </div>
     </div>

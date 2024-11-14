@@ -57,6 +57,7 @@ import ConsultwithNewDoctor from "./Pages/AppointmentBooking/ReturningPatient/Co
 
 import CategoriesHome from "./Components/CategoriesHome/CategoriesHome";
 import InsideIndia from "./Pages/AppointmentBooking/NewPatient/InsideIndia/InsideIndia";
+import BookingSlot from "./Pages/BookingSlot/BookingSlot";
 
 function App() {
   return (
@@ -78,6 +79,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact-us" element={<ContactPage />} />
           <Route path="/drs-profile" element={<DrProfilePage />} />
+          <Route path="/BookingSlot/:id" element={<BookingSlot/>}/>
           <Route path="/dr-indi/:id" element={<DrIndividualProfilePage />} />
           <Route
             path="/DrAppointmentCreation"

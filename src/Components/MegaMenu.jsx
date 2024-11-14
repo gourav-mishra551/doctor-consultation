@@ -5,7 +5,7 @@ function MegaMenu() {
   const [hoveredItem, setHoveredItem] = useState(null);
   const [submenuPosition, setSubmenuPosition] = useState({ top: 0, left: 0 });
   const containerRef = useRef(null);
-
+const [category,setCategory]=useState([])
   const [activeMobileMenu, setActiveMobileMenu] = useState(null); // Initially no menu is active
 
   
@@ -15,6 +15,19 @@ function MegaMenu() {
     setActiveMobileMenu(activeMobileMenu === menu ? null : menu);
   };
 
+  useEffect(()=>{
+FetchCategory()
+  },[])
+
+  const FetchCategory=async()=>{
+    try {
+      const res=await axios("https://api.assetorix.com/ah/api/v1/dc/user/Category?limit=100")
+      setCategory(res.data.data);
+      
+    } catch (error) {
+      
+    }
+  }
   
   const submenuData = {
     PatientCare: [
@@ -133,25 +146,23 @@ function MegaMenu() {
           onMouseLeave={handleMouseLeave}
         >
           {hoveredItem === "CenterOfExcellence" ? (
-            <div className="grid grid-cols-4 justify-items-right items-center gap-10 w-[88%] mx-auto">
-              {submenuData[hoveredItem].map((subItem, index) => (
+            <div className="grid grid-cols-4 justify-items-right items-center gap-10 w-[88%] mx-auto cursor-pointer">
+              {category.map((subItem, index) => (
                 <div key={index} className="flex align-top">
                   <div className="flex items-center justify-center">
                     {/* Images for different subItems */}
-                    {subItem === "Cardiology" && (
+                    
                       <img
-                        src="src/Assests/heart-attack.png"
+                        src={subItem.image}
                         className="h-10 w-10"
                       />
-                    )}
-                    {subItem === "Orthopedics" && (
-                      <img src="src/Assests/x-ray.png" className="h-10 w-10" />
-                    )}
+                    
+                    
                     {/* Add other sub-items here similarly */}
                   </div>
                   <div>
                     <div className="text-black-1000 hover:text-blue-700 transition-colors duration-200 mt-2 font-semibold">
-                      {subItem}
+                      {subItem.specialtyName}
                     </div>
                     <span className="text-gray-800">See all Doctors</span>
                   </div>

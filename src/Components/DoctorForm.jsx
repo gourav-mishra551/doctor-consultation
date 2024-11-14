@@ -31,8 +31,8 @@ const DoctorForm = () => {
         fieldOfStudy: "",
         startDate: { month: "", year: "" },
         endDate: { month: "", year: "" },
-        description:"",
-        skills:[]
+        description: "",
+        skills: [],
       },
     ],
     years_of_experience: [
@@ -636,6 +636,7 @@ const DoctorForm = () => {
     "Tamil Nadu Medical Council",
     "Indian Medical Council",
   ];
+
 
   return (
     <div className="bg-[#E3EAF0]">
