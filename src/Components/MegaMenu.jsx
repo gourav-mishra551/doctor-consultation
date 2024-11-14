@@ -103,16 +103,16 @@ FetchCategory()
   };
 
   return (
-    <div>
+    <div className="bg-[#00768A]">
       {/* Main Container */}
       <div
-        className=" bg-[#F7F6F9] bg-opacity-40 z-50 w-full md:block  sm:block hidden"
+        className=" bg-[#F7F6F9] max-w-[1200px] mx-auto bg-opacity-40 z-50 w-full md:block  sm:block hidden"
         ref={containerRef}
       >
         {/* Menu Bar (for larger screens) */}
-        <div className="flex justify-center gap-12 py-4 bg-[#00768A] text-white">
+        <div className="flex justify-center gap-6 py-4 bg-[#00768A] text-white">
           {Object.keys(submenuData).map((menu, index) => (
-            <div className="relative cursor-pointer group">
+            <div className="relative cursor-pointer group max-w-[1200px] mx-auto">
               <span
                 key={index}
                 className="cursor-pointer px-4 py-2 font-medium hover:scale-110 duration-300 relative z-10"
@@ -130,7 +130,7 @@ FetchCategory()
       {/* Hovered Menu for Desktop (appears on mouse enter) */}
       {hoveredItem && (
         <div
-          className={`absolute p-4 bg-white rounded-lg shadow-lg flex justify-center gap-18 z-50 transition-all duration-300 ${
+          className={` absolute p-4 bg-white rounded-lg shadow-lg flex justify-center gap-18 z-50 transition-all duration-300 ${
             hoveredItem === "CenterOfExcellence"
               ? "w-full mr-[450px]"
               : "w-auto"
@@ -163,6 +163,10 @@ FetchCategory()
                   <div>
                     <div className="text-black-1000 hover:text-blue-700 transition-colors duration-200 mt-2 font-semibold">
                       {subItem.specialtyName}
+
+                    <div className="text-black-1000  transition-colors duration-200 mt-2 font-semibold">
+                      {subItem}
+
                     </div>
                     <span className="text-gray-800">See all Doctors</span>
                   </div>

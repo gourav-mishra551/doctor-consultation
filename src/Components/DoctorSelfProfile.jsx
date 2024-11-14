@@ -8,7 +8,7 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
   const [isFAQOpen, setIsFAQOpen] = useState(false);
   // Set the first speciality's ID as the default open box
   const [activeSpecialityId, setActiveSpecialityId] = useState(
-    doctorProfileData?.data?.specialitycategories[0]?._id || null
+    doctorProfileData?.data?.specialityCategories[0]?._id || null
   );
 
   const handleSpecialityClick = (id) => {
@@ -153,7 +153,7 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
 
             <div className="flex flex-col w-[40%]">
               <div className="speciality-accordion">
-                {doctorProfileData?.data?.specialitycategories.map(
+                {doctorProfileData?.specialityCategories?.map(
                   (special, index) => (
                     <div
                       key={special._id}
