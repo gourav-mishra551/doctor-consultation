@@ -66,7 +66,8 @@ const DrIndividualProfile = () => {
           {/* Star Rating */}
           <div className="flex items-center justify-center sm:justify-start mb-3">
             <p className="text-xl font-semibold text-white mr-2">Ratings :</p>
-            <div className="flex">{renderStars(IndiProfile?.averageRating || 0)}</div>
+            <div className={IndiProfile?.averageRating === 0 ? "hidden" :"flex"}>{renderStars(IndiProfile?.averageRating || 0)}</div>
+            <div className={IndiProfile?.averageRating === 0 ? "flex font-semibold text-yellow-300" :"hidden"}>No Ratings </div>
           </div>
 
           {/* Specialties */}
