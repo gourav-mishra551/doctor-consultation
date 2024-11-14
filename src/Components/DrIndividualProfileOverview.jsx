@@ -1,78 +1,76 @@
 import React, { useState } from "react";
-import { FaGraduationCap } from "react-icons/fa";
-import { FaCommentDots } from "react-icons/fa";
+import { FaGraduationCap, FaCommentDots } from "react-icons/fa";
 import { MdOutlineAddLocation } from "react-icons/md";
-import DrAppointmentBooking from "./DrApointmentBooking";
+import ExperienceCard from "./DrExperience/ExperienceCard";
 
 const DrIndividualProfileOverview = ({ IndiProfile }) => {
-  // Check if IndiProfile exists before using it
-  if (!IndiProfile) {
-    return <div>Loading...</div>; // You can show a loading message or spinner
-  }
-
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const toggleDescription = () => {
-    setIsExpanded(!isExpanded);
-  };
-console.log(IndiProfile);
+  const toggleDescription = () => setIsExpanded(!isExpanded);
 
   return (
-    <div>
-      <div className="bg-white w-full h-auto p-5">
-        <div className="dr-profile flex sm:flex-row flex-col gap-10 mt-5 p-5 rounded-xl shadow-lg bg-gray-50">
+    <div className="bg-gray-100 py-10 px-5">
+      <div className="bg-white w-full p-6 rounded-xl shadow-lg transition-transform transform hover:scale-105">
+
+        {/* Profile Section */}
+        <div
+          className="dr-profile flex sm:flex-row flex-col gap-10 mt-5 p-6 rounded-xl shadow-lg bg-gray-50"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+
           {/* Left Section: Doctor Profile */}
-          <div className="border-2 border-gray-300 rounded-xl p-6 flex-1 h-[350px]">
-            <div>
+          <div className="border-2 border-gray-300 rounded-xl p-6 flex-1 h-auto">
+            <div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+            >
+
               {/* Doctor's Name */}
-              <p className="font-bold text-3xl text-[#00768A]">
-                {IndiProfile?.name}
-              </p>
+              <p className="font-bold text-3xl text-[#00768A] mb-3 capitalize">{IndiProfile?.name}</p>
 
               {/* Specialties */}
-              <div className="flex gap-3 mt-2">
+              <div className="flex gap-2 flex-wrap mt-2 mb-4">
                 {IndiProfile?.specialties?.map((spe, index) => (
-                  <p
+                  <span
                     key={index}
-                    className="font-semibold text-lg text-gray-700"
+                    className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold"
                   >
                     {spe}
-                    {index < IndiProfile.length - 1 && ","}
-                  </p>
+                  </span>
                 ))}
               </div>
 
               {/* Experience */}
-              <p className="font-semibold text-gray-600 mt-2">
+              <p className="font-semibold text-gray-600 mt-2 text-lg">
                 {IndiProfile.experience}+ years experience
               </p>
 
               {/* Qualifications */}
-              <div className="flex gap-2 mt-3 items-center">
-                <FaGraduationCap className="text-[#00768A]" />
-                {Array.isArray(IndiProfile.qualifications) &&
-                IndiProfile.qualifications.length > 0 ? (
-                  IndiProfile.qualifications.map((deg, index) => (
-                    <p key={index} className="font-semibold text-gray-600">
-                      {deg.degree}
-                    </p>
-                  ))
+              <div className="flex gap-2 mt-4 items-center">
+                <FaGraduationCap className="text-[#00768A]" size={20} />
+                {Array.isArray(IndiProfile.qualifications) && IndiProfile.qualifications.length > 0 ? (
+                  <p className="font-semibold text-gray-600">
+                    {IndiProfile.qualifications.map((deg) => deg.degree).join(", ")}
+                  </p>
                 ) : (
                   <p className="text-gray-500">No qualifications available</p>
                 )}
               </div>
 
               {/* Languages */}
-              <div className="flex gap-2 mt-3 items-center">
-                <FaCommentDots className="text-[#00768A]" />
+              <div className="flex gap-2 mt-4 items-center">
+                <FaCommentDots className="text-[#00768A]" size={20} />
                 <p className="font-semibold text-gray-600">
                   {(IndiProfile.language || []).join(", ")}
                 </p>
               </div>
 
               {/* Location */}
-              <div className="flex gap-2 mt-3 items-start">
-                <MdOutlineAddLocation className="text-[#00768A]" />
+              <div className="flex gap-2 mt-4 items-start">
+                <MdOutlineAddLocation className="text-[#00768A]" size={20} />
                 <div>
                   <p className="font-semibold text-gray-600">
                     {IndiProfile.hospitalName},{" "}
@@ -81,24 +79,36 @@ console.log(IndiProfile);
                   <p className="text-gray-500">
                     {IndiProfile.clinic_hospital_address?.permanentAddress},{" "}
                     {IndiProfile.clinic_hospital_address?.state},
-                    {IndiProfile.clinic_hospital_address?.city}
+                    {IndiProfile.clinic_hospital_address?.city}{" "}
                     {IndiProfile.clinic_hospital_address?.PinCode}
                   </p>
                 </div>
               </div>
             </div>
+            <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+              <h2 className="text-3xl font-bold text-[#00768A] mb-5">Work Experience</h2>
+              <div className="space-y-4">
+                {IndiProfile?.years_of_experience.map((experience) => (
+                  <ExperienceCard key={experience._id} experience={experience} />
+                ))}
+              </div>
+            </div>
+
           </div>
 
           {/* Right Section: Appointment Booking */}
-          <div className="bg-white rounded-xl p-5 shadow-lg flex-1">
-           
-          </div>
+
         </div>
 
         {/* About Doctor Section */}
-        <div className="about-dr mt-5 p-5 bg-gray-50 rounded-xl">
-          <p className="font-bold text-3xl text-[#00768A]">About Doctor</p>
-          <p className="text-gray-700 mt-3">
+        <div
+          className="about-dr mt-8 p-6 bg-gray-50 rounded-xl shadow-md transition-colors duration-300 hover:bg-blue-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <p className="font-bold text-3xl text-[#00768A] mb-4">About Doctor</p>
+          <p className={`text-gray-700 mt-3 ${isExpanded ? "line-clamp-none" : "line-clamp-5"} transition-all duration-300`}>
             Dr. Ritika Bhatt is an experienced ENT/Otorhinolaryngologist in
             Bangalore with over 5 years of expertise in diagnosing and treating
             a wide range of ear, nose, and throat disorders. Dr. Bhatt is
@@ -114,6 +124,12 @@ console.log(IndiProfile);
             expertise in treating congenital ear problems is highly sought after
             by parents seeking specialized treatment for their children.
           </p>
+          <button
+            onClick={toggleDescription}
+            className="mt-3 text-[#00768A] font-semibold"
+          >
+            {isExpanded ? "Read Less" : "Read More"}
+          </button>
           <div className="w-full bg-[#00768A] h-[2px] mt-5"></div>
         </div>
       </div>
