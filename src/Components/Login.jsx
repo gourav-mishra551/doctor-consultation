@@ -9,9 +9,6 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
-
- 
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",

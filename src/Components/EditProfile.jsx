@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FaQuestion } from "react-icons/fa";
 import { IoPerson } from "react-icons/io5";
-import { MdOutlineTimer } from "react-icons/md";
+import {
+  MdClose,
+  MdKeyboardDoubleArrowUp,
+  MdOutlineTimer,
+} from "react-icons/md";
 import axios from "axios";
 
 const EditProfile = () => {
@@ -9,6 +13,7 @@ const EditProfile = () => {
   const [openIndex, setOpenIndex] = useState(null);
   const [openSection, setOpenSection] = useState(null);
   const [faqs, setFaqs] = useState([]);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [dataToEdit, setDataToEdit] = useState({
     FAQ: [
       {
@@ -17,15 +22,15 @@ const EditProfile = () => {
       },
     ],
     aboutDoctor: "",
-    clinicHospitalAddress: {
+    clinic_hospital_address: {
       PinCode: "",
       city: "",
       permanentAddress: "",
       state: "",
     },
     hospitalName: "",
-    servicesOffered: [],
-    yearsOfExperience: [
+    services_offered: [],
+    years_of_experience: [
       {
         description: "",
         employmentType: "",
@@ -57,6 +62,7 @@ const EditProfile = () => {
       name: "",
     },
   });
+  const [loadingUpdateBtn, setLoadingState] = useState(false);
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -79,29 +85,31 @@ const EditProfile = () => {
       setDataToEdit({
         FAQ: doctorData.FAQ || [{ title: "", value: "" }],
         aboutDoctor: doctorData.aboutDoctor || "",
-        clinicHospitalAddress: {
-          PinCode: doctorData.clinicHospitalAddress?.PinCode || "",
-          city: doctorData.clinicHospitalAddress?.city || "",
+        clinic_hospital_address: {
+          PinCode: doctorData.clinic_hospital_address?.PinCode || "",
+          city: doctorData.clinic_hospital_address?.city || "",
           permanentAddress:
-            doctorData.clinicHospitalAddress?.permanentAddress || "",
-          state: doctorData.clinicHospitalAddress?.state || "",
+            doctorData.clinic_hospital_address?.permanentAddress || "",
+          state: doctorData.clinic_hospital_address?.state || "",
         },
         hospitalName: doctorData.hospitalName || "",
-        servicesOffered: doctorData.servicesOffered || "",
+        services_offered: doctorData.services_offered || "",
         name: doctorData?.userData?.name || "",
-        yearsOfExperience: doctorData.yearsOfExperience?.map((experience) => ({
-          description: experience.description || "",
-          employmentType: experience.employmentType || "",
-          endDate: experience.endDate || "",
-          jobTitle: experience.jobTitle || "",
-          organizationLocation: experience.organizationLocation || "",
-          organizationName: experience.organizationName || "",
-          skills: experience.skills || [],
-          startDate: {
-            month: experience.startDate?.month || "",
-            year: experience.startDate?.year || "",
-          },
-        })) || [
+        years_of_experience: doctorData.years_of_experience?.map(
+          (experience) => ({
+            description: experience.description || "",
+            employmentType: experience.employmentType || "",
+            endDate: experience.endDate || "",
+            jobTitle: experience.jobTitle || "",
+            organizationLocation: experience.organizationLocation || "",
+            organizationName: experience.organizationName || "",
+            skills: experience.skills || [],
+            startDate: {
+              month: experience.startDate?.month || "",
+              year: experience.startDate?.year || "",
+            },
+          })
+        ) || [
           {
             description: "",
             employmentType: "",
@@ -183,6 +191,23 @@ const EditProfile = () => {
   const toggleOpen = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
+  // Functions for managing FAQ
+  const handleAddFaq = () => {
+    // Add a new empty FAQ entry
+    const newFaq = { title: "", value: "" };
+    setDataToEdit((prevData) => ({
+      ...prevData,
+      FAQ: [...prevData.FAQ, newFaq],
+    }));
+  };
+
+  const handleDeleteFaq = (index) => {
+    // Remove the FAQ at the specified index
+    setDataToEdit((prevData) => ({
+      ...prevData,
+      FAQ: prevData.FAQ.filter((_, i) => i !== index),
+    }));
+  };
 
   // --------------------------------------------------------------------------------------------------------
   //Qualification details section is here
@@ -232,20 +257,20 @@ const EditProfile = () => {
   const handleChange = (e, index) => {
     const { name, value } = e.target;
 
-    if (name === "servicesOffered") {
-      // Handle changes to servicesOffered array
-      const updatedServices = [...dataToEdit.servicesOffered];
+    if (name === "services_offered") {
+      // Handle changes to services_offered array
+      const updatedServices = [...dataToEdit.services_offered];
       updatedServices[index] = value;
       setDataToEdit((prevState) => ({
         ...prevState,
-        servicesOffered: updatedServices,
+        services_offered: updatedServices,
       }));
-    } else if (name in dataToEdit.clinicHospitalAddress) {
+    } else if (name in dataToEdit.clinic_hospital_address) {
       // Handle changes to clinicHospitalAddress fields
       setDataToEdit((prevState) => ({
         ...prevState,
-        clinicHospitalAddress: {
-          ...prevState.clinicHospitalAddress,
+        clinic_hospital_address: {
+          ...prevState.clinic_hospital_address,
           [name]: value,
         },
       }));
@@ -269,26 +294,25 @@ const EditProfile = () => {
 
   // Experience qualification change
   const handleExperienceChange = (index, field, value) => {
-    const updatedQualifications = [...dataToEdit.qualifications];
-    updatedQualifications[index] = {
-      ...updatedQualifications[index],
-      [field]: value,
-    };
-    setDataToEdit({
-      ...dataToEdit,
-      qualifications: updatedQualifications,
+    setDataToEdit((prevState) => {
+      const updatedExperience = [...prevState.years_of_experience];
+      updatedExperience[index] = {
+        ...updatedExperience[index],
+        [field]: value,
+      };
+      return { ...prevState, years_of_experience: updatedExperience };
     });
   };
 
   const experienceChange = (index, field, value) => {
-    const updatedExperience = [...dataToEdit.yearsOfExperience];
+    const updatedExperience = [...dataToEdit.years_of_experience];
     updatedExperience[index] = {
       ...updatedExperience[index],
       [field]: value,
     };
     setDataToEdit({
       ...dataToEdit,
-      yearsOfExperience: updatedExperience,
+      years_of_experience: updatedExperience,
     });
   };
 
@@ -298,10 +322,183 @@ const EditProfile = () => {
     setDataToEdit({ ...dataToEdit, FAQ: updatedFaq }); // Update state
   };
 
+  // Add this function to handle adding a new qualification
+  const handleAddQualification = (e) => {
+    e.preventDefault();
+    setDataToEdit((prevData) => ({
+      ...prevData,
+      qualifications: [
+        ...prevData.qualifications,
+        {
+          degree: "",
+          description: "",
+          endDate: { month: "", year: "" },
+          fieldOfStudy: "",
+          instituteName: "",
+          skills: [],
+          startDate: { month: "", year: "" },
+        },
+      ],
+    }));
+
+    // Automatically open the new qualification section
+    setOpenSection(dataToEdit.qualifications.length); // set to new qualification index
+  };
+
+  const handleAddQualificationSkill = (index) => {
+    const updatedQualifications = [...dataToEdit.qualifications];
+    if (!updatedQualifications[index].skills) {
+      updatedQualifications[index].skills = [];
+    }
+    updatedQualifications[index].skills.push(""); // Add a new empty skill
+    setDataToEdit({ ...dataToEdit, qualifications: updatedQualifications });
+  };
+
+  // Function to handle skill input change
+  const handleQualificationSkillChange = (
+    qualificationIndex,
+    skillIndex,
+    value
+  ) => {
+    const updatedQualifications = [...dataToEdit.qualifications];
+    updatedQualifications[qualificationIndex].skills[skillIndex] = value;
+    setDataToEdit({ ...dataToEdit, qualifications: updatedQualifications });
+  };
+
+  // Function to delete a skill
+  const handleDeleteQualificationSkill = (qualificationIndex, skillIndex) => {
+    const updatedQualifications = [...dataToEdit.qualifications];
+    updatedQualifications[qualificationIndex].skills = updatedQualifications[
+      qualificationIndex
+    ].skills.filter((_, index) => index !== skillIndex);
+    setDataToEdit({ ...dataToEdit, qualifications: updatedQualifications });
+  };
+
+  const handleDeleteQualification = (qualificationIndex) => {
+    const updatedQualifications = dataToEdit.qualifications.filter(
+      (_, index) => index !== qualificationIndex
+    );
+    setDataToEdit({ ...dataToEdit, qualifications: updatedQualifications });
+  };
+
+  const handleChangeQualification = (index, field, value) => {
+    const updatedQualifications = [...dataToEdit.qualifications];
+    updatedQualifications[index][field] = value;
+    setDataToEdit({ ...dataToEdit, qualifications: updatedQualifications });
+  };
+
+  // ------------------------------------------------------------------------------------
+  // doctors details
+  // Handle adding a new service
+  const addService = async () => {
+    const updatedServices = [...dataToEdit.services_offered, ""];
+    setDataToEdit((prevData) => ({
+      ...prevData,
+      services_offered: updatedServices,
+    }));
+    await updateServicesInBackend(updatedServices); // Update backend
+  };
+
+  // Handle deleting a service
+  const deleteService = async (index) => {
+    const updatedServices = dataToEdit.services_offered.filter(
+      (_, i) => i !== index
+    );
+    setDataToEdit((prevData) => ({
+      ...prevData,
+      services_offered: updatedServices,
+    }));
+    await updateServicesInBackend(updatedServices); // Update backend
+  };
+
+  // Handle input change for services
+  const handleServiceChange = (e, index) => {
+    const newServices = [...dataToEdit.services_offered];
+    newServices[index] = e.target.value;
+    setDataToEdit((prevData) => ({
+      ...prevData,
+      services_offered: newServices,
+    }));
+  };
+
+  // ----------------------------------------------------------------------------------------------------
+  // Add new Experience function
+  const handleAddExperience = () => {
+    const newExperience = {
+      description: "",
+      employmentType: "",
+      startDate: "",
+      endDate: "",
+      jobTitle: "",
+      organizationLocation: "",
+      organizationName: "",
+      skills: [],
+    };
+    setDataToEdit((prevData) => ({
+      ...prevData,
+      years_of_experience: [...prevData.years_of_experience, newExperience],
+    }));
+  };
+
+  const handleDeleteExperience = (index) => {
+    setDataToEdit((prevData) => ({
+      ...prevData,
+      years_of_experience: prevData.years_of_experience.filter(
+        (_, i) => i !== index
+      ),
+    }));
+  };
+
+  const handleAddExperienceSkill = (experienceIndex) => {
+    setDataToEdit((prevData) => {
+      const updatedData = { ...prevData };
+      // Add a new empty skill to the skills array of the specific experience
+      updatedData.years_of_experience[experienceIndex].skills = [
+        ...updatedData.years_of_experience[experienceIndex].skills,
+        "",
+      ];
+      return updatedData;
+    });
+  };
+
+  const handleDeleteExperienceSkill = (experienceIndex, skillIndex) => {
+    setDataToEdit((prevData) => {
+      const updatedData = { ...prevData };
+      // Remove the skill at the given index for the specific experience
+      updatedData.years_of_experience[experienceIndex].skills.splice(
+        skillIndex,
+        1
+      );
+      return updatedData;
+    });
+  };
+
+  const handleExperienceSkillChange = (
+    experienceIndex,
+    skillIndex,
+    newSkill
+  ) => {
+    setDataToEdit((prevData) => {
+      const updatedData = { ...prevData };
+      updatedData.years_of_experience[experienceIndex].skills[skillIndex] =
+        newSkill;
+      return updatedData;
+    });
+  };
+
+  // / Function to toggle the profile bar
+  const toggleProfileBar = () => {
+    setIsProfileOpen(!isProfileOpen);
+  };
+
+  const closeProfileBar = () => {
+    setIsProfileOpen(false);
+  };
+
   return (
     <>
-      <div className="flex">
-        <div className="w-[30%] bg-white shadow-sm px-5 py-10 flex flex-col">
+      <div className="sm:flex">
+        <div className="w-[30%] bg-white shadow-sm px-5 py-10 sm:flex sm:flex-col hidden">
           {/* Personal details part is here */}
           <div className="flex gap-3 justify-start items-center ml-5">
             <div
@@ -439,8 +636,63 @@ const EditProfile = () => {
             </div>
           </div>
         </div>
+        {/* for mobile section */}
+        <div className="relative sm:hidden">
+          {/* Profile Button at the top */}
+          <div className="flex fixed top-[470px] right-[110px] z-50">
+            <button
+              onClick={toggleProfileBar}
+              className="bg-blue-500 w-[220px] text-[22px] text-white p-4 rounded-xl shadow-lg md:hidden focus:outline-none"
+            >
+              Profile
+            </button>
+            <MdKeyboardDoubleArrowUp className="text-white absolute left-[140px] top-[21px] text-[25px]" />
+          </div>
 
-        <div className="w-[70%] bg-white shadow-sm px-5 py-10">
+          {/* Profile Bar (Visible only on mobile) */}
+          <div
+            className={`shadow-xl bg-gray-100 fixed bottom-0 left-0 w-full transition-transform duration-300 md:hidden ${
+              isProfileOpen
+                ? "transform translate-y-0"
+                : "transform translate-y-full"
+            }`}
+            style={{
+              height: "80%",
+            }}
+          >
+            {/* Close Button (Cross Icon) */}
+            <div className="flex justify-end p-4">
+              <MdClose
+                onClick={closeProfileBar}
+                className="text-2xl cursor-pointer text-gray-600"
+              />
+            </div>
+
+            {/* Profile Options */}
+            <div className="flex flex-col space-y-4 p-6">
+              <p className="text-sm font-bold">Select the section</p>
+              <div className="flex justify-start items-center gap-2">
+                <IoPerson />
+                <button className="text-xl">Doctor Details</button>
+              </div>
+
+              <div className="flex justify-start items-center gap-2">
+                <FaQuestion />
+                <button className="text-xl">FAQ</button>
+              </div>
+              <div className="flex justify-start items-center gap-2">
+                <IoPerson />
+                <button className="text-xl">Qualification Details</button>
+              </div>
+              <div className="flex justify-start items-center gap-2">
+                <MdOutlineTimer />
+                <button className="text-xl">Experience Details</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="sm:w-[70%] w-[100%] bg-white shadow-sm px-5 py-10">
           <form>
             {activesection === "Doctor-Details" && (
               <div className="space-y-5">
@@ -481,7 +733,7 @@ const EditProfile = () => {
                       placeholder="Enter Permanent Address"
                       className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
                       value={
-                        dataToEdit?.clinicHospitalAddress?.permanentAddress ||
+                        dataToEdit?.clinic_hospital_address?.permanentAddress ||
                         ""
                       }
                       onChange={handleChange}
@@ -496,7 +748,7 @@ const EditProfile = () => {
                       name="state" // Bind to the correct state
                       placeholder="Enter State"
                       className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
-                      value={dataToEdit?.clinicHospitalAddress?.state || ""}
+                      value={dataToEdit?.clinic_hospital_address?.state || ""}
                       onChange={handleChange}
                     />
                   </div>
@@ -511,7 +763,7 @@ const EditProfile = () => {
                       name="city" // Bind to the correct state
                       placeholder="Enter City"
                       className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
-                      value={dataToEdit?.clinicHospitalAddress?.city || ""}
+                      value={dataToEdit?.clinic_hospital_address?.city || ""}
                       onChange={handleChange}
                     />
                   </div>
@@ -524,7 +776,7 @@ const EditProfile = () => {
                       name="PinCode" // Bind to the correct state
                       placeholder="Enter Pincode"
                       className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
-                      value={dataToEdit?.clinicHospitalAddress?.PinCode || ""}
+                      value={dataToEdit?.clinic_hospital_address?.PinCode || ""}
                       onChange={handleChange}
                     />
                   </div>
@@ -533,194 +785,276 @@ const EditProfile = () => {
                 {/* Services Offered */}
                 <div className="flex flex-col gap-1">
                   <label className="px-2 font-bold">Services</label>
-                  <div className="flex gap-5">
-                    {dataToEdit?.servicesOffered?.map((service, index) => (
-                      <input
-                        key={index}
-                        type="text"
-                        name="servicesOffered" // Name can be the same as it is part of an array
-                        placeholder="Enter Service"
-                        className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
-                        value={service || ""}
-                        onChange={(e) => handleChange(e, index)} // Pass the index for updating the right service
-                      />
+                  <div className="flex flex-col gap-2">
+                    {dataToEdit.services_offered.map((service, index) => (
+                      <div key={index} className="flex gap-3 items-center">
+                        <input
+                          type="text"
+                          placeholder="Enter Service"
+                          className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
+                          value={service || ""}
+                          onChange={(e) => handleServiceChange(e, index)}
+                          onBlur={() =>
+                            updateServicesInBackend(dataToEdit.services_offered)
+                          } // Update backend on blur
+                        />
+                        <button
+                          type="button"
+                          onClick={() => deleteService(index)}
+                          className="text-red-500 px-2"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     ))}
+                    <button
+                      type="button"
+                      onClick={addService}
+                      className="mt-2 text-white bg-blue-500 p-2 focus:outline-none rounded-xl"
+                    >
+                      Add Service
+                    </button>
                   </div>
                 </div>
               </div>
             )}
             {activesection === "qualification-details" && (
               <div className="space-y-4">
-                {dataToEdit?.qualifications?.map((experience, index) => (
-                  <div key={index}>
-                    {/* Toggle Button */}
-                    <button
-                      type="button"
-                      className="w-full text-left font-bold bg-gray-100 p-4 rounded-md focus:border-[#4358f6] focus:outline-none"
-                      onClick={() => toggleSection(index)}
-                    >
-                      {experience.degree || `Experience ${index + 1}`}
-                    </button>
+                {dataToEdit?.qualifications?.map(
+                  (qualification, qualificationIndex) => (
+                    <div key={qualificationIndex}>
+                      {/* Toggle Button */}
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          className="w-full text-left font-bold bg-gray-100 p-4 rounded-md focus:border-[#4358f6] focus:outline-none"
+                          onClick={() => toggleSection(qualificationIndex)} // Toggle by qualificationIndex
+                        >
+                          {qualification.degree ||
+                            `Qualification ${qualificationIndex + 1}`}
+                        </button>
 
-                    {/* Collapsible Content */}
-                    {openSection === index && (
-                      <div className="p-4 border border-gray-200 rounded-md space-y-4">
-                        {/* Description */}
-                        <div className="flex flex-col gap-1">
-                          <label className="px-2 font-bold">Description</label>
-                          <input
-                            type="text"
-                            value={experience.description || ""}
-                            placeholder="Enter Description"
-                            className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
-                            onChange={(e) =>
-                              handleExperienceChange(
-                                index,
-                                "description",
-                                e.target.value
-                              )
-                            }
-                          />
-                        </div>
-
-                        {/* Employment Type */}
-                        <div className="flex flex-col gap-1">
-                          <label className="px-2 font-bold">
-                            Institute Name
-                          </label>
-                          <input
-                            type="text"
-                            value={experience.instituteName || ""}
-                            placeholder="Enter Employment Type"
-                            className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
-                            onChange={(e) =>
-                              handleExperienceChange(
-                                index,
-                                "instituteName",
-                                e.target.value
-                              )
-                            }
-                          />
-                        </div>
-
-                        {/* Start Date and End Date */}
-                        <div className="flex gap-4">
-                          <div className="flex flex-col gap-1 w-full">
-                            <label className="px-2 font-bold">Start Date</label>
-                            <input
-                              type="date"
-                              value={experience.startDate || ""}
-                              className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
-                              onChange={(e) =>
-                                handleExperienceChange(
-                                  index,
-                                  "startDate",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                          <div className="flex flex-col gap-1 w-full">
-                            <label className="px-2 font-bold">End Date</label>
-                            <input
-                              type="date"
-                              value={experience.endDate || ""}
-                              className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
-                              onChange={(e) =>
-                                handleExperienceChange(
-                                  index,
-                                  "endDate",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                        </div>
-
-                        {/* Job Title */}
-                        <div className="flex flex-col gap-1">
-                          <label className="px-2 font-bold">
-                            Field of Study
-                          </label>
-                          <input
-                            type="text"
-                            value={experience.fieldOfStudy || ""}
-                            placeholder="Enter Job Title"
-                            className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
-                            onChange={(e) =>
-                              handleExperienceChange(
-                                index,
-                                "fieldOfStudy",
-                                e.target.value
-                              )
-                            }
-                          />
-                        </div>
-
-                        {/* Skills Section */}
-                        <div className="flex flex-col gap-1">
-                          <label className="px-2 font-bold">Skills</label>
-                          <div className="flex flex-wrap gap-2">
-                            {experience.skills?.map((skill, skillIndex) => (
-                              <div
-                                key={skillIndex}
-                                className="flex items-center gap-2"
-                              >
-                                <input
-                                  type="text"
-                                  value={skill || ""}
-                                  className="border border-gray-400 px-2 py-1 rounded-md focus:border-[#4358f6]"
-                                  onChange={(e) =>
-                                    handleSkillChange(
-                                      index,
-                                      skillIndex,
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    handleDeleteSkill(index, skillIndex)
-                                  }
-                                  className="text-red-500 px-2 py-1 rounded-md"
-                                >
-                                  Delete
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                          {/* Add New Skill Button */}
-                          <button
-                            type="button"
-                            onClick={() => handleAddSkill(index)}
-                            className="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md"
-                          >
-                            Add Skill
-                          </button>
-                        </div>
+                        {/* Delete Qualification Button */}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleDeleteQualification(qualificationIndex)
+                          } // Handle qualification deletion
+                          className="bg-red-500 text-white p-2 rounded-md bg-opacity-50 hover:bg-opacity-100 h-[40px] mt-2"
+                        >
+                          Delete
+                        </button>
                       </div>
-                    )}
-                  </div>
-                ))}
+
+                      {/* Collapsible Content */}
+                      {openSection === qualificationIndex && (
+                        <div className="p-4 border border-gray-200 rounded-md space-y-4">
+                          {/* Degree */}
+                          <div className="flex flex-col gap-1">
+                            <label className="px-2 font-bold">Degree</label>
+                            <input
+                              type="text"
+                              value={qualification.degree || ""}
+                              placeholder="Enter Degree"
+                              className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
+                              onChange={(e) =>
+                                handleChangeQualification(
+                                  qualificationIndex,
+                                  "degree",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+
+                          {/* Description */}
+                          <div className="flex flex-col gap-1">
+                            <label className="px-2 font-bold">
+                              Description
+                            </label>
+                            <input
+                              type="text"
+                              value={qualification.description || ""}
+                              placeholder="Enter Description"
+                              className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
+                              onChange={(e) =>
+                                handleChangeQualification(
+                                  qualificationIndex,
+                                  "description",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+
+                          {/* Institute Name */}
+                          <div className="flex flex-col gap-1">
+                            <label className="px-2 font-bold">
+                              Institute Name
+                            </label>
+                            <input
+                              type="text"
+                              value={qualification.instituteName || ""}
+                              placeholder="Enter Institute Name"
+                              className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
+                              onChange={(e) =>
+                                handleChangeQualification(
+                                  qualificationIndex,
+                                  "instituteName",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+
+                          {/* Start Date and End Date */}
+                          <div className="flex gap-4">
+                            <div className="flex flex-col gap-1 w-full">
+                              <label className="px-2 font-bold">
+                                Start Date
+                              </label>
+                              <input
+                                type="date"
+                                value={qualification.startDate || ""}
+                                className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
+                                onChange={(e) =>
+                                  handleChangeQualification(
+                                    qualificationIndex,
+                                    "startDate",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </div>
+                            <div className="flex flex-col gap-1 w-full">
+                              <label className="px-2 font-bold">End Date</label>
+                              <input
+                                type="date"
+                                value={qualification.endDate || ""}
+                                className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
+                                onChange={(e) =>
+                                  handleChangeQualification(
+                                    qualificationIndex,
+                                    "endDate",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </div>
+                          </div>
+
+                          {/* Field of Study */}
+                          <div className="flex flex-col gap-1">
+                            <label className="px-2 font-bold">
+                              Field of Study
+                            </label>
+                            <input
+                              type="text"
+                              value={qualification.fieldOfStudy || ""}
+                              placeholder="Enter Field of Study"
+                              className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
+                              onChange={(e) =>
+                                handleChangeQualification(
+                                  qualificationIndex,
+                                  "fieldOfStudy",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+
+                          {/* Skills Section */}
+                          <div className="flex flex-col gap-1">
+                            <label className="px-2 font-bold">Skills</label>
+                            <div className="flex flex-wrap gap-2">
+                              {qualification.skills?.map(
+                                (skill, skillIndex) => (
+                                  <div
+                                    key={skillIndex}
+                                    className="flex items-center gap-2"
+                                  >
+                                    <input
+                                      type="text"
+                                      value={skill || ""}
+                                      className="border border-gray-400 px-2 py-1 rounded-md focus:border-[#4358f6]"
+                                      onChange={(e) =>
+                                        handleQualificationSkillChange(
+                                          qualificationIndex,
+                                          skillIndex,
+                                          e.target.value
+                                        )
+                                      }
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={
+                                        () =>
+                                          handleDeleteQualificationSkill(
+                                            qualificationIndex,
+                                            skillIndex
+                                          ) // Pass the correct indices
+                                      }
+                                      className="text-red-500 px-2 py-1 rounded-md border"
+                                    >
+                                      Delete
+                                    </button>
+                                  </div>
+                                )
+                              )}
+                            </div>
+
+                            {/* Add New Skill Button */}
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleAddQualificationSkill(qualificationIndex)
+                              }
+                              className="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md"
+                            >
+                              Add Skill
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )
+                )}
+
+                {/* Add Qualification Button */}
+                <button
+                  onClick={handleAddQualification}
+                  className="bg-blue-500 text-white p-2 rounded-md"
+                >
+                  Add Qualification
+                </button>
               </div>
             )}
+
             {activesection === "FAQ" && (
               <div className="space-y-4">
-                <h2 className="font-bold text-lg">FAQs</h2>
+                {/* Map through existing FAQs */}
                 {dataToEdit?.FAQ?.map((faq, index) => (
                   <div
                     key={index}
                     className="p-4 bg-gray-50 border border-gray-200 rounded-md space-y-4"
                   >
                     {/* FAQ Title - Click to Expand/Collapse */}
-                    <button
-                      type="button"
-                      onClick={() => toggleOpen(index)}
-                      className="w-full text-left font-bold bg-gray-200 p-2 rounded-md"
-                    >
-                      {faq.title}
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => toggleOpen(index)}
+                        className="w-full text-left font-bold bg-gray-200 p-2 rounded-md"
+                      >
+                        {faq.title || `FAQ ${index + 1}`}
+                      </button>
+                      <button
+                        type="button"
+                        className="bg-red-500 text-white p-2 rounded-md bg-opacity-50 hover:bg-opacity-100"
+                        onClick={() => handleDeleteFaq(index)}
+                      >
+                        Delete
+                      </button>
+                    </div>
 
                     {/* Collapsible Content */}
                     {openIndex === index && (
@@ -753,31 +1087,54 @@ const EditProfile = () => {
                           />
                         </div>
 
-                        <button
-                          type="button"
-                          className="bg-blue-500 text-white p-2 rounded-md"
-                          onClick={() => toggleOpen(null)}
-                        >
-                          Save FAQ
-                        </button>
+                        {/* Save and Delete Buttons */}
+                        <div className="flex justify-between">
+                          <button
+                            type="button"
+                            className="bg-blue-500 text-white p-2 rounded-md"
+                            onClick={() => toggleOpen(null)}
+                          >
+                            Save FAQ
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>
                 ))}
+
+                {/* Button to Add New FAQ */}
+                <button
+                  type="button"
+                  onClick={handleAddFaq}
+                  className="bg-blue-500 text-white p-2 rounded-md"
+                >
+                  Add New FAQ
+                </button>
               </div>
             )}
             {activesection === "Experience" && (
               <div className="space-y-4">
-                {dataToEdit?.yearsOfExperience?.map((experience, index) => (
-                  <div key={index}>
+                {/* Map through existing experiences */}
+                {dataToEdit?.years_of_experience?.map((experience, index) => (
+                  <div key={index} className="space-y-4">
                     {/* Toggle Button */}
-                    <button
-                      type="button"
-                      className="w-full text-left font-bold bg-gray-100 p-4 rounded-md focus:border-[#4358f6] focus:outline-none"
-                      onClick={() => toggleSection(index)}
-                    >
-                      {experience.jobTitle || `Experience ${index + 1}`}
-                    </button>
+                    <div className="flex">
+                      <button
+                        type="button"
+                        className="w-full text-left font-bold bg-gray-100 p-4 rounded-md focus:border-[#4358f6] focus:outline-none"
+                        onClick={() => toggleSection(index)}
+                      >
+                        {experience.jobTitle || `Experience ${index + 1}`}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteExperience(index)}
+                        className=" bg-red-500 text-white p-2 rounded-md text-sm h-[40px] mt-3 ml-2"
+                      >
+                        Delete
+                      </button>
+                    </div>
 
                     {/* Collapsible Content */}
                     {openSection === index && (
@@ -791,7 +1148,7 @@ const EditProfile = () => {
                             placeholder="Enter Description"
                             className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
                             onChange={(e) =>
-                              experienceChange(
+                              handleExperienceChange(
                                 index,
                                 "description",
                                 e.target.value
@@ -811,7 +1168,7 @@ const EditProfile = () => {
                             placeholder="Enter Employment Type"
                             className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
                             onChange={(e) =>
-                              experienceChange(
+                              handleExperienceChange(
                                 index,
                                 "employmentType",
                                 e.target.value
@@ -826,15 +1183,12 @@ const EditProfile = () => {
                             <label className="px-2 font-bold">Start Date</label>
                             <input
                               type="date"
-                              value={
-                                formatDate(
-                                  experience.startDate.month,
-                                  experience.startDate.year
-                                ) || ""
-                              }
+                              value={formatDate(
+                                experience.startDate.month || ""
+                              )}
                               className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
                               onChange={(e) =>
-                                experienceChange(
+                                handleExperienceChange(
                                   index,
                                   "startDate",
                                   e.target.value
@@ -846,15 +1200,10 @@ const EditProfile = () => {
                             <label className="px-2 font-bold">End Date</label>
                             <input
                               type="date"
-                              value={
-                                formatDate(
-                                  experience.endDate.month,
-                                  experience.endDate.year
-                                ) || ""
-                              }
+                              value={experience.endDate || ""}
                               className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
                               onChange={(e) =>
-                                experienceChange(
+                                handleExperienceChange(
                                   index,
                                   "endDate",
                                   e.target.value
@@ -873,7 +1222,7 @@ const EditProfile = () => {
                             placeholder="Enter Job Title"
                             className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
                             onChange={(e) =>
-                              experienceChange(
+                              handleExperienceChange(
                                 index,
                                 "jobTitle",
                                 e.target.value
@@ -882,10 +1231,10 @@ const EditProfile = () => {
                           />
                         </div>
 
-                        {/* Organisation Location */}
+                        {/* Organization Location */}
                         <div className="flex flex-col gap-1">
                           <label className="px-2 font-bold">
-                            Organisation Location
+                            Organization Location
                           </label>
                           <input
                             type="text"
@@ -893,7 +1242,7 @@ const EditProfile = () => {
                             placeholder="Enter Location"
                             className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
                             onChange={(e) =>
-                              experienceChange(
+                              handleExperienceChange(
                                 index,
                                 "organizationLocation",
                                 e.target.value
@@ -902,18 +1251,18 @@ const EditProfile = () => {
                           />
                         </div>
 
-                        {/* Organisation Name */}
+                        {/* Organization Name */}
                         <div className="flex flex-col gap-1">
                           <label className="px-2 font-bold">
-                            Organisation Name
+                            Organization Name
                           </label>
                           <input
                             type="text"
                             value={experience.organizationName || ""}
-                            placeholder="Enter Organisation Name"
+                            placeholder="Enter Organization Name"
                             className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
                             onChange={(e) =>
-                              experienceChange(
+                              handleExperienceChange(
                                 index,
                                 "organizationName",
                                 e.target.value
@@ -936,7 +1285,7 @@ const EditProfile = () => {
                                   value={skill || ""}
                                   className="border border-gray-400 px-2 py-1 rounded-md focus:border-[#4358f6]"
                                   onChange={(e) =>
-                                    handleSkillChange(
+                                    handleExperienceSkillChange(
                                       index,
                                       skillIndex,
                                       e.target.value
@@ -946,7 +1295,10 @@ const EditProfile = () => {
                                 <button
                                   type="button"
                                   onClick={() =>
-                                    handleDeleteSkill(index, skillIndex)
+                                    handleDeleteExperienceSkill(
+                                      index,
+                                      skillIndex
+                                    )
                                   }
                                   className="text-red-500 px-2 py-1 rounded-md"
                                 >
@@ -955,24 +1307,37 @@ const EditProfile = () => {
                               </div>
                             ))}
                           </div>
-                          {/* Add New Skill Button */}
                           <button
                             type="button"
-                            onClick={() => handleAddSkill(index)}
+                            onClick={() => handleAddExperienceSkill(index)} // Pass experience index
                             className="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md"
                           >
                             Add Skill
                           </button>
                         </div>
+
+                        {/* Delete Experience Button */}
                       </div>
                     )}
                   </div>
                 ))}
+
+                {/* Button to Add New Experience */}
+                <button
+                  type="button"
+                  onClick={handleAddExperience}
+                  className="bg-blue-500 text-white p-2 rounded-md"
+                >
+                  Add Experience
+                </button>
               </div>
             )}
             <div className="bg-[#00768A] flex justify-center items-center rounded-xl mt-5">
-              <button className="text-white p-2 " onClick={patchDoctorData}>
-                Update
+              <button
+                className="text-white p-2 focus:outline-none"
+                onClick={patchDoctorData}
+              >
+                {loadingUpdateBtn ? "Updating..." : "Update"}
               </button>
             </div>
           </form>
