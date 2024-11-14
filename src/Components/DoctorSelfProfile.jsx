@@ -8,7 +8,7 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
   const [isFAQOpen, setIsFAQOpen] = useState(false);
   // Set the first speciality's ID as the default open box
   const [activeSpecialityId, setActiveSpecialityId] = useState(
-    doctorProfileData?.data?.specialityCategories[0]?._id || null
+    doctorProfileData?.data?.specialitycategories[0]?._id || null
   );
 
   const handleSpecialityClick = (id) => {
@@ -34,7 +34,9 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
       ...options,
     });
   };
+
   console.log("doctorProfileData", doctorProfileData);
+
   return (
     <div>
       {/* {doctorProfileData.data.map((dr) => ( */}
