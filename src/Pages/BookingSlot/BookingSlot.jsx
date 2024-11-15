@@ -4,6 +4,8 @@ import { GiGraduateCap } from "react-icons/gi";
 import { useParams } from "react-router-dom";
 import Navbar from "../../Components/Navbar";
 import DrAppointmentBooking from "../../Components/DrApointmentBooking";
+import { FaGraduationCap, FaHospital, FaMapMarkerAlt, FaTrophy, FaGlobe } from "react-icons/fa";
+
 
 function BookingSlot() {
   const [DrProfile, setDrProfile] = useState(null); // Set initial state to null
@@ -28,93 +30,132 @@ function BookingSlot() {
   if (!DrProfile) {
     return <div>Loading...</div>; // Show loading message or spinner if DrProfile is null
   }
+  const ProfileDetail = ({ icon, title, value }) => (
+    <div className="flex items-center">
+      <span className="flex items-center justify-center bg-[#00768A] text-white w-12 h-12 rounded-full shadow-lg text-xl">
+        {icon}
+      </span>
+      <div className="ml-4">
+        <p className="text-lg font-semibold text-gray-700">{title}</p>
+        <p className="text-gray-600">{value}</p>
+      </div>
+    </div>
+  );
+
+
 
   return (
     <div>
       <Navbar />
-      <div className="bg-[#E0EBF1] py-8">
-        {/* Ensure DrProfile and userData are defined before rendering */}
-        {DrProfile.userData && (
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-7xl mx-auto p-8 space-y-8">
-            {/* Profile Header */}
-            <div className="text-center">
-              <h1 className="text-4xl font-semibold text-[#00768A]">
-                {DrProfile.userData?.name || "Doctor's Name Not Available"}
-              </h1>
-              <div className="flex justify-center gap-6 mt-4">
-                {/* Uncomment to show specialties if needed */}
-                {/* {DrProfile?.specialties?.map((specialty, index) => (
-                  <span
-                    key={index}
-                    className="text-lg text-gray-600 bg-[#E4F8F6] px-4 py-2 rounded-full"
-                  >
-                    {specialty || "Specialty Not Available"}
+
+      <div className="min-h-screen bg-gradient-to-r from-[#E3FDFD] via-[#FFE6FA] to-[#FBF4E9] flex items-center py-12 px-4 sm:px-6 lg:px-8">
+        {/* Doctor Profile Card */}
+        {DrProfile?.userData && (
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-5xl mx-auto p-6 lg:p-10">
+            {/* Header Section */}
+            <div className="relative bg-cover bg-center rounded-3xl overflow-hidden flex flex-col lg:flex-row lg:items-center gap-8"
+              style={{
+                backgroundImage: `url('https://img.freepik.com/free-vector/cartoon-stomatology-clinic-hospital-interior-empty-dental-hall-waiting-room-with-chair-elevator-reception-doctor-office-doors-tooth-treatment-oral-care-teeth-hygiene-concept_88138-885.jpg?t=st=1731668919~exp=1731672519~hmac=19e6049e9b8e5fb684c129f69724c4522b3e37e33a4096a5279b89cf9aec90b2&w=826')`,
+                height: '300px',
+              }}
+            >
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/40 z-0"></div>
+
+              {/* Doctor Image */}
+              <div className="flex-shrink-0 flex justify-center lg:justify-start z-10">
+                <img
+                  src={DrProfile.userData?.avatar || "https://via.placeholder.com/150"}
+                  alt="Doctor Avatar"
+                  className="h-32 w-32 lg:h-40 lg:w-40 rounded-full object-cover shadow-lg border-4 border-white"
+                />
+              </div>
+
+              {/* Doctor Name and Info */}
+              <div className="text-center lg:text-left z-10 mt-6 lg:mt-0">
+                <h1 className="text-3xl lg:text-4xl text-start my-3 font-bold text-white uppercase [text-shadow:_0_1px_0_rgb(0_0_0_/_40%)]">
+                  {DrProfile.userData?.name || "Doctor's Name"}
+                </h1>
+                <p className="text-xl font-semibold text-[#fff] mr-2 shadow-md [text-shadow:_0_4px_8px_#00BCD4]   leading-snug font-manrope ">
+                  Specialties In :
+                  <span className="font-medium ml-2">
+                    {DrProfile.specialitycategories && DrProfile.specialitycategories.length > 0 ? (
+                      DrProfile.specialitycategories?.map((specialty, index) => (
+                        <span key={index} className="inline-block bg-blue-100 text-[#00768A] px-3 py-1 rounded-full mr-2 text-[16px]">
+                          {specialty.specialtyName}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-gray-500">Not available</span>
+                    )}
                   </span>
-                ))} */}
+                </p>
               </div>
             </div>
 
-            {/* Profile Details */}
-            <div className="space-y-6">
-              <div className="flex justify-between items-center text-lg text-gray-700">
-                <span className="font-semibold text-[#00768A]">Experience:</span>
-                <span className="text-gray-600">
-                  +{DrProfile.totalExperience} years experience
-                </span>
-              </div>
+            {/* Divider */}
+            <div className="border-t my-8"></div>
 
-              <div className="flex justify-between items-center text-lg text-gray-700">
-                <span className="font-semibold text-[#00768A]">Languages:</span>
-                <div className="flex gap-4">
-                  {DrProfile?.language?.length > 0 ? (
-                    <span className="text-gray-600">
-                      {DrProfile.language.join(", ")}
-                    </span>
-                  ) : (
-                    <span className="text-gray-600">No languages available</span>
-                  )}
-                </div>
-              </div>
+            {/* Profile Details Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Experience */}
+              <ProfileDetail
+                icon={<FaTrophy />}
+                title="Experience"
+                value={`+${DrProfile.totalExperience || 0} years`}
+              />
 
-              <div className="space-y-4">
-                <div className="flex justify-between items-center text-lg text-gray-700">
-                  <span className="font-semibold text-[#00768A]">Qualifications:</span>
-                  <div className="space-y-2">
-                    {DrProfile?.qualifications?.map((qualification, index) => (
-                      <div key={index} className="flex items-center gap-3 text-gray-600">
-                        <GiGraduateCap className="text-[#00768A] text-xl" />
-                        <span>{qualification.degree || "Not Available"}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+              {/* Languages */}
+              <ProfileDetail
+                icon={<FaGlobe />}
+                title="Languages"
+                value={
+                  DrProfile?.language?.length > 0
+                    ? DrProfile.language.join(", ")
+                    : "No languages available"
+                }
+              />
 
-                <div className="flex justify-between items-center text-lg text-gray-700">
-                  <span className="font-semibold text-[#00768A]">Hospital Name:</span>
-                  <span className="text-gray-600">
-                    {DrProfile.hospitalName || "Not Available"}
-                  </span>
-                </div>
+              {/* Qualifications */}
+              <ProfileDetail
+                icon={<FaGraduationCap />}
+                title="Qualifications"
+                value={
+                  DrProfile?.qualifications?.length > 0
+                    ? DrProfile.qualifications
+                      .map((qualification) => qualification.degree)
+                      .join(", ")
+                    : "Not available"
+                }
+              />
 
-                <div className="flex justify-between items-center text-lg text-gray-700">
-                  <span className="font-semibold text-[#00768A]">Address:</span>
-                  <span className="text-gray-600">
-                    {DrProfile?.clinic_hospital_address?.permanentAddress || "Not Available"} {", "}
-                    {DrProfile?.clinic_hospital_address?.state || "State Not Available"}, 
-                    {DrProfile?.clinic_hospital_address?.city || "City Not Available"} {", "}
-                    {DrProfile?.clinic_hospital_address?.PinCode || "PinCode Not Available"}
-                  </span>
-                </div>
-              </div>
+              {/* Hospital Info */}
+              <ProfileDetail
+                icon={<FaHospital />}
+                title="Hospital"
+                value={DrProfile.hospitalName || "Not available"}
+              />
+
+              {/* Address */}
+              <ProfileDetail
+                icon={<FaMapMarkerAlt />}
+                title="Address"
+                value={
+                  DrProfile?.clinic_hospital_address
+                    ? `${DrProfile.clinic_hospital_address.permanentAddress || ""}, ${DrProfile.clinic_hospital_address.state || ""
+                    }, ${DrProfile.clinic_hospital_address.city || ""}, ${DrProfile.clinic_hospital_address.PinCode || ""
+                    }`
+                    : "Not available"
+                }
+              />
             </div>
 
-            {/* Book Appointment Section */}
-            {/* Uncomment and style button if needed */}
-            {/* <div className="flex justify-center mt-6">
-              <button className="bg-[#00768A] text-white px-8 py-3 rounded-full text-xl hover:bg-[#005c67] focus:outline-none transform transition-all hover:scale-105 active:scale-95">
+            {/* CTA Section */}
+            <div className="text-center mt-8">
+              <button className="px-8 py-3 bg-gradient-to-r from-[#00C6FF] to-[#00768A] text-white rounded-lg text-lg font-semibold shadow-md hover:opacity-90 transition duration-200">
                 Book Appointment
               </button>
-            </div> */}
+            </div>
           </div>
         )}
       </div>
