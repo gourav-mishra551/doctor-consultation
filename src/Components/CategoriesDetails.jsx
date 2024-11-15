@@ -17,11 +17,37 @@ function CategoriesDetails() {
   const [DoctorsData, setDoctersData] = useState([]);
   const { id } = useParams();
 
+  const [filters, setFilters] = useState({
+    name:'',
+    gender: '',
+    rating: '',
+    visitingMode: '',
+    specialtyName: '',
+  });
+
+  const handleFilterChange = (filterType, value) => {
+    setFilters((prevFilters) => ({ ...prevFilters, [filterType]: value }));
+  };
+
+  const applyFilters = async () => {
+    try {
+      const query = Object.entries(filters)
+        .filter(([_, value]) => value)
+        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+        .join('&');
+      const res = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/dc/user/doctors?categoryID=${id}&${query}`
+      );
+      setDoctersData(res.data.data);
+    } catch (error) {
+      console.error('Error fetching filtered data', error);
+    }
+  };
+
+
   const [openIndex, setOpenIndex] = useState(null);
 
-  const toggleFAQ = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+
 
   useEffect(() => {
     FetchCategory();
@@ -95,89 +121,115 @@ function CategoriesDetails() {
           Filter Options
         </button>
       </div>
-      <div className="max-w-[1200px] mx-auto mt-10 flex flex-col-reverse md:flex-row gap-10 bg-[#CEDDE4] p-5">
+      <div className="max-w-[1200px] justify-between mx-auto mt-10 flex flex-col-reverse md:flex-row gap-10 bg-[#CEDDE4] p-5">
         {/* Filter Section (Desktop Only) */}
-        <div className="hidden  md:flex filter-section flex-col gap-3 md:w-[35vw] h-[870px] rounded-xl shadow-md bg-[#fff] p-5 sticky top-0">
+        <div className="hidden md:flex flex-col gap-5 w-[25%] h-max rounded-xl shadow-md bg-white py-6 px-6 sticky top-0">
           <p className="font-semibold text-center text-2xl text-[#00768A]">
             Doctor Profile
           </p>
+
+          {/* Search */}
           <div className="relative">
             <input
               type="text"
-              placeholder="Search..."
-              className="p-2 border border-[#00768A] rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-rgb(73,168,173)-500 bg-[#e4eaec]"
+              placeholder="Search doctor..."
+              className="p-3 border border-[#00768A] rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#00768A] bg-[#f5f7fa]"
+              onChange={(e) => handleFilterChange('name', e.target.value)}
             />
-            <CiSearch className="absolute top-3 right-5 text-xl font-bold" />
+            <CiSearch className="absolute top-4 right-4 text-xl font-bold text-[#00768A]" />
           </div>
 
-          <div className="mb-2">
-            <p className="font-semibold">Date Range</p>
-            <input
-              type="date"
-              className="p-2 border border-[#00768A] bg-[#e4eaec] rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-rgb(73,168,173)-500"
-            />
-          </div>
-          <hr />
+          {/* Filters */}
+          <div className="flex flex-col gap-3">
+            {/* Rating */}
+            <div>
+              <p className="font-semibold">Rating</p>
+              <select
+                className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
+                onChange={(e) => handleFilterChange('rating', e.target.value)}
+              >
+                <option value="">All</option>
+                {[1, 2, 3, 4, 5].map((rating) => (
+                  <option key={rating} value={rating}>
+                    {rating} Star{rating > 1 ? 's' : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div className="flex flex-col mb-2">
-            <p className="font-semibold">Gender</p>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-[#00768A] h-4 w-4"
-                name="Gender"
-              />
-              <span className="ml-1">Male</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-[#00768A] h-4 w-4"
-                name="Gender"
-              />
-              <span className="ml-1">Female</span>
-            </label>
-          </div>
-          <hr />
+            {/* Visiting Mode */}
+            <div>
+              <p className="font-semibold">Visiting Mode</p>
+              <select
+                className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
+                onChange={(e) => handleFilterChange('visitingMode', e.target.value)}
+              >
+                <option value="">All</option>
+                <option value="online">Online</option>
+                <option value="offline">Offline</option>
+                <option value="both">Both</option>
+              </select>
+            </div>
 
-          <div className="mb-2">
-            <p className="font-semibold">Price Range</p>
-            <input type="range" />
-          </div>
-          <hr />
+            {/* Gender */}
+            <div>
+              <p className="font-semibold">Gender</p>
+              <div className="flex gap-3">
+                {['Male', 'Female'].map((gender) => (
+                  <label key={gender} className="flex items-center">
+                    <input
+                      type="radio"
+                      name="gender"
+                      value={gender.toLowerCase()}
+                      onChange={(e) => handleFilterChange('gender', e.target.value)}
+                      className="form-radio h-4 w-4 text-[#00768A]"
+                    />
+                    <span className="ml-2">{gender}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
 
-          <div className="flex flex-col">
-            <p className="font-semibold">Select Specialist</p>
-            {[
-              "Cardiologist",
-              "Dermatologist",
-              "Orthopedic Surgeon",
-              "Gynecologist",
-              "Neurologist",
-              "Ophthalmologist",
-              "Pediatrician",
-              "Endocrinologist",
-              "Gastroenterologist",
-              "Pulmonologist",
-              "Orthopedic",
-            ].map((specialist) => (
-              <label key={specialist} className="inline-flex items-center">
-                <input
-                  type="radio"
-                  className="form-checkbox text-[#00768A] h-4 w-4"
-                  name="Specialist"
-                />
-                <span className="ml-1">{specialist}</span>
-              </label>
-            ))}
+            {/* Specialist */}
+            <div>
+              <p className="font-semibold">Specialist</p>
+              <select
+                className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
+                onChange={(e) => handleFilterChange('specialtyName', e.target.value)}
+              >
+                <option value="">All</option>
+                {[
+                  'Cardiologist',
+                  'Dermatologist',
+                  'Orthopedic Surgeon',
+                  'Gynecologist',
+                  'Neurologist',
+                  'Ophthalmologist',
+                  'Pediatrician',
+                  'Endocrinologist',
+                  'Gastroenterologist',
+                  'Pulmonologist',
+                  'Orthopedic',
+                ].map((specialist) => (
+                  <option key={specialist} value={specialist}>
+                    {specialist}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          <div className="text-white flex justify-center items-center">
-            <button className="h-[40px] w-full bg-[#00768A] rounded-xl">
-              Search
+          {/* Search Button */}
+          <div className="mt-4">
+            <button
+              onClick={applyFilters}
+              className="h-[40px] w-full bg-[#00768A] text-white rounded-lg font-semibold hover:bg-[#005d71]"
+            >
+              Apply Filters
             </button>
           </div>
         </div>
+
 
         {/* Mobile/Tablet Filter Modal */}
         {showFilter && (

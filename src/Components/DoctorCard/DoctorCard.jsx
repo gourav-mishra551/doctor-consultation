@@ -43,7 +43,7 @@ const DoctorCard = ({ doctorData }) => {
     }, [doctorData]);
 
     return (
-        <div className="flex flex-wrap gap-8 md:gap-10">
+        <div className="flex w-[75%] flex-wrap gap-8 md:gap-10">
             {doctorData?.map((doctor, index) => (
                 <div
                     key={index}
