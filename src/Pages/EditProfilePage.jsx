@@ -11,7 +11,7 @@ const EditProfilePage = () => {
       <Navbar />
       <EditProfile />
       <div className="mt-20">
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </div>
   );

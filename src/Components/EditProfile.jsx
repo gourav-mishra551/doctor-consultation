@@ -7,6 +7,7 @@ import {
   MdOutlineTimer,
 } from "react-icons/md";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const EditProfile = () => {
   const [activesection, setActiveSection] = useState("Doctor-Details");
@@ -68,6 +69,7 @@ const EditProfile = () => {
   const id = localStorage.getItem("id");
 
   const getDoctorsForEdit = async () => {
+    console.log("checking get dr daata");
     try {
       const response = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/doctor`,
@@ -171,6 +173,7 @@ const EditProfile = () => {
           },
         }
       );
+      toast.success("Data updated successfully!");
     } catch (error) {
       console.log(error);
     }
@@ -639,19 +642,27 @@ const EditProfile = () => {
         {/* for mobile section */}
         <div className="relative sm:hidden">
           {/* Profile Button at the top */}
-          <div className="flex fixed top-[470px] right-[110px] z-50">
-            <button
-              onClick={toggleProfileBar}
-              className="bg-blue-500 w-[220px] text-[22px] text-white p-4 rounded-xl shadow-lg md:hidden focus:outline-none"
-            >
+          <div
+            onClick={toggleProfileBar}
+            className="flex fixed bottom-0 z-50 ml-[17px]"
+          >
+            <button className="bg-blue-500 w-[355px] text-[22px] text-white p-4 rounded-xl shadow-lg md:hidden focus:outline-none">
               Profile
             </button>
-            <MdKeyboardDoubleArrowUp className="text-white absolute left-[140px] top-[21px] text-[25px]" />
+            <MdKeyboardDoubleArrowUp className="text-white absolute top-[21px] left-[110px] text-[25px]" />
           </div>
+
+          {/* Background Overlay (Visible when profile bar is open) */}
+          {isProfileOpen && (
+            <div
+              className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-40"
+              onClick={closeProfileBar}
+            />
+          )}
 
           {/* Profile Bar (Visible only on mobile) */}
           <div
-            className={`shadow-xl bg-gray-100 fixed bottom-0 left-0 w-full transition-transform duration-300 md:hidden ${
+            className={`shadow-xl bg-gray-100 fixed bottom-0 left-0 w-full transition-transform duration-300 md:hidden z-50 ${
               isProfileOpen
                 ? "transform translate-y-0"
                 : "transform translate-y-full"
@@ -660,31 +671,62 @@ const EditProfile = () => {
               height: "80%",
             }}
           >
-            {/* Close Button (Cross Icon) */}
-            <div className="flex justify-end p-4">
-              <MdClose
-                onClick={closeProfileBar}
-                className="text-2xl cursor-pointer text-gray-600"
-              />
-            </div>
-
             {/* Profile Options */}
             <div className="flex flex-col space-y-4 p-6">
-              <p className="text-sm font-bold">Select the section</p>
-              <div className="flex justify-start items-center gap-2">
+              {/* Close Button (Cross Icon) */}
+              <div className="flex justify-between">
+                <p className="text-[21px] text-gray-500 font-bold">
+                  Select the section
+                </p>
+                <div className="flex justify-end">
+                  <MdClose
+                    onClick={closeProfileBar}
+                    className="text-2xl cursor-pointer text-gray-600"
+                  />
+                </div>
+              </div>
+
+              <div
+                onClick={() => {
+                  setActiveSection("Doctor-Details"), setIsProfileOpen(false);
+                }}
+                className="flex justify-center items-center gap-2 border w-[100%] p-2 bg-[#00768A] 
+                rounded-xl text-white"
+              >
                 <IoPerson />
                 <button className="text-xl">Doctor Details</button>
               </div>
 
-              <div className="flex justify-start items-center gap-2">
+              <div
+                onClick={() => {
+                  setActiveSection("FAQ"), setIsProfileOpen(false);
+                }}
+                className="flex justify-center items-center gap-2 border w-[100%] p-2 bg-[#00768A] 
+                rounded-xl text-white"
+              >
                 <FaQuestion />
                 <button className="text-xl">FAQ</button>
               </div>
-              <div className="flex justify-start items-center gap-2">
+
+              <div
+                onClick={() => {
+                  setActiveSection("qualification-details"),
+                    setIsProfileOpen(false);
+                }}
+                className="flex justify-center items-center gap-2 border  w-[100%] p-2 bg-[#00768A] 
+                rounded-xl text-white"
+              >
                 <IoPerson />
                 <button className="text-xl">Qualification Details</button>
               </div>
-              <div className="flex justify-start items-center gap-2">
+
+              <div
+                onClick={() => {
+                  setActiveSection("Experience"), setIsProfileOpen(false);
+                }}
+                className="flex justify-center items-center gap-2 border  w-[100%] p-2 bg-[#00768A] 
+                rounded-xl text-white"
+              >
                 <MdOutlineTimer />
                 <button className="text-xl">Experience Details</button>
               </div>
