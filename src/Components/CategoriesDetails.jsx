@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { FiDollarSign } from "react-icons/fi";
-import { FaComment, FaLocationArrow, FaRegThumbsUp } from "react-icons/fa";
-import { IoMdStar } from "react-icons/io";
+
 import { CiSearch } from "react-icons/ci";
 import axios from "axios";
 import TopHeader from "./TopHeader";
 import Faq from "./Faq";
+import DoctorCard from "./DoctorCard/DoctorCard";
+import Footer from "./Footer";
 
 function CategoriesDetails() {
   const location = useLocation();
@@ -16,7 +16,6 @@ function CategoriesDetails() {
   const [result, setResult] = useState({});
   const [DoctorsData, setDoctersData] = useState([]);
   const { id } = useParams();
-  const [minPrice, setMinPrice] = useState(null);
 
   const [openIndex, setOpenIndex] = useState(null);
 
@@ -35,82 +34,24 @@ function CategoriesDetails() {
         `https://api.assetorix.com/ah/api/v1/dc/user/category/${id}`
       );
       console.log(res)
-      
+
       setResult(res.data.data);
       const categoryData = res.data.data;
-    } catch (error) {}
+    } catch (error) { }
   };
 
-  const calculateMinPrice = (doctors) => {
-    let minPrice = Infinity;
 
-    doctors.forEach((doctor) => {
-      // Check if doctor.slots exists
-      if (doctor.slots) {
-        // Check online slots if the visiting mode allows it
-        if (
-          doctor.slots.visitingMode === "online" ||
-          doctor.slots.visitingMode === "both"
-        ) {
-          const availableOnlineSlots = doctor.slots.onlineSlots?.filter(
-            (slot) =>
-              !slot.isBooked &&
-              typeof slot.doctorCharge === "number" &&
-              !isNaN(slot.doctorCharge)
-          );
 
-          if (availableOnlineSlots?.length > 0) {
-            minPrice = Math.min(
-              minPrice,
-              ...availableOnlineSlots.map((slot) => slot.doctorCharge)
-            );
-          }
-        }
 
-        // Check offline slots if the visiting mode allows it
-        if (
-          doctor.slots.visitingMode === "offline" ||
-          doctor.slots.visitingMode === "both"
-        ) {
-          const availableOfflineSlots = doctor.slots.offlineSlots?.filter(
-            (slot) =>
-              !slot.isBooked &&
-              typeof slot.doctorCharge === "number" &&
-              !isNaN(slot.doctorCharge)
-          );
-
-          if (availableOfflineSlots?.length > 0) {
-            minPrice = Math.min(
-              minPrice,
-              ...availableOfflineSlots.map((slot) => slot.doctorCharge)
-            );
-          }
-        }
-      }
-    });
-
-    // If no valid price is found, return null
-    return minPrice === Infinity ? null : minPrice;
-  };
-
-  useEffect(() => {
-    if (result?.doctors && result.doctors.length > 0) {
-      const calculatedMinPrice = calculateMinPrice(result.doctors);
-      console.log("Calculated Min Price:", calculatedMinPrice); // Check the calculated minPrice
-      setMinPrice(calculatedMinPrice); // Store the minPrice in state
-    } else {
-      console.log("No doctors available or result is not yet populated.");
-    }
-  }, [result.doctors]);
 
   const FetchDoctersData = async () => {
     try {
       const res = await axios.get(
-        "https://api.assetorix.com/ah/api/v1/dc/user/doctors"
+        `https://api.assetorix.com/ah/api/v1/dc/user/doctors?categoryID=${id}`
       );
       setDoctersData(res.data.data);
-    } catch (error) {}
-    console.log(DoctorsData);
+    } catch (error) { }
+
   };
 
   const stripHtmlTags = (str) => {
@@ -154,9 +95,9 @@ function CategoriesDetails() {
           Filter Options
         </button>
       </div>
-      <div className="max-w-7xl mx-auto mt-10 flex flex-col-reverse md:flex-row gap-10 bg-[#CEDDE4] p-5">
+      <div className="max-w-[1200px] mx-auto mt-10 flex flex-col-reverse md:flex-row gap-10 bg-[#CEDDE4] p-5">
         {/* Filter Section (Desktop Only) */}
-        <div className="hidden md:flex filter-section flex-col gap-3 w-[25%] h-[870px] rounded-xl shadow-md bg-[#fff] p-5 sticky top-0">
+        <div className="hidden  md:flex filter-section flex-col gap-3 md:w-[35vw] h-[870px] rounded-xl shadow-md bg-[#fff] p-5 sticky top-0">
           <p className="font-semibold text-center text-2xl text-[#00768A]">
             Doctor Profile
           </p>
@@ -243,7 +184,7 @@ function CategoriesDetails() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div
               className="bg-white p-5 sm:p-4 w-[90%] sm:w-[80%] md:w-[400px] rounded-lg shadow-lg overflow-hidden"
-           
+
             >
               {/* Close Button */}
               <button
@@ -362,106 +303,7 @@ function CategoriesDetails() {
         )}
 
         {/* Doctor Profile Section */}
-        <div className="w-full md:w-[75%] flex flex-wrap gap-10">
-          {result?.doctors?.map((doctor, index) => (
-            <div
-              key={index}
-              className="dr-profile-section w-full sm:w-[48%] md:w-full bg-white p-8 flex flex-col md:flex-row justify-between rounded-lg shadow-lg"
-              style={{ border: "1px solid #e1e1e1" }}
-            >
-              <div className="flex flex-col sm:flex-row gap-6">
-                {/* Profile Image */}
-                <div className="img bg-[#f3f3f3] flex justify-center items-center h-[160px] w-[160px] sm:h-[160px] sm:w-[160px] rounded-full border-2 border-[#00768A] mx-auto sm:mx-0">
-                  <img
-                    src="/image.png"
-                    alt="dr-image"
-                    className="h-[150px] w-[150px] sm:h-[150px] sm:w-[150px] rounded-full object-cover"
-                  />
-                </div>
-
-                {/* Doctor Info */}
-                <div className="dr-profilee text-[#333333] text-center sm:text-left">
-                  <p className="text-[#00768A] text-2xl font-bold">
-                    {doctor.name}
-                  </p>
-                  <div className="flex gap-4 flex-wrap mt-2 justify-center sm:justify-start">
-                    {doctor.services_offered.map((service, idx) => (
-                      <div key={idx} className="bg-[#f0f9f9] p-2 rounded-lg">
-                        <p className="text-[#00768A] font-semibold">
-                          {service}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Experience */}
-                  <p className="text-lg font-semibold text-orange-600 mt-2">
-                    Experience: {doctor.experience} years
-                  </p>
-
-                  {/* Skills */}
-                  {doctor?.years_of_experience?.map((experience, index) => (
-                    <div
-                      className="flex flex-wrap mt-2 justify-center sm:justify-start"
-                      key={index}
-                    >
-                      {experience.skills.map((skill, skillIndex) => (
-                        <p
-                          key={skillIndex}
-                          className="font-bold mr-3 text-sm text-gray-600"
-                        >
-                          {skill}
-                        </p>
-                      ))}
-                    </div>
-                  ))}
-
-                  {/* About Doctor */}
-                  <p className="mt-4 text-sm text-gray-600">
-                    {doctor.aboutDoctor}
-                  </p>
-                </div>
-              </div>
-
-              {/* Price and Action Buttons */}
-              <div className="ratings flex flex-col sm:justify-start sm:items-start justify-center  items-center gap-4 mt-6 md:items-start">
-                {/* Ratings */}
-                <div className="flex items-center justify-center mt-2">
-                  {[...Array(4)].map((_, i) => (
-                    <IoMdStar key={i} className="text-yellow-500 text-3xl" />
-                  ))}
-                  <span className="ml-2 text-gray-500">4.0</span>
-                </div>
-                {/* Price */}
-                <div className="flex gap-2 items-center">
-                  Price:
-                  <p className="ml-2 mt-1 text-lg font-semibold">
-                    {minPrice !== null ? (
-                      <span className="text-green-600">{`INR ${minPrice}`}</span>
-                    ) : (
-                      <span className="text-gray-500">Price not available</span>
-                    )}
-                  </p>
-                </div>
-
-                {/* Buttons */}
-                <div className="flex flex-col gap-4 mt-6">
-                  <button className="h-[40px] w-[220px] border-2 rounded-lg border-[#00768A] hover:bg-[#00768A] hover:text-white transition-all ease-in-out duration-300">
-                    <Link
-                      to={`/dr-indi/${doctor.doctorId}`}
-                      className="flex justify-center items-center"
-                    >
-                      VIEW PROFILE
-                    </Link>
-                  </button>
-                  <button className="h-[40px] w-[220px] text-white rounded-lg bg-[#00768A] border-2 border-[#00768A] hover:scale-105">
-                    BOOK APPOINTMENT
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <DoctorCard doctorData={DoctorsData} />
       </div>
 
       {/* Long Description */}
@@ -482,12 +324,13 @@ function CategoriesDetails() {
             justifyContent: "center",
           }}
         >
-           {stripHtmlTags(result.longDescription)}
+          {stripHtmlTags(result.longDescription)}
         </p>
       </div>
 
       {/* FAQ */}
       <Faq result={result} />
+      <Footer />
     </div>
   );
 }
