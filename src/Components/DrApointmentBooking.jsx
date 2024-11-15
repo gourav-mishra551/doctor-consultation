@@ -1,249 +1,219 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const DrAppointmentBooking = ({ IndiProfile }) => {
+  const [selectedMode, setSelectedMode] = useState("both"); // Default to both
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
-  const [appointmentDataState, setAppointmentDataState] = useState({});
-  const [loading, setLoading] = useState(true); // For handling loading state
-  const [selectedMode, setSelectedMode] = useState("both"); // Default to 'both'
-  const [isBooking, setIsBooking] = useState(false); // For tracking booking status
-  const [errorMessage, setErrorMessage] = useState(""); // For error handling
+  const [loading, setLoading] = useState(true);
+  const [appointmentData, setAppointmentData] = useState(null);
 
-  // Function to fetch the doctor availability and structure it for display
-  const fetchAvailability = () => {
-    setLoading(true);
-    const doctorAvailability = IndiProfile?.doctorAvailability || [];
+  const [formdata, setformData] = useState({
+    name: "",
+    reason: "",
+  });
 
-    const structuredData = {};
-
-    // Loop through each availability and structure the data by date
-    doctorAvailability.forEach((availability) => {
-      const date = new Date(availability.selectDate)
-        .toISOString()
-        .split("T")[0]; // Get just the date part
-
-      // Filter based on visiting mode (online, offline, or both)
-      let onlineSlots = [];
-      let offlineSlots = [];
-
-      if (selectedMode === "both") {
-        onlineSlots = availability.onlineSlots;
-        offlineSlots = availability.offlineSlots;
-      } else if (selectedMode === "online") {
-        onlineSlots = availability.onlineSlots;
-      } else if (selectedMode === "offline") {
-        offlineSlots = availability.offlineSlots;
-      }
-
-      // Filter out booked slots
-      structuredData[date] = {
-        online: onlineSlots.filter((slot) => !slot.isBooked),
-        offline: offlineSlots.filter((slot) => !slot.isBooked),
-      };
-    });
-
-    setAppointmentDataState(structuredData);
-    setLoading(false);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setformData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
-
+  // Fetch doctor's availability data
   useEffect(() => {
-    if (IndiProfile) {
-      fetchAvailability(); // Fetch doctor availability data on component mount
+    if (IndiProfile && IndiProfile.doctorAvailability) {
+      setAppointmentData(IndiProfile.doctorAvailability);
+      setLoading(false);
     }
-  }, [IndiProfile, selectedMode]); // Re-fetch when visiting mode or IndiProfile changes
+  }, [IndiProfile]);
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    setSelectedTime(null); // Reset selected time when date changes
+  const handleModeChange = (mode) => {
+    setSelectedMode(mode); // Set the selected mode: "online", "offline", "both"
   };
 
-  const handleTimeChange = (slotId, time) => {
-    setSelectedTime({ slotId, time }); // Set the selected time by slot ID
+  const handleSlotSelect = (slot) => {
+    setSelectedDate(slot.startTime); // Save the selected time slot
+    setSelectedTime(slot); // Store the selected time slot details
   };
 
-  const handleModeChange = (e) => {
-    setSelectedMode(e.target.value); // Change visiting mode
+  const renderSlots = (slots) => {
+    return slots.map((slot) => {
+      const slotTime = `${slot.startTime}:00 - ${slot.endTime}:00`;
+      const slotDate = new Date(appointmentData.selectDate);
+      const dayName = slotDate.toLocaleString("en-US", { weekday: "short" });
+      const formattedDate = slotDate.toLocaleDateString("en-US");
+
+      return (
+        <div
+          key={slot._id}
+          className={`slot p-4 border rounded-lg cursor-pointer mb-4 transition-all ${
+            selectedTime?._id === slot._id ? "bg-blue-100" : "bg-white"
+          }`}
+          onClick={() => handleSlotSelect(slot)}
+        >
+          <p className="font-semibold text-lg">
+            {dayName}, {formattedDate}
+          </p>
+          <p className="text-md">{slotTime}</p>
+          <p className="text-sm text-gray-500">Price: ₹{slot.doctorCharge}</p>
+        </div>
+      );
+    });
   };
 
   const handleBooking = () => {
-    if (selectedTime && selectedDate) {
-      setIsBooking(true);
-      setErrorMessage("");
-
-      // Mock booking request - Replace with actual API call
-      // You will need to implement an API function to handle this
-      const bookingRequest = {
-        date: selectedDate,
-        timeSlotId: selectedTime.slotId,
-        mode: selectedMode,
-      };
-
-      // Simulate successful booking
-      setTimeout(() => {
-        console.log("Booking successful:", bookingRequest);
-        setIsBooking(false);
-        setSelectedTime(null); // Reset after booking
-        setErrorMessage("Booking confirmed!");
-      }, 2000);
+    if (selectedTime) {
+      alert(
+        `Booking successful for ${selectedTime.startTime}:00 - ${selectedTime.endTime}:00`
+      );
+      // You can add the actual booking logic here, like calling an API to save the booking.
     } else {
-      setErrorMessage("Please select a valid time slot.");
+      alert("Please select a time slot first.");
     }
+
+    console.log(formdata);
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-xl">Loading...</p>
+      </div>
+    );
+    
+    
+  }
+
   return (
-    <div
-      className="appointment-section border-2 border-gray-300 rounded-xl p-5"
-      style={{
-        height: "auto",
-        width: "100%",
-        maxWidth: "600px",
-        margin: "0 auto",
-      }}
-    >
-      <h2 className="text-2xl font-bold text-center">Book Appointment</h2>
+    <div className="flex justify-center gap-8">
+      <div className="flex flex-col items-center max-w-2xl  p-6 bg-white shadow-lg rounded-lg">
+        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
+          Book an Appointment with Dr. {IndiProfile.userData.name}
+        </h2>
 
-      {/* Visiting Mode Selector */}
-      <div className="visiting-mode-selector mt-5 flex justify-between items-center">
-        <label className="mr-3 text-lg">Select Visiting Mode:</label>
-        <select
-          value={selectedMode}
-          onChange={handleModeChange}
-          className="border p-3 rounded-lg w-full sm:w-1/3 text-lg"
-        >
-          <option value="both">Both (Online & Offline)</option>
-          <option value="online">Online</option>
-          <option value="offline">Offline</option>
-        </select>
-      </div>
-
-      {/* Calendar Slider */}
-      <div className="calendar-slider flex gap-3 overflow-x-auto mt-5">
-        {Object.keys(appointmentDataState).map((date) => {
-          const dayName = new Date(date).toLocaleString("en-US", {
-            weekday: "short",
-          });
-          return (
-            <div
-              key={date}
-              className={`date-box p-3 border ${
-                selectedDate === date
-                  ? "border-blue-500 bg-blue-100"
-                  : "border-gray-300"
-              } rounded-lg cursor-pointer hover:bg-gray-200 transition-all`}
-              onClick={() => handleDateChange(date)}
-            >
-              <p className="text-lg font-semibold text-center">{dayName}</p>
-              <p className="text-md text-center">{date.split("-").pop()}</p>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Available Time Slots */}
-      <div className="time-slots mt-5">
-        <h3 className="text-lg font-semibold">Available Time Slots</h3>
-        {loading ? (
-          <div className="flex justify-center mt-3">
-            <div className="spinner"></div> {/* Add a spinner here */}
-          </div>
-        ) : (
-          <div className="slots-list flex flex-col gap-5 mt-3">
-            {/* Displaying Online Slots */}
-            {selectedMode !== "offline" &&
-              appointmentDataState[selectedDate]?.online.length > 0 && (
-                <div>
-                  <h4 className="text-md font-semibold">Online Slots</h4>
-                  <div className="flex gap-3 flex-wrap">
-                    {appointmentDataState[selectedDate].online.map((slot) => (
-                      <div
-                        key={slot._id}
-                        className={`slot-box p-4 border ${
-                          selectedTime?.slotId === slot._id
-                            ? "bg-blue-500 text-white"
-                            : "border-gray-300"
-                        } rounded-lg cursor-pointer hover:bg-blue-100 transition-all`}
-                        onClick={() =>
-                          handleTimeChange(
-                            slot._id,
-                            `${slot.startTime}:00 - ${slot.endTime}:00`
-                          )
-                        }
-                      >
-                        {slot.startTime}:00 - {slot.endTime}:00 - ₹
-                        {slot.doctorCharge}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-            {/* Displaying Offline Slots */}
-            {selectedMode !== "online" &&
-              appointmentDataState[selectedDate]?.offline.length > 0 && (
-                <div>
-                  <h4 className="text-md font-semibold">Hospital Visit</h4>
-                  <div className="flex gap-3 flex-wrap">
-                    {appointmentDataState[selectedDate].offline.map((slot) => (
-                      <div
-                        key={slot._id}
-                        className={`slot-box p-4 border ${
-                          selectedTime?.slotId === slot._id
-                            ? "bg-blue-500 text-white"
-                            : "border-gray-300"
-                        } rounded-lg cursor-pointer hover:bg-blue-100 transition-all`}
-                        onClick={() =>
-                          handleTimeChange(
-                            slot._id,
-                            `${slot.startTime}:00 - ${slot.endTime}:00`
-                          )
-                        }
-                      >
-                        {slot.startTime}:00 - {slot.endTime}:00 - ₹
-                        {slot.doctorCharge}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-            {/* No available slots message */}
-            {appointmentDataState[selectedDate]?.online.length === 0 &&
-              appointmentDataState[selectedDate]?.offline.length === 0 && (
-                <p className="text-center text-lg text-red-500">
-                  No available slots for this date
-                </p>
-              )}
-          </div>
-        )}
-      </div>
-
-      {/* Error or Success Message */}
-      {errorMessage && (
-        <div
-          className={`mt-3 text-lg ${
-            errorMessage === "Booking confirmed!"
-              ? "text-green-600"
-              : "text-red-600"
-          } text-center`}
-        >
-          {errorMessage}
+        {/* Mode Selection Buttons */}
+        <div className="flex justify-center gap-5 mb-6">
+          <button
+            onClick={() => handleModeChange("online")}
+            className={`px-6 py-2 rounded-lg text-lg transition-all duration-200 ${
+              selectedMode === "online"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200"
+            }`}
+          >
+            Online Slots
+          </button>
+          <button
+            onClick={() => handleModeChange("offline")}
+            className={`px-6 py-2 rounded-lg text-lg transition-all duration-200 ${
+              selectedMode === "offline"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200"
+            }`}
+          >
+            Offline Slots
+          </button>
+          <button
+            onClick={() => handleModeChange("both")}
+            className={`px-6 py-2 rounded-lg text-lg transition-all duration-200 ${
+              selectedMode === "both" ? "bg-blue-500 text-white" : "bg-gray-200"
+            }`}
+          >
+            Both
+          </button>
         </div>
-      )}
 
-      {/* Booking Button */}
-      <div className="mt-5 text-center">
-        <button
-          className="bg-green-500 text-white p-3 rounded-lg w-full sm:w-auto"
-          disabled={!selectedTime || isBooking}
-          onClick={handleBooking}
-        >
-          {isBooking
-            ? "Booking..."
-            : selectedTime
-            ? `Book for ${selectedTime.time}`
-            : "Select a time"}
-        </button>
+        {/* Date and Day Display */}
+        <div className="w-full mb-6">
+          <h3 className="text-xl font-semibold text-gray-800">
+            {new Date(appointmentData?.selectDate).toLocaleString("en-US", {
+              weekday: "long",
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </h3>
+        </div>
+
+        {/* Offline Slots Section */}
+        {selectedMode === "offline" || selectedMode === "both" ? (
+          <div className="w-full mb-6">
+            <h3 className="text-lg font-bold mb-4 text-gray-800">
+              Offline Slots
+            </h3>
+            <div className="slots-list">
+              {renderSlots(appointmentData?.offlineSlots || [])}
+            </div>
+          </div>
+        ) : null}
+
+        {/* Online Slots Section */}
+        {selectedMode === "online" || selectedMode === "both" ? (
+          <div className="w-full mb-6">
+            <h3 className="text-lg font-bold mb-4 text-gray-800">
+              Online Slots
+            </h3>
+            <div className="slots-list">
+              {renderSlots(appointmentData?.onlineSlots || [])}
+            </div>
+          </div>
+        ) : null}
       </div>
+
+      {/* Form Section */}
+      {selectedTime ? (
+        <div className="flex flex-col max-w-2xl w-[50%]  p-6 bg-white shadow-lg rounded-lg">
+        
+            {/* Name Input */}
+            <div className="mb-4">
+              <label
+                htmlFor="name"
+                className="block text-sm font-semibold text-gray-700"
+              >
+                Name:
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                onChange={handleChange}
+                placeholder="Enter Your Name"
+                className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* Reason for Appointment */}
+            <div className="mb-4">
+              <label
+                htmlFor="reason"
+                className="block text-sm font-semibold text-gray-700"
+              >
+                Reason for Appointment:
+              </label>
+              <textarea
+                id="reason"
+                name="reason"
+                onChange={handleChange}
+                rows="4"
+                placeholder="Please describe the reason for your visit"
+                className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              ></textarea>
+            </div>
+
+            {/* Booking Button */}
+            <div className="mt-6 w-full">
+              <button
+                onClick={handleBooking}
+                className="px-6 py-3 bg-blue-500 text-white rounded-lg w-full text-lg transition-all duration-300 hover:bg-blue-600"
+              >
+                {selectedTime
+                  ? `Book Appointment for ${selectedTime.startTime}:00 - ${selectedTime.endTime}:00`
+                  : "Select a Slot"}
+              </button>
+            </div>
+          
+        </div>
+      ) : null}
     </div>
   );
 };

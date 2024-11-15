@@ -306,7 +306,7 @@ const DoctorsProfile = () => {
                   {/* Profile Image */}
                   <div className="img bg-[#f3f3f3] flex justify-center items-center h-[160px] w-[160px] sm:h-[160px] sm:w-[160px] rounded-full border-2 border-[#00768A] mx-auto sm:mx-0">
                     <img
-                      src={doctor.avatar}
+                      src={doctor.userData.avatar}
                       alt={doctor.name}
                       className="h-[150px] w-[150px] sm:h-[150px] sm:w-[150px] rounded-full object-cover"
                     />
