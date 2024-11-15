@@ -91,7 +91,7 @@ console.log(IndiProfile);
 
           {/* Right Section: Appointment Booking */}
           <div className="bg-white rounded-xl p-5 shadow-lg flex-1">
-           
+            
           </div>
         </div>
 

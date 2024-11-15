@@ -517,7 +517,7 @@ const Navbar = () => {
               {/* MegaMenu Dropdown */}
               <div className="pl-4 space-y-1">
                 {Object.keys(submenuData).map((menu, index) => (
-                  <div key={index} style={{border:"1px solid red"}}>
+                  <div key={index}>
                     <div
                       className=" px-3 py-2 rounded-md text-sm hover:bg-blue-500 hover:text-white cursor-pointer flex"
                       onClick={() => toggleSubMenu(menu)}
