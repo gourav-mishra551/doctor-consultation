@@ -11,8 +11,11 @@ import { TbChartCandle } from "react-icons/tb";
 import axios from "axios";
 
 import { Link } from "react-router-dom";
+import { use } from "framer-motion/m";
 const DoctorsProfile = () => {
   const [DoctorData, setDoctorData] = useState([]);
+  const [Price, setPrice] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     FetchDrProfile();
   }, []);
@@ -22,8 +25,87 @@ const DoctorsProfile = () => {
         "https://api.assetorix.com/ah/api/v1/dc/user/doctors"
       );
       setDoctorData(res.data.data);
+      console.log(DoctorData);
     } catch (error) {}
   };
+
+  console.log(DoctorData[0]?.averageRating);
+  const CheckLowestPrice = (DoctorData) => {
+    if (!DoctorData || DoctorData.length === 0) {
+      console.error("DoctorData is empty or invalid.");
+      setIsLoading(false);
+      return null;
+    }
+
+    // Get visiting mode and slots for both offline and online
+    const visitingMode = DoctorData[0]?.doctorAvailability?.map(
+      (availability) => availability.visitingMode
+    );
+
+    // const offlineSlots =DoctorData[0]?.doctorAvailability[0]?.offlineSlots ?? [];
+    const offlineSlots = DoctorData[0]?.doctorAvailability?.map((avail) => avail?.offlineSlots).flat() ?? [];
+    const onlineSlots = DoctorData[0]?.doctorAvailability?.map((avail) => avail?.onlineSlots).flat() ?? [];
+    // const onlineSlots = DoctorData[0]?.doctorAvailability[0]?.onlineSlots ?? [];
+
+   console.log("dfgjfdjb",offlineSlots);
+   
+    // Extract doctor charges
+    const offlineCharge = offlineSlots
+      .map((drCharge) => drCharge?.doctorCharge)
+      .filter((charge) => charge != null);
+    const onlineCharge = onlineSlots
+      .map((drCharge) => drCharge?.doctorCharge)
+      .filter((charge) => charge != null);
+
+    console.log("onlineCharge", onlineCharge);
+    console.log("offlineCharge", offlineCharge);
+
+    // Initialize price variable
+    let price = null;
+
+    if (visitingMode && visitingMode.includes("both")) {
+      // If visitingMode is "both", compare both offline and online charges
+      if (offlineCharge.length > 0 && onlineCharge.length > 0) {
+        price = Math.min(Math.min(...offlineCharge), Math.min(...onlineCharge));
+      } else if (offlineCharge.length > 0) {
+        price = Math.min(...offlineCharge);
+      } else if (onlineCharge.length > 0) {
+        price = Math.min(...onlineCharge);
+      }
+    } else if (visitingMode && visitingMode.includes("online")) {
+      // If visitingMode is "online", return the minimum of online charges
+      if (onlineCharge.length > 0) {
+        price = Math.min(...onlineCharge);
+      }
+    } else if (visitingMode && visitingMode.includes("offline")) {
+      // If visitingMode is "offline", return the minimum of offline charges
+      if (offlineCharge.length > 0) {
+        price = Math.min(...offlineCharge);
+      }
+    }
+
+    console.log("Lowest price:", price);
+    setPrice(price); // Update state with the lowest price
+    setIsLoading(false); // Set loading to false when done
+    return price;
+  };
+
+  // Effect for logging Price updates
+  useEffect(() => {
+    console.log("Price updated:", Price);
+  }, [Price]);
+
+  // Effect to run CheckLowestPrice once DoctorData is available
+  useEffect(() => {
+    if (DoctorData && DoctorData.length > 0 && isLoading) {
+      CheckLowestPrice(DoctorData); // Only call if DoctorData is available and loading
+    }
+  }, [DoctorData, isLoading]); // Dependency on DoctorData and isLoading
+
+  if (isLoading) {
+    return <div>Loading...</div>; // Show loading state if data is still being fetched
+  }
+ 
 
   return (
     <div>
@@ -315,7 +397,7 @@ const DoctorsProfile = () => {
                   {/* Doctor Info */}
                   <div className="dr-profilee text-[#333333] text-center sm:text-left">
                     <p className="text-[#00768A] text-2xl font-bold">
-                      {doctor.name}
+                      {doctor.userData.name}
                     </p>
                     <div className="flex gap-4 flex-wrap mt-2 justify-center sm:justify-start">
                       {doctor.services_offered.map((service, idx) => (
@@ -329,7 +411,7 @@ const DoctorsProfile = () => {
 
                     {/* Experience */}
                     <p className="text-lg font-semibold text-orange-600 mt-2">
-                      Experience: {doctor.experience} years
+                      Experience: {doctor.totalExperience}+ years
                     </p>
 
                     {/* Skills */}
@@ -369,7 +451,7 @@ const DoctorsProfile = () => {
                   <div className="flex gap-2 items-center">
                     Price:
                     <p className="ml-2 mt-1 text-lg font-semibold">
-                      <span className="text-green-600">{`INR ${doctor.price}`}</span>
+                      <span className="text-green-600">{`INR ${Price}`}</span>
                     </p>
                   </div>
 
