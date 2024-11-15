@@ -43,7 +43,7 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
       <>
         <div className="top-bar">
           {/* top-bar is here */}
-          <div className="flex justify-end gap-5">
+          <div className="flex justify-between gap-5">
             <div className="email flex items-center gap-1">
               <MdEmail className="text-[#00768A] text-sm" />
               <p className="text-sm font-light">
@@ -67,8 +67,8 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
           </div>
           <div className="h-[1px] bg-gray-300 w-[100%] bg-opacity-40 mt-3"></div>
 
-          <div className="mt-10 flex gap-10">
-            <div className="image w-[60%]">
+          <div className="mt-10 sm:flex gap-10">
+            <div className="image sm:w-[60%] w-[100%]">
               <div>
                 <img
                   src={doctorProfileData?.data?.userData?.avatar}
@@ -153,7 +153,7 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
               </div>
             </div>
 
-            <div className="flex flex-col w-[40%]">
+            <div className="flex flex-col sm:w-[40%] w-[100%]">
               <div className="speciality-accordion">
                 {doctorProfileData?.specialityCategories?.map(
                   (special, index) => (
