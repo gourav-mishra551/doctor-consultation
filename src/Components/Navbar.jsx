@@ -1,20 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiSearch, FiUser } from "react-icons/fi";
 import axios from "axios";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
-import { useSelector } from "react-redux";
+
 import { FaChevronUp } from "react-icons/fa";
-import { BsCart3, BsCartPlus } from "react-icons/bs";
+
 import { gsap } from "gsap";
 import "./Navbar.css"; // Import the CSS file
 import Image from "../../src/Assests/ametheus.webp";
 import { FaChevronDown } from "react-icons/fa6";
 import MegaMenu from "./MegaMenu";
-import TopHeader from "./TopHeader";
 
 const Navbar = () => {
-  const cart = useSelector((state) => state.cart);
   const [isOpen, setIsOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [query, setQuery] = useState("");
@@ -28,9 +26,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const searchResultsRef = useRef(null);
-  const [showCart, setShowCart] = useState(false);
   const cartRef = useRef(null);
-  const location = useLocation();
   const [MegaMenubtn, setMegaMenubtn] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
   const [submenuPosition, setSubmenuPosition] = useState({ top: 0, left: 0 });
@@ -134,15 +130,15 @@ const Navbar = () => {
   
 
   const handleMouseLeave = (item) => {
-    if (!item) return; // Guard clause to avoid undefined item
-  
+
     setHoveredItem(null); // Reset the hovered item
+    // Close the submenu when mouse leaves the item
     setOpenSubMenus((prevState) => ({
       ...prevState,
-      [item]: false, // Close the submenu when mouse leaves the item
+      [item]: false,
     }));
   };
-  
+
   const toggleMegaMenu = () => {
     setIsMegaMenuOpen(!isMegaMenuOpen);
   };
@@ -177,13 +173,6 @@ const Navbar = () => {
   const [isHoveringServices, setIsHoveringServices] = useState(false);
   const serviceRef = useRef(null);
 
-  const animateCartIcon = () => {
-    gsap.fromTo(
-      cartRef.current,
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
-    );
-  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -202,7 +191,7 @@ const Navbar = () => {
 
   const logout = () => {
     localStorage.removeItem("Id");
-    localStorage.removeItem("User");
+    localStorage.removeItem("user");
     localStorage.removeItem("signupemail");
     localStorage.removeItem("token");
     setIsLogin(false);
@@ -211,7 +200,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (
-      localStorage.getItem("id") &&
+      localStorage.getItem("Id") &&
       localStorage.getItem("token") &&
       localStorage.getItem("user")
     ) {
@@ -292,13 +281,13 @@ const Navbar = () => {
         "https://api.assetorix.com/ah/api/v1/dc/user/Category"
       );
       setCategorydata(res.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (
-    
-    <div className="">
-      <nav className="text-black  top-0 z-50 bg-white w-full">
+
+    <div className="bg-white">
+      <nav className="text-black  max-w-[92vw] top-0 z-50 bg-white mx-auto">
         <div className="sm:max-w-7xl w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -310,47 +299,7 @@ const Navbar = () => {
               />
             </Link>
 
-            {/* Search Input Section */}
-            <div className="relative flex-grow mx-4 hidden sm:block">
-              {noResults && (
-                <div
-                  ref={searchResultsRef}
-                  className="absolute w-full left-0 border rounded-lg shadow-lg p-4 bg-white max-h-64 overflow-y-auto z-10"
-                >
-                  <div className="text-sm text-red-600">No Product Found</div>
-                </div>
-              )}
-              {showResults && (
-                <div
-                  ref={searchResultsRef}
-                  className="absolute w-full left-0 border rounded-lg shadow-lg p-4 bg-white max-h-64 overflow-y-auto z-10"
-                >
-                  {results.map((product) => (
-                    <div
-                      key={product?._id}
-                      className="flex items-center space-x-4 mb-2 cursor-pointer"
-                      onClick={() => handleProductClick(product?.slug)}
-                    >
-                      {Array.isArray(product?.images) &&
-                      product.images.length > 0 ? (
-                        <img
-                          src={product?.images[0]?.url || "./default.jpg"}
-                          alt={product?.images[0]?.alt || product?.title}
-                          className="w-12 h-12 object-cover rounded"
-                        />
-                      ) : (
-                        <img
-                          className="w-12 h-12 object-cover rounded"
-                          src="/default.jpg"
-                          alt="default alt text"
-                        />
-                      )}
-                      <span className="text-sm">{product?.title}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+
 
             {/* Menu Items */}
             <div className="flex items-center space-x-4">
@@ -411,9 +360,8 @@ const Navbar = () => {
                 <FiUser />
                 <div
                   ref={dropdownRef}
-                  className={`absolute bg-white rounded-xl shadow-lg p-4 z-50 flex -left-[6rem] flex-col w-[15vw] h-max ${
-                    dropdown ? "block" : "hidden"
-                  }`}
+                  className={`absolute bg-white rounded-xl shadow-lg p-4 z-50 flex -left-[6rem] flex-col w-[15vw] h-max ${dropdown ? "block" : "hidden"
+                    }`}
                 >
                   {isLogin ? (
                     <div className="flex flex-col justify-between">
@@ -569,6 +517,7 @@ const Navbar = () => {
 
       {/* MegaMenu for Desktop */}
       <div>
+
       {/* {MegaMenubtn && (
         <div className="bg-[#F7F6F9] bg-opacity-40 z-50">
           <div className="flex justify-center gap-8 py-4 bg-[#00768A] text-white flex-wrap md:flex-nowrap">
@@ -589,10 +538,12 @@ const Navbar = () => {
         </div>
       )} */}
      
-      <MegaMenu/>
+
+        <MegaMenu />
+
       </div>
     </div>
-    
+
   );
 };
 

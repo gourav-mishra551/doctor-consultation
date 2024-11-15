@@ -1,0 +1,17 @@
+.star-filled {
+    fill: #FFD700;
+  }
+  
+  .star-empty {
+    fill: #e0e0e0;
+  }
+  
+  .specialty-tag {
+    background-color: #e3f2fd;
+    color: #1e88e5;
+    padding: 0.3rem 0.6rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    margin-right: 0.5rem;
+  }
+  

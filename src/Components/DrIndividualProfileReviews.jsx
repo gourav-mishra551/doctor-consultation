@@ -4,17 +4,17 @@ const DrIndividualProfileReviews = () => {
   return (
     <div>
       <div className="min-w-screen min-h-screen  flex items-center justify-center py-5">
-        <div className="w-full bg-white border-t border-b border-gray-200 px-5 py-16 md:py-24 text-gray-800">
+        <div className="w-full bg-white border-t border-b border-gray-200 px-5 py-4 md:py-8 text-gray-800">
           <div className="w-full max-w-6xl mx-auto">
-            <div className="text-center max-w-xl mx-auto">
-              <h1 className="text-6xl md:text-7xl font-bold mb-5 text-gray-600">What people <br/>are saying.</h1>
-              <h3 className="text-xl mb-5 font-light">Lorem ipsum dolor sit amet consectetur adipisicing elit.</h3>
+            <div className=" text-center max-w-xl mx-auto">
+              <h1 className="text-4xl md:text-3xl font-bold mb-5 text-gray-600">What people are saying.</h1>
+             
               <div className="text-center mb-10">
-                <span className="inline-block w-1 h-1 rounded-full bg-indigo-500 ml-1"></span>
-                <span className="inline-block w-3 h-1 rounded-full bg-indigo-500 ml-1"></span>
-                <span className="inline-block w-40 h-1 rounded-full bg-indigo-500"></span>
-                <span className="inline-block w-3 h-1 rounded-full bg-indigo-500 ml-1"></span>
-                <span className="inline-block w-1 h-1 rounded-full bg-indigo-500 ml-1"></span>
+                <span className="inline-block w-1 h-1 rounded-full bg-[#00768A] ml-1"></span>
+                <span className="inline-block w-3 h-1 rounded-full bg-[#00768A] ml-1"></span>
+                <span className="inline-block w-40 h-1 rounded-full bg-[#00768A]"></span>
+                <span className="inline-block w-3 h-1 rounded-full bg-[#00768A] ml-1"></span>
+                <span className="inline-block w-1 h-1 rounded-full bg-[#00768A] ml-1"></span>
               </div>
             </div>
             <div className="-mx-3 md:flex items-start">
@@ -108,13 +108,7 @@ const DrIndividualProfileReviews = () => {
       </div>
 
      
-      <div className="flex items-end justify-end fixed bottom-0 right-0 mb-4 mr-4 z-10">
-        {/* <div>
-          <a title="Buy me a beer" href="https://www.buymeacoffee.com/scottwindon" target="_blank" className="block w-16 h-16 rounded-full transition-all shadow hover:shadow-lg transform hover:scale-110 hover:rotate-12">
-            <img className="object-cover object-center w-full h-full rounded-full" src="https://i.pinimg.com/originals/60/fd/e8/60fde811b6be57094e0abc69d9c2622a.jpg" />
-          </a>
-        </div> */}
-      </div>
+     
     </div>
   )
 }

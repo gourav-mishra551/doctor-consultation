@@ -34,7 +34,9 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
       ...options,
     });
   };
+
   console.log("doctorProfileData", doctorProfileData);
+
   return (
     <div>
       {/* {doctorProfileData.data.map((dr) => ( */}
@@ -153,7 +155,7 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
 
             <div className="flex flex-col w-[40%]">
               <div className="speciality-accordion">
-                {doctorProfileData?.data?.specialitycategories.map(
+                {doctorProfileData?.specialityCategories?.map(
                   (special, index) => (
                     <div
                       key={special._id}
