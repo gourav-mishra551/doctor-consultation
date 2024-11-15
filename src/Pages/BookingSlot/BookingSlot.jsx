@@ -4,9 +4,10 @@ import { GiGraduateCap } from "react-icons/gi";
 import { useParams } from "react-router-dom";
 import Navbar from "../../Components/Navbar";
 import DrAppointmentBooking from "../../Components/DrApointmentBooking";
+import { FaGraduationCap, FaHospital, FaMapMarkerAlt, FaTrophy, FaGlobe } from "react-icons/fa";
 
 function BookingSlot() {
-  const [DrProfile, setDrProfile] = useState(null); // Set initial state to null
+  const [DrProfile, setDrProfile] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
@@ -18,109 +19,128 @@ function BookingSlot() {
       const res = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/user/doctors/${id}`
       );
-      setDrProfile(res.data.data); // Set the fetched doctor profile
+      setDrProfile(res.data.data);
     } catch (error) {
       console.error("Error fetching doctor profile data:", error);
     }
   };
 
-  // Check if DrProfile has been loaded and has the userData
   if (!DrProfile) {
-    return <div>Loading...</div>; // Show loading message or spinner if DrProfile is null
+    return <div className="flex items-center justify-center min-h-screen text-xl font-bold text-gray-600">Loading...</div>;
   }
 
+  const ProfileDetail = ({ icon, title, value }) => (
+    <div className="flex items-center">
+      <span className="flex items-center justify-center bg-[#00768A] text-white w-12 h-12 rounded-full shadow-lg text-xl">
+        {icon}
+      </span>
+      <div className="ml-4">
+        <p className="text-base sm:text-lg font-semibold text-gray-700">{title}</p>
+        <p className="text-sm sm:text-base text-gray-600">{value}</p>
+      </div>
+    </div>
+  );
+
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="bg-[#E0EBF1] py-8">
-        {/* Ensure DrProfile and userData are defined before rendering */}
-        {DrProfile.userData && (
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-7xl mx-auto p-8 space-y-8">
-            {/* Profile Header */}
-            <div className="text-center">
-              <h1 className="text-4xl font-semibold text-[#00768A]">
-                {DrProfile.userData?.name || "Doctor's Name Not Available"}
-              </h1>
-              <div className="flex justify-center gap-6 mt-4">
-                {/* Uncomment to show specialties if needed */}
-                {/* {DrProfile?.specialties?.map((specialty, index) => (
-                  <span
-                    key={index}
-                    className="text-lg text-gray-600 bg-[#E4F8F6] px-4 py-2 rounded-full"
-                  >
-                    {specialty || "Specialty Not Available"}
-                  </span>
-                ))} */}
-              </div>
-            </div>
 
-            {/* Profile Details */}
-            <div className="space-y-6">
-              <div className="flex justify-between items-center text-lg text-gray-700">
-                <span className="font-semibold text-[#00768A]">Experience:</span>
-                <span className="text-gray-600">
-                  +{DrProfile.totalExperience} years experience
-                </span>
+      <div className="bg-gradient-to-r from-[#E3FDFD] via-[#FFE6FA] to-[#FBF4E9] flex-grow py-6 px-4 sm:px-6 lg:px-8">
+        {DrProfile?.userData && (
+          <div className="bg-white rounded-3xl shadow-2xl max-w-5xl mx-auto p-4 sm:p-6  lg:p-10">
+            <div
+              className="relative bg-cover bg-center rounded-3xl overflow-hidden flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-8"
+              style={{
+                backgroundImage: `url('https://img.freepik.com/free-vector/cartoon-stomatology-clinic-hospital-interior-empty-dental-hall-waiting-room-with-chair-elevator-reception-doctor-office-doors-tooth-treatment-oral-care-teeth-hygiene-concept_88138-885.jpg')`,
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/40 z-0"></div>
+
+              <div className="flex-shrink-0 flex justify-center lg:justify-start z-10">
+                <img
+                  src={DrProfile.userData?.avatar || "https://via.placeholder.com/150"}
+                  alt="Doctor Avatar"
+                  className="h-28 w-28 sm:h-32 sm:w-32 lg:h-40 lg:w-40 rounded-full object-cover shadow-lg border-4 border-white"
+                />
               </div>
 
-              <div className="flex justify-between items-center text-lg text-gray-700">
-                <span className="font-semibold text-[#00768A]">Languages:</span>
-                <div className="flex gap-4">
-                  {DrProfile?.language?.length > 0 ? (
-                    <span className="text-gray-600">
-                      {DrProfile.language.join(", ")}
+              <div className="text-center lg:text-left z-10">
+                <div className="flex flex-col md:flex-row md:items-center gap-4">
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white uppercase [text-shadow:_0_1px_0_rgb(0_0_0_/_40%)]">
+                    {DrProfile.userData?.name || "Doctor's Name"}
+                  </h1>
+                  <div className="flex justify-center items-center">
+                    <span className="bg-[#00768A] p-2 rounded-full">
+                      <FaTrophy className="text-2xl text-yellow-500" />
                     </span>
-                  ) : (
-                    <span className="text-gray-600">No languages available</span>
-                  )}
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex justify-between items-center text-lg text-gray-700">
-                  <span className="font-semibold text-[#00768A]">Qualifications:</span>
-                  <div className="space-y-2">
-                    {DrProfile?.qualifications?.map((qualification, index) => (
-                      <div key={index} className="flex items-center gap-3 text-gray-600">
-                        <GiGraduateCap className="text-[#00768A] text-xl" />
-                        <span>{qualification.degree || "Not Available"}</span>
-                      </div>
-                    ))}
+                    <p className="text-[#00768A] ml-3 bg-cyan-100 py-1 px-2 text-sm rounded-full font-bold">
+                      {DrProfile.totalExperience} Years of Experience
+                    </p>
                   </div>
                 </div>
-
-                <div className="flex justify-between items-center text-lg text-gray-700">
-                  <span className="font-semibold text-[#00768A]">Hospital Name:</span>
-                  <span className="text-gray-600">
-                    {DrProfile.hospitalName || "Not Available"}
+                <p className="text-lg sm:text-xl mb-4 font-semibold text-white shadow-md [text-shadow:_0_4px_8px_#00BCD4] mt-2">
+                  Specialties In:
+                  <span className="ml-2">
+                    {DrProfile.specialitycategories?.length > 0 ? (
+                      DrProfile.specialitycategories.map((specialty, index) => (
+                        <span
+                          key={index}
+                          className="inline-block bg-blue-100 text-[#00768A] px-3 py-1 rounded-full mr-2 text-sm"
+                        >
+                          {specialty.specialtyName}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-gray-500">Not available</span>
+                    )}
                   </span>
-                </div>
-
-                <div className="flex justify-between items-center text-lg text-gray-700">
-                  <span className="font-semibold text-[#00768A]">Address:</span>
-                  <span className="text-gray-600">
-                    {DrProfile?.clinic_hospital_address?.permanentAddress || "Not Available"} {", "}
-                    {DrProfile?.clinic_hospital_address?.state || "State Not Available"}, 
-                    {DrProfile?.clinic_hospital_address?.city || "City Not Available"} {", "}
-                    {DrProfile?.clinic_hospital_address?.PinCode || "PinCode Not Available"}
-                  </span>
-                </div>
+                </p>
               </div>
             </div>
 
-            {/* Book Appointment Section */}
-            {/* Uncomment and style button if needed */}
-            {/* <div className="flex justify-center mt-6">
-              <button className="bg-[#00768A] text-white px-8 py-3 rounded-full text-xl hover:bg-[#005c67] focus:outline-none transform transition-all hover:scale-105 active:scale-95">
-                Book Appointment
-              </button>
-            </div> */}
+            <div className="border-t my-8"></div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <ProfileDetail
+                icon={<FaGlobe />}
+                title="Languages"
+                value={
+                  DrProfile?.language?.length > 0
+                    ? DrProfile.language.join(", ")
+                    : "No languages available"
+                }
+              />
+              <ProfileDetail
+                icon={<FaGraduationCap />}
+                title="Qualifications"
+                value={
+                  DrProfile?.qualifications?.length > 0
+                    ? DrProfile.qualifications.map((q) => q.degree).join(", ")
+                    : "Not available"
+                }
+              />
+              <ProfileDetail
+                icon={<FaHospital />}
+                title="Hospital"
+                value={DrProfile.hospitalName || "Not available"}
+              />
+              <ProfileDetail
+                icon={<FaMapMarkerAlt />}
+                title="Address"
+                value={
+                  DrProfile?.clinic_hospital_address
+                    ? `${DrProfile.clinic_hospital_address.permanentAddress || ""}, ${DrProfile.clinic_hospital_address.state || ""
+                    }, ${DrProfile.clinic_hospital_address.city || ""}, ${DrProfile.clinic_hospital_address.PinCode || ""
+                    }`
+                    : "Not available"
+                }
+              />
+            </div>
           </div>
         )}
       </div>
 
-      {/* Appointment Booking Component */}
-      <div className="p-8">
+      <div className="p-4 sm:p-6 lg:p-10">
         <DrAppointmentBooking IndiProfile={DrProfile} />
       </div>
     </div>
