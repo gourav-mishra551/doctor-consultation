@@ -43,7 +43,7 @@ function BookingSlot() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      {/* <Navbar /> */}
 
       <div className="bg-gradient-to-r from-[#E3FDFD] via-[#FFE6FA] to-[#FBF4E9] flex-grow py-6 px-4 sm:px-6 lg:px-8">
         {DrProfile?.userData && (

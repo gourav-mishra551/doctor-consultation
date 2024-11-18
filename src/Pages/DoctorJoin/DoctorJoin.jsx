@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 const DoctorJoin = () => {   n 
   return (
     <div className='bg-[#daf5f3] w-full'>
-      <Navbar />
+      {/* <Navbar /> */}
       
       <div className='max-w-[1200px] h-[100vh] justify-between py-32 mx-auto flex flex-wrap animate-fadeIn'>
         <div className='flex justify-start flex-col gap-8 w-full sm:w-[50%]'>

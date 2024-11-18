@@ -7,8 +7,8 @@ import Footer from '../Components/Footer'
 const About = () => {
     return (
         <div>
-            <TopHeader />
-            <Navbar />
+            {/* <TopHeader />
+            <Navbar /> */}
             <AboutUs />
             <div className="mt-10">
                 <Footer />
