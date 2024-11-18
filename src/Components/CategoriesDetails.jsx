@@ -83,7 +83,7 @@ function CategoriesDetails() {
   };
   return (
     <div className="bg-[#CEDDE4]">
-      <TopHeader />
+     
 
       {/* Banner Section */}
       <div
