@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { FaMinus, FaPlus } from "react-icons/fa";
 import toast, { Toaster } from 'react-hot-toast';
-import Multiselect from 'multiselect-react-dropdown';
 import { MdCancel } from "react-icons/md";
 import { TiTickOutline } from "react-icons/ti";
 import axios from 'axios';
-import TopHeader from '../Components/TopHeader';
-import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
@@ -291,8 +288,6 @@ const DoctorForm = () => {
 
     return (
         <div className='bg-[#E3EAF0]'>
-            <TopHeader />
-            <Navbar />
             <div className="bg-transparent my-10 sm:max-w-5xl w-full mx-auto h-auto p-10 rounded-xl shadow-lg">
                 {/* Step Indicator */}
                 <div className="flex justify-center mb-8">

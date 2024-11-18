@@ -1,5 +1,4 @@
-import TopHeader from "../Components/TopHeader";
-import Navbar from "../Components/Navbar";
+
 import Headers from "../Components/Headers";
 import Footer from "../Components/Footer";
 import Categories from "../Components/Categories";
@@ -62,9 +61,6 @@ const Home = () => {
   return (
     <div >
       <header className="App-header">
-        {/* <TopHeader/>
-        <Navbar />
-       */}
         <Headers />
 
         <div className="py-10">

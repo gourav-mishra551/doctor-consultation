@@ -1,9 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Navbar from "./Navbar";
-import Headers from "./Headers";
-import TopHeader from "./TopHeader";
 import Footer from "./Footer";
 
 const Categories = () => {
@@ -39,20 +36,12 @@ const Categories = () => {
   };
   return (
     <div>
-      {/* <TopHeader/>
-      <Navbar/> */}
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-[320px] sm:mt-[40px] mb-8">
       <div className="flex flex-col sm:flex-row gap-3 justify-between max-w-5xl mx-auto mb-8">
         <p className="sm:text-4xl text-2xl font-bold tracking-wider sm:text-start text-center capitalize text-[#1c8e81]">
           Top Specialties
         </p>
-        {/* <div className="flex justify-center items-center">
-          <NavLink to="/categories">
-            <button className="sm:w-[250px] w-[150px] sm:h-[60px] h-[50px] rounded-lg bg-[#1c8e81] text-white font-semibold hover:bg-green-400 transition ease-in-out duration-300">
-              View All Services
-            </button>
-          </NavLink>
-        </div> */}
+       
       </div>
 
       <div className="flex justify-center items-center w-full">

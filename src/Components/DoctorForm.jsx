@@ -3,10 +3,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { MdCancel, MdDelete } from "react-icons/md";
 import { TiTickOutline } from "react-icons/ti";
 import axios from "axios";
-import TopHeader from "./TopHeader";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
 import { ImCross } from "react-icons/im";
+import Footer from "./Footer";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Import icons
 const DoctorForm = () => {
   const [formValues, setFormValues] = useState({
@@ -640,8 +638,6 @@ const DoctorForm = () => {
 
   return (
     <div className="bg-[#E3EAF0]">
-      {/* <TopHeader />
-      <Navbar /> */}
       <div className="bg-transparent my-10 sm:max-w-5xl w-full mx-auto h-auto p-10 rounded-xl shadow-lg">
         {/* Step Indicator */}
         <div className="flex justify-center mb-8">

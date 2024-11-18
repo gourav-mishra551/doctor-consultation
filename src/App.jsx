@@ -1,17 +1,14 @@
 import "./App.css";
+import { useLocation } from "react-router-dom";
 import Home from "./Pages/Home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DoctorForm from "./Components/DoctorForm";
-import Footer from "./Components/Footer";
 import Categories from "./Components/Categories";
 import DoctorsCrew from "./Components/DoctorsCrew";
 import UserProfile from "./Components/UserProfile";
-import AboutUs from "./Components/AboutUs";
 import About from "./Pages/About";
 import ContactPage from "./Pages/ContactPage";
-import DoctorsProfile from "./Components/DoctorsProfile";
 import DrProfilePage from "./Pages/DrProfilePage";
-import DrIndividualProfile from "./Components/DrIndividualProfile";
 import DrIndividualProfilePage from "./Pages/DrIndividualProfilePage";
 import Calendar from "./Components/Calender";
 import FaqPage from "./Pages/FaqPage";
@@ -21,7 +18,6 @@ import BrandAmPage from "./Pages/BrandAmPage";
 import WhyWeDiffPage from "./Pages/WhyWeDiffPage";
 import WellnessSafetyPage from "./Pages/WellnessSafetyPage";
 import PricePromisePage from "./Pages/PricePromisePage";
-import OurTreatment from "./Components/OurTreatment";
 import OurTreatmentPage from "./Pages/OurTreatmentPage";
 import DeliveryPage from "./Pages/DeliveryPage";
 import HowAmWorkPage from "./Pages/HowAmWorkPage";
@@ -61,9 +57,14 @@ import BookingSlot from "./Pages/BookingSlot/BookingSlot";
 import Navbar from "./Components/Navbar";
 import TopHeader from "./Components/TopHeader";
 
+
+
+
 function App() {
+  const location = useLocation();
+  const hideNavbar = ["/auth","/login", "/signup"].includes(location.pathname);
   return (
-    <div className="App" >
+    <div className="App">
       
       <BrowserRouter>
       <TopHeader/>
@@ -78,13 +79,13 @@ function App() {
             path="/CategoriesDetails/:id"
             element={<CategoriesDetails />}
           />
-          <Route path="/CategoryHome" element={<CategoriesHome/>}/>
+          <Route path="/CategoryHome" element={<CategoriesHome />} />
           <Route path="/doctors" element={<DoctorsCrew />} />
           <Route path="/user-profile" element={<UserProfile />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact-us" element={<ContactPage />} />
           <Route path="/drs-profile" element={<DrProfilePage />} />
-          <Route path="/BookingSlot/:id" element={<BookingSlot/>}/>
+          <Route path="/BookingSlot/:id" element={<BookingSlot />} />
           <Route path="/dr-indi/:id" element={<DrIndividualProfilePage />} />
           <Route
             path="/DrAppointmentCreation"
@@ -129,13 +130,13 @@ function App() {
 
           {/* <Route path='/login' element={<Login />} /> */}
           <Route path="/appointment/inside-india" element={<InsideIndia />} />
-          <Route path="/OutSideIndia" element={<OutSideIndia/>}/>
-          <Route path="/ReturningPatientPage" element={<ReturningPatient/>} />
-          <Route path="/ConsultWithLastDoctor" element={<ConsultwithLastDoctor/>}/>
-          <Route path="/ConsultwithNewDoctor" element={<ConsultwithNewDoctor/>}/> 
+          <Route path="/OutSideIndia" element={<OutSideIndia />} />
+          <Route path="/ReturningPatientPage" element={<ReturningPatient />} />
+          <Route path="/ConsultWithLastDoctor" element={<ConsultwithLastDoctor />} />
+          <Route path="/ConsultwithNewDoctor" element={<ConsultwithNewDoctor />} />
         </Routes>
-       
-      </BrowserRouter>
+      </>
+
     </div>
   );
 }
