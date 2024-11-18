@@ -6,6 +6,7 @@ import DrAppointmentBooking from "../../Components/DrApointmentBooking";
 import { FaGraduationCap, FaHospital, FaMapMarkerAlt, FaTrophy, FaGlobe } from "react-icons/fa";
 import PrescriptionUpload from "../../Components/PrescriptionUpload/PrescriptionUpload";
 import Payment from "../../Components/Payment/Payment";
+import { RiNumber1, RiNumber2, RiNumber3 } from "react-icons/ri";
 
 function BookingSlot() {
   const [DrProfile, setDrProfile] = useState(null);
@@ -19,7 +20,9 @@ function BookingSlot() {
   const handlePreviousStep = () => {
     setStep(step - 1);
   };
-
+  const handleStepClick = (stepNumber) => {
+    setStep(stepNumber);
+  };
 
   useEffect(() => {
     DrProfileFetch();
@@ -148,6 +151,49 @@ function BookingSlot() {
             </div>
           </div>
         )}
+      </div>
+      <div className="flex flex-col items-center w-full py-6">
+        <div className="relative flex items-center w-full max-w-md justify-between">
+          {/* Step 1 */}
+          <div
+              className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${step >= 1 ? "text-white bg-[#00768A]" : "text-gray-500"
+              } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
+            onClick={() => handleStepClick(1)}
+          >
+            <RiNumber1 size={22} />
+            <span className="text-sm mt-1 hidden md:block">Step 1</span>
+          </div>
+
+          {/* Animated Line */}
+          <div className="absolute top-1/2 left-1/4 w-1/2 h-1 bg-gray-300 -z-10">
+            <div
+              className={`h-1 bg-[#00768A] transition-all z-5 duration-500`}
+              style={{
+                width: `${step === 1 ? "0%" : step === 2 ? "50%" : "100%"}`,
+              }}
+            ></div>
+          </div>
+
+          {/* Step 2 */}
+          <div
+            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${step >= 2 ? "text-white bg-[#00768A] " : "text-white bg-gray-500"
+              } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
+            onClick={() => handleStepClick(2)}
+          >
+            <RiNumber2 size={22} />
+            <span className="text-sm mt-1 hidden md:block">Step 2</span>
+          </div>
+
+          {/* Step 3 */}
+          <div
+            className={`flex  z-10 flex-col items-center cursor-pointer transition-all duration-300 ${step >= 3 ? "text-white bg-[#00768A]" : "text-white bg-gray-500"
+              } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20 <z-10></z-10>`}
+            onClick={() => handleStepClick(3)}
+          >
+            <RiNumber3 size={22} />
+            <span className="text-sm mt-1 hidden md:block">Step 3</span>
+          </div>
+        </div>
       </div>
 
       <div className="max-w-[1200px] mx-auto py-10">
