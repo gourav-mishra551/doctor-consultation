@@ -15,10 +15,11 @@ function CategoriesDetails() {
   const { title } = location.state || {};
   const [result, setResult] = useState({});
   const [DoctorsData, setDoctersData] = useState([]);
+  const [categories, setCategories] = useState([]);
   const { id } = useParams();
 
   const [filters, setFilters] = useState({
-    name:'',
+    name: '',
     gender: '',
     rating: '',
     visitingMode: '',
@@ -45,9 +46,6 @@ function CategoriesDetails() {
   };
 
 
-  const [openIndex, setOpenIndex] = useState(null);
-
-
 
   useEffect(() => {
     FetchCategory();
@@ -59,10 +57,10 @@ function CategoriesDetails() {
       const res = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/user/category/${id}`
       );
-      console.log(res)
 
       setResult(res.data.data);
-      const categoryData = res.data.data;
+      setCategories(res.data.categoryList)
+
     } catch (error) { }
   };
 
@@ -93,7 +91,7 @@ function CategoriesDetails() {
       <div
         className="relative h-[40vh] flex justify-center items-center"
         style={{
-          backgroundImage: `url(${result?.banner})`,
+          backgroundImage: `url(${result?.image})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -104,10 +102,10 @@ function CategoriesDetails() {
         {/* Content with animation */}
         <div className="relative text-center text-white px-4 flex flex-col justify-center items-center animate-slideIn">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 transform transition-transform duration-500 ease-in-out hover:scale-105">
-            Consult {result.categoryName}
+            Consult {result?.specialtyName}
           </h1>
           <p className="max-w-[500px] text-base sm:text-lg md:text-xl transform transition-transform duration-500 ease-in-out hover:scale-105">
-            {result.sortDescription}
+            {result?.sortDescription}
           </p>
         </div>
       </div>
@@ -198,21 +196,9 @@ function CategoriesDetails() {
                 onChange={(e) => handleFilterChange('specialtyName', e.target.value)}
               >
                 <option value="">All</option>
-                {[
-                  'Cardiologist',
-                  'Dermatologist',
-                  'Orthopedic Surgeon',
-                  'Gynecologist',
-                  'Neurologist',
-                  'Ophthalmologist',
-                  'Pediatrician',
-                  'Endocrinologist',
-                  'Gastroenterologist',
-                  'Pulmonologist',
-                  'Orthopedic',
-                ].map((specialist) => (
-                  <option key={specialist} value={specialist}>
-                    {specialist}
+                {categories.map((specialist) => (
+                  <option key={specialist._id} value={specialist.specialtyName}>
+                    {specialist.specialtyName}
                   </option>
                 ))}
               </select>
@@ -311,35 +297,19 @@ function CategoriesDetails() {
                   <hr className="my-4" />
 
                   {/* Specialist Filter */}
-                  <div className="flex flex-col mb-4">
-                    <p className="font-semibold text-sm sm:text-base">
-                      Select Specialist
-                    </p>
-                    {[
-                      "Cardiologist",
-                      "Dermatologist",
-                      "Orthopedic Surgeon",
-                      "Gynecologist",
-                      "Neurologist",
-                      "Ophthalmologist",
-                      "Pediatrician",
-                      "Endocrinologist",
-                      "Gastroenterologist",
-                      "Pulmonologist",
-                      "Orthopedic",
-                    ].map((specialist) => (
-                      <label
-                        key={specialist}
-                        className="inline-flex items-center mb-2 text-sm sm:text-base"
-                      >
-                        <input
-                          type="radio"
-                          className="form-checkbox text-[#00768A] h-4 w-4"
-                          name="Specialist"
-                        />
-                        <span className="ml-1">{specialist}</span>
-                      </label>
-                    ))}
+                  <div>
+                    <p className="font-semibold">Specialist</p>
+                    <select
+                      className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
+                      onChange={(e) => handleFilterChange('specialtyName', e.target.value)}
+                    >
+                      <option value="">All</option>
+                      {categories.map((specialist) => (
+                        <option key={specialist._id} value={specialist.specialtyName}>
+                          {specialist.specialtyName}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   {/* Search Button */}
