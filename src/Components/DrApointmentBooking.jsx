@@ -74,15 +74,15 @@ const DrAppointmentBooking = ({ IndiProfile }) => {
     console.log(formdata);
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-xl">Loading...</p>
-      </div>
-    );
+  // if (loading) {
+  //   return (
+  //     <div className="flex justify-center items-center h-screen">
+  //       <p className="text-xl">Loading...</p>
+  //     </div>
+  //   );
     
     
-  }
+  // }
 
   return (
     <div className="flex justify-center gap-8">

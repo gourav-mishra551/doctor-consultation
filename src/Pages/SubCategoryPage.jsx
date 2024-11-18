@@ -8,8 +8,8 @@ const SubCategoryPage = () => {
     return (
         <div>
             <header className='app-header'>
-                <TopHeader />
-                <Navbar />
+                {/* <TopHeader />
+                <Navbar /> */}
                 <SubCategories />
                 <div className="mt-20">
                     <Footer />

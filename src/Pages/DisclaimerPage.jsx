@@ -8,8 +8,8 @@ const DisclaimerPage = () => {
     return (
         <div>
             <header className='App-header'>
-                <TopHeader />
-                <Navbar />
+                {/* <TopHeader />
+                <Navbar /> */}
                 <Disclaimer />
                 <div className='mt-20'>
                     <Footer />

@@ -8,8 +8,8 @@ import Profile from "../Components/Profile";
 const ProfilePage = () => {
   return (
     <div>
-      <TopHeader />
-      <Navbar />
+      {/* <TopHeader />
+      <Navbar /> */}
       <Profile />
       <div className="mt-20">
         <Footer />

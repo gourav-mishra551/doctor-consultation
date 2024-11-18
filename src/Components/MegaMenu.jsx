@@ -90,7 +90,7 @@ function MegaMenu() {
     const containerRect = containerRef.current.getBoundingClientRect();
     setSubmenuPosition({
       top: menuItemRect.bottom - containerRect.top + 90,
-      left: menuItemRect.left - containerRect.left + 10,
+      left: menuItemRect.left - containerRect.left + 110,
     });
   };
 

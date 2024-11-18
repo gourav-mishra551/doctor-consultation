@@ -96,6 +96,7 @@ function CategoriesDetails() {
           backgroundImage: `url(${result?.banner})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
+          
         }}
       >
         {/* Overlay */}
@@ -121,7 +122,7 @@ function CategoriesDetails() {
           Filter Options
         </button>
       </div>
-      <div className="max-w-[1200px] justify-between mx-auto mt-10 flex flex-col-reverse md:flex-row gap-10 bg-[#CEDDE4] p-5">
+      <div className="max-w-[1200px] justify-between mx-auto mt-10 flex flex-col-reverse md:flex-row gap-10 bg-[#CEDDE4] p-5" >
         {/* Filter Section (Desktop Only) */}
         <div className="hidden md:flex flex-col gap-5 w-[25%] h-max rounded-xl shadow-md bg-white py-6 px-6 sticky top-0">
           <p className="font-semibold text-center text-2xl text-[#00768A]">
@@ -315,6 +316,7 @@ function CategoriesDetails() {
                     <p className="font-semibold text-sm sm:text-base">
                       Select Specialist
                     </p>
+                  
                     {[
                       "Cardiologist",
                       "Dermatologist",

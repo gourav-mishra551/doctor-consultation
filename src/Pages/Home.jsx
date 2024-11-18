@@ -62,13 +62,7 @@ const Home = () => {
   return (
     <div className="">
       <header className="App-header">
-        <TopHeader/>
-        <Navbar />
-        {/* {
-          MegaMenubtn ? <MegaMenu /> :null
-        } */}
-
-        <Headers />
+       
 
         <div className="py-10">
           {/* <Categories /> */}

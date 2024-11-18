@@ -8,8 +8,8 @@ const WellnessSafetyPage = () => {
   return (
     <div>
       <header className="App-header">
-        <TopHeader />
-        <Navbar />
+        {/* <TopHeader />
+        <Navbar /> */}
         <WellnessSafety />
         <div className="mt-20">
           <Footer />
