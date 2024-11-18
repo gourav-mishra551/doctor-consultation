@@ -8,8 +8,8 @@ const DeliveryPage = () => {
   return (
     <div>
         <header>
-            <TopHeader/>
-            <Navbar/>
+            {/* <TopHeader/>
+            <Navbar/> */}
             <Delivery/>
             <div className='mt-20'>
                 <Footer/>

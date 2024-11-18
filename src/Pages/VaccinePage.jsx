@@ -8,8 +8,8 @@ const VaccinePage = () => {
     return (
         <div>
             <div className="App-header">
-                <TopHeader />
-                <Navbar />
+                {/* <TopHeader />
+                <Navbar /> */}
                 <Vaccine />
                 <div className='mt-20'>
                     <Footer />

@@ -7,8 +7,8 @@ import Footer from '../Components/Footer'
 const FaqPage = () => {
     return (
         <div>
-            <TopHeader />
-            <Navbar />
+            {/* <TopHeader />
+            <Navbar /> */}
             <Faq />
             <div className='mt-20'>
                 <Footer />

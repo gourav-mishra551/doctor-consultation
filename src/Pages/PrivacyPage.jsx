@@ -7,8 +7,8 @@ import Footer from '../Components/Footer'
 const PrivacyPage = () => {
     return (
         <div>
-            <TopHeader />
-            <Navbar />
+            {/* <TopHeader />
+            <Navbar /> */}
             <Privacy />
             <div className='mt-20'>
                 <Footer />

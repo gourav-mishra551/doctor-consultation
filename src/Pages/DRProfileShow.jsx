@@ -90,7 +90,7 @@ function DRProfileShow() {
 
     return (
         <div>
-            <Navbar />
+            {/* <Navbar /> */}
             <div className='flex justify-center'>
                 <CiEdit className='text-2xl cursor-pointer' onClick={handleEditClick} />
                 <span className='cursor-pointer' onClick={handleEditClick}>Edit Your Profile</span>

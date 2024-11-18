@@ -7,8 +7,8 @@ import Footer from "../Components/Footer";
 const EditProfilePage = () => {
   return (
     <div>
-      <TopHeader />
-      <Navbar />
+      {/* <TopHeader />
+      <Navbar /> */}
       <EditProfile />
       <div className="mt-20">
         {/* <Footer /> */}

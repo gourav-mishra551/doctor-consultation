@@ -8,8 +8,8 @@ const BrandAmPage = () => {
     return (
         <div>
             <header className="App-header">
-                <TopHeader />
-                <Navbar />
+                {/* <TopHeader />
+                <Navbar /> */}
                 <BrandAmatheus/>
                 <div className="mt-20">
                     <Footer />

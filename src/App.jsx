@@ -58,11 +58,16 @@ import ConsultwithNewDoctor from "./Pages/AppointmentBooking/ReturningPatient/Co
 import CategoriesHome from "./Components/CategoriesHome/CategoriesHome";
 import InsideIndia from "./Pages/AppointmentBooking/NewPatient/InsideIndia/InsideIndia";
 import BookingSlot from "./Pages/BookingSlot/BookingSlot";
+import Navbar from "./Components/Navbar";
+import TopHeader from "./Components/TopHeader";
 
 function App() {
   return (
     <div className="App">
+      
       <BrowserRouter>
+      <TopHeader/>
+      <Navbar/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/doctor-slots-generation" element={<DrExam />} />

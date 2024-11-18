@@ -8,8 +8,8 @@ const WhyWeDiffPage = () => {
     return (
         <div>
             <header className="App-header">
-                <TopHeader />
-                <Navbar />
+                {/* <TopHeader />
+                <Navbar /> */}
                 <WhyWeDifferent />
                 <div className="mt-20">
                     <Footer />

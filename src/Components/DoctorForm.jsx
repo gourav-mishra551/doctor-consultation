@@ -640,8 +640,8 @@ const DoctorForm = () => {
 
   return (
     <div className="bg-[#E3EAF0]">
-      <TopHeader />
-      <Navbar />
+      {/* <TopHeader />
+      <Navbar /> */}
       <div className="bg-transparent my-10 sm:max-w-5xl w-full mx-auto h-auto p-10 rounded-xl shadow-lg">
         {/* Step Indicator */}
         <div className="flex justify-center mb-8">

@@ -7,8 +7,8 @@ import Footer from '../Components/Footer'
 const TermsOfUsePage = () => {
     return (
         <div>
-            <TopHeader />
-            <Navbar />
+            {/* <TopHeader />
+            <Navbar /> */}
             <TermsOfUse />
             <div className='mt-20'>
                 <Footer />
