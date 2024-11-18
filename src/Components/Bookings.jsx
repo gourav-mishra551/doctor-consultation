@@ -41,15 +41,15 @@ const Bookings = ({ history }) => {
 
   return (
     <div>
-      <div className="max-w-5xl mx-auto my-8 space-y-4">
+      <div className="sm:max-w-5xl w-full mx-auto sm:my-8 space-y-4">
         <div className="top-detail-section">
-          {/* <p className="text-2xl font-bold text-gray-500">Hi {name}</p> */}
           <p className="text-gray-500 font-light">Your Previous Bookings</p>
         </div>
         {history?.data?.map((consultation, index) => (
           <>
             <div key={index} className="bg-white shadow-lg rounded-lg">
               <div
+                key={index}
                 className="flex justify-between items-center p-4 cursor-pointer bg-[#1495AB] text-white rounded-t-lg"
                 onClick={() => toggleSection(index)}
               >
@@ -61,7 +61,7 @@ const Bookings = ({ history }) => {
               </div>
 
               {openSection === index && (
-                <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4 space-y-2 sm:space-y-0">
                   {/* Consultation Formats */}
                   <div className="flex flex-col">
                     <span className="text-sm text-gray-500">
@@ -70,19 +70,19 @@ const Bookings = ({ history }) => {
                     <span className="text-sm text-gray-800 font-bold">
                       {consultation.bookingDetails.consultation_formats ===
                       "videoCall" ? (
-                        <div className="flex gap-2 border w-[30%] rounded-xl justify-center items-center p-1">
+                        <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-1">
                           <p className="text-xm">Video Call</p>
                           <MdOutlineVideoCall className="text-xl" />
                         </div>
                       ) : consultation.bookingDetails.consultation_formats ===
                         "chat" ? (
-                        <div className="flex gap-2 border w-[30%] rounded-xl justify-center items-center p-2">
+                        <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-2">
                           <p>Chat </p>
                           <CiChat1 />
                         </div>
                       ) : consultation.bookingDetails.consultation_formats ===
                         "phoneCall" ? (
-                        <div className="flex gap-2 border w-[30%] rounded-xl justify-center items-center p-2">
+                        <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-2">
                           <p>Audio Call</p>
                           <MdSpatialAudioOff />
                         </div>
@@ -99,7 +99,7 @@ const Bookings = ({ history }) => {
                       <div className="flex ">
                         {consultation?.bookingDetails?.selectMode ===
                         "online" ? (
-                          <div className="flex gap-2 border w-[30%] rounded-xl justify-center items-center p-1">
+                          <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-1">
                             <p className="text-sm">Online</p>
                             <MdOutlineBookOnline className="text-xl" />
                           </div>
@@ -147,7 +147,7 @@ const Bookings = ({ history }) => {
                   <div className="flex flex-col">
                     <span className="text-sm text-gray-500">Last Updated</span>
                     <span className="text-sm font-semibold text-gray-800">
-                      <div className="flex w-[50%] rounded-xl border justify-center items-center p-1 gap-2">
+                      <div className="flex sm:w-[30%] w-full rounded-xl border justify-center items-center p-1 gap-2">
                         <span>
                           {convertToIST(consultation.bookingDetails.updatedAt)}
                         </span>
@@ -165,7 +165,7 @@ const Bookings = ({ history }) => {
                   </div>
 
                   {/* make prescription */}
-                  <div className="flex flex-col w-[40%] ">
+                  <div className="flex flex-col sm:w-[30%] w-full ">
                     <button className="bg-[#944120] hover:bg-[#6e341d] transition-all duration-500 ease-in-out px-2 py-1 text-white rounded-md">
                       Make prescription
                     </button>
