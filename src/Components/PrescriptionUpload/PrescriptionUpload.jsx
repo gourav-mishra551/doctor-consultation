@@ -51,9 +51,9 @@ const PrescriptionUpload = ({ onNext, onPrevious }) => {
         }
     };
     return (
-        <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <div className="w-[60vw] mx-auto p-6 bg-white shadow-lg rounded-lg bg-gradient-to-r from-[#E3FDFD] via-[#fcfcfc] to-[#87dce7]">
             <h1 className="text-lg font-semibold text-gray-700 mb-4">Upload Files</h1>
-            <div className="max-w-2xl mx-auto p-6 shadow-lg rounded-3xl" style={{ backgroundColor: "rgb(240, 248, 247)" }}>
+            <div className="max-w-2xl mx-auto p-6 shadow-lg rounded-3xl " >
                     {/* Step 1: Document Information */}
                     {step === 1 && (
                         <div>
@@ -105,7 +105,7 @@ const PrescriptionUpload = ({ onNext, onPrevious }) => {
 
                             <button
                                 onClick={handleNextStep}
-                                className="block w-full bg-[#1c8e81] text-white p-2 rounded-md text-lg font-semibold hover:bg-[#176b63] transition duration-300"
+                                className="block w-full bg-[#00768A] text-white p-2 rounded-md text-lg font-semibold hover:bg-[#176b63] transition duration-300"
                             >
                                 Next
                             </button>
@@ -142,7 +142,7 @@ const PrescriptionUpload = ({ onNext, onPrevious }) => {
                                 <button
                                     type="submit"
                                     onClick={handleSubmit}
-                                    className="bg-[#1c8e81] text-white p-2 rounded-md text-lg font-semibold hover:bg-[#176b63] transition duration-300"
+                                    className="bg-[#00768A] text-white p-2 rounded-md text-lg font-semibold hover:bg-[#176b63] transition duration-300"
                                 >
                                     Submit
                                 </button>
@@ -172,7 +172,7 @@ const PrescriptionUpload = ({ onNext, onPrevious }) => {
                     </div>
                 ))}
             </div>
-            <div className="mt-4">
+            <div className="mt-4  flex justify-between">
                 <button
                     onClick={onPrevious}
                     className="mr-2 px-4 py-2 bg-gray-500 text-white rounded-lg"
@@ -181,7 +181,7 @@ const PrescriptionUpload = ({ onNext, onPrevious }) => {
                 </button>
                 <button
                     onClick={onNext}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+                    className="px-4 py-2 bg-[#00768A] text-white rounded-lg"
                 >
                     Skip / Next
                 </button>
