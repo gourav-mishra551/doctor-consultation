@@ -27,6 +27,17 @@ const PrescriptionMaker = () => {
     instruction: "",
   });
 
+  const [prescriptionData, setPrescriptionData] = useState({
+    problems: "",
+    observations: "",
+    notes: "",
+    medicineName: "",
+    frequency: "",
+    duration: "",
+    action: "",
+    instruction: "",
+  });
+
   const popupRef = useRef(null);
 
   const token = localStorage.getItem("token");
@@ -126,6 +137,7 @@ const PrescriptionMaker = () => {
       setLoading(false);
     }
   };
+  
   // Close product list if clicked outside the popup or input
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -568,6 +580,12 @@ const PrescriptionMaker = () => {
               </div>
             </div>
           )}
+        </div>
+
+        <div>
+          <button className="bg-[#00768A] px-2 py-1 rounded-md text-white">
+            Submit
+          </button>
         </div>
       </div>
     </div>
