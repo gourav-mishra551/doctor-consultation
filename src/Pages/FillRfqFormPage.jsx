@@ -8,8 +8,8 @@ const FillRfqFormPage = () => {
     return (
         <div>
             <header className='App-header'>
-                <TopHeader />
-                <Navbar />
+                {/* <TopHeader />
+                <Navbar /> */}
                 <FillRfqForm />
                 <div className='mt-20'>
                     <Footer />

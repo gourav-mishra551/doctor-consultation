@@ -20,6 +20,7 @@ const DrIndividualProfile = () => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     DrIndiProfile();
   }, []);
 

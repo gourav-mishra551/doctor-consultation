@@ -7,8 +7,8 @@ import Footer from '../Components/Footer'
 const ReturnRefundsPage = () => {
   return (
     <div>
-        <TopHeader/>
-        <Navbar/>
+        {/* <TopHeader/>
+        <Navbar/> */}
         <ReturnRefunds/>
         <div className='mt-20'>
             <Footer/>

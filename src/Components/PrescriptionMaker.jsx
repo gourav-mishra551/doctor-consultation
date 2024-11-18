@@ -3,6 +3,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { FaClipboard, FaEdit, FaPlus } from "react-icons/fa";
 import { MdCancel, MdDelete } from "react-icons/md";
 import axios from "axios";
+import { Table, Tbody, Td, Th, Thead, Tr } from "react-super-responsive-table";
 
 const PrescriptionMaker = () => {
   const [sections, setSections] = useState([]);
@@ -23,6 +24,17 @@ const PrescriptionMaker = () => {
     medicineSelected: "",
     frequency: "",
     duration: "",
+    instruction: "",
+  });
+
+  const [prescriptionData, setPrescriptionData] = useState({
+    problems: "",
+    observations: "",
+    notes: "",
+    medicineName: "",
+    frequency: "",
+    duration: "",
+    action: "",
     instruction: "",
   });
 
@@ -125,6 +137,7 @@ const PrescriptionMaker = () => {
       setLoading(false);
     }
   };
+  
   // Close product list if clicked outside the popup or input
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -169,9 +182,9 @@ const PrescriptionMaker = () => {
   };
 
   return (
-    <div className="bg-gray-100 p-5 flex gap-5">
+    <div className="bg-gray-100 p-5 sm:flex gap-5">
       {/* Left section */}
-      <div className="patient-details w-1/4 p-5 space-y-3 shadow-xl bg-white rounded-lg">
+      <div className="patient-details sm:w-1/4 p-5 space-y-3 sm:shadow-xl bg-white rounded-lg">
         <p className="font-light text-2xl text-gray-800">Patient Details</p>
         <div className="space-y-1">
           <div className="flex">
@@ -207,7 +220,7 @@ const PrescriptionMaker = () => {
       </div>
 
       {/* Right section */}
-      <div className="prescription-detail w-3/4 space-y-5">
+      <div className="prescription-detail sm:w-3/4 space-y-5 sm:mt-0 mt-5">
         <div className="flex justify-end">
           <button
             onClick={addSection}
@@ -293,50 +306,51 @@ const PrescriptionMaker = () => {
         {/* prescription details */}
         <div className="bg-white p-5">
           <div className="flex justify-between">
-            <p className="text-gray-800 font-semibold">Prescription Detials</p>
+            <p className="text-gray-800 font-semibold mt-1 sm:mt-0">
+              Prescription Detials
+            </p>
             <div className="">
               <button
                 onClick={() => setPopUp(true)}
-                className="px-4 py-2 flex gap-1 justify-center items-center text-[16px] font-normal text-white rounded-md bg-[#00768A]"
+                className="px-4 py-2 flex gap-1 justify-center items-center sm:text-[16px] text-[14px] font-normal text-white rounded-md bg-[#00768A]"
               >
                 Add Medication
                 <FaPlus />
               </button>
             </div>
           </div>
-          <div className="overflow-x-auto mt-5 border-2 p-5">
-            <div className="overflow-x-auto">
-              {/* Table */}
-              <table className="min-w-full table-auto border-collapse mt-6">
-                <thead>
-                  <tr>
-                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+          <div className="overflow-x-auto block mt-5 border-2 p-5">
+            <div className="overflow-x-auto mt-6">
+              <Table className="min-w-full table-auto border-collapse">
+                <Thead>
+                  <Tr>
+                    <Th className="py-2 px-4 border-b border-gray-300 text-left">
                       Medicine Name
-                    </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                    </Th>
+                    <Th className="py-2 px-4 border-b border-gray-300 text-left">
                       Frequency
-                    </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                    </Th>
+                    <Th className="py-2 px-4 border-b border-gray-300 text-left">
                       Duration
-                    </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                    </Th>
+                    <Th className="py-2 px-4 border-b border-gray-300 text-left">
                       Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
                   {medicineData.map((data, index) => (
-                    <tr key={index}>
-                      <td className="py-2 px-4 border-b border-gray-300">
+                    <Tr key={index}>
+                      <Td className="py-2 px-4 border-b border-gray-300">
                         {data.medicineName}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-300">
+                      </Td>
+                      <Td className="py-2 px-4 border-b border-gray-300">
                         {data.frequency}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-300">
+                      </Td>
+                      <Td className="py-2 px-4 border-b border-gray-300">
                         {data.duration}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-300">
+                      </Td>
+                      <Td className="py-2 px-4 border-b border-gray-300">
                         <div className="flex gap-2">
                           <FaEdit
                             onClick={() => loadEditData(data)}
@@ -347,11 +361,11 @@ const PrescriptionMaker = () => {
                             className="text-red-500 cursor-pointer"
                           />
                         </div>
-                      </td>
-                    </tr>
+                      </Td>
+                    </Tr>
                   ))}
-                </tbody>
-              </table>
+                </Tbody>
+              </Table>
             </div>
           </div>
           {openPopUp && (
@@ -371,7 +385,7 @@ const PrescriptionMaker = () => {
                 <div className="space-y-4">
                   <form onSubmit={handleFormSubmit} className="space-y-5">
                     {/* Medicine and Frequency fields */}
-                    <div className="relative flex gap-4">
+                    <div className="relative sm:flex flex-col space-y-4 sm:space-y-0 gap-4">
                       <div className="w-full">
                         <input
                           name="search"
@@ -426,7 +440,7 @@ const PrescriptionMaker = () => {
                     </div>
 
                     {/* Duration and Instruction fields */}
-                    <div className="flex gap-4">
+                    <div className="sm:flex gap-4 space-y-4 sm:space-y-0">
                       <input
                         name="duration"
                         placeholder="Duration (in days)"
@@ -469,7 +483,7 @@ const PrescriptionMaker = () => {
                   />
                 </div>
                 <form onSubmit={handleEditSubmit} className="space-y-5">
-                  <div className="relative flex gap-4">
+                  <div className="relative sm:flex flex-col gap-4 space-y-4 sm:space-y-0">
                     <div className="w-full">
                       <input
                         name="medicineName"
@@ -499,7 +513,7 @@ const PrescriptionMaker = () => {
                     />
                   </div>
 
-                  <div className="flex gap-4">
+                  <div className="sm:flex flex-col gap-4 sm:space-y-0 space-y-4">
                     <input
                       name="duration"
                       placeholder="Duration (in days)"
@@ -566,6 +580,12 @@ const PrescriptionMaker = () => {
               </div>
             </div>
           )}
+        </div>
+
+        <div>
+          <button className="bg-[#00768A] px-2 py-1 rounded-md text-white">
+            Submit
+          </button>
         </div>
       </div>
     </div>

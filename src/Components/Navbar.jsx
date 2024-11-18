@@ -437,7 +437,7 @@ const Navbar = () => {
                 {isOpen ? (
                   <RxCross1 size={24} />
                 ) : (
-                  <RxHamburgerMenu size={24} />
+                  <RxHamburgerMenu size={24} className="focus:outline-none  focus:ring-0 focus:border-0" />
                 )}
               </button>
             </div>

@@ -10,12 +10,21 @@ import { PiArrowsDownUpFill } from "react-icons/pi";
 import { TbChartCandle } from "react-icons/tb";
 import axios from "axios";
 
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { use } from "framer-motion/m";
+import DoctorCard from "./DoctorCard/DoctorCard";
 const DoctorsProfile = () => {
   const [DoctorData, setDoctorData] = useState([]);
-  const [Price, setPrice] = useState([]);
+  const [Price, setPrice] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { id } = useParams();
+  const [filters, setFilters] = useState({
+    name: "",
+    gender: "",
+    rating: "",
+    visitingMode: "",
+    specialtyName: "",
+  });
   useEffect(() => {
     FetchDrProfile();
   }, []);
@@ -43,12 +52,18 @@ const DoctorsProfile = () => {
     );
 
     // const offlineSlots =DoctorData[0]?.doctorAvailability[0]?.offlineSlots ?? [];
-    const offlineSlots = DoctorData[0]?.doctorAvailability?.map((avail) => avail?.offlineSlots).flat() ?? [];
-    const onlineSlots = DoctorData[0]?.doctorAvailability?.map((avail) => avail?.onlineSlots).flat() ?? [];
+    const offlineSlots =
+      DoctorData[0]?.doctorAvailability
+        ?.map((avail) => avail?.offlineSlots)
+        .flat() ?? [];
+    const onlineSlots =
+      DoctorData[0]?.doctorAvailability
+        ?.map((avail) => avail?.onlineSlots)
+        .flat() ?? [];
     // const onlineSlots = DoctorData[0]?.doctorAvailability[0]?.onlineSlots ?? [];
 
-   console.log("dfgjfdjb",offlineSlots);
-   
+    console.log("dfgjfdjb", offlineSlots);
+
     // Extract doctor charges
     const offlineCharge = offlineSlots
       .map((drCharge) => drCharge?.doctorCharge)
@@ -105,7 +120,25 @@ const DoctorsProfile = () => {
   if (isLoading) {
     return <div>Loading...</div>; // Show loading state if data is still being fetched
   }
- 
+
+  const handleFilterChange = (filterType, value) => {
+    setFilters((prevFilters) => ({ ...prevFilters, [filterType]: value }));
+  };
+
+  const applyFilters = async () => {
+    try {
+      const query = Object.entries(filters)
+        .filter(([_, value]) => value)
+        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+        .join("&");
+      const res = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/dc/user/doctors?categoryID=${id}&${query}`
+      );
+      setDoctorData(res.data.data);
+    } catch (error) {
+      console.error("Error fetching filtered data", error);
+    }
+  };
 
   return (
     <div>
@@ -116,6 +149,7 @@ const DoctorsProfile = () => {
           backgroundSize: "cover", // or 'contain'
           backgroundPosition: "center", // Centers the image
           backgroundRepeat: "no-repeat",
+          
         }}
       >
         <div className="translate-y-[-30px]">
@@ -126,190 +160,120 @@ const DoctorsProfile = () => {
           </p>
         </div>
       </div>
-      {/* <div style={{border:"1px solid grey",width:"20%",justifyContent:"end",display:"flex",gap:"8px",marginLeft:"20px",marginTop:"10px",borderRadius:"5px",paddingRight:"8px"}}>
-                  <PiArrowsDownUpFill className='text-9xl' style={{marginTop:"7px"}} /> <button className='border:none focus:outline-none' style={{fontSize:"25px"}}>Sort</button> 
-                </div> */}
-      <div className="sm:hidden  flex gap-4">
-        <div className="flex justify-center items-center border border-black w-[100px] px-2 py-1 rounded-md gap-2 mt-[10px]">
-          <PiArrowsDownUpFill className="text-3xl" />{" "}
-          <button
-            className="border:none focus:outline-none"
-            style={{ fontSize: "20px" }}
-          >
-            Sort
-          </button>
-        </div>
-        <div className="flex justify-center items-center border border-black w-[100px] px-2 py-1 rounded-md gap-2 mt-[10px]">
-          <TbChartCandle className="text-3xl" />{" "}
-          <button
-            className="border:none focus:outline-none"
-            style={{ fontSize: "20px" }}
-          >
-            Filter
-          </button>
-        </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto mt-10 flex gap-10">
-        <div className="filter-section flex-col gap-3 w-[25%] h-[870px] bg-[#f3f3f3] p-5 mt-10  sm:flex  hidden">
-          <p className="font-bold text-center text-xl">Doctor profile</p>
+
+      <div className="bg-[#CEDDE4]">
+      <div className="max-w-[1200px] justify-between mx-auto mt-10 flex flex-col-reverse md:flex-row gap-10 bg-[#CEDDE4] p-5">
+        {/* filter section */}
+        <div className="hidden md:flex flex-col gap-5 w-[25%] h-max rounded-xl shadow-md bg-white py-6 px-6 sticky top-0">
+          <p className="font-semibold text-center text-2xl text-[#00768A]">
+            Doctor Profile
+          </p>
+
+          {/* Search */}
           <div className="relative">
             <input
               type="text"
-              placeholder="Search..."
-              className="p-2 rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-rgb(73,168,173)-500"
+              placeholder="Search doctor..."
+              className="p-3 border border-[#00768A] rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#00768A] bg-[#f5f7fa]"
+              onChange={(e) => handleFilterChange("name", e.target.value)}
             />
-            <CiSearch className="absolute top-3 left-[240px] text-xl font-bold" />
+            <CiSearch className="absolute top-4 right-4 text-xl font-bold text-[#00768A]" />
           </div>
 
-          <div>
-            <p className="font-semibold">Date Range</p>
-            <input
-              type="date"
-              placeholder="Select Date"
-              className="p-2 rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-rgb(73,168,173)-500"
-            />
+          {/* Filters */}
+          <div className="flex flex-col gap-3">
+            {/* Rating */}
+            <div>
+              <p className="font-semibold">Rating</p>
+              <select
+                className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
+                onChange={(e) => handleFilterChange("rating", e.target.value)}
+              >
+                <option value="">All</option>
+                {[1, 2, 3, 4, 5].map((rating) => (
+                  <option key={rating} value={rating}>
+                    {rating} Star{rating > 1 ? "s" : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Visiting Mode */}
+            <div>
+              <p className="font-semibold">Visiting Mode</p>
+              <select
+                className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
+                onChange={(e) =>
+                  handleFilterChange("visitingMode", e.target.value)
+                }
+              >
+                <option value="">All</option>
+                <option value="online">Online</option>
+                <option value="offline">Offline</option>
+                <option value="both">Both</option>
+              </select>
+            </div>
+
+            {/* Gender */}
+            <div>
+              <p className="font-semibold">Gender</p>
+              <div className="flex gap-3">
+                {["Male", "Female"].map((gender) => (
+                  <label key={gender} className="flex items-center">
+                    <input
+                      type="radio"
+                      name="gender"
+                      value={gender.toLowerCase()}
+                      onChange={(e) =>
+                        handleFilterChange("gender", e.target.value)
+                      }
+                      className="form-radio h-4 w-4 text-[#00768A]"
+                    />
+                    <span className="ml-2">{gender}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Specialist */}
+            <div>
+              <p className="font-semibold">Specialist</p>
+              <select
+                className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
+                onChange={(e) =>
+                  handleFilterChange("specialtyName", e.target.value)
+                }
+              >
+                <option value="">All</option>
+                {[
+                  "Cardiologist",
+                  "Dermatologist",
+                  "Orthopedic Surgeon",
+                  "Gynecologist",
+                  "Neurologist",
+                  "Ophthalmologist",
+                  "Pediatrician",
+                  "Endocrinologist",
+                  "Gastroenterologist",
+                  "Pulmonologist",
+                  "Orthopedic",
+                ].map((specialist) => (
+                  <option key={specialist} value={specialist}>
+                    {specialist}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          <div className="flex flex-col">
-            <p className="font-semibold">Gender</p>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-indigo-600 h-4 w-4"
-                name="Gender"
-              />
-              <span className="ml-1">Male</span>
-            </label>
-
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-indigo-600 h-4 w-4"
-                name="Gender"
-              />
-              <span className="ml-1">Female</span>
-            </label>
-
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-indigo-600 h-4 w-4"
-                name="Gender"
-              />
-              <span className="ml-1">others</span>
-              <span className="ml-1">Shemale</span>
-            </label>
-          </div>
-
-          <div>
-            <p className="font-semibold">Price Range</p>
-            <input type="range" />
-          </div>
-
-          <div className="flex flex-col">
-            <p className="font-semibold">Select Specialist</p>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-indigo-600 h-4 w-4"
-                name="Specialist"
-              />
-              <span className="ml-1">Cardiologist</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-indigo-600 h-4 w-4"
-                name="Specialist"
-              />
-              <span className="ml-1">Dermatologist</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-indigo-600 h-4 w-4"
-                name="Specialist"
-              />
-              <span className="ml-1">Orthopedic Surgeon</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-indigo-600 h-4 w-4"
-                name="Specialist"
-              />
-              <span className="ml-1">Gynecologist</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-indigo-600 h-4 w-4"
-                name="Specialist"
-              />
-              <span className="ml-1">Gynecologist</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-indigo-600 h-4 w-4"
-                name="Specialist"
-              />
-              <span className="ml-1">Neurologist</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-indigo-600 h-4 w-4"
-                name="Specialist"
-              />
-              <span className="ml-1">Ophthalmologist</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-indigo-600 h-4 w-4"
-                name="Specialist"
-              />
-              <span className="ml-1">Pediatrician</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-indigo-600 h-4 w-4"
-                name="Specialist"
-              />
-              <span className="ml-1">Endocrinologist</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-indigo-600 h-4 w-4"
-                name="Specialist"
-              />
-              <span className="ml-1">Gastroenterologist</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-indigo-600 h-4 w-4"
-                name="Specialist"
-              />
-              <span className="ml-1">Pulmonologist</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-checkbox text-indigo-600 h-4 w-4"
-                name="Specialist"
-              />
-              <span className="ml-1">Orthopedic</span>
-            </label>
-          </div>
-
-          <div className="text-white flex justify-center items-center">
-            <button className="h-[40px] w-full bg-blue-700 rounded-xl">
-              Search
+          {/* Search Button */}
+          <div className="mt-4">
+            <button
+              onClick={applyFilters}
+              className="h-[40px] w-full bg-[#00768A] text-white rounded-lg font-semibold hover:bg-[#005d71]"
+            >
+              Apply Filters
             </button>
           </div>
         </div>
@@ -375,105 +339,15 @@ const DoctorsProfile = () => {
             </div>
           </div>
 
-          <div></div>
+          
 
-          <div className="w-full md:w-[75%] flex flex-wrap gap-10">
-            {DoctorData.map((doctor, index) => (
-              <div
-                key={index}
-                className="dr-profile-section w-full sm:w-[48%] md:w-full bg-white p-8 flex flex-col md:flex-row justify-between rounded-lg shadow-lg"
-                style={{ border: "1px solid #e1e1e1" }}
-              >
-                <div className="flex flex-col sm:flex-row gap-6">
-                  {/* Profile Image */}
-                  <div className="img bg-[#f3f3f3] flex justify-center items-center h-[160px] w-[160px] sm:h-[160px] sm:w-[160px] rounded-full border-2 border-[#00768A] mx-auto sm:mx-0">
-                    <img
-                      src={doctor.userData.avatar}
-                      alt={doctor.name}
-                      className="h-[150px] w-[150px] sm:h-[150px] sm:w-[150px] rounded-full object-cover"
-                    />
-                  </div>
-
-                  {/* Doctor Info */}
-                  <div className="dr-profilee text-[#333333] text-center sm:text-left">
-                    <p className="text-[#00768A] text-2xl font-bold">
-                      {doctor.userData.name}
-                    </p>
-                    <div className="flex gap-4 flex-wrap mt-2 justify-center sm:justify-start">
-                      {doctor.services_offered.map((service, idx) => (
-                        <div key={idx} className="bg-[#f0f9f9] p-2 rounded-lg">
-                          <p className="text-[#00768A] font-semibold">
-                            {service}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Experience */}
-                    <p className="text-lg font-semibold text-orange-600 mt-2">
-                      Experience: {doctor.totalExperience}+ years
-                    </p>
-
-                    {/* Skills */}
-                    {doctor?.years_of_experience?.map((experience, index) => (
-                      <div
-                        className="flex flex-wrap mt-2 justify-center sm:justify-start"
-                        key={index}
-                      >
-                        {experience.skills.map((skill, skillIndex) => (
-                          <p
-                            key={skillIndex}
-                            className="font-bold mr-3 text-sm text-gray-600"
-                          >
-                            {skill}
-                          </p>
-                        ))}
-                      </div>
-                    ))}
-
-                    {/* About Doctor */}
-                    <p className="mt-4 text-sm text-gray-600">
-                      {doctor.aboutDoctor}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Price and Action Buttons */}
-                <div className="ratings flex flex-col sm:justify-start sm:items-start justify-center items-center gap-4 mt-6 md:items-start">
-                  {/* Ratings */}
-                  <div className="flex items-center justify-center mt-2">
-                    {[...Array(4)].map((_, i) => (
-                      <IoMdStar key={i} className="text-yellow-500 text-3xl" />
-                    ))}
-                    <span className="ml-2 text-gray-500">4.0</span>
-                  </div>
-                  {/* Price */}
-                  <div className="flex gap-2 items-center">
-                    Price:
-                    <p className="ml-2 mt-1 text-lg font-semibold">
-                      <span className="text-green-600">{`INR ${Price}`}</span>
-                    </p>
-                  </div>
-
-                  {/* Buttons */}
-                  <div className="flex flex-col gap-4 mt-6">
-                    <button className="h-[40px] w-[220px] border-2 rounded-lg border-[#00768A] hover:bg-[#00768A] hover:text-white transition-all ease-in-out duration-300">
-                      <Link
-                        to={`/dr-indi/${doctor._id}`}
-                        className="flex justify-center items-center"
-                      >
-                        VIEW PROFILE
-                      </Link>
-                    </button>
-                    <button className="h-[40px] w-[220px] text-white rounded-lg bg-[#00768A] border-2 border-[#00768A] hover:scale-105">
-                      BOOK APPOINTMENT
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+           <div className="flex w-[100%] flex-wrap gap-8 md:gap-10">
+           <DoctorCard doctorData={DoctorData} />
+           </div>
+          
+          
         </div>
+      </div>
       </div>
     </div>
   );

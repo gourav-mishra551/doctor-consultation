@@ -8,8 +8,8 @@ const ShippingInfoPage = () => {
     return (
         <div>
             <header className='App-header'>
-                <TopHeader />
-                <Navbar />
+                {/* <TopHeader />
+                <Navbar /> */}
                 <ShippingInfo />
                 <div className='mt-20'>
                     <Footer />
