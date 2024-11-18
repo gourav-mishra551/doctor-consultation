@@ -109,7 +109,7 @@ const DrIndividualProfile = () => {
             ))}
           </ul>
 
-          <div className="transition-all duration-300 mt-6">
+          <div className="transition-all duration-300 mt-6 w-full">
             {activeNav === 1 && <DrIndividualProfileOverview IndiProfile={IndiProfile} />}
             {activeNav === 2 && <DrIndividualprofileLocation profile={IndiProfile} />}
             {activeNav === 3 && <DrIndividualProfileReviews profile={IndiProfile} />}

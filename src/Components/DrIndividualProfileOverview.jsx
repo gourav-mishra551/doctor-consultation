@@ -9,7 +9,7 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
   const toggleDescription = () => setIsExpanded(!isExpanded);
 
   return (
-    <div className="bg-gray-100 py-10 px-5">
+    <div className="bg-gray-100 py-10 px-5"z>
       <div className="bg-white w-full p-6 rounded-xl shadow-lg transition-transform transform hover:scale-105">
 
         {/* Profile Section */}
