@@ -4,6 +4,7 @@ import { MdCancel, MdDelete } from "react-icons/md";
 import { TiTickOutline } from "react-icons/ti";
 import axios from "axios";
 import { ImCross } from "react-icons/im";
+import Footer from "./Footer";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Import icons
 const DoctorForm = () => {
   const [formValues, setFormValues] = useState({

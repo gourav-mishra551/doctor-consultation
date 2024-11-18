@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { GrRadialSelected } from "react-icons/gr";
 
-const DrAppointmentBooking = ({ IndiProfile }) => {
+const DrAppointmentBooking = ({ IndiProfile, onNext }) => {
   const [selectedMode, setSelectedMode] = useState("both"); // Default to both
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -9,6 +10,8 @@ const DrAppointmentBooking = ({ IndiProfile }) => {
 
   const [formdata, setformData] = useState({
     name: "",
+    gender: '',
+    dob: "",
     reason: "",
   });
 
@@ -46,29 +49,29 @@ const DrAppointmentBooking = ({ IndiProfile }) => {
       return (
         <div
           key={slot._id}
-          className={`slot p-4 border rounded-lg cursor-pointer mb-4 transition-all ${
-            selectedTime?._id === slot._id ? "bg-blue-100" : "bg-white"
-          }`}
+          className={`slot relative p-4 border rounded-lg cursor-pointer mb-4 transition-all ${selectedTime?._id === slot._id ? " bg-gray-200  shadow-lg bg-gradient-to-r from-[#ecfcfc] via-[#ffff] to-[#75c5cf] border-4 border-[#00768A]" : "bg-gradient-to-r from-[#E3FDFD] via-[#fcfcfc] to-[#87dce7]"
+            }`}
           onClick={() => handleSlotSelect(slot)}
         >
-          <p className="font-semibold text-lg">
+          <p className="font-semibold text-[15.5px] bg-[#00768A] text-white w-max rounded-md p-3">
             {dayName}, {formattedDate}
           </p>
-          <p className="text-md">{slotTime}</p>
-          <p className="text-sm text-gray-500">Price: ₹{slot.doctorCharge}</p>
+          <p className="text-md text-black">{slotTime}</p>
+          <p className="text-sm text-lime-800 font-semibold">Price: ₹{slot.doctorCharge}</p>
+          <p className={selectedTime?._id === slot._id ? "absolute right-1 top-1 text-green-800 font-bold" : "absolute right-0 top-0 text-green-400 font-bold hidden "}> <GrRadialSelected size={20} /></p>
         </div>
       );
     });
   };
 
   const handleBooking = () => {
-    if (selectedTime) {
+    if (selectedTime && formdata.name && formdata.reason) {
       alert(
         `Booking successful for ${selectedTime.startTime}:00 - ${selectedTime.endTime}:00`
       );
       // You can add the actual booking logic here, like calling an API to save the booking.
     } else {
-      alert("Please select a time slot first.");
+      alert("Please Field the required fields");
     }
 
     console.log(formdata);
@@ -80,13 +83,13 @@ const DrAppointmentBooking = ({ IndiProfile }) => {
   //       <p className="text-xl">Loading...</p>
   //     </div>
   //   );
-    
-    
+
+
   // }
 
   return (
-    <div className="flex justify-center gap-8">
-      <div className="flex flex-col items-center max-w-2xl  p-6 bg-white shadow-lg rounded-lg">
+    <div className="flex md:flex-row flex-col justify-center gap-8">
+      <div className="flex flex-wrap flex-col items-center max-w-2xl  p-6 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
           Book an Appointment with Dr. {IndiProfile.userData.name}
         </h2>
@@ -95,29 +98,26 @@ const DrAppointmentBooking = ({ IndiProfile }) => {
         <div className="flex justify-center gap-5 mb-6">
           <button
             onClick={() => handleModeChange("online")}
-            className={`px-6 py-2 rounded-lg text-lg transition-all duration-200 ${
-              selectedMode === "online"
-                ? "bg-blue-500 text-white"
+            className={`px-6 py-2 rounded-lg text-lg transition-all duration-200 ${selectedMode === "online"
+                ? "bg-[#00768A] text-white"
                 : "bg-gray-200"
-            }`}
+              }`}
           >
             Online Slots
           </button>
           <button
             onClick={() => handleModeChange("offline")}
-            className={`px-6 py-2 rounded-lg text-lg transition-all duration-200 ${
-              selectedMode === "offline"
-                ? "bg-blue-500 text-white"
+            className={`px-6 py-2 rounded-lg text-lg transition-all duration-200 ${selectedMode === "offline"
+                ? "bg-[#00768A] text-white"
                 : "bg-gray-200"
-            }`}
+              }`}
           >
             Offline Slots
           </button>
           <button
             onClick={() => handleModeChange("both")}
-            className={`px-6 py-2 rounded-lg text-lg transition-all duration-200 ${
-              selectedMode === "both" ? "bg-blue-500 text-white" : "bg-gray-200"
-            }`}
+            className={`px-6 py-2 rounded-lg text-lg transition-all duration-200 ${selectedMode === "both" ? "bg-[#00768A] text-white" : "bg-gray-200"
+              }`}
           >
             Both
           </button>
@@ -162,57 +162,90 @@ const DrAppointmentBooking = ({ IndiProfile }) => {
 
       {/* Form Section */}
       {selectedTime ? (
-        <div className="flex flex-col max-w-2xl w-[50%]  p-6 bg-white shadow-lg rounded-lg">
-        
-            {/* Name Input */}
-            <div className="mb-4">
-              <label
-                htmlFor="name"
-                className="block text-sm font-semibold text-gray-700"
-              >
-                Name:
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                onChange={handleChange}
-                placeholder="Enter Your Name"
-                className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+        <form
+          onSubmit={handleBooking}
+          className="flex flex-col max-w-2xl md:w-[60%]   p-6 bg-white shadow-lg rounded-lg">
 
-            {/* Reason for Appointment */}
-            <div className="mb-4">
-              <label
-                htmlFor="reason"
-                className="block text-sm font-semibold text-gray-700"
-              >
-                Reason for Appointment:
-              </label>
-              <textarea
-                id="reason"
-                name="reason"
-                onChange={handleChange}
-                rows="4"
-                placeholder="Please describe the reason for your visit"
-                className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              ></textarea>
-            </div>
+          {/* Name Input */}
+          <div className="mb-4">
+            <label
+              htmlFor="name"
+              className="block text-sm font-semibold text-gray-700"
+            >
+              Name:
+            </label>
+            <input
+              id="name"
+              name="name"
+              required
+              type="text"
+              onChange={handleChange}
+              placeholder="Enter Your Name"
+              className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[#00768A]"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="gender"
+              className="block text-sm font-semibold text-gray-700"
+            >
+              Gender:
+            </label>
+            <select className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[#00768A]" name="gender" id="" onChange={handleChange}>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="dob"
+              className="block text-sm font-semibold text-gray-700"
+            >
+              Date of birth (DOB):
+            </label>
+            <input
+              id="dob"
+              name="dob"
+              type="date"
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[#00768A]"
+            />
+          </div>
 
-            {/* Booking Button */}
-            <div className="mt-6 w-full">
-              <button
-                onClick={handleBooking}
-                className="px-6 py-3 bg-blue-500 text-white rounded-lg w-full text-lg transition-all duration-300 hover:bg-blue-600"
-              >
-                {selectedTime
-                  ? `Book Appointment for ${selectedTime.startTime}:00 - ${selectedTime.endTime}:00`
-                  : "Select a Slot"}
-              </button>
-            </div>
-          
-        </div>
+
+          {/* Reason for Appointment */}
+          <div className="mb-4">
+            <label
+              htmlFor="reason"
+              className="block text-sm font-semibold text-gray-700"
+            >
+              Reason for Appointment:
+            </label>
+            <textarea
+              id="reason"
+              required
+              name="reason"
+              onChange={handleChange}
+              rows="4"
+              placeholder="Please describe the reason for your visit"
+              className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[#00768A]"
+            ></textarea>
+          </div>
+
+          {/* Booking Button */}
+          <div className="mt-6 w-full">
+            <button
+              onClick={onNext}
+              className="px-6 py-3 bg-[#00768A] text-white rounded-lg w-full text-lg transition-all duration-300 hover:bg-[#00768A]"
+            >
+              {selectedTime
+                ? `Book Appointment for ${selectedTime.startTime}:00 - ${selectedTime.endTime}:00`
+                : "Select a Slot"}
+            </button>
+          </div>
+
+        </form>
       ) : null}
     </div>
   );

@@ -4,10 +4,22 @@ import { GiGraduateCap } from "react-icons/gi";
 import { useParams } from "react-router-dom";
 import DrAppointmentBooking from "../../Components/DrApointmentBooking";
 import { FaGraduationCap, FaHospital, FaMapMarkerAlt, FaTrophy, FaGlobe } from "react-icons/fa";
+import PrescriptionUpload from "../../Components/PrescriptionUpload/PrescriptionUpload";
+import Payment from "../../Components/Payment/Payment";
 
 function BookingSlot() {
   const [DrProfile, setDrProfile] = useState(null);
   const { id } = useParams();
+  const [step, setStep] = useState(1);
+
+  const handleNextStep = () => {
+    setStep(step + 1);
+  };
+
+  const handlePreviousStep = () => {
+    setStep(step - 1);
+  };
+
 
   useEffect(() => {
     DrProfileFetch();
@@ -138,8 +150,20 @@ function BookingSlot() {
         )}
       </div>
 
-      <div className="p-4 sm:p-6 lg:p-10">
-        <DrAppointmentBooking IndiProfile={DrProfile} />
+      <div className="max-w-[1200px] mx-auto py-10">
+        {step === 1 ? (
+          <DrAppointmentBooking
+            IndiProfile={DrProfile}
+            onNext={handleNextStep}
+          />
+        ) : step === 2 ? (
+          <PrescriptionUpload
+            onNext={handleNextStep}
+            onPrevious={handlePreviousStep}
+          />
+        ) : (
+          <Payment onPrevious={handlePreviousStep} />
+        )}
       </div>
     </div>
   );
