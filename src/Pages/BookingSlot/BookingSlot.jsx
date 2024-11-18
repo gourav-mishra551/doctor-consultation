@@ -30,7 +30,7 @@ function BookingSlot() {
 
   const ProfileDetail = ({ icon, title, value }) => (
     <div className="flex items-center">
-      <span className="flex items-center justify-center bg-[#00768A] text-white w-12 h-12 rounded-full shadow-lg text-xl">
+      <span className="flex items-center justify-center bg-[#00768A] text-white w-14 h-14 p-4 leading-none rounded-full shadow-lg text-xl">
         {icon}
       </span>
       <div className="ml-4">
@@ -45,7 +45,7 @@ function BookingSlot() {
 
       <div className="bg-gradient-to-r from-[#E3FDFD] via-[#FFE6FA] to-[#FBF4E9] flex-grow py-6 px-4 sm:px-6 lg:px-8">
         {DrProfile?.userData && (
-          <div className="bg-white rounded-3xl shadow-2xl max-w-5xl mx-auto p-4 sm:p-6  lg:p-10">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-[1180px] mx-auto p-4 sm:p-6  lg:p-10">
             <div
               className="relative bg-cover bg-center rounded-3xl overflow-hidden flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-8"
               style={{
@@ -98,7 +98,7 @@ function BookingSlot() {
 
             <div className="border-t my-8"></div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
               <ProfileDetail
                 icon={<FaGlobe />}
                 title="Languages"

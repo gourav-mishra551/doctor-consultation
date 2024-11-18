@@ -64,9 +64,6 @@ function CategoriesDetails() {
   };
 
 
-
-
-
   const FetchDoctersData = async () => {
     try {
       const res = await axios.get(
