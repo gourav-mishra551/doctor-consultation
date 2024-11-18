@@ -1,5 +1,4 @@
 import React from 'react'
-import Navbar from '../../../Components/Navbar'
 import { FiPhoneCall } from 'react-icons/fi'
 import { SlArrowRight } from 'react-icons/sl'
 import { Link } from 'react-router-dom'
@@ -8,8 +7,6 @@ import Footer from '../../../Components/Footer'
 function ReturningPatient() {
   return (
     <div className='bg-[#daf5f3] w-full '>
-    {/* <Navbar /> */}
-
     <div className='max-w-[1200px] min-h-[80vh] flex flex-col lg:flex-row justify-between sm:py-32 py-16 px-6 lg:px-0 mx-auto animate-fadeIn'>
         <div className='flex justify-start flex-col gap-8'>
             <h1 className='sm:text-4xl text-2xl font-semibold font-serif text-justify'>

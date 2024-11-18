@@ -2,7 +2,6 @@ import React from 'react';
 import { FaArrowRight, FaFacebook, FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa6";
 import { FaXTwitter } from "react-icons/fa6";
 import { NavLink } from 'react-router-dom';
-import Navbar from './Navbar';
 import { FaInstagramSquare } from 'react-icons/fa';
 
 const Footer = () => {

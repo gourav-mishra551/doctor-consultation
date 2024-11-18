@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../Components/Navbar';
 import DrAppointmentCreation from './DrAppoinmentCreation';
 import { MdOutlineAddLocation } from 'react-icons/md';
 import { FaCommentDots, FaGraduationCap } from 'react-icons/fa6';
@@ -90,7 +89,6 @@ function DRProfileShow() {
 
     return (
         <div>
-            {/* <Navbar /> */}
             <div className='flex justify-center'>
                 <CiEdit className='text-2xl cursor-pointer' onClick={handleEditClick} />
                 <span className='cursor-pointer' onClick={handleEditClick}>Edit Your Profile</span>

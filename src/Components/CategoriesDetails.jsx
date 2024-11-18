@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "./Navbar";
 import { Link, useLocation, useParams } from "react-router-dom";
 
 import { CiSearch } from "react-icons/ci";
@@ -85,7 +84,6 @@ function CategoriesDetails() {
   return (
     <div className="bg-[#CEDDE4]">
       <TopHeader />
-      <Navbar />
 
       {/* Banner Section */}
       <div

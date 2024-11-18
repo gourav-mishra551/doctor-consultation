@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../Components/Navbar'
 import { useLocation, useParams } from 'react-router-dom';
 import { FiDollarSign } from 'react-icons/fi';
 import { FaComment, FaLocationArrow, FaRegThumbsUp } from 'react-icons/fa';
 import { IoMdStar } from 'react-icons/io';
 import { CiSearch } from 'react-icons/ci';
 import axios from 'axios';
-import TopHeader from '../Components/TopHeader';
+
 
 function CategoriesDetails() {
     const location = useLocation();
@@ -53,8 +52,7 @@ function CategoriesDetails() {
 
     return (
         <div className='bg-[#CEDDE4]'>
-            <TopHeader />
-            <Navbar />
+           
 
             <div
                 className="relative h-[40vh] flex justify-center items-center "

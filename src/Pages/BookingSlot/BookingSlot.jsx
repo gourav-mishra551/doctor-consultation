@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { GiGraduateCap } from "react-icons/gi";
 import { useParams } from "react-router-dom";
-import Navbar from "../../Components/Navbar";
 import DrAppointmentBooking from "../../Components/DrApointmentBooking";
 import { FaGraduationCap, FaHospital, FaMapMarkerAlt, FaTrophy, FaGlobe } from "react-icons/fa";
 
@@ -43,7 +42,6 @@ function BookingSlot() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* <Navbar /> */}
 
       <div className="bg-gradient-to-r from-[#E3FDFD] via-[#FFE6FA] to-[#FBF4E9] flex-grow py-6 px-4 sm:px-6 lg:px-8">
         {DrProfile?.userData && (
