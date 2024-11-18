@@ -7,8 +7,8 @@ import ContactUs from '../Components/ContactUs'
 const ContactPage = () => {
     return (
         <div>
-            <TopHeader />
-            <Navbar />
+            {/* <TopHeader />
+            <Navbar /> */}
             <ContactUs />
 
             <div className='mt-10'>

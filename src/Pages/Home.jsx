@@ -62,7 +62,10 @@ const Home = () => {
   return (
     <div className="">
       <header className="App-header">
-       
+        {/* <TopHeader/>
+        <Navbar />
+       */}
+        <Headers />
 
         <div className="py-10">
           {/* <Categories /> */}

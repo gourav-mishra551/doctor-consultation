@@ -7,8 +7,8 @@ import DrIndividualProfile from "../Components/DrIndividualProfile";
 const DrIndividualProfilePage = () => {
   return (
     <div>
-      <TopHeader />
-      <Navbar />
+      {/* <TopHeader />
+      <Navbar /> */}
       <DrIndividualProfile />
       <div className="mt-20">
         <Footer />
