@@ -10,14 +10,12 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
 
   return (
     <div className=" bg-gray-100 md:py-10 md:px-5">
-      <div className="bg-white w-full md:p-6 rounded-xl shadow-lg transition-transform transform md:hover:scale-105">
+      <div className=" md:p-6 rounded-xl shadow-lg transition-transform transform md:hover:scale-105">
 
         {/* Profile Section */}
         <div
-          className=" flex sm:flex-row justify-center items-center flex-col md:gap-10 mt-5 md:p-6 md:w-auto  mx-auto rounded-xl shadow-lg bg-red-50"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          className=" flex sm:flex-row justify-center items-center  flex-col md:gap-10 mt-5 md:p-6 md:w-auto  mx-auto rounded-xl shadow-lg bg-[#e1f0f3]"
+        
         >
 
           {/* Left Section: Doctor Profile */}
@@ -29,18 +27,15 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
               className="flex flex-wrap md:flex-row-reverse justify-between"
             >
               <div className="md:w-[60%]">
-
-
-
                 {/* Doctor's Name */}
-                <p className="font-bold text-3xl text-[#00768A] mb-3 capitalize text-center">{IndiProfile?.userData?.name}</p>
+                <p className="font-bold text-3xl text-[#00768A] mb-3 capitalize md:text-start sm:text-center">{IndiProfile?.userData?.name}</p>
 
                 {/* Specialties */}
-                <div className="flex gap-2 justify-center flex-wrap mt-2 mb-4">
+                <div className="flex gap-2 md:justify-start justify-center flex-wrap mt-2 mb-4">
                   {IndiProfile?.specialitycategories?.map((spe, index) => (
                     <span
                       key={index}
-                      className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold"
+                      className="bg-blue-100 text-[#00768A] px-3 py-1 rounded-full text-sm font-semibold"
                     >
                       {spe?.specialtyName}
                     </span>
@@ -48,7 +43,7 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
                 </div>
 
                 {/* Experience */}
-                <p className="font-semibold text-gray-600 mt-2 text-lg text-center">
+                <p className="font-semibold text-gray-600 mt-2 text-lg md:text-start sm:text-center">
                   {IndiProfile.totalExperience}+ years experience
                 </p>
                 <div className="flex flex-wrap gap-5">
