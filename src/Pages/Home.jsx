@@ -1,9 +1,7 @@
 
 import Headers from "../Components/Headers";
 import Footer from "../Components/Footer";
-import Categories from "../Components/Categories";
 import HowItWorks from "../Components/HowItWorks";
-import DownloadApp from "../Components/DownloadApp";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -59,7 +57,7 @@ const Home = () => {
   };
 
   return (
-    <div className="">
+    <div >
       <header className="App-header">
         <Headers />
 
@@ -75,8 +73,8 @@ const Home = () => {
             What our users say about their online consultation experience
           </p>
 
-          <Slider {...settings} className="mt-10 gap-10 max-w-[1200px] mx-auto">
-            <div className="flex p-5 shadow-xl h-[200px] mb-5">
+          <Slider {...settings} className="mt-10 gap-10 max-w-[380px] sm:max-w-[1200px] mx-auto">
+            <div className="flex  shadow-xl h-[200px] mb-5">
               <div className="flex gap-3">
                 <div>
                   <img
@@ -210,9 +208,7 @@ const Home = () => {
           </Slider>
         </div>
 
-        <div className="">
-          <DownloadApp />
-        </div>
+       
         <div className="appointment-form bg-[#1c8e81] sm:h-[350px] h-auto mt-20">
           <div className="flex sm:flex-row flex-col sm:max-w-6xl w-full mx-auto">
             <div className="left sm:w-[50%] w-full p-10 flex flex-col gap-5">

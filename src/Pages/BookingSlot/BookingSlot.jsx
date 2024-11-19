@@ -4,10 +4,25 @@ import { GiGraduateCap } from "react-icons/gi";
 import { useParams } from "react-router-dom";
 import DrAppointmentBooking from "../../Components/DrApointmentBooking";
 import { FaGraduationCap, FaHospital, FaMapMarkerAlt, FaTrophy, FaGlobe } from "react-icons/fa";
+import PrescriptionUpload from "../../Components/PrescriptionUpload/PrescriptionUpload";
+import Payment from "../../Components/Payment/Payment";
+import { RiNumber1, RiNumber2, RiNumber3 } from "react-icons/ri";
 
 function BookingSlot() {
   const [DrProfile, setDrProfile] = useState(null);
   const { id } = useParams();
+  const [step, setStep] = useState(1);
+
+  const handleNextStep = () => {
+    setStep(step + 1);
+  };
+
+  const handlePreviousStep = () => {
+    setStep(step - 1);
+  };
+  const handleStepClick = (stepNumber) => {
+    setStep(stepNumber);
+  };
 
   useEffect(() => {
     DrProfileFetch();
@@ -30,7 +45,7 @@ function BookingSlot() {
 
   const ProfileDetail = ({ icon, title, value }) => (
     <div className="flex items-center">
-      <span className="flex items-center justify-center bg-[#00768A] text-white w-12 h-12 rounded-full shadow-lg text-xl">
+      <span className="flex items-center justify-center bg-[#00768A] text-white w-14 h-14 p-4 leading-none rounded-full shadow-lg text-xl">
         {icon}
       </span>
       <div className="ml-4">
@@ -45,7 +60,7 @@ function BookingSlot() {
 
       <div className="bg-gradient-to-r from-[#E3FDFD] via-[#FFE6FA] to-[#FBF4E9] flex-grow py-6 px-4 sm:px-6 lg:px-8">
         {DrProfile?.userData && (
-          <div className="bg-white rounded-3xl shadow-2xl max-w-5xl mx-auto p-4 sm:p-6  lg:p-10">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-[1180px] mx-auto p-4 sm:p-6  lg:p-10">
             <div
               className="relative bg-cover bg-center rounded-3xl overflow-hidden flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-8"
               style={{
@@ -98,7 +113,7 @@ function BookingSlot() {
 
             <div className="border-t my-8"></div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
               <ProfileDetail
                 icon={<FaGlobe />}
                 title="Languages"
@@ -137,9 +152,64 @@ function BookingSlot() {
           </div>
         )}
       </div>
+      <div className="flex flex-col items-center w-full py-6">
+        <div className="relative flex items-center w-full max-w-md justify-between">
+          {/* Step 1 */}
+          <div
+              className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${step >= 1 ? "text-white bg-[#00768A]" : "text-gray-500"
+              } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
+            onClick={() => handleStepClick(1)}
+          >
+            <RiNumber1 size={22} />
+            <span className="text-sm mt-1 hidden md:block">Step 1</span>
+          </div>
 
-      <div className="p-4 sm:p-6 lg:p-10">
-        <DrAppointmentBooking IndiProfile={DrProfile} />
+          {/* Animated Line */}
+          <div className="absolute top-1/2 left-1/4 w-1/2 h-1 bg-gray-300 -z-10">
+            <div
+              className={`h-1 bg-[#00768A] transition-all z-5 duration-500`}
+              style={{
+                width: `${step === 1 ? "0%" : step === 2 ? "50%" : "100%"}`,
+              }}
+            ></div>
+          </div>
+
+          {/* Step 2 */}
+          <div
+            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${step >= 2 ? "text-white bg-[#00768A] " : "text-white bg-gray-500"
+              } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
+            onClick={() => handleStepClick(2)}
+          >
+            <RiNumber2 size={22} />
+            <span className="text-sm mt-1 hidden md:block">Step 2</span>
+          </div>
+
+          {/* Step 3 */}
+          <div
+            className={`flex  z-10 flex-col items-center cursor-pointer transition-all duration-300 ${step >= 3 ? "text-white bg-[#00768A]" : "text-white bg-gray-500"
+              } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20 <z-10></z-10>`}
+            onClick={() => handleStepClick(3)}
+          >
+            <RiNumber3 size={22} />
+            <span className="text-sm mt-1 hidden md:block">Step 3</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-[1200px] mx-auto py-10">
+        {step === 1 ? (
+          <DrAppointmentBooking
+            IndiProfile={DrProfile}
+            onNext={handleNextStep}
+          />
+        ) : step === 2 ? (
+          <PrescriptionUpload
+            onNext={handleNextStep}
+            onPrevious={handlePreviousStep}
+          />
+        ) : (
+          <Payment onPrevious={handlePreviousStep} />
+        )}
       </div>
     </div>
   );

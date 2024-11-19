@@ -40,7 +40,7 @@ function CategoriesHome() {
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-[320px] sm:mt-[40px]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-[400px] sm:mt-[40px]">
             <div className="flex flex-col sm:flex-row gap-3 justify-between max-w-5xl mx-auto mb-8">
                 <p className="sm:text-4xl text-2xl font-bold tracking-wider sm:text-start text-center capitalize text-[#1c8e81]">
                     Top Specialties
