@@ -1,7 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { FaImage } from "react-icons/fa";
 
-const EditFamilyMemebrs = ({ editFamilyPopUp, setEditFamilyPopUp }) => {
+const EditFamilyMemebrs = ({
+  setEditFamilyPopUp,
+  deleteId,
+  getFamilyEdit,
+}) => {
   const [editData, setEditData] = useState({
     name: "",
     gender: "Male",
@@ -15,61 +20,109 @@ const EditFamilyMemebrs = ({ editFamilyPopUp, setEditFamilyPopUp }) => {
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
 
-  const getFamilyEdit = async () => {
+  const getFamilyData = async () => {
     try {
       const response = await axios.get(
-        `https://api.assetorix.com/ah/api/v1/user/family`,
+        `https://api.assetorix.com/ah/api/v1/user/family/${deleteId}`,
         {
           headers: {
-            "Content-Type": "multipart/form-data", // Important for file uploads
+            "Content-Type": "multipart/form-data",
             authorization: `Bearer ${token}`,
             id: id,
           },
         }
       );
+      const data = response.data.data;
       setEditData({
-        name: response.data,
+        name: data.name,
+        gender: data.gender,
+        relation: data.relation,
+        dateOfBirth: data.dateOfBirth,
+        avatar: data.avatar,
+        isOther: data.relation === "OTHER",
+        otherRelation:
+          data.relation === "OTHER" ? data.otherRelation || "" : "",
       });
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    getFamilyEdit();
+    getFamilyData();
   }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditData({
+      ...editData,
+      [name]: value,
+    });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditData({
+          ...editData,
+          avatar: reader.result, // Preview the uploaded image
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const patchFamily = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.patch(
+        `https://api.assetorix.com/ah/api/v1/user/family/${deleteId}`,
+        editData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setEditFamilyPopUp(false);
+      getFamilyEdit();
+    }
+  };
+
+  console.log(getFamilyEdit);
 
   return (
     <div className="max-w-xl mx-auto mt-5 py-1 px-5 rounded-xl bg-gray-100">
       <div className="form-section border mt-10 p-5 rounded-xl relative">
-        <form>
+        <form onSubmit={patchFamily}>
           <div className="absolute w-16 h-16 -top-8 right-[20px] border-4 border-white rounded-full bg-gray-300 overflow-hidden shadow-md cursor-pointer flex items-center justify-center">
-            {/* Image Icon */}
-            {/* {!avatar && (
-            <FaImage className="text-gray-500 text-[15px] pointer-events-none" />
-          )} */}
-
-            {/* Image Preview */}
-            {/* {avatar && (
-            <img
-              src={avatar}
-              alt="Uploaded Avatar"
-              className="w-full h-full object-cover"
-            />
-          )} */}
-
-            {/* Hidden Input */}
-            {/* <label htmlFor="avatarUpload" className="absolute w-full h-full">
-            <input
-              id="avatarUpload"
-              type="file"
-              className="hidden"
-              accept="image/*"
-              name="avatar"
-              onChange={handleFileChange}
-            />
-          </label> */}
+            {!editData.avatar && (
+              <FaImage className="text-gray-500 text-[15px] pointer-events-none" />
+            )}
+            {editData.avatar && (
+              <img
+                src={editData.avatar}
+                alt="Uploaded Avatar"
+                className="w-full h-full object-cover"
+              />
+            )}
+            <label htmlFor="avatarUpload" className="absolute w-full h-full">
+              <input
+                id="avatarUpload"
+                type="file"
+                className="hidden"
+                accept="image/*"
+                name="avatar"
+                onChange={handleFileChange}
+              />
+            </label>
           </div>
 
           <div className="mb-4 mt-5">
@@ -84,26 +137,25 @@ const EditFamilyMemebrs = ({ editFamilyPopUp, setEditFamilyPopUp }) => {
               className="w-full p-2 border rounded-md focus:ring-2 focus:outline-none"
               placeholder="Enter your full name"
               name="name"
-              // value={formData.name}
-              // onChange={handleChange}
+              value={editData.name}
+              onChange={handleChange}
             />
           </div>
 
           <div className="mb-4 mt-5">
             <label
-              htmlFor="fullname"
+              htmlFor="date"
               className="block text-sm font-medium text-gray-600 mb-1"
             >
               Date of Birth
             </label>
             <input
               type="date"
-              // value={formData.dateOfBirth}
+              value={editData.dateOfBirth}
               id="dateOfBirth"
               name="dateOfBirth"
-              // onChange={handleChange}
+              onChange={handleChange}
               className="w-full p-2 border rounded-md focus:ring-2 focus:outline-none"
-              placeholder="Enter your full name"
             />
           </div>
 
@@ -117,25 +169,18 @@ const EditFamilyMemebrs = ({ editFamilyPopUp, setEditFamilyPopUp }) => {
             <select
               id="relation"
               className="w-full p-2 border rounded-md focus:outline-none text-gray-700 bg-white mb-2"
-              // value={formData.relation || ""} // Default to empty value
+              value={editData.relation || ""}
               name="relation"
-              // onChange={(e) => {
-              //   const value = e.target.value;
-              //   if (value === "OTHER") {
-              //     setFormData({
-              //       ...formData,
-              //       relation: value, // Set selected value to "OTHER"
-              //       isOther: true, // Show custom input field
-              //     });
-              //   } else {
-              //     setFormData({
-              //       ...formData,
-              //       relation: value, // Set the selected relation value
-              //       isOther: false, // Hide the custom input field
-              //       otherRelation: "", // Clear the other relation input when a selection is made
-              //     });
-              //   }
-              // }}
+              onChange={(e) => {
+                const value = e.target.value;
+                setEditData({
+                  ...editData,
+                  relation: value,
+                  isOther: value === "OTHER",
+                  otherRelation:
+                    value === "OTHER" ? editData.otherRelation : "",
+                });
+              }}
             >
               <option value="">Select Relation</option>
               <option value="GRANDMOTHER">GRANDMOTHER</option>
@@ -153,34 +198,30 @@ const EditFamilyMemebrs = ({ editFamilyPopUp, setEditFamilyPopUp }) => {
               <option value="HUSBAND">HUSBAND</option>
               <option value="OTHER">OTHER</option>
             </select>
-
-            {/* Manual input for relation when "OTHER" is selected */}
-            {/* {formData.isOther && ( */}
-            <input
-              type="text"
-              className="w-full p-2 border rounded-md focus:ring-2 focus:outline-none"
-              placeholder="Enter relation"
-              name="otherRelation"
-              //   value={formData.otherRelation}
-              //   onChange={(e) =>
-              //     setFormData({ ...formData, otherRelation: e.target.value })
-              //   }
-            />
-            {/* )} */}
+            {editData.isOther && (
+              <input
+                type="text"
+                className="w-full p-2 border rounded-md focus:ring-2 focus:outline-none"
+                placeholder="Enter relation"
+                name="otherRelation"
+                value={editData.otherRelation}
+                onChange={handleChange}
+              />
+            )}
           </div>
 
           <div className="mb-4 mt-5">
             <label
               htmlFor="gender"
-              className="block text-sm font-medium text-gray-600 mb-1 "
+              className="block text-sm font-medium text-gray-600 mb-1"
             >
               Gender
             </label>
             <select
               className="w-full p-2 border rounded-md focus:outline-none text-gray-700 bg-white"
-              // value={formData.gender}
+              value={editData.gender}
               name="gender"
-              // onChange={handleChange}
+              onChange={handleChange}
             >
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -203,7 +244,7 @@ const EditFamilyMemebrs = ({ editFamilyPopUp, setEditFamilyPopUp }) => {
                 type="submit"
                 className="bg-[#00768A] hover:bg-[#176e7e] text-white px-2 py-1 rounded-md"
               >
-                Save
+                Update
               </button>
             </div>
           </div>

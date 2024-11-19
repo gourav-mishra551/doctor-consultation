@@ -1,20 +1,23 @@
 import "./App.css";
-import { useLocation } from "react-router-dom";
 import Home from "./Pages/Home";
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DoctorForm from "./Components/DoctorForm";
 import Categories from "./Components/Categories";
 import UserProfile from "./Components/UserProfile";
 import About from "./Pages/About";
 import ContactPage from "./Pages/ContactPage";
+import DoctorsProfile from "./Components/DoctorsProfile";
 import DrProfilePage from "./Pages/DrProfilePage";
-import DrIndividualProfilePage from "./Pages/DrIndividualProfilePage";
-
+import DrIndividualProfile from "./Components/DrIndividualProfile";
+import DrIndividualProfilePage from "./Pages/DrIndividualProfilePage"; 
+import Calendar from "./Components/Calender";
+import FaqPage from "./Pages/FaqPage";
 import DrVerifyOtp from "./Components/DrVerifyOtp";
 import BrandAmPage from "./Pages/BrandAmPage";
 import WhyWeDiffPage from "./Pages/WhyWeDiffPage";
 import WellnessSafetyPage from "./Pages/WellnessSafetyPage";
 import PricePromisePage from "./Pages/PricePromisePage";
+import OurTreatment from "./Components/OurTreatment";
 import OurTreatmentPage from "./Pages/OurTreatmentPage";
 import DeliveryPage from "./Pages/DeliveryPage";
 import HowAmWorkPage from "./Pages/HowAmWorkPage";
@@ -25,13 +28,13 @@ import TermsOfUsePage from "./Pages/TermsOfUsePage";
 import ShippingInfoPage from "./Pages/ShippingInfoPage";
 import SupportCenterPage from "./Pages/SupportCenterPage";
 import FillRfqFormPage from "./Pages/FillRfqFormPage";
-
+import Disclaimer from "./Components/Disclaimer";
 import DisclaimerPage from "./Pages/DisclaimerPage";
 import Covid19DrugsPage from "./Pages/Covid19DrugsPage";
 import VaccinePage from "./Pages/VaccinePage";
 import DataFillingForm from "./Components/DataFillingForm";
 import HowItWorks from "./Components/HowItWorks";
-
+import DownloadApp from "./Components/DownloadApp";
 import CategoriesDetails from "./Components/CategoriesDetails";
 import DRProfileShow from "./Components/DRProfileShow";
 import DrAppointmentCreation from "./Components/DrAppoinmentCreation";
@@ -48,6 +51,7 @@ import ReturningPatient from "./Pages/AppointmentBooking/ReturningPatient/Return
 import ConsultwithLastDoctor from "./Pages/AppointmentBooking/ReturningPatient/ConsultwithLast/ConsultwithLastDoctor";
 import ConsultwithNewDoctor from "./Pages/AppointmentBooking/ReturningPatient/ConsultwithNew/ConsultwithNewDoctor";
 
+import CategoriesHome from "./Components/CategoriesHome/CategoriesHome";
 import InsideIndia from "./Pages/AppointmentBooking/NewPatient/InsideIndia/InsideIndia";
 import BookingSlot from "./Pages/BookingSlot/BookingSlot";
 import Navbar from "./Components/Navbar";
@@ -56,21 +60,14 @@ import AddFamilyMembers from "./Components/AddFamilyMembers";
 import ViewFamilyMembersPage from "./Pages/ViewFamilyMembers/ViewFamilyMembersPage";
 
 function App() {
-  const location = useLocation();
-
-  const hideNavbar = ["/auth","/login", "/signup"].includes(location.pathname);
-
   return (
     <div className="App">
-
-      {!hideNavbar && <TopHeader />}
-      {!hideNavbar && <Navbar />}
-      <>
+      <BrowserRouter>
+        <TopHeader />
+        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* pending */}
           <Route path="/doctor-slots-generation" element={<DrExam />} />
-
           <Route path="/auth" element={<Login />} />
           <Route path="/doctor-onboarding-form" element={<DoctorForm />} />
           <Route path="/categories" element={<Categories />} />
@@ -78,6 +75,7 @@ function App() {
             path="/CategoriesDetails/:id"
             element={<CategoriesDetails />}
           />
+          <Route path="/CategoryHome" element={<CategoriesHome />} />
           <Route path="/user-profile" element={<UserProfile />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact-us" element={<ContactPage />} />
@@ -88,11 +86,10 @@ function App() {
             path="/DrAppointmentCreation"
             element={<DrAppointmentCreation />}
           />
-          {/* linking of this page is not done */}
           <Route path="/DRProfileShow" element={<DRProfileShow />} />
+          <Route path="/calender" element={<Calendar />} />
+          <Route path="/faq" element={<FaqPage />} />
           <Route path="/dr-otp" element={<DrVerifyOtp />} />
-
-          {/* static pages */}
           <Route path="/brand-ametheus" element={<BrandAmPage />} />
           <Route path="/why-we-are-different" element={<WhyWeDiffPage />} />
           <Route path="/wellness-and-safety" element={<WellnessSafetyPage />} />
@@ -115,9 +112,7 @@ function App() {
           <Route path="/vaccine/" element={<VaccinePage />} />
           <Route path="/data-filling-form" element={<DataFillingForm />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
-
-          {/* static page end */}
-
+          <Route path="/download-app" element={<DownloadApp />} />
           <Route path="/appointments" element={<FirstQuestion />} />
           <Route path="/appointments/location" element={<NewPatient />} />
           <Route path="/profile" element={<ProfilePage />} />
@@ -126,13 +121,26 @@ function App() {
             element={<PrescriptionMakerPage />}
           />
           <Route path="/edit-profile" element={<EditProfilePage />} />
+          <Route path="/add-family-members" element={<AddFamilyMembers />} />
+          {/* <Route
+            path="/view-family-members"
+            element={<ViewFamilyMembersPage />}
+          /> */}
+
+          {/* <Route path='/login' element={<Login />} /> */}
           <Route path="/appointment/inside-india" element={<InsideIndia />} />
           <Route path="/OutSideIndia" element={<OutSideIndia />} />
           <Route path="/ReturningPatientPage" element={<ReturningPatient />} />
-          <Route path="/ConsultWithLastDoctor" element={<ConsultwithLastDoctor />} />
-          <Route path="/ConsultwithNewDoctor" element={<ConsultwithNewDoctor />} />
+          <Route
+            path="/ConsultWithLastDoctor"
+            element={<ConsultwithLastDoctor />}
+          />
+          <Route
+            path="/ConsultwithNewDoctor"
+            element={<ConsultwithNewDoctor />}
+          />
         </Routes>
-      </>
+      </BrowserRouter>
     </div>
   );
 }
