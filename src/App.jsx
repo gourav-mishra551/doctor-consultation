@@ -60,11 +60,6 @@ function App() {
 
   return (
     <div className="App">
-      {/* Navbar and TopHeader will be rendered unless the path is one of the excluded paths */}
-
-  const hideNavbar = ["/auth", "/login", "/signup"].includes(location.pathname);
-  return (
-    <div className="App">
       {!hideNavbar && <TopHeader />}
       {!hideNavbar && <Navbar />}
       <>
