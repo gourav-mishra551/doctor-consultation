@@ -59,7 +59,7 @@ const Home = () => {
   };
 
   return (
-    <div className="">
+    <div >
       <header className="App-header">
         <Headers />
 
@@ -75,8 +75,8 @@ const Home = () => {
             What our users say about their online consultation experience
           </p>
 
-          <Slider {...settings} className="mt-10 gap-10 max-w-[1200px] mx-auto">
-            <div className="flex p-5 shadow-xl h-[200px] mb-5">
+          <Slider {...settings} className="mt-10 gap-10 max-w-[380px] sm:max-w-[1200px] mx-auto">
+            <div className="flex  shadow-xl h-[200px] mb-5">
               <div className="flex gap-3">
                 <div>
                   <img
@@ -211,7 +211,7 @@ const Home = () => {
         </div>
 
         <div className="">
-          <DownloadApp />
+          {/* render the Download App component */}
         </div>
         <div className="appointment-form bg-[#1c8e81] sm:h-[350px] h-auto mt-20">
           <div className="flex sm:flex-row flex-col sm:max-w-6xl w-full mx-auto">

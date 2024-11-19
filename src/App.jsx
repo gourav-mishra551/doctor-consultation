@@ -53,11 +53,15 @@ import BookingSlot from "./Pages/BookingSlot/BookingSlot";
 import Navbar from "./Components/Navbar";
 import TopHeader from "./Components/TopHeader";
 
-
-
-
 function App() {
   const location = useLocation();
+
+  const hideNavbar = ["/auth","/login", "/signup"].includes(location.pathname);
+
+  return (
+    <div className="App">
+      {/* Navbar and TopHeader will be rendered unless the path is one of the excluded paths */}
+
   const hideNavbar = ["/auth", "/login", "/signup"].includes(location.pathname);
   return (
     <div className="App">
@@ -76,8 +80,6 @@ function App() {
             path="/CategoriesDetails/:id"
             element={<CategoriesDetails />}
           />
-
-
           <Route path="/user-profile" element={<UserProfile />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact-us" element={<ContactPage />} />
@@ -133,7 +135,6 @@ function App() {
           <Route path="/ConsultwithNewDoctor" element={<ConsultwithNewDoctor />} />
         </Routes>
       </>
-
     </div>
   );
 }

@@ -75,7 +75,12 @@ function MegaMenu() {
       "Amethus Torch: Alumni Network",
       "New Medicine",
     ],
-    OurServices: ["Medicine"],
+    OurServices: ["Medicine","General Medicine",
+      "Pediatrics",
+      "Cardiology",
+      "Emergency Care",
+      "Physical Therapy",
+      "Vaccination Services"],
     ContactUs: [
       "Post A Query",
       "Consult Doctor Online",

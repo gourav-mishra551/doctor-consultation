@@ -9,6 +9,7 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
   const toggleDescription = () => setIsExpanded(!isExpanded);
 
   return (
+
     <div className=" bg-gray-100 md:py-10 md:px-5">
       <div className=" md:p-6 rounded-xl shadow-lg transition-transform transform md:hover:scale-105">
 
