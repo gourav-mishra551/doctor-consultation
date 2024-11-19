@@ -57,7 +57,7 @@ const Home = () => {
   };
 
   return (
-    <div className="">
+    <div >
       <header className="App-header">
         <Headers />
 
@@ -73,8 +73,8 @@ const Home = () => {
             What our users say about their online consultation experience
           </p>
 
-          <Slider {...settings} className="mt-10 gap-10 max-w-[1200px] mx-auto">
-            <div className="flex p-5 shadow-xl h-[200px] mb-5">
+          <Slider {...settings} className="mt-10 gap-10 max-w-[380px] sm:max-w-[1200px] mx-auto">
+            <div className="flex  shadow-xl h-[200px] mb-5">
               <div className="flex gap-3">
                 <div>
                   <img

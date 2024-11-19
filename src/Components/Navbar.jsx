@@ -108,29 +108,25 @@ const Navbar = () => {
 
   const handleMouseEnter = (item, event) => {
     if (!event) return;
-  
+
     setHoveredItem(item);
-  
+
     // Check if submenuData for the item exists
     if (!submenuData[item]) return;
-  
+
     const menuItemRect = event.target.getBoundingClientRect();
     setSubmenuPosition({
       top: menuItemRect.bottom + window.scrollY,
       left: menuItemRect.left + window.scrollX,
     });
-  
+
     setOpenSubMenus((prevState) => ({
       ...prevState,
       [item]: true,
     }));
   };
-  
-  
-  
 
   const handleMouseLeave = (item) => {
-
     setHoveredItem(null); // Reset the hovered item
     // Close the submenu when mouse leaves the item
     setOpenSubMenus((prevState) => ({
@@ -145,16 +141,16 @@ const Navbar = () => {
   const containerRef = useRef(null);
   const megaMenuRef = useRef(null);
   const servicesRef = useRef(null);
- // Detect clicks outside of Services or the mega menu
- const handleClickOutside = (event) => {
-  if (
-    megaMenuRef.current &&
-    !megaMenuRef.current.contains(event.target) &&
-    !servicesRef.current.contains(event.target)
-  ) {
-    setIsMegaMenuOpen(false); // Close the mega menu if clicked outside
-  }
-};
+  // Detect clicks outside of Services or the mega menu
+  const handleClickOutside = (event) => {
+    if (
+      megaMenuRef.current &&
+      !megaMenuRef.current.contains(event.target) &&
+      !servicesRef.current.contains(event.target)
+    ) {
+      setIsMegaMenuOpen(false); // Close the mega menu if clicked outside
+    }
+  };
 
   const setBothRefs = (node) => {
     containerRef.current = node;
@@ -172,7 +168,6 @@ const Navbar = () => {
 
   const [isHoveringServices, setIsHoveringServices] = useState(false);
   const serviceRef = useRef(null);
-
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -281,11 +276,10 @@ const Navbar = () => {
         "https://api.assetorix.com/ah/api/v1/dc/user/Category"
       );
       setCategorydata(res.data.data);
-    } catch (error) { }
+    } catch (error) {}
   };
 
   return (
-
     <div className="bg-white">
       <nav className="text-black  max-w-[92vw] top-0 z-50 bg-white mx-auto">
         <div className="sm:max-w-7xl w-full px-4 sm:px-6 lg:px-8">
@@ -298,8 +292,6 @@ const Navbar = () => {
                 alt="logo"
               />
             </Link>
-
-
 
             {/* Menu Items */}
             <div className="flex items-center space-x-4">
@@ -321,7 +313,6 @@ const Navbar = () => {
                 <div
                   className="relative cursor-pointer group"
                   ref={servicesRef}
-                  
                   onMouseEnter={(e) => handleMouseEnter(menu, e)} // Pass the event as `e`
                   onMouseLeave={() => handleMouseLeave(menu)}
                 >
@@ -360,8 +351,9 @@ const Navbar = () => {
                 <FiUser />
                 <div
                   ref={dropdownRef}
-                  className={`absolute bg-white rounded-xl shadow-lg p-4 z-50 flex -left-[6rem] flex-col w-[15vw] h-max ${dropdown ? "block" : "hidden"
-                    }`}
+                  className={`absolute bg-white rounded-xl shadow-lg p-4 z-50 flex -left-[6rem] flex-col w-[15vw] h-max ${
+                    dropdown ? "block" : "hidden"
+                  }`}
                 >
                   {isLogin ? (
                     <div className="flex flex-col justify-between">
@@ -432,12 +424,15 @@ const Navbar = () => {
             <div className="block sm:hidden">
               <button
                 onClick={toggleMenu}
-                className="text-black p-2 rounded-md"
+                className="text-black p-2 rounded-md focus:outline-none focus:ring-0 focus:border-0 !border-none !outline-none"
               >
                 {isOpen ? (
                   <RxCross1 size={24} />
                 ) : (
-                  <RxHamburgerMenu size={24} className="focus:outline-none  focus:ring-0 focus:border-0" />
+                  <RxHamburgerMenu
+                    size={24}
+                    className="focus:outline-none focus:ring-0 focus:border-0 !border-none !outline-none"
+                  />
                 )}
               </button>
             </div>
@@ -445,80 +440,81 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu */}
-        {isOpen && (
-          <div className="md:hidden bg-white-200 text-black h-max pb-32 ">
-            <div className="px-2 pt-2 space-y-1">
-              <Link
-                to="/"
-                className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white"
-              >
-                Home
-              </Link>
+        <div>
+          {isOpen && (
+            <div className="md:hidden w-[96%]  bg-white text-black h-max pb-32 absolute z-50">
+              <div className="px-2 pt-2 space-y-1">
+                <Link
+                  to="/"
+                  className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white"
+                >
+                  Home
+                </Link>
 
-              <Link
-                to="/about"
-                className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white"
-              >
-                About
-              </Link>
+                <Link
+                  to="/about"
+                  className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white"
+                >
+                  About
+                </Link>
 
-              {/* MegaMenu Dropdown */}
-              <div className="pl-4 space-y-1">
-                {Object.keys(submenuData).map((menu, index) => (
-                  <div key={index}>
-                    <div
-                      className=" px-3 py-2 rounded-md text-sm hover:bg-blue-500 hover:text-white cursor-pointer flex"
-                      onClick={() => toggleSubMenu(menu)}
-                    >
-                      {menu.replace(/([A-Z])/g, " $1")}
-                      {openSubMenus[menu] ? (
-                        <span className="ml-2 p-1">
-                          <FaChevronUp />
-                        </span>
-                      ) : (
-                        <span className="ml-2 p-1">
-                          <FaChevronDown />
-                        </span>
+                {/* MegaMenu Dropdown */}
+                <div className="pl-4 space-y-1">
+                  {Object.keys(submenuData).map((menu, index) => (
+                    <div key={index}>
+                      <div
+                        className=" px-3 py-2 rounded-md text-sm hover:bg-blue-500 hover:text-white cursor-pointer flex"
+                        onClick={() => toggleSubMenu(menu)}
+                      >
+                        {menu.replace(/([A-Z])/g, " $1")}
+                        {openSubMenus[menu] ? (
+                          <span className="ml-2 p-1">
+                            <FaChevronUp />
+                          </span>
+                        ) : (
+                          <span className="ml-2 p-1">
+                            <FaChevronDown />
+                          </span>
+                        )}
+                      </div>
+                      {openSubMenus[menu] && (
+                        <ul className="pl-4 space-y-1">
+                          {submenuData[menu].map((subItem, index) => (
+                            <li
+                              key={index}
+                              className="block px-3 py-2 rounded-md text-sm hover:bg-blue-100"
+                            >
+                              <span className="p-2 mt-2">{subItem}</span>
+                              <hr />
+                            </li>
+                          ))}
+                        </ul>
                       )}
                     </div>
-                    {openSubMenus[menu] && (
-                      <ul className="pl-4 space-y-1">
-                        {submenuData[menu].map((subItem, index) => (
-                          <li
-                            key={index}
-                            className="block px-3 py-2 rounded-md text-sm hover:bg-blue-100"
-                          >
-                            <span className="p-2 mt-2">{subItem}</span>
-                            <hr />
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              <Link
-                to="/CategoriesDetails/:id"
-                className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white"
-              >
-                Doctors
-              </Link>
-              <Link
-                to="/contact-us"
-                className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white"
-              >
-                Contact
-              </Link>
+                <Link
+                  to="/CategoriesDetails/:id"
+                  className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white"
+                >
+                  Doctors
+                </Link>
+                <Link
+                  to="/contact-us"
+                  className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white"
+                >
+                  Contact
+                </Link>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </nav>
 
       {/* MegaMenu for Desktop */}
       <div>
-
-      {/* {MegaMenubtn && (
+        {/* {MegaMenubtn && (
         <div className="bg-[#F7F6F9] bg-opacity-40 z-50">
           <div className="flex justify-center gap-8 py-4 bg-[#00768A] text-white flex-wrap md:flex-nowrap">
             {Object.keys(submenuData).map((menu, index) => (
@@ -537,13 +533,10 @@ const Navbar = () => {
           </div>
         </div>
       )} */}
-     
 
         <MegaMenu />
-
       </div>
     </div>
-
   );
 };
 

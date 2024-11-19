@@ -27,7 +27,7 @@ const Headers = () => {
                   We are committed to providing you with the best medical and <br />
                   healthcare services to help you live healthier and happier.
                 </p>
-                <div>
+                <div className="flex gap-2">
                   <Link to="/appointments">
                     <button className="px-8 py-3 mt-5 text-white bg-teal-600 hover:bg-teal-700 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
                       Find a doctor
@@ -47,7 +47,7 @@ const Headers = () => {
         </div>
 
         {/* Centering OurServices Component */}
-        <div className="absolute left-1/2 transform bottom-[-55%]  -translate-x-1/2 sm:-bottom-[6rem] w-[95%]  sm:w-[85vw] bg-white shadow-lg rounded-xl sm:px-8 sm:py-5 px-2 py-2">
+        <div className="absolute left-1/2 transform  -translate-x-1/2 sm:-bottom-[6rem] w-[95%]  sm:w-[85vw] bg-white shadow-lg rounded-xl sm:px-8 sm:py-5 px-2 py-2">
           <OurServices />
         </div>
       </div>
