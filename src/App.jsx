@@ -60,14 +60,15 @@ import InsideIndia from "./Pages/AppointmentBooking/NewPatient/InsideIndia/Insid
 import BookingSlot from "./Pages/BookingSlot/BookingSlot";
 import Navbar from "./Components/Navbar";
 import TopHeader from "./Components/TopHeader";
+import AddFamilyMembers from "./Components/AddFamilyMembers";
+import ViewFamilyMembersPage from "./Pages/ViewFamilyMembers/ViewFamilyMembersPage";
 
 function App() {
   return (
     <div className="App">
-      
       <BrowserRouter>
-      <TopHeader/>
-      <Navbar/>
+        <TopHeader />
+        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/doctor-slots-generation" element={<DrExam />} />
@@ -78,13 +79,13 @@ function App() {
             path="/CategoriesDetails/:id"
             element={<CategoriesDetails />}
           />
-          <Route path="/CategoryHome" element={<CategoriesHome/>}/>
+          <Route path="/CategoryHome" element={<CategoriesHome />} />
           <Route path="/doctors" element={<DoctorsCrew />} />
           <Route path="/user-profile" element={<UserProfile />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact-us" element={<ContactPage />} />
           <Route path="/drs-profile" element={<DrProfilePage />} />
-          <Route path="/BookingSlot/:id" element={<BookingSlot/>}/>
+          <Route path="/BookingSlot/:id" element={<BookingSlot />} />
           <Route path="/dr-indi/:id" element={<DrIndividualProfilePage />} />
           <Route
             path="/DrAppointmentCreation"
@@ -126,15 +127,25 @@ function App() {
             element={<PrescriptionMakerPage />}
           />
           <Route path="/edit-profile" element={<EditProfilePage />} />
+          <Route path="/add-family-members" element={<AddFamilyMembers />} />
+          {/* <Route
+            path="/view-family-members"
+            element={<ViewFamilyMembersPage />}
+          /> */}
 
           {/* <Route path='/login' element={<Login />} /> */}
           <Route path="/appointment/inside-india" element={<InsideIndia />} />
-          <Route path="/OutSideIndia" element={<OutSideIndia/>}/>
-          <Route path="/ReturningPatientPage" element={<ReturningPatient/>} />
-          <Route path="/ConsultWithLastDoctor" element={<ConsultwithLastDoctor/>}/>
-          <Route path="/ConsultwithNewDoctor" element={<ConsultwithNewDoctor/>}/> 
+          <Route path="/OutSideIndia" element={<OutSideIndia />} />
+          <Route path="/ReturningPatientPage" element={<ReturningPatient />} />
+          <Route
+            path="/ConsultWithLastDoctor"
+            element={<ConsultwithLastDoctor />}
+          />
+          <Route
+            path="/ConsultwithNewDoctor"
+            element={<ConsultwithNewDoctor />}
+          />
         </Routes>
-       
       </BrowserRouter>
     </div>
   );
