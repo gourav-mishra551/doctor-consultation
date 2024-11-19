@@ -18,9 +18,11 @@ import {
   MdOutlineTimer,
 } from "react-icons/md";
 import { IoPerson } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import AddFamilyMembers from "./AddFamilyMembers";
+import { RxCross2 } from "react-icons/rx";
+import ViewFamilyMembers from "./ViewFamilyMembers/ViewFamilyMembers";
 const Profile = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [history, setHistory] = useState([]);
   const [userProfileData, setUserProfileData] = useState([]);
@@ -29,6 +31,9 @@ const Profile = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
   const [isDoctorProfileOpen, setIsDoctorProfileOpen] = useState(false);
+  const [familyPopUp, setFamilyPopUp] = useState(false);
+  const [editFamilyPopUp, setEditFamilyPopUp] = useState(false);
+  const [familyData, setFamilyData] = useState([]);
 
   const toggleMenu = (menu) => {
     if (selectedMenu === menu) {
@@ -113,6 +118,31 @@ const Profile = () => {
   const toggleUserProfile = () => setIsUserProfileOpen((prev) => !prev);
 
   const toggleDoctorProfile = () => setIsDoctorProfileOpen((prev) => !prev);
+
+  const toggleFamily = () => setIsDoctorProfileOpen((prev) => !prev);
+
+  const getFamilyEdit = async () => {
+    try {
+      const response = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/user/family`,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Important for file uploads
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      setFamilyData(response.data);
+      console.log(familyData.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getFamilyEdit();
+  }, []);
 
   return (
     <div>
@@ -216,9 +246,56 @@ const Profile = () => {
                   </ul>
                 )}
               </li>
+
+              {/* family members */}
+              <li className="mb-2">
+                <div
+                  className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
+                  onClick={() => toggleMenu("family")}
+                >
+                  <div className="flex items-center">
+                    <FaUser className="mr-2" /> Family Members
+                  </div>
+                  {selectedMenu === "family" ? (
+                    <FaChevronUp />
+                  ) : (
+                    <FaChevronDown />
+                  )}
+                </div>
+                {selectedMenu === "family" && (
+                  <ul className="ml-6 mt-2 space-y-1 text-gray-300">
+                    <li>
+                      <p
+                        onClick={() => setActiveSection("familyProfile")}
+                        className="block font-normal p-1 hover:bg-[#00768A] rounded-md hover:text-white text-gray-500 cursor-pointer"
+                      >
+                        View Members
+                      </p>
+                    </li>
+                    <li>
+                      <Link
+                        onClick={() => setFamilyPopUp(true)}
+                        className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-gray-500"
+                      >
+                        Add Family
+                      </Link>
+                    </li>
+
+                    <li>
+                      <Link
+                        onClick={() => setEditFamilyPopUp(true)}
+                        className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-gray-500"
+                      >
+                        Edit Family
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
             </ul>
           </nav>
         </div>
+
         {/* for mobile section */}
         <div className="relative sm:hidden">
           {/* Profile Button at the top */}
@@ -377,8 +454,41 @@ const Profile = () => {
           {activeSection === "doctorselfprofile" && (
             <DoctorSelfProfile doctorProfileData={doctorProfileData} />
           )}
+          {activeSection === "familyProfile" && (
+            <ViewFamilyMembers
+              familyData={familyData}
+              getFamilyEdit={getFamilyEdit}
+            />
+          )}
         </div>
       </div>
+
+      {familyPopUp && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 backdrop-blur-sm p-3 sm:p-0 lg:p-2">
+          <div className="bg-white rounded-lg border-2 z-10 w-full max-w-md mx-4 md:mx-0">
+            {/* Scrollable container with a fixed height */}
+            <div className="flex justify-between gap-10 items-center px-10 translate-y-5">
+              <p className="uppercase font-bold">Add Family members</p>
+              <RxCross2
+                className="font-bold cursor-pointer"
+                onClick={() => setFamilyPopUp(false)}
+              />
+            </div>
+
+            <div className="h-[90vh] overflow-y-auto p-6 space-y-6">
+              <div className="bg-gray-500 h-[1px] w-full bg-opacity-30 mt-5"></div>
+              {/* Close button to hide the popup */}
+              <AddFamilyMembers
+                getFamilyEdit={getFamilyEdit}
+                setActiveSection={setActiveSection}
+                activeSection={activeSection}
+                familyPopUp={familyPopUp}
+                setFamilyPopUp={setFamilyPopUp}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,9 +1,7 @@
 
 import Headers from "../Components/Headers";
 import Footer from "../Components/Footer";
-import Categories from "../Components/Categories";
 import HowItWorks from "../Components/HowItWorks";
-import DownloadApp from "../Components/DownloadApp";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -210,9 +208,7 @@ const Home = () => {
           </Slider>
         </div>
 
-        <div className="">
-          {/* render the Download App component */}
-        </div>
+       
         <div className="appointment-form bg-[#1c8e81] sm:h-[350px] h-auto mt-20">
           <div className="flex sm:flex-row flex-col sm:max-w-6xl w-full mx-auto">
             <div className="left sm:w-[50%] w-full p-10 flex flex-col gap-5">
