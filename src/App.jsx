@@ -52,6 +52,8 @@ import InsideIndia from "./Pages/AppointmentBooking/NewPatient/InsideIndia/Insid
 import BookingSlot from "./Pages/BookingSlot/BookingSlot";
 import Navbar from "./Components/Navbar";
 import TopHeader from "./Components/TopHeader";
+import AddFamilyMembers from "./Components/AddFamilyMembers";
+import ViewFamilyMembersPage from "./Pages/ViewFamilyMembers/ViewFamilyMembersPage";
 
 function App() {
   const location = useLocation();
@@ -60,6 +62,7 @@ function App() {
 
   return (
     <div className="App">
+
       {!hideNavbar && <TopHeader />}
       {!hideNavbar && <Navbar />}
       <>
