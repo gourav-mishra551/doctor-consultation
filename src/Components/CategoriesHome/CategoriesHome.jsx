@@ -73,13 +73,13 @@ function CategoriesHome() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-      <div className="flex flex-col sm:flex-row gap-3 justify-between items-center max-w-5xl mx-auto mb-8">
+      <div className="flex flex-row sm:flex-row gap-3 justify-between items-center max-w-5xl mx-auto mb-8">
         <p className="sm:text-4xl text-2xl font-bold tracking-wide text-center sm:text-start capitalize text-[#1c8e81]">
           Top Specialties
         </p>
         <NavLink to="/categories">
           <button
-            className="sm:w-[250px] w-[150px] sm:h-[60px] h-[50px] rounded-lg bg-[#1c8e81] text-white font-semibold hover:scale-105 transition-transform duration-300"
+            className="sm:w-[250px] w-[150px] sm:h-[60px] h-[50px] md:text-lg text-xs rounded-lg bg-[#1c8e81] text-white font-semibold hover:scale-105 transition-transform duration-300"
             aria-label="View All Services"
           >
             View All Services
