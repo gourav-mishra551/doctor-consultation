@@ -7,7 +7,7 @@ const Headers = () => {
     <>
       <div className="relative mb-32">
         <div
-          className="background bg-teal-100 -z-10 h-screen flex items-center"
+          className="background bg-teal-100 -z-10 md:h-screen h-[70vh] flex items-center"
           style={{
             backgroundImage: `url(${image})`,
             backgroundSize: "cover",
@@ -39,15 +39,13 @@ const Headers = () => {
                     </button>
                   </Link>
                 </div>
-
-
               </div>
             </div>
           </div>
         </div>
 
         {/* Centering OurServices Component */}
-        <div className="absolute left-1/2 transform  -translate-x-1/2 sm:-bottom-[7rem] -bottom-[16rem] md:mb-0 mb-20  w-[95%]  sm:w-[85vw] bg-white md:shadow-lg shadow-md rounded-xl sm:px-8 sm:py-5 px-2 py-2">
+        <div className="md:absolute  md:left-1/2  transform  md:-translate-x-1/2    md:-bottom-[9rem]  md:mb-0 mb-5  w-[95%]  sm:w-[85vw] bg-white md:shadow-lg shadow-md rounded-xl sm:px-8 sm:py-5 px-2 py-2">
           <OurServices />
         </div>
       </div>
