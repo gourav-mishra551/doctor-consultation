@@ -1,6 +1,7 @@
 import "./App.css";
+import AuthRoute from "./Components/Auth/AuthRoute";
 import Home from "./Pages/Home";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route , useLocation } from "react-router-dom";
 import DoctorForm from "./Components/DoctorForm";
 import Categories from "./Components/Categories";
 import UserProfile from "./Components/UserProfile";
@@ -58,23 +59,25 @@ import Navbar from "./Components/Navbar";
 import TopHeader from "./Components/TopHeader";
 
 function App() {
+  const location = useLocation();
+  
+const hideNavbar = ["/login", "/signup" , "/auth"].includes(location.pathname);
   return (
     <div className="App">
-     
-        <TopHeader />
-        <Navbar />
+      {!hideNavbar && <TopHeader />}
+        {!hideNavbar && <Navbar />}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/doctor-slots-generation" element={<DrExam />} />
+          <Route path="/doctor-slots-generation" element={<AuthRoute element={DrExam } />}  />
           <Route path="/auth" element={<Login />} />
-          <Route path="/doctor-onboarding-form" element={<DoctorForm />} />
+          <Route path="/doctor-onboarding-form" element={< AuthRoute element={DoctorForm } />} />
           <Route path="/categories" element={<Categories />} />
           <Route
             path="/CategoriesDetails/:id"
             element={<CategoriesDetails />}
           />
           <Route path="/CategoryHome" element={<CategoriesHome />} />
-          <Route path="/user-profile" element={<UserProfile />} />
+          <Route path="/user-profile" element={<AuthRoute element={UserProfile}  />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact-us" element={<ContactPage />} />
           <Route path="/drs-profile" element={<DrProfilePage />} />
@@ -82,9 +85,9 @@ function App() {
           <Route path="/dr-indi/:id" element={<DrIndividualProfilePage />} />
           <Route
             path="/DrAppointmentCreation"
-            element={<DrAppointmentCreation />}
+            element={<AuthRoute element={DrAppointmentCreation}  />}
           />
-          <Route path="/DRProfileShow" element={<DRProfileShow />} />
+          <Route path="/DRProfileShow" element={<AuthRoute element={DRProfileShow }/>} />
           <Route path="/calender" element={<Calendar />} />
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/dr-otp" element={<DrVerifyOtp />} />
@@ -108,17 +111,16 @@ function App() {
           <Route path="/disclaimer/" element={<DisclaimerPage />} />
           <Route path="/covid-19-drug/" element={<Covid19DrugsPage />} />
           <Route path="/vaccine/" element={<VaccinePage />} />
-          <Route path="/data-filling-form" element={<DataFillingForm />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
-          <Route path="/download-app" element={<DownloadApp />} />
           <Route path="/appointments" element={<FirstQuestion />} />
           <Route path="/appointments/location" element={<NewPatient />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile" element={<AuthRoute element={ProfilePage } />} />
           <Route
             path="/prescription-maker"
-            element={<PrescriptionMakerPage />}
+            element={ <AuthRoute element={PrescriptionMakerPage}  />}
           />
-          <Route path="/edit-profile" element={<EditProfilePage />} />
+
+          <Route path="/edit-profile" element={ <AuthRoute element={EditProfilePage } />} />
         
           {/* <Route
             path="/view-family-members"
