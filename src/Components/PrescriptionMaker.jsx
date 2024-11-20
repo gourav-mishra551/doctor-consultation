@@ -396,7 +396,13 @@ const PrescriptionMaker = () => {
                           className="px-4 py-2 rounded-lg border w-full focus:outline-none focus:border-[#1495AB] focus:ring-2 focus:ring-[#1495AB] h-[68px]"
                         />
                         {loading && (
-                          <p className="text-sm text-gray-500">Loading...</p>
+                          <div className="spinner">
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                        </div>
                         )}
                         {/* Show suggestions only if no medicine is selected */}
                         {searchTerm &&

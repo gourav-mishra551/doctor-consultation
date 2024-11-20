@@ -36,7 +36,13 @@ const DrIndividualProfile = () => {
     // Loading state when data is not fetched yet
     return (
       <div className="loading-state text-center text-lg font-semibold text-gray-700">
-        <p>Loading doctor profile...</p>
+        <div className="spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     );
   }

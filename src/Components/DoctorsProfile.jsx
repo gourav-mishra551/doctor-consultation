@@ -119,7 +119,13 @@ const DoctorsProfile = () => {
   }, [DoctorData, isLoading]); // Dependency on DoctorData and isLoading
 
   if (isLoading) {
-    return <div>Loading...</div>; // Show loading state if data is still being fetched
+    return <div className="spinner">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>; // Show loading state if data is still being fetched
   }
 
   const handleFilterChange = (filterType, value) => {

@@ -35,7 +35,13 @@ const UserProfile = () => {
 
     }, [])
 
-    // if (loading) return <div>loading...</div>
+    if (loading) return <div className="spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
     if (error) return <div>{error.message}</div>
     if (!userData) return null
 
@@ -241,12 +247,12 @@ const UserProfile = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
-                            <button className="btn btn-sm btn-info mr-4 bg-[#1c8e81] p-2 w-[200px] text-center"style={{alignItems:"center"}}>Submit</button>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <button className="btn btn-sm btn-info mr-4 bg-[#1c8e81] p-2 w-[200px] text-center" style={{ alignItems: "center" }}>Submit</button>
                             </div>
-                            
+
                         </div>
-                        
+
                     </div>
                 </div>
             </div>

@@ -40,7 +40,13 @@ function BookingSlot() {
   };
 
   if (!DrProfile) {
-    return <div className="flex items-center justify-center min-h-screen text-xl font-bold text-gray-600">Loading...</div>;
+    return <div className="spinner">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   }
 
   const ProfileDetail = ({ icon, title, value }) => (
@@ -156,7 +162,7 @@ function BookingSlot() {
         <div className="relative flex items-center w-full max-w-md justify-between">
           {/* Step 1 */}
           <div
-              className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${step >= 1 ? "text-white bg-[#00768A]" : "text-gray-500"
+            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${step >= 1 ? "text-white bg-[#00768A]" : "text-gray-500"
               } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
             onClick={() => handleStepClick(1)}
           >
