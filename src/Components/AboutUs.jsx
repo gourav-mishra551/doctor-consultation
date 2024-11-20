@@ -3,6 +3,9 @@ import { Link, NavLink } from 'react-router-dom'
 const AboutUs = () => {
     return (
         <div className='sm:max-w-6xl mx-auto flex flex-col gap-5 sm:p-0 p-10 mt-10'>
+            <div className='border'>
+             <img src="src/Assests/portrait-doctor-nurse-examining-senior-260nw-2162006253.webp" alt="" className='w-full h-[250px]' />
+            </div>
             <div className='h-[1px] w-full bg-gray-400 opacity-40'></div>
             <div className="heading">
                 <p className='font-bold text-[30px]'>ABOUT US</p>
