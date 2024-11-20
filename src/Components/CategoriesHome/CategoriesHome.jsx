@@ -51,7 +51,7 @@ function CategoriesHome() {
         </p>
         <div className="flex justify-center items-center">
           <NavLink to="/categories">
-            <button className="sm:w-[250px] w-[150px] sm:h-[60px] h-[50px] rounded-lg bg-[#1c8e81] text-white font-semibold hover:bg-green-400 transition ease-in-out duration-300">
+            <button className="sm:w-[250px] w-[150px] sm:h-[60px] h-[50px] rounded-lg bg-[#1c8e81] text-white font-semibold hover:scale-105 transition ease-in-out duration-300">
               View All Services
             </button>
           </NavLink>

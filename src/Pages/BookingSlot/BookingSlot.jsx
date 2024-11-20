@@ -208,7 +208,7 @@ function BookingSlot() {
             IndiProfile={DrProfile}
             onNext={handleNextStep}
           />
-        ) : step === 2 ? (
+        ) : step === 3 ? (
           <PrescriptionUpload
             onNext={handleNextStep}
             onPrevious={handlePreviousStep}
