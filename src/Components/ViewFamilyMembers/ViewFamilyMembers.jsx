@@ -5,11 +5,13 @@ import { FaUserEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import EditFamilyMemebrs from "../EditFamilyMemebrs";
 import { RxCross2 } from "react-icons/rx";
+import AddFamilyMembers from "../AddFamilyMembers";
 
 const ViewFamilyMembers = ({ familyData, getFamilyEdit }) => {
   const [deleteAlert, setDeleteAlert] = useState(false);
   const [deleteId, setDeleteId] = useState("");
   const [editFamilyPopUp, setEditFamilyPopUp] = useState(false);
+  const [addFamilyPopup, setAddFamilyPopup] = useState(false);
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -40,11 +42,17 @@ const ViewFamilyMembers = ({ familyData, getFamilyEdit }) => {
     return new Intl.DateTimeFormat("en-US", options).format(date);
   }
 
+  console.log(addFamilyPopup);
+  console.log(setAddFamilyPopup);
+
   return (
     <>
       <div className="flex flex-col gap-5">
         <div className="flex justify-end">
-          <button className="bg-[#00768A] text-white px-2 py-1 rounded-md ">
+          <button
+            onClick={() => setAddFamilyPopup(true)}
+            className="bg-[#00768A] text-white px-2 py-1 rounded-md "
+          >
             Add members
           </button>
         </div>
@@ -62,7 +70,11 @@ const ViewFamilyMembers = ({ familyData, getFamilyEdit }) => {
 
             <div className="w-[90%] space-y-1">
               <div className="flex justify-end gap-1">
-                <FaUserEdit onClick={() => setEditFamilyPopUp(true)} />
+                <FaUserEdit
+                  onClick={() => {
+                    setEditFamilyPopUp(true), setDeleteId(family._id);
+                  }}
+                />
                 <MdDelete
                   onClick={() => {
                     setDeleteAlert(true);
@@ -132,8 +144,32 @@ const ViewFamilyMembers = ({ familyData, getFamilyEdit }) => {
               <div className="h-[90vh] overflow-y-auto p-6 space-y-6">
                 <div className="bg-gray-500 h-[1px] w-full bg-opacity-30 mt-5">
                   <EditFamilyMemebrs
+                    deleteId={deleteId}
                     editFamilyPopUp={editFamilyPopUp}
                     setEditFamilyPopUp={setEditFamilyPopUp}
+                    getFamilyEdit={getFamilyEdit}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {addFamilyPopup && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 backdrop-blur-sm p-3 sm:p-0 lg:p-2">
+            <div className="bg-white rounded-lg border-2 z-10 w-full max-w-md mx-4 md:mx-0">
+              {/* Scrollable container with a fixed height */}
+              <div className="flex justify-between gap-10 items-center px-10 translate-y-5">
+                <p className="uppercase font-bold">Add Family members</p>
+                <RxCross2
+                  className="font-bold cursor-pointer"
+                  onClick={() => setAddFamilyPopup(false)}
+                />
+              </div>
+              <div className="h-[90vh] overflow-y-auto p-6 space-y-6">
+                <div className="bg-gray-500 h-[1px] w-full bg-opacity-30 mt-5">
+                  <AddFamilyMembers
+                    addFamilyPopup={addFamilyPopup}
+                    setAddFamilyPopup={setAddFamilyPopup}
                   />
                 </div>
               </div>

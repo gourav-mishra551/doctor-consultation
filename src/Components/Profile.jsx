@@ -144,6 +144,8 @@ const Profile = () => {
     getFamilyEdit();
   }, []);
 
+  console.log(getFamilyEdit);
+
   return (
     <div>
       <div className="bg-gray-300 bg-opacity-50 w-full h-[1px] mt-5"></div>

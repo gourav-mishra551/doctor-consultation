@@ -6,6 +6,9 @@ const AddFamilyMembers = ({
   setFamilyPopUp,
   setActiveSection,
   getFamilyEdit,
+  addFamilyPopup,
+  setAddFamilyPopup,
+  familyPopUp,
 }) => {
   const [avatar, setAvatar] = useState(null);
   const [saveLoader, setSaveLoader] = useState(false);
@@ -18,6 +21,7 @@ const AddFamilyMembers = ({
     isOther: false,
     otherRelation: "",
   });
+  const [check, setCheck] = useState(familyPopUp);
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -87,10 +91,16 @@ const AddFamilyMembers = ({
     } finally {
       setSaveLoader(false);
       setFamilyPopUp(false);
-      setActiveSection("familyProfile");
+      setAddFamilyPopup(false);
       getFamilyEdit();
+      setActiveSection("familyProfile");
     }
   };
+
+  console.log(addFamilyPopup);
+  console.log("100 number", setFamilyPopUp);
+  console.log("101 number", check);
+  console.log(getFamilyEdit);
 
   return (
     <div className="max-w-xl mx-auto mt-5 py-1 px-5 rounded-xl bg-gray-100">
@@ -241,15 +251,17 @@ const AddFamilyMembers = ({
           </div>
 
           <div className="mb-4 mt-5 flex gap-5">
-            <div>
-              <button
-                type="button"
-                onClick={() => setFamilyPopUp(false)}
-                className="bg-[#00768A] hover:bg-[#176e7e] text-white px-2 py-1 rounded-md focus:outline-none"
-              >
-                Cancel
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setCheck(false);
+                setFamilyPopUp(false);
+              }}
+              className="bg-[#00768A] hover:bg-[#176e7e] text-white px-2 py-1 rounded-md focus:outline-none"
+            >
+              Cancel
+            </button>
+
             <div>
               <button
                 type="submit"
