@@ -13,6 +13,7 @@ import { CiPhone } from "react-icons/ci";
 import MegaMenu from "../Components/MegaMenu";
 import { useState } from "react";
 import CategoriesHome from "../Components/CategoriesHome/CategoriesHome";
+import WhyChooseUs from "../Components/whyChooseUs/WhyChooseUs";
 const Home = () => {
   const [MegaMenubtn, setMegaMenubtn] = useState(false);
   const settings = {
@@ -64,6 +65,7 @@ const Home = () => {
           {/* <Categories /> */}
           <CategoriesHome />
         </div>
+        <WhyChooseUs/>
         <div className="py-10">
           <HowItWorks />
         </div>
@@ -210,7 +212,7 @@ const Home = () => {
           </Slider>
         </div>
 
-        <div className="appointment-form bg-[#1c8e81] sm:h-[350px] h-auto mt-20">
+        <div className="appointment-form bg-[#1c8e81] sm:h-[350px] h-auto mt-20 pb-10">
           <div className="flex sm:flex-row flex-col sm:max-w-6xl w-full mx-auto">
             <div className="left sm:w-[50%] w-full p-10 flex flex-col gap-5">
               <div className="flex gap-2 mt-10">
@@ -295,17 +297,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-
-        <div className="mt-4 border-red-600 w-full ">
-          <iframe
-            src="src/Assests/4205975-uhd_3840_2160_25fps.mp4"
-            frameborder="5"
-            className="w-[1500px] h-[700px]"
-            style={{ borderWidth: "5px" }}
-            title="Video Preview"
-          />
-        </div>
-        <div className="mt-20">
+        <div >
           <Footer />
         </div>
       </header>
