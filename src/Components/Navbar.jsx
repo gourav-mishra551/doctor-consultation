@@ -295,7 +295,7 @@ const Navbar = () => {
   };
   
   return (
-    <div className="bg-white sticky top-[-2px] z-50">
+    <div className="bg-white sticky top-[-2px] z-50 shadow-md">
       <nav className="text-black  max-w-[92vw] top-0 z-50 bg-white mx-auto">
         <div className="sm:max-w-7xl w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -529,28 +529,6 @@ const Navbar = () => {
 
       {/* MegaMenu for Desktop */}
       <div>
-        {/* {MegaMenubtn && (
-        <div className="bg-[#F7F6F9] bg-opacity-40 z-50">
-          <div className="flex justify-center gap-8 py-4 bg-[#00768A] text-white flex-wrap md:flex-nowrap">
-            {Object.keys(submenuData).map((menu, index) => (
-              <div key={index} className="relative cursor-pointer group">
-                <span
-                  className="cursor-pointer px-4 py-2 font-medium hover:scale-110 duration-300 relative z-10"
-                  onMouseEnter={(e) => handleMouseEnter(menu, e)}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  {menu.replace(/([A-Z])/g, " $1")}
-                </span>
-                <span className="absolute left-0 bottom-0 h-0.5 w-full bg-white scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100 group-hover:origin-left origin-left"></span>
-              </div>
-            ))}
-            
-          </div>
-        </div>
-      )} */}
-
-        
-    
           {/* MegaMenu Component */}
           <div
           ref={menuRef} // Attach ref to the container
