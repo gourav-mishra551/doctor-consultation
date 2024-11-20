@@ -57,7 +57,7 @@ import InsideIndia from "./Pages/AppointmentBooking/NewPatient/InsideIndia/Insid
 import BookingSlot from "./Pages/BookingSlot/BookingSlot";
 import Navbar from "./Components/Navbar";
 import TopHeader from "./Components/TopHeader";
-import { ToastContainer } from "react-toastify";
+
 
 function App() {
   const location = useLocation();

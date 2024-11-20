@@ -14,7 +14,7 @@ const ProfilePage = () => {
     <div>
       <Profile />
       <div className="mt-20">
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </div>
   );

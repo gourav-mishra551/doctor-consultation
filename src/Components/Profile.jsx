@@ -14,6 +14,7 @@ import SelfProfile from "./SelfProfile";
 import DoctorSelfProfile from "./DoctorSelfProfile";
 import {
   MdClose,
+  MdFamilyRestroom,
   MdKeyboardDoubleArrowUp,
   MdOutlineTimer,
 } from "react-icons/md";
@@ -22,6 +23,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AddFamilyMembers from "./AddFamilyMembers";
 import { RxCross2 } from "react-icons/rx";
 import ViewFamilyMembers from "./ViewFamilyMembers/ViewFamilyMembers";
+import toast from "react-hot-toast";
 const Profile = () => {
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [history, setHistory] = useState([]);
@@ -34,6 +36,8 @@ const Profile = () => {
   const [familyPopUp, setFamilyPopUp] = useState(false);
   const [editFamilyPopUp, setEditFamilyPopUp] = useState(false);
   const [familyData, setFamilyData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isFamilyOpen, setIsFamilyOpen] = useState(false);
 
   const toggleMenu = (menu) => {
     if (selectedMenu === menu) {
@@ -99,10 +103,13 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    bookings();
-    userData();
-    docotrData();
-  }, []);
+    if (id && token) {
+      bookings();
+      userData();
+      docotrData();
+      getFamilyEdit();
+    }
+  }, [id, token]);
 
   const convertToIndianDate = (dateString) => {
     const date = new Date(dateString);
@@ -119,7 +126,7 @@ const Profile = () => {
 
   const toggleDoctorProfile = () => setIsDoctorProfileOpen((prev) => !prev);
 
-  const toggleFamily = () => setIsDoctorProfileOpen((prev) => !prev);
+  const toggleFamily = () => setIsFamilyOpen((prev) => !prev);
 
   const getFamilyEdit = async () => {
     try {
@@ -137,15 +144,15 @@ const Profile = () => {
       console.log(familyData.data);
     } catch (error) {
       console.log(error);
+      // toast.error(error.response.data);
     }
   };
 
-  useEffect(() => {
-    getFamilyEdit();
-  }, []);
-
   console.log(getFamilyEdit);
 
+  if (loading) {
+    return <div>Loading...</div>; // Loader is displayed
+  }
   return (
     <div>
       <div className="bg-gray-300 bg-opacity-50 w-full h-[1px] mt-5"></div>
@@ -346,7 +353,7 @@ const Profile = () => {
                 }}
                 className="flex justify-center items-center gap-2 border w-[100%] p-2 bg-[#00768A] rounded-xl text-white"
               >
-                <IoPerson />
+                <FaHome />
 
                 <button type="button" className="text-xl">
                   Home
@@ -408,7 +415,7 @@ const Profile = () => {
                   onClick={toggleDoctorProfile}
                   className="flex justify-center items-center gap-2 border w-full p-2 bg-[#00768A] rounded-xl text-white cursor-pointer"
                 >
-                  <MdOutlineTimer />
+                  <FaUserDoctor />
                   <button type="button" className="text-xl focus:outline-none">
                     Doctor Profile
                   </button>
@@ -431,6 +438,41 @@ const Profile = () => {
                       className="text-white bg-gray-500 w-full py-2 rounded-lg"
                     >
                       Edit Profile
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Add Family Section */}
+              <div>
+                <div
+                  onClick={toggleFamily}
+                  className="flex justify-center items-center gap-2 border w-full p-2 bg-[#00768A] rounded-xl text-white cursor-pointer"
+                >
+                  <MdFamilyRestroom />
+                  <button type="button" className="text-xl focus:outline-none">
+                    Family
+                  </button>
+                </div>
+                {isFamilyOpen && (
+                  <div className="flex flex-col space-y-2 mt-2">
+                    <button
+                      onClick={() => {
+                        setActiveSection("familyProfile");
+                        setIsProfileOpen(false);
+                      }}
+                      className="text-white bg-gray-500 w-full py-2 rounded-lg"
+                    >
+                      View Members
+                    </button>
+                    <button
+                      onClick={() => {
+                        setFamilyPopUp(true);
+                        setIsProfileOpen(false);
+                      }}
+                      className="text-white bg-gray-500 w-full py-2 rounded-lg"
+                    >
+                      Add Family
                     </button>
                   </div>
                 )}
