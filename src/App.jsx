@@ -57,7 +57,6 @@ import BookingSlot from "./Pages/BookingSlot/BookingSlot";
 import Navbar from "./Components/Navbar";
 import TopHeader from "./Components/TopHeader";
 
-
 function App() {
   return (
     <div className="App">
