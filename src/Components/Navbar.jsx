@@ -30,10 +30,10 @@ const Navbar = () => {
   const [MegaMenubtn, setMegaMenubtn] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
   const [submenuPosition, setSubmenuPosition] = useState({ top: 0, left: 0 });
-
+  const menuRef = useRef(null);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [openSubMenus, setOpenSubMenus] = useState({});
-
+  const [isMegaMenuVisible, setIsMegaMenuVisible] = useState(false);
   const [Categoriesdata, setCategorydata] = useState([]);
   const submenuData = {
     PatientCare: [
@@ -101,6 +101,12 @@ const Navbar = () => {
     }));
   };
 
+  const handleHover = () => {
+    if (!isMegaMenuVisible) {
+      setIsMegaMenuVisible(true); // Set to true on the first hover
+    }
+  };
+
   const handleCategoryClick = (Categoriesdata) => {
     console.log(Categoriesdata);
   };
@@ -142,15 +148,14 @@ const Navbar = () => {
   const megaMenuRef = useRef(null);
   const servicesRef = useRef(null);
   // Detect clicks outside of Services or the mega menu
-  const handleClickOutside = (event) => {
-    if (
-      megaMenuRef.current &&
-      !megaMenuRef.current.contains(event.target) &&
-      !servicesRef.current.contains(event.target)
-    ) {
-      setIsMegaMenuOpen(false); // Close the mega menu if clicked outside
-    }
-  };
+
+ // Handle click outside
+ const handleClickOutside = (event) => {
+  if (menuRef.current && !menuRef.current.contains(event.target)) {
+    setIsMegaMenuVisible(false); // Hide the MegaMenu
+  }
+};
+
 
   const setBothRefs = (node) => {
     containerRef.current = node;
@@ -279,13 +284,23 @@ const Navbar = () => {
     } catch (error) {}
   };
 
+  const HandleScrolling = () => {
+    useEffect(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth", 
+        
+      });
+    }, []);
+  };
+  
   return (
-    <div className="bg-white">
+    <div className="bg-white sticky top-[-2px] z-50">
       <nav className="text-black  max-w-[92vw] top-0 z-50 bg-white mx-auto">
         <div className="sm:max-w-7xl w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link to="/" className="text-xl font-bold flex-shrink-0 ">
+            <Link to="/" className="text-xl font-bold flex-shrink-0 " onClick={HandleScrolling}>
               <img
                 className="h-14 w-[50vw] sm:w-[20vw]"
                 src={Image}
@@ -312,9 +327,9 @@ const Navbar = () => {
 
                 <div
                   className="relative cursor-pointer group"
-                  ref={servicesRef}
-                  onMouseEnter={(e) => handleMouseEnter(menu, e)} // Pass the event as `e`
-                  onMouseLeave={() => handleMouseLeave(menu)}
+                  ref={menuRef} 
+                  onMouseEnter={handleHover}
+                
                 >
                   <span className="relative z-10">Service</span>
                   <span className="absolute left-0 bottom-0 h-0.5 w-full bg-[#00768A] scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
@@ -463,7 +478,7 @@ const Navbar = () => {
                   {Object.keys(submenuData).map((menu, index) => (
                     <div key={index}>
                       <div
-                        className=" px-3 py-2 rounded-md text-sm hover:bg-blue-500 hover:text-white cursor-pointer flex"
+                        className=" px-3 py-2 rounded-md text-sm hover:bg-blue-500 hover:text-white cursor-pointer flex  "
                         onClick={() => toggleSubMenu(menu)}
                       >
                         {menu.replace(/([A-Z])/g, " $1")}
@@ -482,7 +497,7 @@ const Navbar = () => {
                           {submenuData[menu].map((subItem, index) => (
                             <li
                               key={index}
-                              className="block px-3 py-2 rounded-md text-sm hover:bg-blue-100"
+                              className="block px-3 py-2 rounded-md text-sm hover:bg-blue-100 border-red-700"
                             >
                               <span className="p-2 mt-2">{subItem}</span>
                               <hr />
@@ -534,7 +549,20 @@ const Navbar = () => {
         </div>
       )} */}
 
-        <MegaMenu />
+        
+    
+          {/* MegaMenu Component */}
+          <div
+          ref={menuRef} // Attach ref to the container
+          onMouseEnter={handleHover}
+          >
+          {isMegaMenuVisible && (
+            <div className=" top-full left-0 mt-2 bg-white text-black shadow-lg">
+              <MegaMenu />
+            </div>
+          )}
+          </div>
+       
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-
 import Headers from "../Components/Headers";
 import Footer from "../Components/Footer";
 import HowItWorks from "../Components/HowItWorks";
@@ -57,13 +56,13 @@ const Home = () => {
   };
 
   return (
-    <div >
+    <div>
       <header className="App-header">
         <Headers />
 
         <div className="py-10">
           {/* <Categories /> */}
-          <CategoriesHome/>
+          <CategoriesHome />
         </div>
         <div className="py-10">
           <HowItWorks />
@@ -73,7 +72,10 @@ const Home = () => {
             What our users say about their online consultation experience
           </p>
 
-          <Slider {...settings} className="mt-10 gap-10 max-w-[380px] sm:max-w-[1200px] mx-auto">
+          <Slider
+            {...settings}
+            className="mt-10 gap-10 max-w-[380px] sm:max-w-[1200px] mx-auto"
+          >
             <div className="flex  shadow-xl h-[200px] mb-5">
               <div className="flex gap-3">
                 <div>
@@ -208,7 +210,6 @@ const Home = () => {
           </Slider>
         </div>
 
-       
         <div className="appointment-form bg-[#1c8e81] sm:h-[350px] h-auto mt-20">
           <div className="flex sm:flex-row flex-col sm:max-w-6xl w-full mx-auto">
             <div className="left sm:w-[50%] w-full p-10 flex flex-col gap-5">
@@ -293,6 +294,16 @@ const Home = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="mt-4 border-red-600 w-full ">
+          <iframe
+            src="src/Assests/4205975-uhd_3840_2160_25fps.mp4"
+            frameborder="5"
+            className="w-[1500px] h-[700px]"
+            style={{ borderWidth: "5px" }}
+            title="Video Preview"
+          />
         </div>
         <div className="mt-20">
           <Footer />

@@ -94,7 +94,7 @@ function MegaMenu() {
     const menuItemRect = event.target.getBoundingClientRect();
     const containerRect = containerRef.current.getBoundingClientRect();
     setSubmenuPosition({
-      top: menuItemRect.bottom - containerRect.top + 90,
+      top: menuItemRect.bottom - containerRect.top + 70,
       left: menuItemRect.left - containerRect.left + 110,
     });
   };
@@ -124,12 +124,14 @@ function MegaMenu() {
 
       {hoveredItem && (
         <div
-          className={`absolute p-4 bg-white rounded-lg shadow-lg flex justify-center gap-18 z-50 transition-all duration-300 ${
+        
+          className={`absolute p-4 bg-white rounded-lg shadow-lg flex justify-center gap-18 z-50 transition-all duration-300 cursor-pointer  ${
             hoveredItem === "CenterOfExcellence" ? "w-full mr-[450px]" : "w-auto"
           }`}
           style={{
             top: `${submenuPosition.top}px`,
             left: hoveredItem === "CenterOfExcellence" ? 0 : `${submenuPosition.left}px`,
+          
           }}
           onMouseEnter={() => setHoveredItem(hoveredItem)}
           onMouseLeave={handleMouseLeave}
@@ -137,7 +139,7 @@ function MegaMenu() {
           {hoveredItem === "CenterOfExcellence" ? (
             <div className="grid grid-cols-4 gap-10 w-[88%] mx-auto cursor-pointer">
               {category.map((subItem, index) => (
-                <div key={index} className="flex items-start gap-3">
+                <div key={index} className="flex items-start gap-3 cursor-pointer ">
                   <img src={subItem.image} alt={subItem.specialtyName} className="h-10 w-10" />
                   <div>
                     <div className="text-black font-semibold hover:text-blue-700 transition-colors duration-200">
