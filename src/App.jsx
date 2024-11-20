@@ -57,10 +57,11 @@ import BookingSlot from "./Pages/BookingSlot/BookingSlot";
 import Navbar from "./Components/Navbar";
 import TopHeader from "./Components/TopHeader";
 
+
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
+     
         <TopHeader />
         <Navbar />
         <Routes>
@@ -119,13 +120,11 @@ function App() {
             element={<PrescriptionMakerPage />}
           />
           <Route path="/edit-profile" element={<EditProfilePage />} />
-          <Route path="/add-family-members" element={<AddFamilyMembers />} />
+        
           {/* <Route
             path="/view-family-members"
             element={<ViewFamilyMembersPage />}
           /> */}
-
-          {/* <Route path='/login' element={<Login />} /> */}
           <Route path="/appointment/inside-india" element={<InsideIndia />} />
           <Route path="/OutSideIndia" element={<OutSideIndia />} />
           <Route path="/ReturningPatientPage" element={<ReturningPatient />} />
@@ -138,7 +137,7 @@ function App() {
             element={<ConsultwithNewDoctor />}
           />
         </Routes>
-      </BrowserRouter>
+    
     </div>
   );
 }
