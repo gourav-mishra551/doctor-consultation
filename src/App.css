@@ -68,3 +68,15 @@
     transform: rotate(360deg) translateY(-200%);
   }
 }
+
+
+.slick-next:before {
+  position: relative !important;
+  left: -9px !important;
+  top: -9px !important;
+}
+.slick-prev:before {
+  position: relative !important;
+  left: -9px !important;
+  top: -9px !important;
+}
