@@ -282,15 +282,6 @@ const Profile = () => {
                         Add Family
                       </Link>
                     </li>
-
-                    <li>
-                      <Link
-                        onClick={() => setEditFamilyPopUp(true)}
-                        className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-gray-500"
-                      >
-                        Edit Family
-                      </Link>
-                    </li>
                   </ul>
                 )}
               </li>
