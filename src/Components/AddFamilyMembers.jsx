@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { FaImage } from "react-icons/fa6";
 
 const AddFamilyMembers = ({
@@ -7,8 +8,8 @@ const AddFamilyMembers = ({
   setActiveSection,
   getFamilyEdit,
   addFamilyPopup,
-  setAddFamilyPopup,
   familyPopUp,
+  setAddFamilyPopup,
 }) => {
   const [avatar, setAvatar] = useState(null);
   const [saveLoader, setSaveLoader] = useState(false);
@@ -23,18 +24,33 @@ const AddFamilyMembers = ({
   });
   const [check, setCheck] = useState(familyPopUp);
 
+  // console.log(setFamilyPopUp);
+  // console.log(familyPopUp);
+  console.log(getFamilyEdit);
+  console.log("Add family popup", addFamilyPopup);
+  console.log("set Add family popup", setAddFamilyPopup);
+
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      if (!["image/jpeg", "image/png"].includes(file.type)) {
+        toast.error("Only JPEG and PNG files are allowed.");
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        // 2MB limit
+        toast.error("File size must be under 2MB.");
+        return;
+      }
       const reader = new FileReader();
       reader.onloadend = () => {
-        setAvatar(reader.result); // Set the uploaded image as preview
+        setAvatar(reader.result);
         setFormData({
           ...formData,
-          avatar: file, // Store the file itself for submission
+          avatar: file,
         });
       };
       reader.readAsDataURL(file);
@@ -51,12 +67,6 @@ const AddFamilyMembers = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const finalData = {
-      ...formData,
-      relation:
-        formData.relation === "OTHER" ? formData.relation : formData.relation,
-    };
 
     // Create FormData to append file data
     const formDataToSend = new FormData();
@@ -86,14 +96,26 @@ const AddFamilyMembers = ({
         }
       );
       console.log(response.data);
-    } catch (error) {
-      console.log("Error submitting data:", error);
-    } finally {
+
+      // Success actions
       setSaveLoader(false);
       setFamilyPopUp(false);
       setAddFamilyPopup(false);
+      toast.success("Family member added successfully!");
+    } catch (error) {
+      console.error("Error submitting data:", error);
+
+      // Enhanced error handling
+      const errorMessage =
+        error?.response?.data?.msg ||
+        error?.message ||
+        "An unexpected error occurred.";
+      toast.error(errorMessage);
+    } finally {
+      // Ensure this runs after the request, whether success or failure
       getFamilyEdit();
       setActiveSection("familyProfile");
+      setSaveLoader(false); // Stop the loader after the process completes
     }
   };
 
@@ -254,7 +276,6 @@ const AddFamilyMembers = ({
             <button
               type="button"
               onClick={() => {
-                setCheck(false);
                 setFamilyPopUp(false);
               }}
               className="bg-[#00768A] hover:bg-[#176e7e] text-white px-2 py-1 rounded-md focus:outline-none"
@@ -265,7 +286,7 @@ const AddFamilyMembers = ({
             <div>
               <button
                 type="submit"
-                className="bg-[#00768A] hover:bg-[#176e7e] text-white px-2 py-1 rounded-md"
+                className="bg-[#00768A] hover:bg-[#176e7e] text-white px-2 py-1 rounded-md focus:outline-none"
               >
                 {saveLoader ? "Saving..." : "Save"}
               </button>
