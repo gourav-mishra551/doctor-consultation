@@ -5,6 +5,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TopHeader from "./TopHeader";
+import Footer from "./Footer";
 const DrExam = () => {
   const [data, setData] = useState({
     selectDate: Date.now(),
@@ -397,6 +398,7 @@ const DrExam = () => {
                     />
                     <button
                       onClick={Submit}
+                      type="button"
                       className="bg-[#4BAAB3] text-white font-semibold py-2 px-4 rounded-md hover:bg-[#3A8C8E] transition duration-300"
                     >
                       Apply
