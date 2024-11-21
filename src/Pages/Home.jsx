@@ -13,6 +13,8 @@ import { CiPhone } from "react-icons/ci";
 import MegaMenu from "../Components/MegaMenu";
 import { useState } from "react";
 import CategoriesHome from "../Components/CategoriesHome/CategoriesHome";
+import WhyChooseUs from "../Components/whyChooseUs/WhyChooseUs";
+import TestimonialSection from "../Components/Testimonial/Testimonial";
 const Home = () => {
   const [MegaMenubtn, setMegaMenubtn] = useState(false);
   const settings = {
@@ -35,92 +37,17 @@ const Home = () => {
           {/* <Categories /> */}
           <CategoriesHome />
         </div>
-        <div className="py-10">
+        <WhyChooseUs />
+        <div className="py-10 bg-gray-50">
           <HowItWorks />
         </div>
-        <div className="slider-container mt-10">
-          <p className="text-xl sm:text-3xl font-bold text-center text-[#1c8e81]">
-            What our users say about their online consultation experience
-          </p>
 
-          <Slider
-            {...settings}
-            className="mt-10 flex gap-6 max-w-[380px] sm:max-w-[1200px] mx-auto p-10" // Adjust gap as needed
-          >
-            {/* Testimonial Card 1 */}
-            <div className="relative bg-[#001439] rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:opacity-90 hover:translate-y-2 p-5">
-              <div className="flex gap-5">
-                {/* Avatar */}
-                <div className="w-[120px] h-[120px] rounded-full overflow-hidden bg-gray-200 border-4 border-[#00768A] shadow-lg">
-                  <img
-                    src="dr-1.jpg"
-                    alt="Profile"
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-
-                {/* Profile Info */}
-                <div className="flex flex-col justify-center">
-                  <p className="text-xl text-[#ffff] font-semibold leading-6">
-                    Arman Ali
-                  </p>
-                  <p className="text-sm text-[#00768A] font-semibold">
-                    Anonymous
-                  </p>
-                </div>
-              </div>
-
-              {/* Testimonial Text */}
-              <div className="px-6 pb-6">
-                <p className="text-base text-[#ffff] leading-7 font-medium">
-                  Excellent experience consulting on Practo. I could solve my
-                  health issue without going to a clinic! Highly recommended.
-                </p>
-                <p className="mt-4 text-sm text-[#ffff] italic">
-                  - An easy, effective solution!
-                </p>
-              </div>
-            </div>
-
-            <div className="relative bg-[#001439] rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:opacity-90 hover:translate-y-2 p-5">
-              <div className="flex gap-5">
-                {/* Avatar */}
-                <div className="w-[120px] h-[120px] rounded-full overflow-hidden bg-gray-200 border-4 border-[#00768A] shadow-lg">
-                  <img
-                    src="dr-1.jpg"
-                    alt="Profile"
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-
-                {/* Profile Info */}
-                <div className="flex flex-col justify-center">
-                  <p className="text-xl text-[#ffff] font-semibold leading-6">
-                    Arman Ali
-                  </p>
-                  <p className="text-sm text-[#00768A] font-semibold">
-                    Anonymous
-                  </p>
-                </div>
-              </div>
-
-              {/* Testimonial Text */}
-              <div className="px-6 pb-6">
-                <p className="text-base text-[#ffff] leading-7 font-medium">
-                  Excellent experience consulting on Practo. I could solve my
-                  health issue without going to a clinic! Highly recommended.
-                </p>
-                <p className="mt-4 text-sm text-[#ffff] italic">
-                  - An easy, effective solution!
-                </p>
-              </div>
-            </div>
-
-            {/* Duplicate cards can follow the same structure */}
-          </Slider>
+        <div className="my-5">
+          <TestimonialSection />
         </div>
+        {/* appointment form */}
 
-        <div className="appointment-form bg-[#1c8e81] sm:h-[350px] h-auto mt-20">
+        <div className="appointment-form bg-[#1c8e81] sm:h-[350px] h-auto mt-20 pb-10">
           <div className="flex sm:flex-row flex-col sm:max-w-6xl w-full mx-auto">
             <div className="left sm:w-[50%] w-full p-10 flex flex-col gap-5">
               <div className="flex gap-2 mt-10">
@@ -183,7 +110,7 @@ const Home = () => {
               </div>
 
               <div className="mt-7 flex sm:flex-row flex-col gap-5">
-                <div className="book-btn h-[50px] w-[220px] text-sm text-white cursor-pointer font-bold bg-red-700 rounded-xl flex justify-center items-center hover:bg-green-950 transition-all ease-in-out duration-300 delay-150">
+                <div className="book-btn h-[50px] w-[220px] text-sm text-white cursor-pointer font-bold rounded-xl flex justify-center items-center hover:bg-[#206e65] shadow-md shadow-slate-200 transition-all ease-in-out duration-300 delay-150">
                   <button className="">BOOK AN APPOINTMENT</button>
                 </div>
                 <p className="font-bold mt-2 text-white">(OR)</p>
@@ -197,7 +124,7 @@ const Home = () => {
                   <p className="mt-1 font-bold text-xl text-white">
                     {" "}
                     <NavLink to="tel:+9999099538">
-                      <span>9999099538</span>
+                      <span className="text-white hover:text-gray-400">9999099538</span>
                     </NavLink>
                   </p>
                 </div>
@@ -205,17 +132,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-
-        <div className="mt-4 border-red-600 w-full ">
-          <iframe
-            src="src/Assests/4205975-uhd_3840_2160_25fps.mp4"
-            frameborder="5"
-            className="w-[1500px] h-[700px]"
-            style={{ borderWidth: "5px" }}
-            title="Video Preview"
-          />
-        </div>
-        <div className="mt-20">
+        <div >
           <Footer />
         </div>
       </header>

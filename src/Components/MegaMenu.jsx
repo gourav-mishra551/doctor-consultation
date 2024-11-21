@@ -94,8 +94,8 @@ function MegaMenu() {
     const menuItemRect = event.target.getBoundingClientRect();
     const containerRect = containerRef.current.getBoundingClientRect();
     setSubmenuPosition({
-      top: menuItemRect.bottom - containerRect.top + 70,
-      left: menuItemRect.left - containerRect.left + 110,
+      top: menuItemRect.bottom - containerRect.top + 76,
+      left: menuItemRect.left - containerRect.left + 60,
     });
   };
 
@@ -125,7 +125,7 @@ function MegaMenu() {
       {hoveredItem && (
         <div
         
-          className={`absolute p-4 bg-white rounded-lg shadow-lg flex justify-center gap-18 z-50 transition-all duration-300 cursor-pointer  ${
+          className={`absolute p-4 bg-white  shadow-lg flex justify-center gap-18 z-50 transition-all duration-300 cursor-pointer  ${
             hoveredItem === "CenterOfExcellence" ? "w-full mr-[450px]" : "w-auto"
           }`}
           style={{
@@ -140,12 +140,12 @@ function MegaMenu() {
             <div className="grid grid-cols-4 gap-10 w-[88%] mx-auto cursor-pointer">
               {category.map((subItem, index) => (
                 <div key={index} className="flex items-start gap-3 cursor-pointer ">
-                  <img src={subItem.image} alt={subItem.specialtyName} className="h-10 w-10" />
-                  <div>
-                    <div className="text-black font-semibold hover:text-blue-700 transition-colors duration-200">
+                  <img src={subItem.image} alt={subItem.specialtyName} className="h-16 hover:scale-105 transition ease-out shadow-md shadow-slate-400 w-16 border p-2 bg-gray-200 rounded-md" />
+                  <div className="ml-2">
+                    <div className="text-black font-semibold hover:text-[#00768A] transition-colors duration-200">
                       {subItem.specialtyName}
                     </div>
-                    <span className="text-gray-800">See all Doctors</span>
+                    <span className="text-gray-800 text-xs font-semibold underline underline-offset-4 hover:text-[#00768A]">See all Doctors</span>
                   </div>
                 </div>
               ))}
