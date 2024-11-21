@@ -5,7 +5,9 @@ import { TiTickOutline } from "react-icons/ti";
 import axios from "axios";
 import { ImCross } from "react-icons/im";
 import Footer from "./Footer";
+import "./DoctorForm.css";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Import icons
+import { useLocation } from "react-router-dom";
 const DoctorForm = () => {
   const [formValues, setFormValues] = useState({
     specialitycategories: [],
@@ -48,6 +50,17 @@ const DoctorForm = () => {
       },
     ],
   });
+
+  console.log("fgffb", formValues.aboutDoctor);
+
+  const isNextDisabled =
+    formValues.specialitycategories.length === 0 ||
+    formValues.language.length === 0 ||
+    !formValues.aboutDoctor ||
+    !formValues.RegistrationNumber ||
+    !formValues.councilName;
+
+  console.log(formValues.years_of_experience[0].description);
 
   const yearsOfExperience = formValues?.years_of_experience || [];
   const qualifications = formValues?.qualifications || [];
@@ -215,12 +228,14 @@ const DoctorForm = () => {
   const [CustomOpen, CustomSetOpen] = useState(false);
   const [step, setStep] = useState(1);
 
-  const handleNextStep = () => {
+  const handleNextStep = (e) => {
     setStep(step + 1);
+    window.scrollTo(0, 0);
   };
 
   const handlePreviousStep = () => {
     setStep(step - 1);
+    window.scrollTo(0, 0);
   };
 
   // Toggle function to open/close dropdown
@@ -635,7 +650,6 @@ const DoctorForm = () => {
     "Indian Medical Council",
   ];
 
-
   return (
     <div className="bg-[#E3EAF0]">
       <div className="bg-transparent my-10 sm:max-w-5xl w-full mx-auto h-auto p-10 rounded-xl shadow-lg">
@@ -664,6 +678,9 @@ const DoctorForm = () => {
           {/* Step 1: Doctor's Details */}
           {step === 1 && (
             <div className="bg-white p-10 rounded-xl shadow-lg">
+              <p className="font-semibold text-4xl text-center text-[#00768A] mb-6">
+                We are happy to on board you.
+              </p>
               <p className="font-semibold text-2xl text-center text-[#00768A] mb-6">
                 Doctor's Details
               </p>
@@ -672,12 +689,12 @@ const DoctorForm = () => {
 
                 <div className="relative inline-block text-left">
                   <label htmlFor="qualifications" className="text-[#00768A]">
-                    Select Specialties:
+                    Select your Specialties:
                   </label>
                   <button
                     type="button"
                     onClick={toggleDropdown}
-                    className="items-center justify-between grid grid-cols-1 sm:grid-cols-2 gap-2 md:grid-cols-3 border-2 bg-[#ffffff] bg-opacity-100 border-gray-300 text-black px-4 py-2 rounded-md w-full text-start focus:outline-none"
+                    className="items-start justify-start grid grid-cols-1 sm:grid-cols-2 gap-2 md:grid-cols-4 border-2 bg-[#ffffff] bg-opacity-100 border-gray-300 text-black px-4 py-2 rounded-md w-full text-start focus:outline-none  focus:border-[#00768A]"
                   >
                     {/* Display selected specialties */}
                     {formValues.specialitycategories.length > 0
@@ -710,7 +727,7 @@ const DoctorForm = () => {
                           <div
                             key={ele._id}
                             onClick={() => handleSelectSpecialty(ele._id)}
-                            className="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-[#00768A] cursor-pointer"
+                            className="flex items-center justify-between px-4 py-2 hover:text-white text-gray-700 hover:bg-[#00768A] cursor-pointer"
                           >
                             <span>{ele.specialtyName}</span>
                             {/* Add checkmark if the option is selected */}
@@ -729,13 +746,14 @@ const DoctorForm = () => {
                 {/* Language */}
                 <div className="relative">
                   <label htmlFor="language" className="text-[#00768A]">
-                    Select Language:
+                    Select your Language:
                   </label>
 
                   {/* Custom dropdown trigger */}
-                  <div
+                  <button
                     className="border border-gray-300 w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A] flex items-center justify-between cursor-pointer"
                     onClick={LangtoggleDropdown}
+                    type="button"
                   >
                     <div className="flex items-center">
                       {/* {formValues.language.length > 0
@@ -747,7 +765,7 @@ const DoctorForm = () => {
                       {/* Toggle arrow */}
                       {CustomLangOpen ? <FaChevronUp /> : <FaChevronDown />}
                     </div>
-                  </div>
+                  </button>
 
                   {/* Dropdown content */}
                   {CustomLangOpen && (
@@ -760,7 +778,7 @@ const DoctorForm = () => {
                           value={customLanguage}
                           onChange={(e) => setCustomLanguage(e.target.value)}
                           placeholder="Enter custom language"
-                          className="w-full p-2 border border-gray-300 rounded-md mb-2"
+                          className="w-full p-2 border border-gray-300 rounded-md mb-2 focus:outline-none focus:border-[#00768A]"
                         />
                         <button
                           onClick={handleCustomLanguageSubmit}
@@ -809,109 +827,35 @@ const DoctorForm = () => {
                 {/* Council Name */}
                 <div className="relative">
                   <label htmlFor="CouncilName" className="text-[#00768A]">
-                    Select Council Name:
+                    Select your Council Name:
                   </label>
 
-                  {/* Custom dropdown trigger */}
-                  <div
-                    className="border border-gray-300 w-full max-w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A] flex items-center justify-between cursor-pointer"
-                    onClick={CustomtoggleDropdown}
-                  >
-                    <div className="flex items-center">
-                      {/* Display selected councils */}
-                      {/* {formValues.councilName.length > 0
-                        ? formValues.councilName.join(", ") // Display all selected councils as a comma-separated string
-                        : "Select a Council"} */}
-                      {"Select a Council"}
-                    </div>
-                    <div className="flex items-center">
-                      {/* Toggle arrow */}
-                      {CustomOpen ? <FaChevronUp /> : <FaChevronDown />}
-                    </div>
-                  </div>
-
-                  {/* Show custom input inside dropdown */}
-                  {CustomOpen && (
-                    <div className="absolute top-full left-0 w-full bg-white shadow-lg mt-2 border border-gray-300 rounded-md z-10">
-                      {/* Container for input and button */}
-                      <div className="p-2">
-                        {/* Input field for custom council */}
-                        <input
-                          type="text"
-                          value={customCouncil}
-                          onChange={(e) => setCustomCouncil(e.target.value)}
-                          placeholder="Enter custom council name"
-                          className="w-full p-2 border border-gray-300 rounded-md mb-2"
-                        />
-                        <button
-                          onClick={handleCustomCouncilSubmit}
-                          className="w-full bg-[#00768A] text-white p-2 rounded-md"
-                        >
-                          Add Custom Council
-                        </button>
-                      </div>
-
-                      {/* Render predefined council options */}
-                      <div className="max-h-60 overflow-y-auto">
-                        {CouncilName.map((ele, index) => (
-                          <div
-                            key={index}
-                            onClick={() => handleCouncilSelect(ele)} // Add council to the array on selection
-                            className="cursor-pointer hover:bg-[#00768A] text-black p-2"
-                          >
-                            {ele}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Render selected council names with remove option */}
-                      {/* {formValues.councilName.length > 0 && (
-                        <div className="p-2 mt-2">
-                          <h4 className="text-sm font-semibold">
-                            Selected Councils:
-                          </h4>
-                          {formValues.councilName.map((council, idx) => (
-                            <div
-                              key={idx}
-                              className="flex items-center justify-between p-2"
-                            >
-                              <span>{council}</span>
-                              <button
-                                onClick={() => handleRemoveCouncil(council)} // Remove council from the list
-                                className="text-red-500"
-                              >
-                                Remove
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      )} */}
-                    </div>
-                  )}
-
-                  {/* Render Selected Council with cross button */}
-
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {Array.isArray(formValues.councilName) &&
-                      formValues.councilName.map((council, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center gap-2 bg-[#00768A] p-2 rounded-md"
-                        >
-                          <p className="text-white">{council}</p>
-                          <ImCross
-                            style={{
-                              fontSize: "10px",
-                              color: "white",
-                              cursor: "pointer",
-                            }}
-                            onClick={() => handleCouncilNameRemove(council)} // Remove council
-                          />
-                        </div>
+                  <div>
+                    <select
+                      onChange={handleChange}
+                      name="councilName"
+                      value={formValues.councilName}
+                      className="border border-gray-300 w-full max-w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A] flex items-center justify-between cursor-pointer"
+                    >
+                      <option>Select Your Council Name</option>
+                      {CouncilName.map((council) => (
+                        <option>{council}</option>
                       ))}
+                    </select>
                   </div>
                 </div>
 
+                {formValues.councilName ? (
+                  <input
+                    placeholder="Enter Your Registration Number"
+                    onChange={handleChange}
+                    name="RegistrationNumber"
+                    value={formValues.RegistrationNumber}
+                    className="border border-gray-300 w-full max-w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A] flex items-center justify-between cursor-pointer"
+                    required
+                  />
+                ) : null}
+                {console.log(formValues.RegistrationNumber)}
                 {/* <div>
                   <label
                     className="text-[#00768A]"
@@ -932,7 +876,7 @@ const DoctorForm = () => {
 
                 <div className="gap-5">
                   <label className="text-[#00768A]" htmlFor="DoctorDescription">
-                    Doctor's Description
+                    Your Professional Summary
                   </label>
                   <textarea
                     className="border border-gray-300 w-full h-18 p-3 rounded-md focus:outline-none focus:border-[#00768A]"
@@ -950,11 +894,21 @@ const DoctorForm = () => {
                 <button
                   type="button"
                   onClick={handleNextStep}
-                  className="bg-[#00768A] text-white px-6 py-2 rounded-md hover:bg-[#00607A] sm:w-[auto] w-[100%]"
+                  className={`px-6 py-2 rounded-md sm:w-[auto] w-[100%] ${
+                    isNextDisabled
+                      ? "bg-gray-400 text-white cursor-not-allowed"
+                      : "bg-[#00768A] text-white hover:bg-[#00607A]"
+                  }`}
+                  disabled={isNextDisabled}
                 >
                   Next
                 </button>
               </div>
+
+              {console.log(
+                "year if ",
+                formValues.years_of_experience.description
+              )}
             </div>
           )}
 
@@ -962,7 +916,7 @@ const DoctorForm = () => {
 
           {step === 2 && (
             <div className="p-6 bg-white rounded-lg shadow-md">
-              <h2 className="text-2xl font-semibold text-[#00768A] mb-6">
+              <h2 className="text-2xl flex justify-center items-center font-semibold text-[#00768A] mb-6">
                 Doctor Profile Form
               </h2>
 
@@ -982,6 +936,7 @@ const DoctorForm = () => {
                         <MdDelete
                           onClick={() => handleDeleteQualification(index)}
                           className="cursor-pointer"
+                          style={{color:"red"}}
                         />
                       </div>
                     ) : null}
@@ -995,7 +950,7 @@ const DoctorForm = () => {
                         type="text"
                         name="instituteName"
                         required
-                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                        className="w-full mt-1 p-2 border border-gray-300 rounded-md  focus:outline-none  focus:border-[#00768A] "
                         value={
                           formValues.qualifications[index]?.instituteName || ""
                         }
@@ -1019,7 +974,7 @@ const DoctorForm = () => {
                         type="text"
                         name="degree"
                         required
-                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                         value={qual.degree}
                         onChange={(e) =>
                           handleInputChange(
@@ -1041,7 +996,7 @@ const DoctorForm = () => {
                         type="text"
                         name="fieldOfStudy"
                         required
-                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                         value={qual.fieldOfStudy}
                         onChange={(e) =>
                           handleInputChange(
@@ -1061,25 +1016,26 @@ const DoctorForm = () => {
                           Start Month:
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           name="startMonth"
                           placeholder="MM"
-                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                           value={qual.startDate?.month}
                           onChange={(e) =>
-                            handleDateChange(e, index, "startDate", "month")
+                            handleDateChange(e, 0, "startDate", "month")
                           }
                         />
                       </div>
+
                       <div>
                         <label className="block text-sm font-medium text-[#00768A]">
                           Start Year:
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           name="startYear"
                           placeholder="YYYY"
-                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                           value={qual.startDate?.year}
                           onChange={(e) =>
                             handleDateChange(e, index, "startDate", "year")
@@ -1095,10 +1051,10 @@ const DoctorForm = () => {
                           End Month:
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           name="endMonth"
                           placeholder="MM"
-                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                           value={qual.endDate?.month}
                           onChange={(e) =>
                             handleDateChange(e, index, "endDate", "month")
@@ -1110,10 +1066,10 @@ const DoctorForm = () => {
                           End Year:
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           name="endYear"
                           placeholder="YYYY"
-                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                           value={qual.endDate?.year}
                           onChange={(e) =>
                             handleDateChange(e, index, "endDate", "year")
@@ -1129,7 +1085,7 @@ const DoctorForm = () => {
                       </label>
                       <textarea
                         name="description"
-                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                         value={qual.description}
                         onChange={(e) =>
                           handleInputChange(
@@ -1143,7 +1099,7 @@ const DoctorForm = () => {
                     </div>
 
                     {/* Skills */}
-                    <div className="mb-3 flex gap-3">
+                    <div className="mb-3 flex  items-center gap-3">
                       <div className="w-[80%]">
                         <label className="block text-sm font-medium text-[#00768A]">
                           Skills
@@ -1155,13 +1111,13 @@ const DoctorForm = () => {
                           onChange={(e) =>
                             setQualificationSkill(e.target.value)
                           }
-                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                         />
                       </div>
                       <button
                         type="button"
                         onClick={() => HandleSkillOfQualification(index)}
-                        className="mb-6 px-4 py-2 mt-6 bg-[#00607A] text-white rounded-md hover:bg-[#306978] transition duration-300"
+                        className=" px-4 py-2 mt-8 bg-[#00607A] text-white rounded-md hover:bg-[#306978] transition duration-300 focus:outline-none"
                       >
                         Add
                       </button>
@@ -1180,6 +1136,7 @@ const DoctorForm = () => {
                                 fontSize: "10px",
                                 color: "white",
                                 marginTop: "5px",
+                                cursor:"pointer"
                               }}
                               onClick={() =>
                                 handleQualificationDelete(index, skillIndex)
@@ -1215,6 +1172,7 @@ const DoctorForm = () => {
                       <div className="flex justify-end">
                         <MdDelete
                           onClick={() => HandleDeleteExperience(index)}
+                          style={{color:"red",cursor:"pointer"}}
                         />
                       </div>
                     ) : null}
@@ -1225,7 +1183,7 @@ const DoctorForm = () => {
                       </label>
                       <input
                         type="text"
-                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                         value={exp.jobTitle}
                         onChange={(e) =>
                           handleInputChange(
@@ -1243,7 +1201,7 @@ const DoctorForm = () => {
                         Employment Type:
                       </label>
                       <select
-                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        className="w-full mt-1 p-2 border border-gray-300 rounded-md  focus:outline-none  focus:border-[#00768A]"
                         value={exp.employmentType}
                         onChange={(e) =>
                           handleInputChange(
@@ -1268,7 +1226,7 @@ const DoctorForm = () => {
                       </label>
                       <input
                         type="text"
-                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                         value={exp.organizationName}
                         onChange={(e) =>
                           handleInputChange(
@@ -1287,7 +1245,7 @@ const DoctorForm = () => {
                       </label>
                       <input
                         type="text"
-                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                        className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#00768A]"
                         value={exp.organizationLocation}
                         onChange={(e) =>
                           handleInputChange(
@@ -1310,7 +1268,7 @@ const DoctorForm = () => {
                           type="text"
                           name="startMonth"
                           placeholder="MM"
-                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                           value={exp.startDate?.month || ""}
                           onChange={(e) =>
                             handleInputChange(
@@ -1330,7 +1288,7 @@ const DoctorForm = () => {
                           type="text"
                           name="startYear"
                           placeholder="YYYY"
-                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                           value={exp.startDate?.year || ""}
                           onChange={(e) =>
                             handleInputChange(
@@ -1360,7 +1318,7 @@ const DoctorForm = () => {
                             type="text"
                             name="endMonth"
                             placeholder="MM"
-                            className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                            className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                             value={exp.endDate?.month}
                             onChange={(e) =>
                               handleInputChange(
@@ -1380,7 +1338,7 @@ const DoctorForm = () => {
                             type="text"
                             name="endYear"
                             placeholder="YYYY"
-                            className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                            className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                             value={exp.endDate?.year}
                             onChange={(e) =>
                               handleInputChange(
@@ -1425,13 +1383,13 @@ const DoctorForm = () => {
                           placeholder="Skills"
                           value={skillInput}
                           onChange={(e) => setSkillInput(e.target.value)}
-                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#00768A]"
+                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                         />
                       </div>
                       <button
                         type="button"
                         onClick={() => HandleSkillOfExperience(index)}
-                        className="mb-6 px-4 py-2 mt-6 bg-[#00607A] text-white rounded-md hover:bg-[#306978] transition duration-300"
+                        className="mb-6 px-4 py-2 mt-[32px] bg-[#00607A] text-white rounded-md hover:bg-[#306978] transition duration-300"
                       >
                         Add
                       </button>

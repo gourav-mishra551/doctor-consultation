@@ -18,41 +18,12 @@ const Home = () => {
   const settings = {
     dots: false,
     infinite: true,
+    speed: 500,
     slidesToShow: 3,
-    slidesToScroll: 1,
+    slidesToScroll: 3,
     autoplay: true,
-    speed: 4000,
-    autoplaySpeed: 2000,
-    cssEase: "linear",
-    responsive: [
-      {
-        breakpoint: 1024, // Screens smaller than 1024px
-        settings: {
-          slidesToShow: 2, // Show 2 slides on medium screens
-          slidesToScroll: 1,
-          infinite: true,
-          dots: false,
-        },
-      },
-      {
-        breakpoint: 768, // Screens smaller than 768px
-        settings: {
-          slidesToShow: 1, // Show 1 slide on small screens
-          slidesToScroll: 1,
-          infinite: true,
-          dots: false,
-        },
-      },
-      {
-        breakpoint: 480, // Screens smaller than 480px
-        settings: {
-          slidesToShow: 1, // Show 1 slide on very small screens
-          slidesToScroll: 1,
-          infinite: true,
-          dots: false,
-        },
-      },
-    ],
+    autoplaySpeed: 3000,
+    arrows: true, // Disable default arrows
   };
 
   return (
@@ -74,139 +45,78 @@ const Home = () => {
 
           <Slider
             {...settings}
-            className="mt-10 gap-10 max-w-[380px] sm:max-w-[1200px] mx-auto"
+            className="mt-10 flex gap-6 max-w-[380px] sm:max-w-[1200px] mx-auto p-10" // Adjust gap as needed
           >
-            <div className="flex  shadow-xl h-[200px] mb-5">
-              <div className="flex gap-3">
-                <div>
+            {/* Testimonial Card 1 */}
+            <div className="relative bg-[#001439] rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:opacity-90 hover:translate-y-2 p-5">
+              <div className="flex gap-5">
+                {/* Avatar */}
+                <div className="w-[120px] h-[120px] rounded-full overflow-hidden bg-gray-200 border-4 border-[#00768A] shadow-lg">
                   <img
                     src="dr-1.jpg"
-                    alt=""
-                    className="w-[40px] h-[40px] rounded-full"
+                    alt="Profile"
+                    className="object-cover w-full h-full"
                   />
                 </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold">Arman Ali</p>
-                  <p className="font-semibold">Anonymous</p>
+
+                {/* Profile Info */}
+                <div className="flex flex-col justify-center">
+                  <p className="text-xl text-[#ffff] font-semibold leading-6">
+                    Arman Ali
+                  </p>
+                  <p className="text-sm text-[#00768A] font-semibold">
+                    Anonymous
+                  </p>
                 </div>
               </div>
-              <div>
-                <p className="font-normal leading-5">
+
+              {/* Testimonial Text */}
+              <div className="px-6 pb-6">
+                <p className="text-base text-[#ffff] leading-7 font-medium">
                   Excellent experience consulting on Practo. I could solve my
-                  heath issue without going to a clinic! highly recomended
+                  health issue without going to a clinic! Highly recommended.
+                </p>
+                <p className="mt-4 text-sm text-[#ffff] italic">
+                  - An easy, effective solution!
                 </p>
               </div>
             </div>
 
-            <div className="flex p-5 shadow-xl h-[200px] mb-5">
-              <div className="flex gap-3">
-                <div>
+            <div className="relative bg-[#001439] rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:opacity-90 hover:translate-y-2 p-5">
+              <div className="flex gap-5">
+                {/* Avatar */}
+                <div className="w-[120px] h-[120px] rounded-full overflow-hidden bg-gray-200 border-4 border-[#00768A] shadow-lg">
                   <img
                     src="dr-1.jpg"
-                    alt=""
-                    className="w-[40px] h-[40px] rounded-full"
+                    alt="Profile"
+                    className="object-cover w-full h-full"
                   />
                 </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold">Arman Ali</p>
-                  <p className="font-semibold">Anonymous</p>
+
+                {/* Profile Info */}
+                <div className="flex flex-col justify-center">
+                  <p className="text-xl text-[#ffff] font-semibold leading-6">
+                    Arman Ali
+                  </p>
+                  <p className="text-sm text-[#00768A] font-semibold">
+                    Anonymous
+                  </p>
                 </div>
               </div>
-              <div>
-                <p className="font-normal leading-5">
+
+              {/* Testimonial Text */}
+              <div className="px-6 pb-6">
+                <p className="text-base text-[#ffff] leading-7 font-medium">
                   Excellent experience consulting on Practo. I could solve my
-                  heath issue without going to a clinic! highly recomended
+                  health issue without going to a clinic! Highly recommended.
+                </p>
+                <p className="mt-4 text-sm text-[#ffff] italic">
+                  - An easy, effective solution!
                 </p>
               </div>
             </div>
 
-            <div className="flex p-5 shadow-xl h-[200px] mb-5">
-              <div className="flex gap-3">
-                <div>
-                  <img
-                    src="dr-1.jpg"
-                    alt=""
-                    className="w-[40px] h-[40px] rounded-full"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold">Arman Ali</p>
-                  <p className="font-semibold">Anonymous</p>
-                </div>
-              </div>
-              <div>
-                <p className="font-normal leading-5">
-                  Excellent experience consulting on Practo. I could solve my
-                  heath issue without going to a clinic! highly recomended
-                </p>
-              </div>
-            </div>
-
-            <div className="flex p-5 shadow-xl h-[200px] mb-5">
-              <div className="flex gap-3">
-                <div>
-                  <img
-                    src="dr-1.jpg"
-                    alt=""
-                    className="w-[40px] h-[40px] rounded-full"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold">Arman Ali</p>
-                  <p className="font-semibold">Anonymous</p>
-                </div>
-              </div>
-              <div>
-                <p className="font-normal leading-5">
-                  Excellent experience consulting on Practo. I could solve my
-                  heath issue without going to a clinic! highly recomended
-                </p>
-              </div>
-            </div>
-
-            <div className="flex p-5 shadow-xl h-[200px] mb-5">
-              <div className="flex gap-3">
-                <div>
-                  <img
-                    src="dr-1.jpg"
-                    alt=""
-                    className="w-[40px] h-[40px] rounded-full"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold">Arman Ali</p>
-                  <p className="font-semibold">Anonymous</p>
-                </div>
-              </div>
-              <div>
-                <p className="font-normal leading-5">
-                  Excellent experience consulting on Practo. I could solve my
-                  heath issue without going to a clinic! highly recomended
-                </p>
-              </div>
-            </div>
-
-            <div className="flex p-5 shadow-xl h-[200px] mb-5">
-              <div className="flex gap-3">
-                <div>
-                  <img
-                    src="dr-1.jpg"
-                    alt=""
-                    className="w-[40px] h-[40px] rounded-full"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold">Arman Ali</p>
-                  <p className="font-semibold">Anonymous</p>
-                </div>
-              </div>
-              <div>
-                <p className="font-normal leading-5">
-                  Excellent experience consulting on Practo. I could solve my
-                  heath issue without going to a clinic! highly recomended
-                </p>
-              </div>
-            </div>
+            {/* Duplicate cards can follow the same structure */}
           </Slider>
         </div>
 
