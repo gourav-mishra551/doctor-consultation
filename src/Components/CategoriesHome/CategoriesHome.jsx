@@ -15,7 +15,7 @@ function CategoryCard({ item, navigate }) {
     >
       <div className="cardio h-[300px] flex flex-col justify-center items-center bg-[#e4f8f6] rounded-3xl hover:bg-white hover:border-2 hover:border-[#1c8e81] transition-transform duration-300 transform hover:-translate-y-2 shadow-lg">
         <div className="bg-white h-[110px] w-[110px] flex justify-center items-center rounded-full shadow-lg translate-y-[-64px]">
-          <div className="cardio-logo h-[100px] w-[100px] rounded-full bg-gray-200 flex justify-center items-center">
+          <div className="cardio-logo md:h-[100px] md:w-[100px] rounded-full bg-gray-200 flex justify-center items-center">
             <img
               src={item.image}
               className="w-[65px]"
@@ -28,7 +28,7 @@ function CategoryCard({ item, navigate }) {
             {item.specialtyName}
           </p>
         </div>
-        <div className="p-4">
+        <div className="p-2">
           <p className="px-2 sm:px-5 text-md text-gray-600 text-center font-medium">
             {item.sortDescription.split(" ").slice(0, 9).join(" ") + "..."}
           </p>

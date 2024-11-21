@@ -80,7 +80,7 @@ const WhyChooseUs = () => {
         </p>
       </div>
 
-      <div className="flex flex-row-reverse justify-between items-center gap-10">
+      <div className="flex md:flex-row-reverse flex-col justify-between items-center gap-10">
         {/* Left Section */}
         <motion.div
           className={`w-full  lg:w-[40%] transform transition-all duration-1500 ${
@@ -90,7 +90,7 @@ const WhyChooseUs = () => {
           <img
             src="./faq-img.webp"
             alt="Healthcare"
-            className="rounded-lg  h-[400px] shadow-lg "
+            className="rounded-lg  h-[290px] mx-auto  md:h-[400px] shadow-lg "
           />
         </motion.div>
 

@@ -40,7 +40,7 @@ const HowItWorks = () => {
         <img
           src="./image.webp"
           alt="How it works"
-          className=" w-[80%] h-auto"
+          className=" w-[80%] md:mx-0 mx-auto h-auto"
         />
       </div>
 
