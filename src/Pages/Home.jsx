@@ -66,7 +66,7 @@ const Home = () => {
           <CategoriesHome />
         </div>
         <WhyChooseUs/>
-        <div className="py-10">
+        <div className="py-10 bg-gray-50">
           <HowItWorks />
         </div>
         <div className="slider-container mt-10">
@@ -211,6 +211,8 @@ const Home = () => {
             </div>
           </Slider>
         </div>
+
+        {/* appointment form */}
 
         <div className="appointment-form bg-[#1c8e81] sm:h-[350px] h-auto mt-20 pb-10">
           <div className="flex sm:flex-row flex-col sm:max-w-6xl w-full mx-auto">
