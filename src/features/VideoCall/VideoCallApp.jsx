@@ -7,6 +7,8 @@ import {
   useCallStateHooks,
   ParticipantView,
   StreamTheme,
+  SpeakerLayout,
+  CallControls,
 } from "@stream-io/video-react-sdk";
 
 const apiKey = "mmhfdzb5evj2";
@@ -30,17 +32,10 @@ console.log(client);
 
 export const MyUILayout = () => {
   const call = useCall();
-  const {
-    useCallCallingState,
-    useParticipantCount,
-    useLocalParticipant,
-    useRemoteParticipants,
-  } = useCallStateHooks();
+  const { useCallCallingState, useParticipantCount } = useCallStateHooks();
 
   const callingState = useCallCallingState();
   const participantCount = useParticipantCount();
-  const localParticipant = useLocalParticipant();
-  const remoteParticipants = useRemoteParticipants();
 
   if (callingState !== CallingState.JOINED) {
     return <div>Loading...</div>;
@@ -50,8 +45,8 @@ export const MyUILayout = () => {
     <div>
       Call "{call.id}" has {participantCount} participants
       <StreamTheme className="relative">
-        <MyParticipantList participants={remoteParticipants} />
-        <MyFloatingLocalParticipant participant={localParticipant} />
+        <SpeakerLayout participantsBarPosition="bottom" />
+        <CallControls />
       </StreamTheme>
     </div>
   );
