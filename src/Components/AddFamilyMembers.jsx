@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { FaImage } from "react-icons/fa6";
-
+  
 const AddFamilyMembers = ({
   setFamilyPopUp,
   setActiveSection,
