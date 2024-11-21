@@ -5,6 +5,8 @@ import {
   StreamVideoClient,
   useCall,
   useCallStateHooks,
+  ParticipantView,
+  StreamTheme,
 } from "@stream-io/video-react-sdk";
 
 const apiKey = "mmhfdzb5evj2";
@@ -26,6 +28,35 @@ call.join({ create: true });
 
 console.log(client);
 
+export const MyUILayout = () => {
+  const call = useCall();
+  const {
+    useCallCallingState,
+    useParticipantCount,
+    useLocalParticipant,
+    useRemoteParticipants,
+  } = useCallStateHooks();
+
+  const callingState = useCallCallingState();
+  const participantCount = useParticipantCount();
+  const localParticipant = useLocalParticipant();
+  const remoteParticipants = useRemoteParticipants();
+
+  if (callingState !== CallingState.JOINED) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      Call "{call.id}" has {participantCount} participants
+      <StreamTheme className="relative">
+        <MyParticipantList participants={remoteParticipants} />
+        <MyFloatingLocalParticipant participant={localParticipant} />
+      </StreamTheme>
+    </div>
+  );
+};
+
 export default function App() {
   return (
     <StreamVideo client={client}>
@@ -36,19 +67,33 @@ export default function App() {
   );
 }
 
-export const MyUILayout = () => {
-  const call = useCall();
-  const { useCallCallingState, useParticipantCount } = useCallStateHooks();
-  const callingState = useCallCallingState();
-  const participantCount = useParticipantCount();
-
-  if (callingState !== CallingState.JOINED) {
-    return <div>Loading...</div>;
-  }
-
+export const MyParticipantList = ({ participants }) => {
   return (
-    <div>
-      Call "{call.id}" has {participantCount} participants
+    <div style={{ display: "flex", flexDirection: "row", gap: "8px" }}>
+      {participants.map((participant) => (
+        <ParticipantView
+          participant={participant}
+          key={participant.sessionId}
+        />
+      ))}
+    </div>
+  );
+};
+
+export const MyFloatingLocalParticipant = ({ participant }) => {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: "15px",
+        left: "15px",
+        width: "240px",
+        height: "135px",
+        boxShadow: "rgba(0, 0, 0, 0.1) 0px 0px 10px 3px",
+        borderRadius: "12px",
+      }}
+    >
+      <ParticipantView participant={participant} />
     </div>
   );
 };
