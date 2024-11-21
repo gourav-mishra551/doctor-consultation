@@ -1,7 +1,7 @@
 import "./App.css";
 import AuthRoute from "./Components/Auth/AuthRoute";
 import Home from "./Pages/Home";
-import { BrowserRouter, Routes, Route , useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import DoctorForm from "./Components/DoctorForm";
 import Categories from "./Components/Categories";
 import UserProfile from "./Components/UserProfile";
@@ -10,7 +10,7 @@ import ContactPage from "./Pages/ContactPage";
 import DoctorsProfile from "./Components/DoctorsProfile";
 import DrProfilePage from "./Pages/DrProfilePage";
 import DrIndividualProfile from "./Components/DrIndividualProfile";
-import DrIndividualProfilePage from "./Pages/DrIndividualProfilePage"; 
+import DrIndividualProfilePage from "./Pages/DrIndividualProfilePage";
 import Calendar from "./Components/Calender";
 import FaqPage from "./Pages/FaqPage";
 import DrVerifyOtp from "./Components/DrVerifyOtp";
@@ -57,89 +57,101 @@ import InsideIndia from "./Pages/AppointmentBooking/NewPatient/InsideIndia/Insid
 import BookingSlot from "./Pages/BookingSlot/BookingSlot";
 import Navbar from "./Components/Navbar";
 import TopHeader from "./Components/TopHeader";
-
+import VideoCallApp from "./features/VideoCall/VideoCallApp";
 
 function App() {
   const location = useLocation();
-  
-const hideNavbar = ["/login", "/signup" , "/auth"].includes(location.pathname);
+
+  const hideNavbar = ["/login", "/signup", "/auth"].includes(location.pathname);
   return (
     <div className="App">
       {!hideNavbar && <TopHeader />}
-        {!hideNavbar && <Navbar />}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/doctor-slots-generation" element={<AuthRoute element={DrExam } />}  />
-          <Route path="/auth" element={<Login />} />
-          <Route path="/doctor-onboarding-form" element={< AuthRoute element={DoctorForm } />} />
-          <Route path="/categories" element={<Categories />} />
-          <Route
-            path="/CategoriesDetails/:id"
-            element={<CategoriesDetails />}
-          />
-          <Route path="/CategoryHome" element={<CategoriesHome />} />
-          <Route path="/user-profile" element={<AuthRoute element={UserProfile}  />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact-us" element={<ContactPage />} />
-          <Route path="/drs-profile" element={<DrProfilePage />} />
-          <Route path="/BookingSlot/:id" element={<BookingSlot />} />
-          <Route path="/dr-indi/:id" element={<DrIndividualProfilePage />} />
-          <Route
-            path="/DrAppointmentCreation"
-            element={<AuthRoute element={DrAppointmentCreation}  />}
-          />
-          <Route path="/DRProfileShow" element={<AuthRoute element={DRProfileShow }/>} />
-          <Route path="/calender" element={<Calendar />} />
-          <Route path="/faq" element={<FaqPage />} />
-          <Route path="/dr-otp" element={<DrVerifyOtp />} />
-          <Route path="/brand-ametheus" element={<BrandAmPage />} />
-          <Route path="/why-we-are-different" element={<WhyWeDiffPage />} />
-          <Route path="/wellness-and-safety" element={<WellnessSafetyPage />} />
-          <Route path="/price-promise" element={<PricePromisePage />} />
-          <Route path="/our-treatments/" element={<OurTreatmentPage />} />
-          <Route path="/delivery" element={<DeliveryPage />} />
-          <Route path="/how-amatheus-work" element={<HowAmWorkPage />} />
-          <Route
-            path="/purchase-terms-conditions/"
-            element={<PurchaseTermsCondtionsPage />}
-          />
-          <Route path="/return-refunds/" element={<ReturnRefundsPage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/terms-of-use/" element={<TermsOfUsePage />} />
-          <Route path="/shipping-information/" element={<ShippingInfoPage />} />
-          <Route path="/support-center" element={<SupportCenterPage />} />
-          <Route path="/request-for-quote/" element={<FillRfqFormPage />} />
-          <Route path="/disclaimer/" element={<DisclaimerPage />} />
-          <Route path="/covid-19-drug/" element={<Covid19DrugsPage />} />
-          <Route path="/vaccine/" element={<VaccinePage />} />
-          <Route path="/how-it-works" element={<HowItWorks />} />
-          <Route path="/appointments" element={<FirstQuestion />} />
-          <Route path="/appointments/location" element={<NewPatient />} />
-          <Route path="/profile" element={<AuthRoute element={ProfilePage } />} />
-          <Route
-            path="/prescription-maker"
-            element={ <AuthRoute element={PrescriptionMakerPage}  />}
-          />
+      {!hideNavbar && <Navbar />}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/doctor-slots-generation"
+          element={<AuthRoute element={DrExam} />}
+        />
+        <Route path="/auth" element={<Login />} />
+        <Route
+          path="/doctor-onboarding-form"
+          element={<AuthRoute element={DoctorForm} />}
+        />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/CategoriesDetails/:id" element={<CategoriesDetails />} />
+        <Route path="/CategoryHome" element={<CategoriesHome />} />
+        <Route
+          path="/user-profile"
+          element={<AuthRoute element={UserProfile} />}
+        />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact-us" element={<ContactPage />} />
+        <Route path="/drs-profile" element={<DrProfilePage />} />
+        <Route path="/BookingSlot/:id" element={<BookingSlot />} />
+        <Route path="/dr-indi/:id" element={<DrIndividualProfilePage />} />
+        <Route
+          path="/DrAppointmentCreation"
+          element={<AuthRoute element={DrAppointmentCreation} />}
+        />
+        <Route
+          path="/DRProfileShow"
+          element={<AuthRoute element={DRProfileShow} />}
+        />
+        <Route path="/calender" element={<Calendar />} />
+        <Route path="/faq" element={<FaqPage />} />
+        <Route path="/dr-otp" element={<DrVerifyOtp />} />
+        <Route path="/brand-ametheus" element={<BrandAmPage />} />
+        <Route path="/why-we-are-different" element={<WhyWeDiffPage />} />
+        <Route path="/wellness-and-safety" element={<WellnessSafetyPage />} />
+        <Route path="/price-promise" element={<PricePromisePage />} />
+        <Route path="/our-treatments/" element={<OurTreatmentPage />} />
+        <Route path="/delivery" element={<DeliveryPage />} />
+        <Route path="/how-amatheus-work" element={<HowAmWorkPage />} />
+        <Route
+          path="/purchase-terms-conditions/"
+          element={<PurchaseTermsCondtionsPage />}
+        />
+        <Route path="/return-refunds/" element={<ReturnRefundsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms-of-use/" element={<TermsOfUsePage />} />
+        <Route path="/shipping-information/" element={<ShippingInfoPage />} />
+        <Route path="/support-center" element={<SupportCenterPage />} />
+        <Route path="/request-for-quote/" element={<FillRfqFormPage />} />
+        <Route path="/disclaimer/" element={<DisclaimerPage />} />
+        <Route path="/covid-19-drug/" element={<Covid19DrugsPage />} />
+        <Route path="/vaccine/" element={<VaccinePage />} />
+        <Route path="/how-it-works" element={<HowItWorks />} />
+        <Route path="/appointments" element={<FirstQuestion />} />
+        <Route path="/appointments/location" element={<NewPatient />} />
+        <Route path="/profile" element={<AuthRoute element={ProfilePage} />} />
+        <Route
+          path="/prescription-maker"
+          element={<AuthRoute element={PrescriptionMakerPage} />}
+        />
 
-          <Route path="/edit-profile" element={ <AuthRoute element={EditProfilePage } />} />
-        
-          {/* <Route
+        <Route
+          path="/edit-profile"
+          element={<AuthRoute element={EditProfilePage} />}
+        />
+
+        {/* <Route
             path="/view-family-members"
             element={<ViewFamilyMembersPage />}
           /> */}
-          <Route path="/appointment/inside-india" element={<InsideIndia />} />
-          <Route path="/OutSideIndia" element={<OutSideIndia />} />
-          <Route path="/ReturningPatientPage" element={<ReturningPatient />} />
-          <Route
-            path="/ConsultWithLastDoctor"
-            element={<ConsultwithLastDoctor />}
-          />
-          <Route
-            path="/ConsultwithNewDoctor"
-            element={<ConsultwithNewDoctor />}
-          />
-        </Routes>
-    
+        <Route path="/appointment/inside-india" element={<InsideIndia />} />
+        <Route path="/OutSideIndia" element={<OutSideIndia />} />
+        <Route path="/ReturningPatientPage" element={<ReturningPatient />} />
+        <Route
+          path="/ConsultWithLastDoctor"
+          element={<ConsultwithLastDoctor />}
+        />
+        <Route
+          path="/ConsultwithNewDoctor"
+          element={<ConsultwithNewDoctor />}
+        />
+        <Route path="/video-call" element={<VideoCallApp />} />
+      </Routes>
     </div>
   );
 }
