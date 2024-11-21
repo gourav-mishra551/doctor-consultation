@@ -57,7 +57,7 @@ import InsideIndia from "./Pages/AppointmentBooking/NewPatient/InsideIndia/Insid
 import BookingSlot from "./Pages/BookingSlot/BookingSlot";
 import Navbar from "./Components/Navbar";
 import TopHeader from "./Components/TopHeader";
-import VideoCallPage from "./Pages/VideoCallPage/VideoCallPage";
+import VideoCallApp from "./features/VideoCall/VideoCallApp";
 
 function App() {
   const location = useLocation();
@@ -150,7 +150,7 @@ function App() {
           path="/ConsultwithNewDoctor"
           element={<ConsultwithNewDoctor />}
         />
-        <Route path="/video-call" element={<VideoCallPage />} />
+        <Route path="/video-call" element={<VideoCallApp />} />
       </Routes>
     </div>
   );

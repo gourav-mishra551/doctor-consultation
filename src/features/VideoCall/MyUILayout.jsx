@@ -15,6 +15,8 @@ const MyUILayout = () => {
     return <div>Loading...</div>;
   }
 
+  console.log(participantCount);
+
   return (
     <div>
       Call "{call?.id}" has {participantCount} participant(s)

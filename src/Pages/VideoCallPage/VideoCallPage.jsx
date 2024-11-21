@@ -1,5 +1,5 @@
 import React from "react";
-import VideoCallApp from "../features/VideoCall/VideoCallApp";
+import "../../features/VideoCall/VideoCallApp";
 
 const VideoCallPage = () => {
   return (
