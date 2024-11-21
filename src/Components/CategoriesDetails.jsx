@@ -15,6 +15,7 @@ function CategoriesDetails() {
   const [result, setResult] = useState({});
   const [DoctorsData, setDoctersData] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [Loading,setLoading]=useState(true)
   const { id } = useParams();
 
   const [filters, setFilters] = useState({
@@ -52,8 +53,16 @@ function CategoriesDetails() {
 
 
   useEffect(() => {
+    window.scroll(0,0)
     FetchCategory();
     FetchDoctersData();
+
+    const timer = setTimeout(() => {
+      setLoading(false); // Stop loading after 2 seconds (adjust if necessary)
+    }, 500);
+
+    // Cleanup the timer when the component unmounts
+    return () => clearTimeout(timer);
   }, []);
 
   const FetchCategory = async () => {
@@ -86,7 +95,14 @@ function CategoriesDetails() {
     return doc.body.textContent || "";
   };
   return (
-    <div className="bg-[#CEDDE4]">
+    <div>
+      {
+        Loading ? (
+          <div className="flex justify-center  min-h-screen">
+          <img src="src/Assests/Spinner@1x-0.5s-200px-200px.svg"  alt="Loading..."/>
+        </div>
+        ):(
+          <div className="bg-[#CEDDE4]">
 
       {/* Banner Section */}
       <div
@@ -520,6 +536,10 @@ function CategoriesDetails() {
       <Faq result={result} />
       <Footer />
     </div>
+        )
+      }
+    </div>
+    
   );
 }
 
