@@ -27,7 +27,9 @@ const client = new StreamVideoClient({
   user: {
     id: userId,
     name: "This is a test user",
+
     image: "link/to/profile/image", // Optional: replace with actual user image URL
+
     role: "User",
   },
 });
@@ -42,10 +44,12 @@ export default function App() {
       try {
         await call.join({ create: true });
         console.log("Successfully joined the call");
+
       } catch (err) {
         console.error("Error joining call:", err);
       }
     })();
+
 
     // Cleanup when component unmounts
     return () => {
@@ -53,6 +57,9 @@ export default function App() {
       console.log("Left the call");
     };
   }, [call]);
+
+  }, []);
+
 
   return (
     <StreamVideo client={client}>
@@ -83,6 +90,9 @@ export const MyUILayout = () => {
       .enable()
       .catch((err) => console.error("Failed to enable the camera:", err));
 
+  }, [camera]);
+
+
     // Cleanup when leaving the component
     return () => {
       camera.disable();
@@ -100,7 +110,7 @@ export const MyUILayout = () => {
   if (call.isCreatedByMe) {
     membersToShow =
       members
-        ?.slice(0, 3) // Show up to 3 members
+        ?.slice(0, 3)
         .map(({ user }) => user)
         .filter(Boolean) || [];
   } else if (creator) {
