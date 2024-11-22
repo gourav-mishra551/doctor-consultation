@@ -11,14 +11,6 @@ import { useLocation } from "react-router-dom";
 const DoctorForm = () => {
   const [formValues, setFormValues] = useState({
     specialitycategories: [],
-    hospitalName: "",
-    clinic_hospital_address: {
-      permanentAddress: "",
-      city: "",
-      state: "",
-      PinCode: "",
-    },
-    hospital_contact: "",
     aboutDoctor: "",
     councilName: "",
     RegistrationNumber: "",
@@ -423,21 +415,11 @@ const DoctorForm = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    if (name.startsWith("clinic_hospital_address.")) {
-      const fieldName = name.split(".")[1];
-      setFormValues((prev) => ({
-        ...prev,
-        clinic_hospital_address: {
-          ...prev.clinic_hospital_address,
-          [fieldName]: value,
-        },
-      }));
-    } else {
-      setFormValues((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
+
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   // Handle change in qualification selection
@@ -469,12 +451,13 @@ const DoctorForm = () => {
 
   //for IsPresent
 
-  const handleIsPresentChange = (index) => {
+  const handleIsPresentChange = (index, checked) => {
     setFormValues((prevState) => {
+      // Clone the years_of_experience array to avoid direct state mutation
       const updatedExperiences = [...prevState.years_of_experience];
-      // Toggle the value of isPresent for the given index
-      updatedExperiences[index].isPresent =
-        !updatedExperiences[index].isPresent;
+
+      // Update the 'isPresent' field for the given index
+      updatedExperiences[index].isPresent = checked;
 
       return {
         ...prevState,
@@ -530,69 +513,68 @@ const DoctorForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Toast notification
 
+    // Toast notification
     if (formValues.qualifications.length === 0) {
       setQualificationError(true);
       setSpecialityError(true);
       SetVisitingModeError(true);
+      toast.error("Please fill in all required fields!");
     } else {
       setQualificationError(false);
       setSpecialityError(false);
       SetVisitingModeError(false);
-      // proceed with form submission
-      toast.success("Doctor information submitted successfully!");
-    }
 
-    console.log("formvalue", formValues);
-    const { permanentAddress, city, state, PinCode } =
-      formValues.clinic_hospital_address;
-    const token = localStorage.getItem("token");
-    const id = localStorage.getItem("id");
+      // Proceed with form submission
+      console.log("formvalue", formValues);
 
-    console.log(formValues.qualifications);
+      const token = localStorage.getItem("token");
+      const id = localStorage.getItem("id");
 
-    const {
-      specialitycategories,
-      hospitalName,
-      clinic_hospital_address,
-      hospital_contact,
-      hospital_email,
-      aboutDoctor,
-      councilName,
-      RegistrationNumber,
-      language,
-      years_of_experience,
-    } = formValues;
+      // Check if token and id are available
+      if (!token || !id) {
+        console.error("Missing token or ID. Redirecting to login.");
+        // Optionally, redirect to login page if necessary
+        return;
+      }
 
-    const payload = {
-      specialitycategories,
-      hospitalName,
-      clinic_hospital_address,
-      hospital_contact,
-      hospital_email,
-      aboutDoctor,
-      councilName,
-      RegistrationNumber,
-      language,
-      years_of_experience,
-    };
+      // Destructuring formValues
+      const {
+        specialitycategories,
+        aboutDoctor,
+        councilName,
+        RegistrationNumber,
+        language,
+        years_of_experience,
+      } = formValues;
 
-    try {
-      const res = await axios.post(
-        "https://api.assetorix.com/ah/api/v1/dc/user/doctor/temp",
-        payload,
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-            id: id,
-          },
-        }
-      );
+      // Construct payload
+      const payload = {
+        specialitycategories,
+        aboutDoctor,
+        councilName,
+        RegistrationNumber,
+        language,
+        years_of_experience,
+      };
 
-      console.log("result", res.data);
-    } catch (error) {
-      console.error("Error submitting the form", error);
+      try {
+        const res = await axios.post(
+          "https://api.assetorix.com/ah/api/v1/dc/user/doctor/temp",
+          payload,
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+              id: id,
+            },
+          }
+        );
+
+        console.log("result", res.data);
+      } catch (error) {
+        console.error("Error submitting the form", error);
+        toast.error("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -936,7 +918,7 @@ const DoctorForm = () => {
                         <MdDelete
                           onClick={() => handleDeleteQualification(index)}
                           className="cursor-pointer"
-                          style={{color:"red"}}
+                          style={{ color: "red" }}
                         />
                       </div>
                     ) : null}
@@ -1020,9 +1002,9 @@ const DoctorForm = () => {
                           name="startMonth"
                           placeholder="MM"
                           className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
-                          value={qual.startDate?.month}
+                          value={qual.startDate?.month || ""}
                           onChange={(e) =>
-                            handleDateChange(e, 0, "startDate", "month")
+                            handleDateChange(e, index, "startDate", "month")
                           }
                         />
                       </div>
@@ -1136,7 +1118,7 @@ const DoctorForm = () => {
                                 fontSize: "10px",
                                 color: "white",
                                 marginTop: "5px",
-                                cursor:"pointer"
+                                cursor: "pointer",
                               }}
                               onClick={() =>
                                 handleQualificationDelete(index, skillIndex)
@@ -1172,7 +1154,7 @@ const DoctorForm = () => {
                       <div className="flex justify-end">
                         <MdDelete
                           onClick={() => HandleDeleteExperience(index)}
-                          style={{color:"red",cursor:"pointer"}}
+                          style={{ color: "red", cursor: "pointer" }}
                         />
                       </div>
                     ) : null}
@@ -1265,7 +1247,7 @@ const DoctorForm = () => {
                           Start Month:
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           name="startMonth"
                           placeholder="MM"
                           className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
@@ -1285,7 +1267,7 @@ const DoctorForm = () => {
                           Start Year:
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           name="startYear"
                           placeholder="YYYY"
                           className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
@@ -1300,14 +1282,25 @@ const DoctorForm = () => {
                           }
                         />
                       </div>
-                      <input
-                        type="checkbox"
-                        checked={exp.isPresent}
-                        name="isPresent"
-                        onChange={() => handleIsPresentChange(index)}
-                      />
+                      <div className="mt-[40px] ml-[25px] flex items-center">
+                        <label htmlFor={`experience-${index}`} className="mr-2 font-bold">
+                          If Present
+                        </label>
+                        <input
+                          type="checkbox"
+                          id={`experience-${index}`}
+                          checked={
+                            formValues.years_of_experience[index].isPresent
+                          }
+                          name="isPresent"
+                          onChange={(e) =>
+                            handleIsPresentChange(index, e.target.checked)
+                          }
+                          className="cursor-pointer"
+                        />
+                      </div>
                     </div>
-
+                      
                     {!exp.isPresent && (
                       <div className="mb-3 flex gap-4">
                         <div>
@@ -1315,7 +1308,7 @@ const DoctorForm = () => {
                             End Month:
                           </label>
                           <input
-                            type="text"
+                            type="number"
                             name="endMonth"
                             placeholder="MM"
                             className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
@@ -1335,7 +1328,7 @@ const DoctorForm = () => {
                             End Year:
                           </label>
                           <input
-                            type="text"
+                            type="number"
                             name="endYear"
                             placeholder="YYYY"
                             className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
@@ -1407,6 +1400,8 @@ const DoctorForm = () => {
                               fontSize: "10px",
                               color: "white",
                               marginTop: "5px",
+
+                              cursor: "pointer",
                             }}
                             onClick={() =>
                               HandleExperienceSkillDelete(index, skillIndex)
