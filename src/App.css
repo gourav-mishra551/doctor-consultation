@@ -110,7 +110,7 @@ html {
 .str-video {
   background-color: #272a30;
   color: #ffffff;
-  height: 100dvh;
+  height: auto;
   width: 100%;
   display: flex;
   flex-direction: column;
