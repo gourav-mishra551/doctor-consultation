@@ -62,7 +62,7 @@ function BookingSlot() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className=" flex flex-col">
 
       <div className="bg-gradient-to-r from-[#E3FDFD] via-[#FFE6FA] to-[#FBF4E9] flex-grow py-6 px-4 sm:px-6 lg:px-8">
         {DrProfile?.userData && (
@@ -202,7 +202,7 @@ function BookingSlot() {
         </div>
       </div>
 
-      <div className="max-w-[1200px] mx-auto py-10">
+      <div className=" mx-auto py-10">
         {step === 1 ? (
           <DrAppointmentBooking
             IndiProfile={DrProfile}

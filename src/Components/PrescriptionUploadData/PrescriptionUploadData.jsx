@@ -15,6 +15,7 @@ const PrescriptionUploadData = ({ upload }) => {
     const [firm, setFirm] = useState('');
     const [date, setDate] = useState('');
     const [notes, setNotes] = useState('');
+    
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
         const updatedFiles = files.map((file) => ({
