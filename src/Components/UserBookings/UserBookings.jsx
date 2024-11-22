@@ -37,7 +37,7 @@ const UserBookings = ({ setUserBooking, userBooking }) => {
             <div key={index} className="bg-white shadow-lg rounded-lg">
               <div className="top-detail-section">
                 <p className="text-gray-500 font-light">
-                  Your Previous Bookings
+                  Your Previous Bookings are here
                 </p>
               </div>
               <div
