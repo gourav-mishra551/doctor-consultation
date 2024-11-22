@@ -66,13 +66,11 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
     }));
   };
 
-
   const SampleNextArrow = (props) => {
     const { className, style, onClick } = props;
     return (
       <div
         className={`${className} bg-[#00768A] text-white rounded-full p-3 shadow-lg hover:bg-gray-400`}
-
         style={{ ...style, right: "-25px", zIndex: 2 }}
         onClick={onClick}
       >
@@ -80,6 +78,8 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       </div>
     );
   };
+
+  console.log(IndiProfile);
 
   const SamplePrevArrow = (props) => {
     const { className, style, onClick } = props;
@@ -91,8 +91,8 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       >
         ⬅️
       </div>
-    )
-  }
+    );
+  };
 
   const settings = {
     dots: false,
@@ -114,7 +114,10 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       case "offline":
         return availability.offlineSlots || [];
       case "both":
-        return [...(availability.onlineSlots || []), ...(availability.offlineSlots || [])];
+        return [
+          ...(availability.onlineSlots || []),
+          ...(availability.offlineSlots || []),
+        ];
       default:
         return [];
     }
@@ -122,17 +125,28 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
 
   // Render individual slot
   const renderSlot = (slot) => (
-
     <div
       key={slot._id}
-      className={`p-4  relative border rounded-lg transition-transform ${slot.isBooked
-        ? "bg-red-100 text-gray-700 cursor-not-allowed"
-        : "bg-green-100 hover:scale-105"
-        }`}
+      className={`p-4 relative border rounded-lg transition-transform ${
+        slot.isBooked
+          ? "bg-red-100 text-gray-700 cursor-not-allowed"
+          : "bg-green-100 hover:scale-105"
+      }`}
     >
-      <FaCheckCircle className={selectedSlot?._id === slot?._id ? "block absolute -top-2 right-0 text-xl text-green-800" : "hidden"} />
+      <FaCheckCircle
+        className={
+          selectedSlot?._id === slot?._id
+            ? "block absolute -top-2 right-0 text-xl text-green-800"
+            : "hidden"
+        }
+      />
       <p className="text-sm">
-        <span className="font-semibold font-serif ">Time:</span> {slot.startTime > 12 ? (slot.startTime) - 12 : slot.startTime} {slot.startTime >= 12 ? "PM" : "AM"} -  {slot.endTime > 12 ? (slot.endTime) - 12 : slot.endTime}  {slot.endTime >= 12 ? "PM" : "AM"}
+        <span className="font-semibold font-serif ">Time:</span>{" "}
+        {slot.startTime > 12 ? slot.startTime - 12 : slot.startTime}{" "}
+        {slot.startTime >= 12 ? "PM" : "AM"} -{" "}
+        {slot.endTime > 12 ? slot.endTime - 12 : slot.endTime}{" "}
+        {slot.endTime >= 12 ? "PM" : "AM"}
+
       </p>
       <p className="text-sm">
         <span className="font-medium">Charge:</span> ₹ {slot.doctorCharge}
@@ -140,13 +154,20 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       <button
         disabled={slot.isBooked}
         onClick={() => setSelectedSlot(slot)}
-        className={`mt-4 w-full px-4 py-2 rounded-lg font-medium transition ${slot.isBooked
-          ? "bg-gray-400 text-white"
-          : selectedSlot?._id === slot?._id ? "bg-green-700 text-white font-semibold shadow-xl"
+        className={`mt-4 w-full px-4 py-2 rounded-lg font-medium transition ${
+          slot.isBooked
+            ? "bg-gray-400 text-white"
+            : selectedSlot?._id === slot?._id
+            ? "bg-green-700 text-white font-semibold shadow-xl"
             : "bg-[#00768A] text-white "
-          }`}
+        }`}
       >
-        {slot.isBooked ? "Slot is booked" : selectedSlot?._id === slot?._id ? "Selected" : "Book"}
+        {slot.isBooked
+          ? "Slot is booked"
+          : selectedSlot?._id === slot?._id
+          ? "Selected"
+          : "Book"}
+
       </button>
     </div>
   );
@@ -166,6 +187,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
           {["online", "offline", "both"].map((type) => (
             <button
               key={type}
+
               type="button"
               className={`px-6 py-2 text-sm font-medium rounded-lg transition-all ${filter === type
                 ? "bg-[#00768A] text-white shadow-md"
@@ -177,6 +199,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
             </button>
           ))}
         </div>
+
 
         {/* Date Slider */}
         {doctorAvailability.length > 1 ? (
@@ -203,6 +226,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
           <div className="text-center text-gray-500 mt-4">No availability to display</div>
         )}
 
+
         {/* Slots Section */}
         <div className="mt-8 space-y-6">
           {doctorAvailability
@@ -218,6 +242,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
                 className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow"
               >
                 <p className="font-bold text-lg text-[#00768A] mb-2">
+
                   {new Date(availability?.selectDate).toLocaleDateString("en-US", {
                     month: "short",
                     day: "numeric",
@@ -290,6 +315,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
                 className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[#00768A]"
               />
             </div>
+
 
             <div className="mb-4">
               <label

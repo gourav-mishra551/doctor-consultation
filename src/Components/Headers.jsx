@@ -45,7 +45,7 @@ const Headers = () => {
         </div>
 
         {/* Centering OurServices Component */}
-        <div className="md:absolute  md:left-1/2  transform  md:-translate-x-1/2    md:-bottom-[9rem]  md:mb-0 mb-5  w-[95%]  sm:w-[85vw] bg-white md:shadow-lg shadow-md rounded-xl sm:px-8 sm:py-5 px-2 py-2">
+        <div className="md:absolute  md:left-1/2  transform  md:-translate-x-1/2     md:-bottom-[9rem]  md:mb-0 mb-5  w-[95%]  sm:w-[85vw] bg-white md:shadow-lg sm:shadow-md rounded-xl sm:px-8 sm:py-5 px-2 py-2">
           <OurServices />
         </div>
       </div>

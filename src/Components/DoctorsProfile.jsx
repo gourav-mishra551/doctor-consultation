@@ -17,6 +17,7 @@ const DoctorsProfile = () => {
   const [DoctorData, setDoctorData] = useState([]);
   const [Price, setPrice] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
   const { id } = useParams();
   const [filters, setFilters] = useState({
     name: "",
@@ -29,6 +30,7 @@ const DoctorsProfile = () => {
     FetchDrProfile();
   }, []);
   const FetchDrProfile = async () => {
+    setIsLoading(true)
     try {
       const res = await axios.get(
         "https://api.assetorix.com/ah/api/v1/dc/user/doctors"
@@ -36,6 +38,9 @@ const DoctorsProfile = () => {
       setDoctorData(res.data.data);
       console.log(DoctorData);
     } catch (error) {}
+    finally{
+      setIsLoading(false)
+    }
   };
 
   const [showFilter, setShowFilter] = useState(false);
@@ -150,350 +155,361 @@ const DoctorsProfile = () => {
 
   return (
     <div>
-      <div
-        className="h-[300px] bg-cover opacity-100 bg-no-repeat flex flex-col justify-center items-center"
-        style={{
-          backgroundImage: "url('https://wallpapercave.com/wp/wp2968489.jpg')",
-          backgroundSize: "cover", // or 'contain'
-          backgroundPosition: "center", // Centers the image
-          backgroundRepeat: "no-repeat",
-        }}
-      >
-        <div className="translate-y-[-30px]">
-          <p className="font-bold text-white text-3xl opacity-100">DOCTORS</p>
-          <div className="h-[1px] w-[140px] mt-1 bg-white text-center"></div>
-          <p className="font-normal text-white text-xl opacity-100">
-            lorem ipsum dolor sit
-          </p>
-        </div>
-      </div>
-
-      <div className="bg-[#CEDDE4]">
-        <div className="max-w-[1200px] justify-between mx-auto mt-10 flex flex-col-reverse md:flex-row gap-10 bg-[#CEDDE4] p-5">
-          {/* filter section */}
-          <div className="hidden md:flex flex-col gap-5 w-[25%] h-max rounded-xl shadow-md bg-white py-6 px-6 sticky top-0">
-            <p className="font-semibold text-center text-2xl text-[#00768A]">
-              Doctor Profile
-            </p>
-
-            {/* Search */}
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search doctor..."
-                className="p-3 border border-[#00768A] rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#00768A] bg-[#f5f7fa]"
-                onChange={(e) => handleFilterChange("name", e.target.value)}
-              />
-              <CiSearch className="absolute top-4 right-4 text-xl font-bold text-[#00768A]" />
-            </div>
-
-            {/* Filters */}
-            <div className="flex flex-col gap-3">
-              {/* Rating */}
-              <div>
-                <p className="font-semibold">Rating</p>
-                <select
-                  className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
-                  onChange={(e) => handleFilterChange("rating", e.target.value)}
-                >
-                  <option value="">All</option>
-                  {[1, 2, 3, 4, 5].map((rating) => (
-                    <option key={rating} value={rating}>
-                      {rating} Star{rating > 1 ? "s" : ""}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Visiting Mode */}
-              <div>
-                <p className="font-semibold">Visiting Mode</p>
-                <select
-                  className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
-                  onChange={(e) =>
-                    handleFilterChange("visitingMode", e.target.value)
-                  }
-                >
-                  <option value="">All</option>
-                  <option value="online">Online</option>
-                  <option value="offline">Offline</option>
-                  <option value="both">Both</option>
-                </select>
-              </div>
-
-              {/* Gender */}
-              <div>
-                <p className="font-semibold">Gender</p>
-                <div className="flex gap-3">
-                  {["Male", "Female"].map((gender) => (
-                    <label key={gender} className="flex items-center">
-                      <input
-                        type="radio"
-                        name="gender"
-                        value={gender.toLowerCase()}
-                        onChange={(e) =>
-                          handleFilterChange("gender", e.target.value)
-                        }
-                        className="form-radio h-4 w-4 text-[#00768A]"
-                      />
-                      <span className="ml-2">{gender}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Specialist */}
-              <div>
-                <p className="font-semibold">Specialist</p>
-                <select
-                  className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
-                  onChange={(e) =>
-                    handleFilterChange("specialtyName", e.target.value)
-                  }
-                >
-                  <option value="">All</option>
-                  {[
-                    "Cardiologist",
-                    "Dermatologist",
-                    "Orthopedic Surgeon",
-                    "Gynecologist",
-                    "Neurologist",
-                    "Ophthalmologist",
-                    "Pediatrician",
-                    "Endocrinologist",
-                    "Gastroenterologist",
-                    "Pulmonologist",
-                    "Orthopedic",
-                  ].map((specialist) => (
-                    <option key={specialist} value={specialist}>
-                      {specialist}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Search Button */}
-            <div className="mt-4">
-              <button
-                onClick={applyFilters}
-                className="h-[40px] w-full bg-[#00768A] text-white rounded-lg font-semibold hover:bg-[#005d71]"
-              >
-                Apply Filters
-              </button>
+      {
+        isLoading ?(
+          <div className="flex justify-center  min-h-screen">
+         <img src="src/Assests/Spinner@1x-0.5s-200px-200px.svg"  alt="Loading..."/>
+       </div>
+        ):(
+          <div>
+          <div
+            className="h-[300px] bg-cover opacity-100 bg-no-repeat flex flex-col justify-center items-center"
+            style={{
+              backgroundImage: "url('https://wallpapercave.com/wp/wp2968489.jpg')",
+              backgroundSize: "cover", // or 'contain'
+              backgroundPosition: "center", // Centers the image
+              backgroundRepeat: "no-repeat",
+            }}
+          >
+            <div className="translate-y-[-30px]">
+              <p className="font-bold text-white text-3xl opacity-100">DOCTORS</p>
+              <div className="h-[1px] w-[140px] mt-1 bg-white text-center"></div>
+              <p className="font-normal text-white text-xl opacity-100">
+                lorem ipsum dolor sit
+              </p>
             </div>
           </div>
-
-          <div className="w-[auto] sm:w-[85%] flex flex-col gap-10">
-            <div
-              className="dr-profile-section hidden  h-[280px] bg-[#f3f3f3] p-10  justify-between"
-              style={{ border: "1px solid red" }}
-            >
-              <div className="flex gap-5">
-                <div className="img bg-[#f3f3f3] flex justify-center items-center h-[150px] w-[150px] rounded-full">
-                  <img
-                    src="image.png"
-                    alt="dr-image"
-                    className="h-[130px] w-[130px] rounded-full"
+    
+          <div className="bg-[#CEDDE4]">
+            <div className="max-w-[1200px] justify-between mx-auto mt-10 flex flex-col-reverse md:flex-row gap-10 bg-[#CEDDE4] p-5">
+              {/* filter section */}
+              <div className="hidden md:flex flex-col gap-5 w-[25%] h-max rounded-xl shadow-md bg-white py-6 px-6 sticky top-0">
+                <p className="font-semibold text-center text-2xl text-[#00768A]">
+                  Doctor Profile
+                </p>
+    
+                {/* Search */}
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search doctor..."
+                    className="p-3 border border-[#00768A] rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#00768A] bg-[#f5f7fa]"
+                    onChange={(e) => handleFilterChange("name", e.target.value)}
                   />
+                  <CiSearch className="absolute top-4 right-4 text-xl font-bold text-[#00768A]" />
                 </div>
-                <div className="dr-profilee">
-                  <p className="text-blue-800 font-bold">Dr Aashu m</p>
-                  <p className="text-blue-800 font-semibold">hgt</p>
-                  <p>Urology</p>
-                  <div className="flex">
-                    <IoMdStar className="text-yellow-500" />
-                    <IoMdStar className="text-yellow-500" />
-                    <IoMdStar className="text-yellow-500" />
-                    <IoMdStar className="text-yellow-500" />
+    
+                {/* Filters */}
+                <div className="flex flex-col gap-3">
+                  {/* Rating */}
+                  <div>
+                    <p className="font-semibold">Rating</p>
+                    <select
+                      className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
+                      onChange={(e) => handleFilterChange("rating", e.target.value)}
+                    >
+                      <option value="">All</option>
+                      {[1, 2, 3, 4, 5].map((rating) => (
+                        <option key={rating} value={rating}>
+                          {rating} Star{rating > 1 ? "s" : ""}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-
-                  <p>hft,htd</p>
-                  <p>Dermatologist</p>
+    
+                  {/* Visiting Mode */}
+                  <div>
+                    <p className="font-semibold">Visiting Mode</p>
+                    <select
+                      className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
+                      onChange={(e) =>
+                        handleFilterChange("visitingMode", e.target.value)
+                      }
+                    >
+                      <option value="">All</option>
+                      <option value="online">Online</option>
+                      <option value="offline">Offline</option>
+                      <option value="both">Both</option>
+                    </select>
+                  </div>
+    
+                  {/* Gender */}
+                  <div>
+                    <p className="font-semibold">Gender</p>
+                    <div className="flex gap-3">
+                      {["Male", "Female"].map((gender) => (
+                        <label key={gender} className="flex items-center">
+                          <input
+                            type="radio"
+                            name="gender"
+                            value={gender.toLowerCase()}
+                            onChange={(e) =>
+                              handleFilterChange("gender", e.target.value)
+                            }
+                            className="form-radio h-4 w-4 text-[#00768A]"
+                          />
+                          <span className="ml-2">{gender}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+    
+                  {/* Specialist */}
+                  <div>
+                    <p className="font-semibold">Specialist</p>
+                    <select
+                      className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
+                      onChange={(e) =>
+                        handleFilterChange("specialtyName", e.target.value)
+                      }
+                    >
+                      <option value="">All</option>
+                      {[
+                        "Cardiologist",
+                        "Dermatologist",
+                        "Orthopedic Surgeon",
+                        "Gynecologist",
+                        "Neurologist",
+                        "Ophthalmologist",
+                        "Pediatrician",
+                        "Endocrinologist",
+                        "Gastroenterologist",
+                        "Pulmonologist",
+                        "Orthopedic",
+                      ].map((specialist) => (
+                        <option key={specialist} value={specialist}>
+                          {specialist}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
-
-              <div className="ratings ml-[50px] sm:ml-[0px] h-[150px] sm:h-[auto]">
-                <div className="thumbs flex gap-1">
-                  <FaRegThumbsUp className="mt-1" />
-                  <p>97%</p>
-                </div>
-
-                <div className="feedback flex gap-1">
-                  <FaComment className="mt-1" />
-                  <p>4 Feedback</p>
-                </div>
-
-                <div className="flex gap-1">
-                  <FaLocationArrow className="mt-1" />
-                  <p>ht</p>
-                </div>
-
-                <div className="flex gap-1">
-                  <FiDollarSign className="mt-1" />
-                  <p>20 (per hour)</p>
-                </div>
-
-                <div className="flex  gap-3 sm:mt-[15px] sm:mr-[200px] sm:flex sm:flex-col sm:ml-[0px] sm:w-[250px] mt-[55px]  w-[250px] center ml-[0px] justify-between">
-                  <button className="h-[35px]   w-[100px] text-sm/[17px] sm:w-[200px] border-2 border-blue-700 hover:bg-[#1977cc] hover:text-white transition-all ease-in-out duration-300 delay-150 ">
-                    VIEW PROFILE
-                  </button>
-                  <button className="h-[35px] w-[100px] text-sm/[17px] sm:w-[200px] text-white bg-[#1977cc] border-2 border-blue-700">
-                    BOOK APPOINTMENT
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="md:hidden flex justify-center mb-5 mt-8">
-              <button
-                onClick={() => setShowFilter(!showFilter)}
-                className="bg-[#00768A] text-white px-4 py-2 rounded-lg"
-              >
-                Filter Options
-              </button>
-            </div>
-
-            {/* Mobile/Tablet Filter Modal */}
-            {showFilter && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                <div className="bg-white p-5 sm:p-4 w-[90%] sm:w-[80%] md:w-[400px] rounded-lg shadow-lg overflow-hidden relative">
-                  {/* Close Button */}
+    
+                {/* Search Button */}
+                <div className="mt-4">
                   <button
-                    onClick={() => setShowFilter(false)}
-                    className="absolute top-3 right-3 text-black text-xl sm:text-lg"
+                    onClick={applyFilters}
+                    className="h-[40px] w-full bg-[#00768A] text-white rounded-lg font-semibold hover:bg-[#005d71]"
                   >
-                    X
+                    Apply Filters
                   </button>
-
-                  {/* Modal Content */}
-                  <div className="flex flex-col gap-5 w-full h-auto rounded-xl shadow-md bg-white py-6 px-6">
-                    <p className="font-semibold text-center text-2xl text-[#00768A]">
-                      Doctor Profile
-                    </p>
-
-                    {/* Search */}
-                    <div className="relative">
-                      <input
-                        type="text"
-                        placeholder="Search doctor..."
-                        className="p-3 border border-[#00768A] rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#00768A] bg-[#f5f7fa]"
-                        onChange={(e) =>
-                          handleFilterChange("name", e.target.value)
-                        }
+                </div>
+              </div>
+    
+              <div className="w-[auto] sm:w-[85%] flex flex-col gap-10">
+                <div
+                  className="dr-profile-section hidden  h-[280px] bg-[#f3f3f3] p-10  justify-between"
+                  style={{ border: "1px solid red" }}
+                >
+                  <div className="flex gap-5">
+                    <div className="img bg-[#f3f3f3] flex justify-center items-center h-[150px] w-[150px] rounded-full">
+                      <img
+                        src="image.png"
+                        alt="dr-image"
+                        className="h-[130px] w-[130px] rounded-full"
                       />
-                      <CiSearch className="absolute top-4 right-4 text-xl font-bold text-[#00768A]" />
                     </div>
-
-                    {/* Filters */}
-                    <div className="flex flex-col gap-3">
-                      {/* Rating */}
-                      <div>
-                        <p className="font-semibold">Rating</p>
-                        <select
-                          className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
-                          onChange={(e) =>
-                            handleFilterChange("rating", e.target.value)
-                          }
-                        >
-                          <option value="">All</option>
-                          {[1, 2, 3, 4, 5].map((rating) => (
-                            <option key={rating} value={rating}>
-                              {rating} Star{rating > 1 ? "s" : ""}
-                            </option>
-                          ))}
-                        </select>
+                    <div className="dr-profilee">
+                      <p className="text-blue-800 font-bold">Dr Aashu m</p>
+                      <p className="text-blue-800 font-semibold">hgt</p>
+                      <p>Urology</p>
+                      <div className="flex">
+                        <IoMdStar className="text-yellow-500" />
+                        <IoMdStar className="text-yellow-500" />
+                        <IoMdStar className="text-yellow-500" />
+                        <IoMdStar className="text-yellow-500" />
                       </div>
-
-                      {/* Visiting Mode */}
-                      <div>
-                        <p className="font-semibold">Visiting Mode</p>
-                        <select
-                          className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
-                          onChange={(e) =>
-                            handleFilterChange("visitingMode", e.target.value)
-                          }
-                        >
-                          <option value="">All</option>
-                          <option value="online">Online</option>
-                          <option value="offline">Offline</option>
-                          <option value="both">Both</option>
-                        </select>
-                      </div>
-
-                      {/* Gender */}
-                      <div>
-                        <p className="font-semibold">Gender</p>
-                        <div className="flex gap-3">
-                          {["Male", "Female"].map((gender) => (
-                            <label key={gender} className="flex items-center">
-                              <input
-                                type="radio"
-                                name="gender"
-                                value={gender.toLowerCase()}
-                                onChange={(e) =>
-                                  handleFilterChange("gender", e.target.value)
-                                }
-                                className="form-radio h-4 w-4 text-[#00768A]"
-                              />
-                              <span className="ml-2">{gender}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Specialist */}
-                      <div>
-                        <p className="font-semibold">Specialist</p>
-                        <select
-                          className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
-                          onChange={(e) =>
-                            handleFilterChange("specialtyName", e.target.value)
-                          }
-                        >
-                          <option value="">All</option>
-                          {[
-                            "Cardiologist",
-                            "Dermatologist",
-                            "Orthopedic Surgeon",
-                            "Gynecologist",
-                            "Neurologist",
-                            "Ophthalmologist",
-                            "Pediatrician",
-                            "Endocrinologist",
-                            "Gastroenterologist",
-                            "Pulmonologist",
-                            "Orthopedic",
-                          ].map((specialist) => (
-                            <option key={specialist} value={specialist}>
-                              {specialist}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+    
+                      <p>hft,htd</p>
+                      <p>Dermatologist</p>
                     </div>
-
-                    {/* Search Button */}
-                    <div className="mt-4">
-                      <button
-                        onClick={applyFilters}
-                        className="h-[40px] w-full bg-[#00768A] text-white rounded-lg font-semibold hover:bg-[#005d71]"
-                      >
-                        Apply Filters
+                  </div>
+    
+                  <div className="ratings ml-[50px] sm:ml-[0px] h-[150px] sm:h-[auto]">
+                    <div className="thumbs flex gap-1">
+                      <FaRegThumbsUp className="mt-1" />
+                      <p>97%</p>
+                    </div>
+    
+                    <div className="feedback flex gap-1">
+                      <FaComment className="mt-1" />
+                      <p>4 Feedback</p>
+                    </div>
+    
+                    <div className="flex gap-1">
+                      <FaLocationArrow className="mt-1" />
+                      <p>ht</p>
+                    </div>
+    
+                    <div className="flex gap-1">
+                      <FiDollarSign className="mt-1" />
+                      <p>20 (per hour)</p>
+                    </div>
+    
+                    <div className="flex  gap-3 sm:mt-[15px] sm:mr-[200px] sm:flex sm:flex-col sm:ml-[0px] sm:w-[250px] mt-[55px]  w-[250px] center ml-[0px] justify-between">
+                      <button className="h-[35px]   w-[100px] text-sm/[17px] sm:w-[200px] border-2 border-blue-700 hover:bg-[#1977cc] hover:text-white transition-all ease-in-out duration-300 delay-150 ">
+                        VIEW PROFILE
+                      </button>
+                      <button className="h-[35px] w-[100px] text-sm/[17px] sm:w-[200px] text-white bg-[#1977cc] border-2 border-blue-700">
+                        BOOK APPOINTMENT
                       </button>
                     </div>
                   </div>
                 </div>
+    
+                <div className="md:hidden flex justify-center mb-5 mt-8">
+                  <button
+                    onClick={() => setShowFilter(!showFilter)}
+                    className="bg-[#00768A] text-white px-4 py-2 rounded-lg"
+                  >
+                    Filter Options
+                  </button>
+                </div>
+    
+                {/* Mobile/Tablet Filter Modal */}
+                {showFilter && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-5 sm:p-4 w-[90%] sm:w-[80%] md:w-[400px] rounded-lg shadow-lg overflow-hidden relative">
+                      {/* Close Button */}
+                      <button
+                        onClick={() => setShowFilter(false)}
+                        className="absolute top-3 right-3 text-black text-xl sm:text-lg"
+                      >
+                        X
+                      </button>
+    
+                      {/* Modal Content */}
+                      <div className="flex flex-col gap-5 w-full h-auto rounded-xl shadow-md bg-white py-6 px-6">
+                        <p className="font-semibold text-center text-2xl text-[#00768A]">
+                          Doctor Profile
+                        </p>
+    
+                        {/* Search */}
+                        <div className="relative">
+                          <input
+                            type="text"
+                            placeholder="Search doctor..."
+                            className="p-3 border border-[#00768A] rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#00768A] bg-[#f5f7fa]"
+                            onChange={(e) =>
+                              handleFilterChange("name", e.target.value)
+                            }
+                          />
+                          <CiSearch className="absolute top-4 right-4 text-xl font-bold text-[#00768A]" />
+                        </div>
+    
+                        {/* Filters */}
+                        <div className="flex flex-col gap-3">
+                          {/* Rating */}
+                          <div>
+                            <p className="font-semibold">Rating</p>
+                            <select
+                              className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
+                              onChange={(e) =>
+                                handleFilterChange("rating", e.target.value)
+                              }
+                            >
+                              <option value="">All</option>
+                              {[1, 2, 3, 4, 5].map((rating) => (
+                                <option key={rating} value={rating}>
+                                  {rating} Star{rating > 1 ? "s" : ""}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+    
+                          {/* Visiting Mode */}
+                          <div>
+                            <p className="font-semibold">Visiting Mode</p>
+                            <select
+                              className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
+                              onChange={(e) =>
+                                handleFilterChange("visitingMode", e.target.value)
+                              }
+                            >
+                              <option value="">All</option>
+                              <option value="online">Online</option>
+                              <option value="offline">Offline</option>
+                              <option value="both">Both</option>
+                            </select>
+                          </div>
+    
+                          {/* Gender */}
+                          <div>
+                            <p className="font-semibold">Gender</p>
+                            <div className="flex gap-3">
+                              {["Male", "Female"].map((gender) => (
+                                <label key={gender} className="flex items-center">
+                                  <input
+                                    type="radio"
+                                    name="gender"
+                                    value={gender.toLowerCase()}
+                                    onChange={(e) =>
+                                      handleFilterChange("gender", e.target.value)
+                                    }
+                                    className="form-radio h-4 w-4 text-[#00768A]"
+                                  />
+                                  <span className="ml-2">{gender}</span>
+                                </label>
+                              ))}
+                            </div>
+                          </div>
+    
+                          {/* Specialist */}
+                          <div>
+                            <p className="font-semibold">Specialist</p>
+                            <select
+                              className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
+                              onChange={(e) =>
+                                handleFilterChange("specialtyName", e.target.value)
+                              }
+                            >
+                              <option value="">All</option>
+                              {[
+                                "Cardiologist",
+                                "Dermatologist",
+                                "Orthopedic Surgeon",
+                                "Gynecologist",
+                                "Neurologist",
+                                "Ophthalmologist",
+                                "Pediatrician",
+                                "Endocrinologist",
+                                "Gastroenterologist",
+                                "Pulmonologist",
+                                "Orthopedic",
+                              ].map((specialist) => (
+                                <option key={specialist} value={specialist}>
+                                  {specialist}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+    
+                        {/* Search Button */}
+                        <div className="mt-4">
+                          <button
+                            onClick={applyFilters}
+                            className="h-[40px] w-full bg-[#00768A] text-white rounded-lg font-semibold hover:bg-[#005d71]"
+                          >
+                            Apply Filters
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+    
+                <div className="flex w-[100%] flex-wrap gap-8 md:gap-10">
+                  <DoctorCard doctorData={DoctorData} />
+                </div>
               </div>
-            )}
-
-            <div className="flex w-[100%] flex-wrap gap-8 md:gap-10">
-              <DoctorCard doctorData={DoctorData} />
             </div>
           </div>
         </div>
-      </div>
+        )
+      }
     </div>
+   
   );
 };
 

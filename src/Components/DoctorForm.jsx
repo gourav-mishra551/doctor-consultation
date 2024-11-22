@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { MdCancel, MdDelete } from "react-icons/md";
 import { TiTickOutline } from "react-icons/ti";
@@ -11,6 +11,7 @@ import { useLocation } from "react-router-dom";
 const DoctorForm = () => {
   const [formValues, setFormValues] = useState({
     specialitycategories: [],
+    verification: "",
     aboutDoctor: "",
     councilName: "",
     RegistrationNumber: "",
@@ -43,17 +44,18 @@ const DoctorForm = () => {
     ],
   });
 
-  console.log("fgffb", formValues.aboutDoctor);
+  console.log("fgffb", formValues.verification);
 
   const isNextDisabled =
     formValues.specialitycategories.length === 0 ||
     formValues.language.length === 0 ||
-    !formValues.aboutDoctor ||
     !formValues.RegistrationNumber ||
-    !formValues.councilName;
+    !formValues.councilName
+    !formValues.verification;
 
-  console.log(formValues.years_of_experience[0].description);
 
+
+  const selectRef = useRef(null);
   const yearsOfExperience = formValues?.years_of_experience || [];
   const qualifications = formValues?.qualifications || [];
 
@@ -74,6 +76,12 @@ const DoctorForm = () => {
     }
   };
 
+  const currentYear = new Date().getFullYear();
+
+  const years = Array.from(
+    { length: currentYear - 1960 + 1 },
+    (_, index) => currentYear - index
+  );
   const handleCouncilSelect = (council) => {
     setFormValues((prevValues) => {
       // Add selected council to the councilName array if not already present
@@ -525,6 +533,23 @@ const DoctorForm = () => {
       setSpecialityError(false);
       SetVisitingModeError(false);
 
+      // Filter out any experience objects where all fields are empty
+      const filteredYearsOfExperience = formValues.years_of_experience.filter(
+        (exp) =>
+          exp.jobTitle !== "" ||
+          exp.organizationName !== "" ||
+          exp.organizationLocation !== "" ||
+          exp.startDate?.month !== "" ||
+          exp.startDate?.year !== "" ||
+          exp.description !== "" ||
+          exp.skills.length > 0 // Ensure skills are checked as well
+      );
+
+      // If no valid experience, set years_of_experience as an empty array
+      if (filteredYearsOfExperience.length === 0) {
+        formValues.years_of_experience = [];
+      }
+
       // Proceed with form submission
       console.log("formvalue", formValues);
 
@@ -534,7 +559,6 @@ const DoctorForm = () => {
       // Check if token and id are available
       if (!token || !id) {
         console.error("Missing token or ID. Redirecting to login.");
-        // Optionally, redirect to login page if necessary
         return;
       }
 
@@ -546,6 +570,8 @@ const DoctorForm = () => {
         RegistrationNumber,
         language,
         years_of_experience,
+        verification,
+        qualifications,
       } = formValues;
 
       // Construct payload
@@ -556,6 +582,8 @@ const DoctorForm = () => {
         RegistrationNumber,
         language,
         years_of_experience,
+        qualifications,
+        verification
       };
 
       try {
@@ -661,24 +689,33 @@ const DoctorForm = () => {
           {step === 1 && (
             <div className="bg-white p-10 rounded-xl shadow-lg">
               <p className="font-semibold text-4xl text-center text-[#00768A] mb-6">
-                We are happy to on board you.
+                We are happy to onboard you.
               </p>
               <p className="font-semibold text-2xl text-center text-[#00768A] mb-6">
                 Doctor's Details
               </p>
+
+              <p style={{ color: "red" }}>
+                Instruction : <br />{" "}
+                <span style={{ color: "red" }}>
+                  All (*) marked fields are mandatory
+                </span>
+              </p>
               <div className="input-group flex flex-col gap-5">
                 {/* Specialist Toggle */}
 
-                <div className="relative inline-block text-left">
+                <div className="relative inline-block text-left mt-2">
                   <label htmlFor="qualifications" className="text-[#00768A]">
-                    Select your Specialties:
+                    Select your Specialties:{" "}
+                    <span style={{ color: "red" }}>*</span>
                   </label>
                   <button
                     type="button"
                     onClick={toggleDropdown}
-                    className="items-start justify-start grid grid-cols-1 sm:grid-cols-2 gap-2 md:grid-cols-4 border-2 bg-[#ffffff] bg-opacity-100 border-gray-300 text-black px-4 py-2 rounded-md w-full text-start focus:outline-none  focus:border-[#00768A]"
+                    className="items-start justify-start grid grid-cols-1  sm:grid-cols-2 gap-2 md:grid-cols-4 border-2 bg-[#ffffff] bg-opacity-100 border-gray-300 text-black px-4 py-2 rounded-md w-full text-start focus:outline-none  focus:border-[#00768A]"
                   >
                     {/* Display selected specialties */}
+
                     {formValues.specialitycategories.length > 0
                       ? specialtyoptions
                           .filter((option) =>
@@ -687,11 +724,12 @@ const DoctorForm = () => {
                           .map((option) => (
                             <span
                               key={option._id}
-                              className="flex items-center mr-2 gap-2"
+                              className="flex items-center justify-center gap-1 w-auto p-2 bg-[#00768A] rounded-[5px] text-white"
                             >
-                              {option.specialtyName}
+                              <span>{option.specialtyName}</span>
+
                               <MdCancel
-                                className="ml-1"
+                                className="ml-1 "
                                 onClick={() =>
                                   handleRemoveSpecialty(option._id)
                                 }
@@ -728,7 +766,8 @@ const DoctorForm = () => {
                 {/* Language */}
                 <div className="relative">
                   <label htmlFor="language" className="text-[#00768A]">
-                    Select your Language:
+                    Select your preferred Languages:{" "}
+                    <span style={{ color: "red" }}>*</span>
                   </label>
 
                   {/* Custom dropdown trigger */}
@@ -809,7 +848,8 @@ const DoctorForm = () => {
                 {/* Council Name */}
                 <div className="relative">
                   <label htmlFor="CouncilName" className="text-[#00768A]">
-                    Select your Council Name:
+                    Select your Medical Council:{" "}
+                    <span style={{ color: "red" }}>*</span>
                   </label>
 
                   <div>
@@ -819,7 +859,8 @@ const DoctorForm = () => {
                       value={formValues.councilName}
                       className="border border-gray-300 w-full max-w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A] flex items-center justify-between cursor-pointer"
                     >
-                      <option>Select Your Council Name</option>
+                      <option>Select Your Council Name</option>{" "}
+                      <span style={{ color: "red" }}>*</span>
                       {CouncilName.map((council) => (
                         <option>{council}</option>
                       ))}
@@ -828,14 +869,21 @@ const DoctorForm = () => {
                 </div>
 
                 {formValues.councilName ? (
-                  <input
-                    placeholder="Enter Your Registration Number"
-                    onChange={handleChange}
-                    name="RegistrationNumber"
-                    value={formValues.RegistrationNumber}
-                    className="border border-gray-300 w-full max-w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A] flex items-center justify-between cursor-pointer"
-                    required
-                  />
+                  <div>
+                    <label htmlFor="CouncilName" className="text-[#00768A]">
+                      Enter your Medical Registration Number:{" "}
+                      <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <input
+                      placeholder="Enter Your Registration Number"
+                      onChange={handleChange}
+                      name="RegistrationNumber"
+                      value={formValues.RegistrationNumber}
+                      className="border border-gray-300 w-full max-w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A] flex items-center justify-between cursor-pointer"
+                      required
+                      autoComplete="off"
+                    />
+                  </div>
                 ) : null}
                 {console.log(formValues.RegistrationNumber)}
                 {/* <div>
@@ -858,16 +906,33 @@ const DoctorForm = () => {
 
                 <div className="gap-5">
                   <label className="text-[#00768A]" htmlFor="DoctorDescription">
-                    Your Professional Summary
+                    Your Professional Summary:{" "}
                   </label>
                   <textarea
                     className="border border-gray-300 w-full h-18 p-3 rounded-md focus:outline-none focus:border-[#00768A]"
-                    placeholder="Enter Description"
+                    placeholder="Enter your  Professional Summary"
                     name="aboutDoctor"
                     value={formValues.aboutDoctor}
                     onChange={handleChange}
                     required
                   ></textarea>
+                </div>
+
+                <div className="gap-5">
+                  <label htmlFor="CouncilName" className="text-[#00768A]">
+                    Enter your Adhar Number: (for verification Purpose Only){" "}
+                    <span style={{ color: "red" }}>*</span>
+                  </label>
+                  <input
+                    type="number"
+                    className="border border-gray-300 w-full max-w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A] flex items-center justify-between cursor-pointer"
+                    placeholder="Enter Your Adhar number"
+                    max="12"
+                    name="verification"
+                    value={formValues.verification}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
               </div>
 
@@ -887,10 +952,7 @@ const DoctorForm = () => {
                 </button>
               </div>
 
-              {console.log(
-                "year if ",
-                formValues.years_of_experience.description
-              )}
+              
             </div>
           )}
 
@@ -926,11 +988,13 @@ const DoctorForm = () => {
                     {/* Institute Name */}
                     <div className="mb-3">
                       <label className="block text-sm font-medium text-[#00768A]">
-                        Institute Name:
+                        Institute Name: <span style={{ color: "red" }}>*</span>
                       </label>
                       <input
                         type="text"
                         name="instituteName"
+                        placeholder="Ex- All India Institute of Medical Sciences"
+                        autoComplete="off"
                         required
                         className="w-full mt-1 p-2 border border-gray-300 rounded-md  focus:outline-none  focus:border-[#00768A] "
                         value={
@@ -950,11 +1014,13 @@ const DoctorForm = () => {
                     {/* Degree */}
                     <div className="mb-3">
                       <label className="block text-sm font-medium text-[#00768A]">
-                        Degree:
+                        Degree: <span style={{ color: "red" }}>*</span>
                       </label>
                       <input
                         type="text"
                         name="degree"
+                        autoComplete="off"
+                        placeholder="Ex- MBBS"
                         required
                         className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                         value={qual.degree}
@@ -972,11 +1038,13 @@ const DoctorForm = () => {
                     {/* Field of Study */}
                     <div className="mb-3">
                       <label className="block text-sm font-medium text-[#00768A]">
-                        Field of Study:
+                        Field of Study: <span style={{ color: "red" }}>*</span>
                       </label>
                       <input
                         type="text"
                         name="fieldOfStudy"
+                        autoComplete="off"
+                        placeholder="Ex- Cardiology"
                         required
                         className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                         value={qual.fieldOfStudy}
@@ -995,9 +1063,9 @@ const DoctorForm = () => {
                     <div className="mb-3 flex gap-4">
                       <div>
                         <label className="block text-sm font-medium text-[#00768A]">
-                          Start Month:
+                          Start Month: <span style={{ color: "red" }}>*</span>
                         </label>
-                        <input
+                        {/* <input
                           type="number"
                           name="startMonth"
                           placeholder="MM"
@@ -1006,14 +1074,37 @@ const DoctorForm = () => {
                           onChange={(e) =>
                             handleDateChange(e, index, "startDate", "month")
                           }
-                        />
+                        /> */}
+                        <select
+                          value={qual.startDate?.month || ""}
+                          onChange={(e) =>
+                            handleDateChange(e, index, "startDate", "month")
+                          }
+                          name="startMonth"
+                          id="month"
+                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
+                        >
+                          <option value="">Select Month</option>
+                          <option value="1">January</option>
+                          <option value="2">February</option>
+                          <option value="3">March</option>
+                          <option value="4">April</option>
+                          <option value="5">May</option>
+                          <option value="6">June</option>
+                          <option value="7">July</option>
+                          <option value="8">August</option>
+                          <option value="9">September</option>
+                          <option value="10">October</option>
+                          <option value="11">November</option>
+                          <option value="12">December</option>
+                        </select>
                       </div>
-
+                      {console.log(formValues.qualifications[0])}
                       <div>
                         <label className="block text-sm font-medium text-[#00768A]">
-                          Start Year:
+                          Start Year: <span style={{ color: "red" }}>*</span>
                         </label>
-                        <input
+                        {/* <input
                           type="number"
                           name="startYear"
                           placeholder="YYYY"
@@ -1022,7 +1113,23 @@ const DoctorForm = () => {
                           onChange={(e) =>
                             handleDateChange(e, index, "startDate", "year")
                           }
-                        />
+                        /> */}
+
+                        <select
+                          name="startYear"
+                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
+                          value={qual.startDate?.year}
+                          onChange={(e) =>
+                            handleDateChange(e, index, "startDate", "year")
+                          }
+                        >
+                          <option value="">Select End Year</option>
+                          {years.map((year) => (
+                            <option key={year} value={year}>
+                              {year}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </div>
 
@@ -1030,9 +1137,9 @@ const DoctorForm = () => {
                     <div className="mb-3 flex gap-4">
                       <div>
                         <label className="block text-sm font-medium text-[#00768A]">
-                          End Month:
+                          End Month: <span style={{ color: "red" }}>*</span>
                         </label>
-                        <input
+                        {/* <input
                           type="number"
                           name="endMonth"
                           placeholder="MM"
@@ -1041,13 +1148,36 @@ const DoctorForm = () => {
                           onChange={(e) =>
                             handleDateChange(e, index, "endDate", "month")
                           }
-                        />
+                        /> */}
+                        <select
+                          name="endMonth"
+                          value={qual.endDate?.month}
+                          onChange={(e) =>
+                            handleDateChange(e, index, "endDate", "month")
+                          }
+                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
+                          id=""
+                        >
+                          <option value="">Select Month</option>
+                          <option value="1">January</option>
+                          <option value="2">February</option>
+                          <option value="3">March</option>
+                          <option value="4">April</option>
+                          <option value="5">May</option>
+                          <option value="6">June</option>
+                          <option value="7">July</option>
+                          <option value="8">August</option>
+                          <option value="9">September</option>
+                          <option value="10">October</option>
+                          <option value="11">November</option>
+                          <option value="12">December</option>
+                        </select>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-[#00768A]">
-                          End Year:
+                          End Year: <span style={{ color: "red" }}>*</span>
                         </label>
-                        <input
+                        {/* <input
                           type="number"
                           name="endYear"
                           placeholder="YYYY"
@@ -1056,7 +1186,23 @@ const DoctorForm = () => {
                           onChange={(e) =>
                             handleDateChange(e, index, "endDate", "year")
                           }
-                        />
+                        /> */}
+
+                        <select
+                          value={qual.endDate?.year}
+                          onChange={(e) =>
+                            handleDateChange(e, index, "endDate", "year")
+                          }
+                          name="endYear"
+                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
+                        >
+                          <option value="">Select End Year</option>
+                          {years.map((year) => (
+                            <option key={year} value={year}>
+                              {year}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </div>
 
@@ -1069,6 +1215,8 @@ const DoctorForm = () => {
                         name="description"
                         className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                         value={qual.description}
+                        autoComplete="off"
+                        placeholder="Describe your Educational Experience"
                         onChange={(e) =>
                           handleInputChange(
                             e,
@@ -1137,13 +1285,14 @@ const DoctorForm = () => {
                 onClick={addQualification}
                 className="mb-6 px-4 py-2 mt-4 bg-[#00607A] text-white rounded-md hover:bg-[#306978] transition duration-300"
               >
-                Add Qualification
+                + Add More Qualifications
               </button>
-
+              <hr />
               {/* Experience Section */}
-              <h3 className="text-xl font-semibold text-[#00768A] mb-4">
-                Years of Experience
+              <h3 className="text-xl font-semibold text-[#00768A] mb-4 mt-4">
+                Years of Experience (Optional)
               </h3>
+
               <div className="border border-dashed border-gray-400 p-4 rounded-md">
                 {yearsOfExperience.map((exp, index) => (
                   <div
@@ -1167,6 +1316,7 @@ const DoctorForm = () => {
                         type="text"
                         className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                         value={exp.jobTitle}
+                        autoComplete="off"
                         onChange={(e) =>
                           handleInputChange(
                             e,
@@ -1198,7 +1348,7 @@ const DoctorForm = () => {
                           Work from Office
                         </option>
                         <option value="Work from Home">Work from Home</option>
-                        <option value="Hybrid work">Hybrid work</option>
+                        <option value="Hybrid work">Hybrid Work</option>
                       </select>
                     </div>
 
@@ -1246,7 +1396,7 @@ const DoctorForm = () => {
                         <label className="block text-sm font-medium text-[#00768A]">
                           Start Month:
                         </label>
-                        <input
+                        {/* <input
                           type="number"
                           name="startMonth"
                           placeholder="MM"
@@ -1260,13 +1410,41 @@ const DoctorForm = () => {
                               "startDate"
                             )
                           }
-                        />
+                        /> */}
+
+                        <select
+                          name="startMonth"
+                          value={exp.startDate?.month || ""}
+                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
+                          onChange={(e) =>
+                            handleInputChange(
+                              e,
+                              index,
+                              "years_of_experience",
+                              "startDate"
+                            )
+                          }
+                        >
+                          <option value="">Select Month</option>
+                          <option value="1">January</option>
+                          <option value="2">February</option>
+                          <option value="3">March</option>
+                          <option value="4">April</option>
+                          <option value="5">May</option>
+                          <option value="6">June</option>
+                          <option value="7">July</option>
+                          <option value="8">August</option>
+                          <option value="9">September</option>
+                          <option value="10">October</option>
+                          <option value="11">November</option>
+                          <option value="12">December</option>
+                        </select>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-[#00768A]">
                           Start Year:
                         </label>
-                        <input
+                        {/* <input
                           type="number"
                           name="startYear"
                           placeholder="YYYY"
@@ -1280,10 +1458,33 @@ const DoctorForm = () => {
                               "startDate"
                             )
                           }
-                        />
+                        /> */}
+                        <select
+                          value={exp.startDate?.year || ""}
+                          onChange={(e) =>
+                            handleInputChange(
+                              e,
+                              index,
+                              "years_of_experience",
+                              "startDate"
+                            )
+                          }
+                          name="startYear"
+                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
+                        >
+                          <option value="">Select End Year</option>
+                          {years.map((year) => (
+                            <option key={year} value={year}>
+                              {year}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                       <div className="mt-[40px] ml-[25px] flex items-center">
-                        <label htmlFor={`experience-${index}`} className="mr-2 font-bold">
+                        <label
+                          htmlFor={`experience-${index}`}
+                          className="mr-2 font-bold"
+                        >
                           If Present
                         </label>
                         <input
@@ -1300,14 +1501,14 @@ const DoctorForm = () => {
                         />
                       </div>
                     </div>
-                      
+
                     {!exp.isPresent && (
                       <div className="mb-3 flex gap-4">
                         <div>
                           <label className="block text-sm font-medium text-[#00768A]">
                             End Month:
                           </label>
-                          <input
+                          {/* <input
                             type="number"
                             name="endMonth"
                             placeholder="MM"
@@ -1321,13 +1522,41 @@ const DoctorForm = () => {
                                 "endDate"
                               )
                             }
-                          />
+                          /> */}
+
+                          <select
+                            value={exp.endDate?.month}
+                            className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
+                            onChange={(e) =>
+                              handleInputChange(
+                                e,
+                                index,
+                                "years_of_experience",
+                                "endDate"
+                              )
+                            }
+                            name="endMonth"
+                          >
+                            <option value="">Select Month</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                          </select>
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-[#00768A]">
                             End Year:
                           </label>
-                          <input
+                          {/* <input
                             type="number"
                             name="endYear"
                             placeholder="YYYY"
@@ -1341,7 +1570,27 @@ const DoctorForm = () => {
                                 "endDate"
                               )
                             }
-                          />
+                          /> */}
+                          <select
+                            name="endYear"
+                            value={exp.endDate?.year}
+                            onChange={(e) =>
+                              handleInputChange(
+                                e,
+                                index,
+                                "years_of_experience",
+                                "endDate"
+                              )
+                            }
+                            className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
+                          >
+                            <option value="">Select End Year</option>
+                            {years.map((year) => (
+                              <option key={year} value={year}>
+                                {year}
+                              </option>
+                            ))}
+                          </select>
                         </div>
                       </div>
                     )}
@@ -1361,8 +1610,7 @@ const DoctorForm = () => {
                           )
                         }
                         className="border border-gray-300 w-full h-18 p-3 rounded-md focus:outline-none focus:border-[#00768A]"
-                        placeholder="Enter Description"
-                        required
+                        placeholder="Describe your Work Experience"
                       />
                     </div>
 
@@ -1420,7 +1668,7 @@ const DoctorForm = () => {
                   onClick={addExperience}
                   className="mb-6 px-4 py-2 mt-4 bg-[#00607A] text-white rounded-md hover:bg-[#306978] transition duration-300"
                 >
-                  Add Experience
+                  + Add More Experience
                 </button>
 
                 <button
