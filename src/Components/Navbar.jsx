@@ -11,6 +11,8 @@ import "./Navbar.css"; // Import the CSS file
 import Image from "../../src/Assests/ametheus.webp";
 import { FaChevronDown } from "react-icons/fa6";
 import MegaMenu from "./MegaMenu";
+import { CgProfile } from "react-icons/cg";
+import { AiOutlineLogout } from "react-icons/ai";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -149,13 +151,12 @@ const Navbar = () => {
   const servicesRef = useRef(null);
   // Detect clicks outside of Services or the mega menu
 
- // Handle click outside
- const handleClickOutside = (event) => {
-  if (menuRef.current && !menuRef.current.contains(event.target)) {
-    setIsMegaMenuVisible(false); // Hide the MegaMenu
-  }
-};
-
+  // Handle click outside
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setIsMegaMenuVisible(false); // Hide the MegaMenu
+    }
+  };
 
   const setBothRefs = (node) => {
     containerRef.current = node;
@@ -195,7 +196,10 @@ const Navbar = () => {
     localStorage.removeItem("signupemail");
     localStorage.removeItem("token");
     setIsLogin(false);
-    navigate("/");
+    setIsOpen(false);
+    {
+      localStorage.getItem("user") ? navigate("/") : navigate("/auth");
+    }
   };
 
   useEffect(() => {
@@ -288,19 +292,22 @@ const Navbar = () => {
     useEffect(() => {
       window.scrollTo({
         top: 0,
-        behavior: "smooth", 
-        
+        behavior: "smooth",
       });
     }, []);
   };
-  
+
   return (
     <div className="bg-white sticky top-[-2px] z-50 shadow-md">
       <nav className="text-black  max-w-[92vw] top-0 z-50 bg-white mx-auto">
         <div className="sm:max-w-7xl w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link to="/" className="text-xl font-bold flex-shrink-0 " onClick={HandleScrolling}>
+            <Link
+              to="/"
+              className="text-xl font-bold flex-shrink-0 "
+              onClick={HandleScrolling}
+            >
               <img
                 className="h-14 w-[50vw] sm:w-[20vw]"
                 src={Image}
@@ -327,9 +334,8 @@ const Navbar = () => {
 
                 <div
                   className="relative cursor-pointer group"
-                  ref={menuRef} 
+                  ref={menuRef}
                   onMouseEnter={handleHover}
-                
                 >
                   <span className="relative z-10">Service</span>
                   <span className="absolute left-0 bottom-0 h-0.5 w-full bg-[#00768A] scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
@@ -457,7 +463,27 @@ const Navbar = () => {
         {/* Mobile Menu */}
         <div>
           {isOpen && (
-            <div className="md:hidden w-[96%]  bg-white text-black h-max pb-32 absolute z-50">
+            <div className="md:hidden w-full -translate-x-4 bg-white text-black h-max pb-32 absolute z-50 border  overflow-y-auto max-h-screen">
+              <div className="flex flex-col justify-between p-4 space-y-6">
+                {/* Profile Section */}
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-md hover:shadow-xl transition-all"
+                >
+                  <div className="relative h-[60px] w-[60px] flex justify-center items-center bg-[#00768A] rounded-full shadow-lg">
+                    <CgProfile className="h-[40px] w-[40px] text-white" />
+                  </div>
+                  <div className="flex flex-col justify-center">
+                    <h4 className="text-lg font-semibold text-gray-700">
+                      Hi there,{" "}
+                      <span className="font-bold text-[#00768A]">
+                        {localStorage.getItem("user")}
+                      </span>
+                    </h4>
+                  </div>
+                </Link>
+              </div>
+
               <div className="px-2 pt-2 space-y-1">
                 <Link
                   to="/"
@@ -478,7 +504,7 @@ const Navbar = () => {
                   {Object.keys(submenuData).map((menu, index) => (
                     <div key={index}>
                       <div
-                        className=" px-3 py-2 rounded-md text-sm hover:bg-blue-500 hover:text-white cursor-pointer flex  "
+                        className=" px-3 py-2 rounded-md text-sm hover:bg-blue-500 hover:text-white cursor-pointer flex"
                         onClick={() => toggleSubMenu(menu)}
                       >
                         {menu.replace(/([A-Z])/g, " $1")}
@@ -521,6 +547,24 @@ const Navbar = () => {
                 >
                   Contact
                 </Link>
+
+                {/* Logout Button */}
+                <div className="flex justify-start">
+                  <button
+                    onClick={logout}
+                    className="px-4 py-3 mt-3 w-[110px] flex items-center justify-center  text-black rounded-lg text-lg font-semibold transition-colors duration-300  hover:shadow-lg focus:outline-none"
+                  >
+                    <AiOutlineLogout className="text-2xl mr-1" />{" "}
+                    {/* Increased icon size with margin to separate from text */}
+                    <span className="text-md font-medium">
+                      {localStorage.getItem("user") ? (
+                        <span>Logout</span>
+                      ) : (
+                        <span>Login</span>
+                      )}
+                    </span>
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -529,18 +573,17 @@ const Navbar = () => {
 
       {/* MegaMenu for Desktop */}
       <div>
-          {/* MegaMenu Component */}
-          <div
+        {/* MegaMenu Component */}
+        <div
           ref={menuRef} // Attach ref to the container
           onMouseEnter={handleHover}
-          >
+        >
           {isMegaMenuVisible && (
             <div className=" top-full left-0 mt-2 bg-white text-black shadow-lg">
               <MegaMenu />
             </div>
           )}
-          </div>
-       
+        </div>
       </div>
     </div>
   );

@@ -3,7 +3,13 @@ import React, { useEffect, useState } from "react";
 import { GiGraduateCap } from "react-icons/gi";
 import { useParams } from "react-router-dom";
 import DrAppointmentBooking from "../../Components/DrApointmentBooking";
-import { FaGraduationCap, FaHospital, FaMapMarkerAlt, FaTrophy, FaGlobe } from "react-icons/fa";
+import {
+  FaGraduationCap,
+  FaHospital,
+  FaMapMarkerAlt,
+  FaTrophy,
+  FaGlobe,
+} from "react-icons/fa";
 import PrescriptionUpload from "../../Components/PrescriptionUpload/PrescriptionUpload";
 import Payment from "../../Components/Payment/Payment";
 import { RiNumber1, RiNumber2, RiNumber3 } from "react-icons/ri";
@@ -40,13 +46,15 @@ function BookingSlot() {
   };
 
   if (!DrProfile) {
-    return <div className="spinner">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
+    return (
+      <div className="spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    );
   }
 
   const ProfileDetail = ({ icon, title, value }) => (
@@ -55,7 +63,9 @@ function BookingSlot() {
         {icon}
       </span>
       <div className="ml-4">
-        <p className="text-base sm:text-lg font-semibold text-gray-700">{title}</p>
+        <p className="text-base sm:text-lg font-semibold text-gray-700">
+          {title}
+        </p>
         <p className="text-sm sm:text-base text-gray-600">{value}</p>
       </div>
     </div>
@@ -63,7 +73,6 @@ function BookingSlot() {
 
   return (
     <div className="min-h-screen flex flex-col">
-
       <div className="bg-gradient-to-r from-[#E3FDFD] via-[#FFE6FA] to-[#FBF4E9] flex-grow py-6 px-4 sm:px-6 lg:px-8">
         {DrProfile?.userData && (
           <div className="bg-white rounded-3xl shadow-2xl max-w-[1180px] mx-auto p-4 sm:p-6  lg:p-10">
@@ -77,7 +86,10 @@ function BookingSlot() {
 
               <div className="flex-shrink-0 flex justify-center lg:justify-start z-10">
                 <img
-                  src={DrProfile.userData?.avatar || "https://via.placeholder.com/150"}
+                  src={
+                    DrProfile.userData?.avatar ||
+                    "https://via.placeholder.com/150"
+                  }
                   alt="Doctor Avatar"
                   className="h-28 w-28 sm:h-32 sm:w-32 lg:h-40 lg:w-40 rounded-full object-cover shadow-lg border-4 border-white"
                 />
@@ -148,9 +160,11 @@ function BookingSlot() {
                 title="Address"
                 value={
                   DrProfile?.clinic_hospital_address
-                    ? `${DrProfile.clinic_hospital_address.permanentAddress || ""}, ${DrProfile.clinic_hospital_address.state || ""
-                    }, ${DrProfile.clinic_hospital_address.city || ""}, ${DrProfile.clinic_hospital_address.PinCode || ""
-                    }`
+                    ? `${
+                        DrProfile.clinic_hospital_address.permanentAddress || ""
+                      }, ${DrProfile.clinic_hospital_address.state || ""}, ${
+                        DrProfile.clinic_hospital_address.city || ""
+                      }, ${DrProfile.clinic_hospital_address.PinCode || ""}`
                     : "Not available"
                 }
               />
@@ -162,8 +176,9 @@ function BookingSlot() {
         <div className="relative flex items-center w-full max-w-md justify-between">
           {/* Step 1 */}
           <div
-            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${step >= 1 ? "text-white bg-[#00768A]" : "text-gray-500"
-              } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
+            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${
+              step >= 1 ? "text-white bg-[#00768A]" : "text-gray-500"
+            } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
             onClick={() => handleStepClick(1)}
           >
             <RiNumber1 size={22} />
@@ -182,8 +197,9 @@ function BookingSlot() {
 
           {/* Step 2 */}
           <div
-            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${step >= 2 ? "text-white bg-[#00768A] " : "text-white bg-gray-500"
-              } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
+            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${
+              step >= 2 ? "text-white bg-[#00768A] " : "text-white bg-gray-500"
+            } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
             onClick={() => handleStepClick(2)}
           >
             <RiNumber2 size={22} />
@@ -192,8 +208,9 @@ function BookingSlot() {
 
           {/* Step 3 */}
           <div
-            className={`flex  z-10 flex-col items-center cursor-pointer transition-all duration-300 ${step >= 3 ? "text-white bg-[#00768A]" : "text-white bg-gray-500"
-              } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20 <z-10></z-10>`}
+            className={`flex  z-10 flex-col items-center cursor-pointer transition-all duration-300 ${
+              step >= 3 ? "text-white bg-[#00768A]" : "text-white bg-gray-500"
+            } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20 <z-10></z-10>`}
             onClick={() => handleStepClick(3)}
           >
             <RiNumber3 size={22} />

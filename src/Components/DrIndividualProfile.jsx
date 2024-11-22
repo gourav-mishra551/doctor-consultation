@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import DrIndividualProfileOverview from "./DrIndividualProfileOverview";
 import DrIndividualprofileLocation from "./DrIndividualprofileLocation";
 import DrIndividualProfileReviews from "./DrIndividualProfileReviews";
 import DrIndividualProfileAvailibility from "./DrIndividualProfileAvailibility";
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import axios from "axios";
+import { useParams } from "react-router-dom";
 import { IoStarHalfOutline } from "react-icons/io5";
 import { AiOutlineStar } from "react-icons/ai";
 import { AiFillStar } from "react-icons/ai";
@@ -26,8 +26,11 @@ const DrIndividualProfile = () => {
 
   const DrIndiProfile = async () => {
     try {
-      const res = await axios.get(`https://api.assetorix.com/ah/api/v1/dc/user/doctors/${id}`);
+      const res = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/dc/user/doctors/${id}`
+      );
       setIndiProfile(res.data.data);
+      console.log(IndiProfile);
     } catch (error) {
       console.error("Error fetching doctor profile:", error);
     }
@@ -51,9 +54,13 @@ const DrIndividualProfile = () => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
       if (i <= Math.floor(rating)) {
-        stars.push(<AiFillStar key={i} className="text-yellow-500" size={30} />);
+        stars.push(
+          <AiFillStar key={i} className="text-yellow-500" size={30} />
+        );
       } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
-        stars.push(<IoStarHalfOutline key={i} className="text-yellow-500" size={30} />);
+        stars.push(
+          <IoStarHalfOutline key={i} className="text-yellow-500" size={30} />
+        );
       } else {
         stars.push(<AiOutlineStar key={i} className="text-white" size={30} />);
       }
@@ -88,7 +95,9 @@ const DrIndividualProfile = () => {
             </p>
             <div
               className={
-                IndiProfile?.averageRating === 0 ? "hidden" : "flex items-center"
+                IndiProfile?.averageRating === 0
+                  ? "hidden"
+                  : "flex items-center"
               }
             >
               {renderStars(IndiProfile?.averageRating || 0)}
@@ -109,7 +118,7 @@ const DrIndividualProfile = () => {
             Specialties In:
             <span className="font-medium ml-2 inline-block">
               {IndiProfile.specialitycategories &&
-                IndiProfile.specialitycategories.length > 0 ? (
+              IndiProfile.specialitycategories.length > 0 ? (
                 IndiProfile.specialitycategories.map((specialty, index) => (
                   <span
                     key={index}
@@ -135,26 +144,39 @@ const DrIndividualProfile = () => {
         </div>
       </div>
 
-
-      <div className='sm:max-w-6xl w-full mx-auto mt-10 md:p-5'>
+      <div className="sm:max-w-6xl w-full mx-auto mt-10 md:p-5">
         <div className="bg-white rounded-lg shadow-xl transition-shadow hover:shadow-2xl p-8">
           <ul className="flex justify-center gap-6 text-gray-600 font-medium text-lg border-b-2 pb-3">
-            {['Overview', 'Locations', 'Reviews', 'Availability'].map((tab, index) => (
-              <li
-                key={index}
-                className={`cursor-pointer pb-2 border-b-2 ${activeNav === index + 1 ? "text-[#00768A] hover:text-emerald-700 font-semibold" : "border-transparent"} transition duration-300 text-[#00768A] `}
-                onClick={() => handleNavClick(index + 1)}
-              >
-                {tab}
-              </li>
-            ))}
+            {["Overview", "Locations", "Reviews", "Availability"].map(
+              (tab, index) => (
+                <li
+                  key={index}
+                  className={`cursor-pointer pb-2 border-b-2 ${
+                    activeNav === index + 1
+                      ? "text-[#00768A] hover:text-emerald-700 font-semibold"
+                      : "border-transparent"
+                  } transition duration-300 text-[#00768A] `}
+                  onClick={() => handleNavClick(index + 1)}
+                >
+                  {tab}
+                </li>
+              )
+            )}
           </ul>
 
           <div className="transition-all duration-300 mt-6 w-full">
-            {activeNav === 1 && <DrIndividualProfileOverview IndiProfile={IndiProfile} />}
-            {activeNav === 2 && <DrIndividualprofileLocation profile={IndiProfile} />}
-            {activeNav === 3 && <DrIndividualProfileReviews profile={IndiProfile} />}
-            {activeNav === 4 && <DrIndividualProfileAvailibility profile={IndiProfile} />}
+            {activeNav === 1 && (
+              <DrIndividualProfileOverview IndiProfile={IndiProfile} />
+            )}
+            {activeNav === 2 && (
+              <DrIndividualprofileLocation profile={IndiProfile} />
+            )}
+            {activeNav === 3 && (
+              <DrIndividualProfileReviews profile={IndiProfile} />
+            )}
+            {activeNav === 4 && (
+              <DrIndividualProfileAvailibility profile={IndiProfile} />
+            )}
           </div>
         </div>
       </div>
