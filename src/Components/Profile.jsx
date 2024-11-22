@@ -16,14 +16,13 @@ import {
   MdClose,
   MdFamilyRestroom,
   MdKeyboardDoubleArrowUp,
-  MdOutlineTimer,
 } from "react-icons/md";
 import { IoPerson } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import AddFamilyMembers from "./AddFamilyMembers";
 import { RxCross2 } from "react-icons/rx";
 import ViewFamilyMembers from "./ViewFamilyMembers/ViewFamilyMembers";
-import toast from "react-hot-toast";
+import UserBookings from "./UserBookings/UserBookings";
 const Profile = () => {
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [history, setHistory] = useState([]);
@@ -38,6 +37,7 @@ const Profile = () => {
   const [familyData, setFamilyData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isFamilyOpen, setIsFamilyOpen] = useState(false);
+  const [userBooking, setUserBooking] = useState([]);
 
   const toggleMenu = (menu) => {
     if (selectedMenu === menu) {
@@ -68,6 +68,8 @@ const Profile = () => {
     }
   };
 
+  console.log(userProfileData?.data?.role);
+
   const userData = async () => {
     try {
       const response = await axios.get(
@@ -80,10 +82,31 @@ const Profile = () => {
         }
       );
       setUserProfileData(response.data);
+      console.log("userdata", response.data);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const userBookings = async () => {
+    try {
+      const response = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/dc/user/history`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      setUserBooking(response.data);
+      console.log("user-history", response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // console.log("role", userProfileData.data.role);
 
   const docotrData = async () => {
     try {
@@ -101,6 +124,10 @@ const Profile = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    userBookings();
+  }, []);
 
   useEffect(() => {
     if (id && token) {
@@ -153,6 +180,7 @@ const Profile = () => {
   if (loading) {
     return <div>Loading...</div>; // Loader is displayed
   }
+
   return (
     <div>
       <div className="bg-gray-300 bg-opacity-50 w-full h-[1px] mt-5"></div>
@@ -171,16 +199,30 @@ const Profile = () => {
                 </a>
               </li>
 
-              {/* Bookings Section */}
-              <li className="mb-2">
-                <a
-                  onClick={() => setActiveSection("bookings")}
-                  href="#"
-                  className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
-                >
-                  <TbBrandBooking className="mr-2" /> Bookings
-                </a>
-              </li>
+              {userProfileData?.data?.role === "customer" && (
+                <li className="mb-2">
+                  <a
+                    onClick={() => setActiveSection("user-bookings")}
+                    href="#"
+                    className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
+                  >
+                    <TbBrandBooking className="mr-2" /> Bookings
+                  </a>
+                </li>
+              )}
+
+              {/*Doctor Bookings Section */}
+              {userProfileData?.data?.role === "doctor" && (
+                <li className="mb-2">
+                  <a
+                    onClick={() => setActiveSection("bookings")}
+                    href="#"
+                    className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
+                  >
+                    <TbBrandBooking className="mr-2" /> Bookings
+                  </a>
+                </li>
+              )}
 
               {/* Profile Section with Subsections */}
               <li className="mb-2">
@@ -220,41 +262,44 @@ const Profile = () => {
               </li>
 
               {/* Settings Section with Subsections */}
-              <li className="mb-2">
-                <div
-                  className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
-                  onClick={() => toggleMenu("settings")}
-                >
-                  <div className="flex items-center">
-                    <FaUserDoctor className="mr-2" /> Doctor Profile
+              {userProfileData?.data?.role === "doctor" && (
+                <li className="mb-2">
+                  <div
+                    className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
+                    onClick={() => toggleMenu("settings")}
+                  >
+                    <div className="flex items-center">
+                      <FaUserDoctor className="mr-2" /> Doctor Profile
+                    </div>
+                    {selectedMenu === "settings" ? (
+                      <FaChevronUp />
+                    ) : (
+                      <FaChevronDown />
+                    )}
                   </div>
-                  {selectedMenu === "settings" ? (
-                    <FaChevronUp />
-                  ) : (
-                    <FaChevronDown />
+
+                  {selectedMenu === "settings" && (
+                    <ul className="ml-6 mt-2 space-y-1 text-gray-300">
+                      <li>
+                        <p
+                          onClick={() => setActiveSection("doctorselfprofile")}
+                          className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
+                        >
+                          View Profile
+                        </p>
+                      </li>
+                      <li>
+                        <a
+                          href="/edit-profile"
+                          className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
+                        >
+                          Edit Profile
+                        </a>
+                      </li>
+                    </ul>
                   )}
-                </div>
-                {selectedMenu === "settings" && (
-                  <ul className="ml-6 mt-2 space-y-1 text-gray-300">
-                    <li>
-                      <p
-                        onClick={() => setActiveSection("doctorselfprofile")}
-                        className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
-                      >
-                        View Profile
-                      </p>
-                    </li>
-                    <li>
-                      <a
-                        href="/edit-profile"
-                        className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
-                      >
-                        Edit Profile
-                      </a>
-                    </li>
-                  </ul>
-                )}
-              </li>
+                </li>
+              )}
 
               {/* family members */}
               <li className="mb-2">
@@ -297,15 +342,15 @@ const Profile = () => {
         </div>
 
         {/* for mobile section */}
-        <div className="relative sm:hidden">
+        <div className=" sm:hidden">
           {/* Profile Button at the top */}
           <div
             onClick={toggleProfileBar}
-            className="flex fixed bottom-0 z-50 -ml-[22px]"
+            className="flex z-50 justify-center items-center w-full"
           >
             <button
               type="button"
-              className="bg-blue-500 w-[355px] text-[22px] text-white p-4 rounded-xl shadow-lg md:hidden focus:outline-none"
+              className="bg-blue-500 text-[22px] text-white p-4 rounded-xl shadow-lg md:hidden focus:outline-none w-full"
             >
               Profile
             </button>
@@ -410,6 +455,7 @@ const Profile = () => {
               </div>
 
               {/* Doctor Profile Section */}
+              {/* {userProfileData.data.role == "doctor" && ( */}
               <div>
                 <div
                   onClick={toggleDoctorProfile}
@@ -442,6 +488,7 @@ const Profile = () => {
                   </div>
                 )}
               </div>
+              {/* )} */}
 
               {/* Add Family Section */}
               <div>
@@ -486,13 +533,19 @@ const Profile = () => {
           {activeSection === "selfuserprofile" && (
             <SelfProfile userprofiledata={userProfileData} />
           )}
-          {activeSection === "doctorselfprofile" && (
+          {activeSection === "doctorselfprofile" && userProfileData.data && (
             <DoctorSelfProfile doctorProfileData={doctorProfileData} />
           )}
           {activeSection === "familyProfile" && (
             <ViewFamilyMembers
               familyData={familyData}
               getFamilyEdit={getFamilyEdit}
+            />
+          )}
+          {activeSection === "user-bookings" && (
+            <UserBookings
+              userBooking={userBooking}
+              setUserBooking={setUserBooking}
             />
           )}
         </div>

@@ -1,16 +1,6 @@
 import React, { useState } from "react";
-import { CiChat1 } from "react-icons/ci";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { IoIosTimer } from "react-icons/io";
-import { IoCloudOffline } from "react-icons/io5";
-import {
-  MdOutlineBookOnline,
-  MdOutlineVideoCall,
-  MdSpatialAudioOff,
-} from "react-icons/md";
 
-const Bookings = ({ history }) => {
-  console.log("History", history);
+const UserBookings = ({ setUserBooking, userBooking }) => {
   const [openSection, setOpenSection] = useState(null);
   const [name, setName] = useState("");
 
@@ -37,19 +27,20 @@ const Bookings = ({ history }) => {
     });
   };
 
-  console.log("name", name);
+  console.log(userBooking);
 
   return (
     <div>
       <div className="sm:max-w-5xl w-full mx-auto sm:my-8 space-y-4">
-        <div className="top-detail-section">
-          <p className="text-gray-500 font-light">Your Previous Bookings</p>
-        </div>
-        {history?.data?.map((consultation, index) => (
-          <>
+        {userBooking?.data?.length > 0 ? (
+          userBooking.data.map((consultation, index) => (
             <div key={index} className="bg-white shadow-lg rounded-lg">
+              <div className="top-detail-section">
+                <p className="text-gray-500 font-light">
+                  Your Previous Bookings
+                </p>
+              </div>
               <div
-                key={index}
                 className="flex justify-between items-center p-4 cursor-pointer bg-[#1495AB] text-white rounded-t-lg"
                 onClick={() => toggleSection(index)}
               >
@@ -175,11 +166,15 @@ const Bookings = ({ history }) => {
                 </div>
               )}
             </div>
-          </>
-        ))}
+          ))
+        ) : (
+          <div className="text-gray-500 text-center">
+            <p>No bookings till now</p>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default Bookings;
+export default UserBookings;
