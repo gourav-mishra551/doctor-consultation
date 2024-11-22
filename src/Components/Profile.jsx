@@ -126,17 +126,12 @@ const Profile = () => {
   };
 
   useEffect(() => {
+    bookings();
+    docotrData();
+    getFamilyEdit();
     userBookings();
+    userData();
   }, []);
-
-  useEffect(() => {
-    if (id && token) {
-      bookings();
-      userData();
-      docotrData();
-      getFamilyEdit();
-    }
-  }, [id, token]);
 
   const convertToIndianDate = (dateString) => {
     const date = new Date(dateString);
@@ -199,6 +194,7 @@ const Profile = () => {
                 </a>
               </li>
 
+              {/* user bookings */}
               {userProfileData?.data?.role === "customer" && (
                 <li className="mb-2">
                   <a
