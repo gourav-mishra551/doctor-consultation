@@ -30,7 +30,7 @@ const PrescriptionUpload = ({ onPrevious }) => {
     const submitSelectedFiles = async () => {
         try {
             await axios.post(
-                "https://api.assetorix.com/ah/api/v1/submit-health-records",
+                "https://api.assetorix.com/ah/api/v1/dc/user/booking",
                 { fileIds: selectedFiles },
                 {
                     headers: {
