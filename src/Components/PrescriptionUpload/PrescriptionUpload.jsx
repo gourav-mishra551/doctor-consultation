@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaArrowLeft, FaPlus, FaCheckCircle } from "react-icons/fa";
 import axios from "axios";
 import PrescriptionUploadData from "../PrescriptionUploadData/PrescriptionUploadData";
+import { RxCross1 } from "react-icons/rx";
 
 const PrescriptionUpload = ({ onPrevious }) => {
     const [healthData, setHealthData] = useState(null); // State to store the API data
@@ -112,8 +113,9 @@ const PrescriptionUpload = ({ onPrevious }) => {
             </div>
 
             {upload && (
-                <div className="mt-6">
+                <div className="mt-6 relative">
                     <PrescriptionUploadData upload={setUpload} />
+                    <RxCross1 onClick={ ()=>  setUpload(false)} className="absolute top-10 z-50 right-1 bg-red-600 text-white rounded-full p-1 text-2xl cursor-pointer" />
                 </div>
             )}
 

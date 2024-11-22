@@ -7,9 +7,11 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFAQOpen, setIsFAQOpen] = useState(false);
   // Set the first speciality's ID as the default open box
-  const [activeSpecialityId, setActiveSpecialityId] = useState(
-    doctorProfileData?.data?.specialitycategories[0]?._id || null
-  );
+  const [activeSpecialityId, setActiveSpecialityId] = useState(() => {
+    const specialityCategories =
+      doctorProfileData?.data?.specialitycategories || [];
+    return specialityCategories.length > 0 ? specialityCategories[0]._id : null;
+  });
 
   const handleSpecialityClick = (id) => {
     // If the clicked ID is already open, close it; otherwise, open it and close others
@@ -43,7 +45,7 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
       <>
         <div className="top-bar">
           {/* top-bar is here */}
-          <div className="flex justify-between gap-5">
+          <div className="sm:flex mb-2 justify-between sm:gap-5">
             <div className="email flex items-center gap-1">
               <MdEmail className="text-[#00768A] text-sm" />
               <p className="text-sm font-light">
@@ -65,9 +67,9 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
               Dr. {doctorProfileData?.data?.userData?.name}
             </p>
           </div>
-          <div className="h-[1px] bg-gray-300 w-[100%] bg-opacity-40 mt-3"></div>
+          <div className="h-[1px] bg-gray-300 w-[100%] bg-opacity-40 sm:mt-3"></div>
 
-          <div className="mt-10 sm:flex gap-10">
+          <div className="mt-10 sm:flex sm:gap-10">
             <div className="image sm:w-[60%] w-[100%]">
               <div>
                 <img

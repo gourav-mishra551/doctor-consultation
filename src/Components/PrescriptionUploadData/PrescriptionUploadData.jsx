@@ -15,6 +15,7 @@ const PrescriptionUploadData = ({ upload }) => {
     const [firm, setFirm] = useState('');
     const [date, setDate] = useState('');
     const [notes, setNotes] = useState('');
+    
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
         const updatedFiles = files.map((file) => ({
@@ -103,13 +104,13 @@ const PrescriptionUploadData = ({ upload }) => {
     };
 
     return (
-        <div>
-            <div>
+        <div >
+            <div >
                 <h1 className="text-lg font-semibold text-gray-700 mb-4">Upload Files</h1>
-                <div className="max-w-2xl mx-auto  shadow-lg rounded-3xl " >
+                <div className="max-w-2xl  mx-auto  shadow-lg rounded-3xl " >
                     {/* Step 1: Document Information */}
                     {step === 1 && (
-                        <div className="bg-white shadow-lg rounded-xl p-8 max-w-3xl mx-auto">
+                        <div className="bg-white  shadow-lg rounded-xl p-8 max-w-3xl mx-auto">
                             <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-4">
                                 STEP 1: DOCUMENT INFORMATION
                             </h2>
@@ -229,6 +230,7 @@ const PrescriptionUploadData = ({ upload }) => {
                                     Next
                                 </button>
                             </div>
+
                         </div>
                     )}
 
@@ -291,6 +293,7 @@ const PrescriptionUploadData = ({ upload }) => {
                             </div>
                         </form>
                     )}
+
                 </div>
 
                 {/* Preview Section */}
@@ -314,8 +317,8 @@ const PrescriptionUploadData = ({ upload }) => {
                         </div>
                     ))}
                 </div>
-
             </div>
+           
         </div>
     )
 }
