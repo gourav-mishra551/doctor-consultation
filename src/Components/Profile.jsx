@@ -7,7 +7,7 @@ import {
   FaChevronUp,
   FaQuestion,
 } from "react-icons/fa";
-import { FaUserDoctor } from "react-icons/fa6";
+import { FaCheckToSlot, FaUserDoctor } from "react-icons/fa6";
 import { TbBrandBooking } from "react-icons/tb";
 import Bookings from "./Bookings";
 import SelfProfile from "./SelfProfile";
@@ -23,6 +23,8 @@ import AddFamilyMembers from "./AddFamilyMembers";
 import { RxCross2 } from "react-icons/rx";
 import ViewFamilyMembers from "./ViewFamilyMembers/ViewFamilyMembers";
 import UserBookings from "./UserBookings/UserBookings";
+import EditUserDetails from "./EditUserDetails/EditUserDetails";
+import CreateSlotsByDr from "./CreateSlotsByDr/CreateSlotsByDr";
 const Profile = () => {
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [history, setHistory] = useState([]);
@@ -33,7 +35,6 @@ const Profile = () => {
   const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
   const [isDoctorProfileOpen, setIsDoctorProfileOpen] = useState(false);
   const [familyPopUp, setFamilyPopUp] = useState(false);
-  const [editFamilyPopUp, setEditFamilyPopUp] = useState(false);
   const [familyData, setFamilyData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isFamilyOpen, setIsFamilyOpen] = useState(false);
@@ -106,8 +107,6 @@ const Profile = () => {
     }
   };
 
-  // console.log("role", userProfileData.data.role);
-
   const docotrData = async () => {
     try {
       const response = await axios.get(
@@ -173,7 +172,7 @@ const Profile = () => {
   console.log(getFamilyEdit);
 
   if (loading) {
-    return <div>Loading...</div>; // Loader is displayed
+    return <div className="loader"></div>; // Loader is displayed
   }
 
   return (
@@ -181,7 +180,7 @@ const Profile = () => {
       <div className="bg-gray-300 bg-opacity-50 w-full h-[1px] mt-5"></div>
       <div className="sm:flex gap-10 p-10">
         {/* desktop section */}
-        <div className="left h-[400px] w-[20%] sm:flex hidden flex-col mt-5 shadow-xl">
+        <div className="left h-[400px] w-[20%] sm:flex hidden flex-col mt-5 shadow-xl sticky top-[200px]">
           <nav className="flex-1 p-2">
             <ul>
               {/* Home Section */}
@@ -220,6 +219,17 @@ const Profile = () => {
                 </li>
               )}
 
+              {userProfileData?.data?.role === "doctor" && (
+                <li className="mb-2">
+                  <p
+                    onClick={() => setActiveSection("create-slots")}
+                    className="flex items-center p-2 cursor-pointer rounded-md hover:bg-[#00768A] hover:text-white text-black font-normal"
+                  >
+                    <FaCheckToSlot className="mr-2" /> Create Slots
+                  </p>
+                </li>
+              )}
+
               {/* Profile Section with Subsections */}
               <li className="mb-2">
                 <div
@@ -246,12 +256,12 @@ const Profile = () => {
                       </p>
                     </li>
                     <li>
-                      <a
-                        href="#"
-                        className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
+                      <p
+                        onClick={() => setActiveSection("edituserprofile")}
+                        className="block cursor-pointer p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
                       >
                         Edit User
-                      </a>
+                      </p>
                     </li>
                   </ul>
                 )}
@@ -338,7 +348,7 @@ const Profile = () => {
         </div>
 
         {/* for mobile section */}
-        <div className=" sm:hidden">
+        <div className="sm:hidden">
           {/* Profile Button at the top */}
           <div
             onClick={toggleProfileBar}
@@ -415,76 +425,97 @@ const Profile = () => {
               </div>
 
               {/* User Profile Section */}
-              <div>
-                <div
-                  onClick={toggleUserProfile}
-                  className="flex justify-center items-center gap-2 border w-full p-2 bg-[#00768A] rounded-xl text-white cursor-pointer"
-                >
-                  <IoPerson />
-                  <button type="button" className="text-xl focus:outline-none">
-                    User Profile
-                  </button>
-                </div>
-                {isUserProfileOpen && (
-                  <div className="flex flex-col space-y-2 mt-2">
+              {userProfileData?.data?.role === "customer" && (
+                <div>
+                  <div
+                    onClick={toggleUserProfile}
+                    className="flex justify-center items-center gap-2 border w-full p-2 bg-[#00768A] rounded-xl text-white cursor-pointer"
+                  >
+                    <IoPerson />
                     <button
                       type="button"
-                      onClick={() => {
-                        setActiveSection("selfuserprofile");
-                        setIsProfileOpen(false);
-                      }}
-                      className="text-white bg-gray-500 w-full py-2 rounded-lg"
+                      className="text-xl focus:outline-none"
                     >
-                      View Profile
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        console.log("Edit User Profile");
-                      }}
-                      className="text-white bg-gray-500 w-full py-2 rounded-lg"
-                    >
-                      Edit Profile
+                      User Profile
                     </button>
                   </div>
-                )}
-              </div>
+                  {isUserProfileOpen && (
+                    <div className="flex flex-col space-y-2 mt-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveSection("selfuserprofile");
+                          setIsProfileOpen(false);
+                        }}
+                        className="text-white bg-gray-500 w-full py-2 rounded-lg"
+                      >
+                        View Profile
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setActiveSection("edituserprofile")}
+                        className="text-white bg-gray-500 w-full py-2 rounded-lg"
+                      >
+                        Edit Profile
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Doctor Profile Section */}
-              {/* {userProfileData.data.role == "doctor" && ( */}
-              <div>
-                <div
-                  onClick={toggleDoctorProfile}
-                  className="flex justify-center items-center gap-2 border w-full p-2 bg-[#00768A] rounded-xl text-white cursor-pointer"
-                >
-                  <FaUserDoctor />
-                  <button type="button" className="text-xl focus:outline-none">
-                    Doctor Profile
-                  </button>
-                </div>
-                {isDoctorProfileOpen && (
-                  <div className="flex flex-col space-y-2 mt-2">
+              {userProfileData?.data?.role === "doctor" && (
+                <div>
+                  <div
+                    onClick={toggleDoctorProfile}
+                    className="flex justify-center items-center gap-2 border w-full p-2 bg-[#00768A] rounded-xl text-white cursor-pointer"
+                  >
+                    <FaUserDoctor />
                     <button
                       type="button"
-                      onClick={() => {
-                        setActiveSection("doctorselfprofile");
-                        setIsProfileOpen(false);
-                      }}
-                      className="text-white bg-gray-500 w-full py-2 rounded-lg"
+                      className="text-xl focus:outline-none"
                     >
-                      View Profile
-                    </button>
-                    <button
-                      onClick={() => navigate("/edit-profile")}
-                      type="button"
-                      className="text-white bg-gray-500 w-full py-2 rounded-lg"
-                    >
-                      Edit Profile
+                      Doctor Profile
                     </button>
                   </div>
-                )}
-              </div>
-              {/* )} */}
+                  {isDoctorProfileOpen && (
+                    <div className="flex flex-col space-y-2 mt-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveSection("doctorselfprofile");
+                          setIsProfileOpen(false);
+                        }}
+                        className="text-white bg-gray-500 w-full py-2 rounded-lg"
+                      >
+                        View Profile
+                      </button>
+                      <button
+                        onClick={() => navigate("/edit-profile")}
+                        type="button"
+                        className="text-white bg-gray-500 w-full py-2 rounded-lg"
+                      >
+                        Edit Profile
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {userProfileData?.data?.role === "doctor" && (
+                <div
+                  onClick={() => {
+                    setIsProfileOpen(false);
+                    setActiveSection("create-slots");
+                  }}
+                  className="flex justify-center items-center gap-2 border w-[100%] p-2 bg-[#00768A] rounded-xl text-white"
+                >
+                  <FaCheckToSlot />
+                  <button type="button" className="text-xl">
+                    Create Slots
+                  </button>
+                </div>
+              )}
 
               {/* Add Family Section */}
               <div>
@@ -544,6 +575,8 @@ const Profile = () => {
               setUserBooking={setUserBooking}
             />
           )}
+          {activeSection === "edituserprofile" && <EditUserDetails />}
+          {activeSection === "create-slots" && <CreateSlotsByDr />}
         </div>
       </div>
 
@@ -552,14 +585,16 @@ const Profile = () => {
           <div className="bg-white rounded-lg border-2 z-10 w-full max-w-md mx-4 md:mx-0">
             {/* Scrollable container with a fixed height */}
             <div className="flex justify-between gap-10 items-center px-10 translate-y-5">
-              <p className="uppercase font-bold">Add Family members</p>
+              <p className="uppercase sm:font-bold sm:text-xl text-sm">
+                Add Family members
+              </p>
               <RxCross2
                 className="font-bold cursor-pointer"
                 onClick={() => setFamilyPopUp(false)}
               />
             </div>
 
-            <div className="h-[90vh] overflow-y-auto p-6 space-y-6">
+            <div className="sm:h-[90vh] overflow-y-auto sm:p-6 px-3 py-2 sm:space-y-6">
               <div className="bg-gray-500 h-[1px] w-full bg-opacity-30 mt-5"></div>
               {/* Close button to hide the popup */}
               <AddFamilyMembers

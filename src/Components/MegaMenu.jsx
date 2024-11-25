@@ -6,11 +6,8 @@ function MegaMenu() {
   const [submenuPosition, setSubmenuPosition] = useState({ top: 0, left: 0 });
   const containerRef = useRef(null);
   const [category, setCategory] = useState([]);
-  const [activeMobileMenu, setActiveMobileMenu] = useState(null);
 
-  const handleMobileMenuToggle = (menu) => {
-    setActiveMobileMenu(activeMobileMenu === menu ? null : menu);
-  };
+
 
   useEffect(() => {
     FetchCategory();
@@ -75,7 +72,7 @@ function MegaMenu() {
       "Amethus Torch: Alumni Network",
       "New Medicine",
     ],
-    OurServices: ["Medicine","General Medicine",
+    OurServices: ["Medicine", "General Medicine",
       "Pediatrics",
       "Cardiology",
       "Emergency Care",
@@ -94,7 +91,7 @@ function MegaMenu() {
     const menuItemRect = event.target.getBoundingClientRect();
     const containerRect = containerRef.current.getBoundingClientRect();
     setSubmenuPosition({
-      top: menuItemRect.bottom - containerRect.top + 76,
+      top: menuItemRect.bottom - containerRect.top + 72,
       left: menuItemRect.left - containerRect.left + 60,
     });
   };
@@ -105,10 +102,11 @@ function MegaMenu() {
 
   return (
     <div className="bg-[#00768A]">
+      
       <div className="bg-[#F7F6F9] max-w-[1200px] mx-auto bg-opacity-40 z-50 w-full md:block sm:block hidden" ref={containerRef}>
-        <div className="flex justify-center gap-6 py-4 bg-[#00768A] text-white">
+        <div className="flex justify-center gap-4   bg-[#00768A] text-white">
           {Object.keys(submenuData).map((menu, index) => (
-            <div key={index} className="relative cursor-pointer group max-w-[1200px] mx-auto">
+            <div key={index} className="relative cursor-pointer flex justify-center h-[40px]  group max-w-[1200px] mx-auto">
               <span
                 className="cursor-pointer px-4 py-2 font-medium hover:scale-110 duration-300 relative z-10"
                 onMouseEnter={(e) => handleMouseEnter(menu, e)}
@@ -121,17 +119,18 @@ function MegaMenu() {
           ))}
         </div>
       </div>
+      
+
 
       {hoveredItem && (
         <div
-        
-          className={`absolute p-4 bg-white  shadow-lg flex justify-center gap-18 z-50 transition-all duration-300 cursor-pointer  ${
-            hoveredItem === "CenterOfExcellence" ? "w-full mr-[450px]" : "w-auto"
-          }`}
+
+          className={`absolute p-4 bg-white  shadow-lg flex justify-center gap-18 z-50 transition-all duration-300 cursor-pointer  ${hoveredItem === "CenterOfExcellence" ? "w-full mr-[450px]" : "w-auto"
+            }`}
           style={{
             top: `${submenuPosition.top}px`,
             left: hoveredItem === "CenterOfExcellence" ? 0 : `${submenuPosition.left}px`,
-          
+
           }}
           onMouseEnter={() => setHoveredItem(hoveredItem)}
           onMouseLeave={handleMouseLeave}
@@ -139,15 +138,17 @@ function MegaMenu() {
           {hoveredItem === "CenterOfExcellence" ? (
             <div className="grid grid-cols-4 gap-10 w-[88%] mx-auto cursor-pointer">
               {category.map((subItem, index) => (
-                <div key={index} className="flex items-start gap-3 cursor-pointer ">
-                  <img src={subItem.image} alt={subItem.specialtyName} className="h-16 hover:scale-105 transition ease-out shadow-md shadow-slate-400 w-16 border p-2 bg-gray-200 rounded-md" />
-                  <div className="ml-2">
-                    <div className="text-black font-semibold hover:text-[#00768A] transition-colors duration-200">
-                      {subItem.specialtyName}
+                <a href={`/CategoriesDetails/${subItem._id}`}>
+                  <div key={index} className="flex items-start gap-3 cursor-pointer ">
+                    <img src={subItem.image} alt={subItem.specialtyName} className="h-16 hover:scale-105 transition ease-out shadow-md shadow-slate-400 w-16 border p-2 bg-gray-200 rounded-md" />
+                    <div className="ml-2">
+                      <div className="text-black font-semibold hover:text-[#00768A] transition-colors duration-200">
+                        {subItem.specialtyName}
+                      </div>
+                      <span className="text-gray-800 text-xs font-semibold underline underline-offset-4 hover:text-[#00768A]">See all Doctors</span>
                     </div>
-                    <span className="text-gray-800 text-xs font-semibold underline underline-offset-4 hover:text-[#00768A]">See all Doctors</span>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           ) : (

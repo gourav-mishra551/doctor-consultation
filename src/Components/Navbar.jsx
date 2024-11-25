@@ -151,8 +151,8 @@ const Navbar = () => {
   };
   const containerRef = useRef(null);
   const megaMenuRef = useRef(null);
-  const servicesRef = useRef(null);
-  // Detect clicks outside of Services or the mega menu
+
+
 
   // Handle click outside
   const handleClickOutside = (event) => {
@@ -174,9 +174,6 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  const [isHoveringServices, setIsHoveringServices] = useState(false);
-  const serviceRef = useRef(null);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -262,11 +259,7 @@ const Navbar = () => {
     return () => clearTimeout(timeoutId);
   }, [query, currency]);
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      navigate(`/all-product?search=${query}`);
-    }
-  };
+ 
 
   const handleProductClick = (slug) => {
     navigate(`/product/${slug}`);
@@ -326,13 +319,6 @@ const Navbar = () => {
             {/* Menu Items */}
             <div className="flex items-center space-x-4">
               <div className="hidden sm:flex gap-10">
-                <div className="relative cursor-pointer group">
-                  <span className="relative z-10">
-                    <Link to="/">Home</Link>
-                  </span>
-                  <span className="absolute left-0 bottom-0 h-0.5 w-full bg-[#00768A] scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
-                </div>
-
                 <div className="relative cursor-pointer group">
                   <span className="relative z-10">
                     <Link to="/about">About</Link>
@@ -494,12 +480,7 @@ const Navbar = () => {
               </div>
 
               <div className="px-2 pt-2 space-y-1">
-                <Link
-                  to="/"
-                  className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white"
-                >
-                  Home
-                </Link>
+          
 
                 <Link
                   to="/about"

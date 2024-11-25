@@ -8,6 +8,7 @@ import {
 } from "react-icons/md";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
   const [activesection, setActiveSection] = useState("Doctor-Details");
@@ -63,7 +64,9 @@ const EditProfile = () => {
       name: "",
     },
   });
+
   const [loadingUpdateBtn, setLoadingState] = useState(false);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -194,6 +197,7 @@ const EditProfile = () => {
   const toggleOpen = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
+
   // Functions for managing FAQ
   const handleAddFaq = () => {
     // Add a new empty FAQ entry
@@ -639,17 +643,18 @@ const EditProfile = () => {
             </div>
           </div>
         </div>
+
         {/* for mobile section */}
-        <div className="relative sm:hidden">
+        <div className="sm:hidden">
           {/* Profile Button at the top */}
           <div
             onClick={toggleProfileBar}
-            className="flex fixed bottom-0 z-50 ml-[17px]"
+            className="flex z-50 justify-center items-center w-full sticky top-0 bg-gray-100"
           >
-            <button className="bg-blue-500 w-[355px] text-[22px] text-white p-4 rounded-xl shadow-lg md:hidden focus:outline-none">
+            <button className="bg-blue-500 text-[22px] text-white p-4 rounded-xl shadow-lg md:hidden focus:outline-none w-full mx-5 mt-5">
               Profile
             </button>
-            <MdKeyboardDoubleArrowUp className="text-white absolute top-[21px] left-[110px] text-[25px]" />
+            <MdKeyboardDoubleArrowUp className="text-white absolute top-[40px] left-[110px] text-[25px]" />
           </div>
 
           {/* Background Overlay (Visible when profile bar is open) */}
@@ -686,12 +691,13 @@ const EditProfile = () => {
                 </div>
               </div>
 
+              {/* Profile Options */}
               <div
                 onClick={() => {
                   setActiveSection("Doctor-Details"), setIsProfileOpen(false);
                 }}
                 className="flex justify-center items-center gap-2 border w-[100%] p-2 bg-[#00768A] 
-                rounded-xl text-white"
+                 rounded-xl text-white"
               >
                 <IoPerson />
                 <button className="text-xl">Doctor Details</button>
@@ -702,7 +708,7 @@ const EditProfile = () => {
                   setActiveSection("FAQ"), setIsProfileOpen(false);
                 }}
                 className="flex justify-center items-center gap-2 border w-[100%] p-2 bg-[#00768A] 
-                rounded-xl text-white"
+                 rounded-xl text-white"
               >
                 <FaQuestion />
                 <button className="text-xl">FAQ</button>
@@ -714,7 +720,7 @@ const EditProfile = () => {
                     setIsProfileOpen(false);
                 }}
                 className="flex justify-center items-center gap-2 border  w-[100%] p-2 bg-[#00768A] 
-                rounded-xl text-white"
+                 rounded-xl text-white"
               >
                 <IoPerson />
                 <button className="text-xl">Qualification Details</button>
@@ -725,7 +731,7 @@ const EditProfile = () => {
                   setActiveSection("Experience"), setIsProfileOpen(false);
                 }}
                 className="flex justify-center items-center gap-2 border  w-[100%] p-2 bg-[#00768A] 
-                rounded-xl text-white"
+                 rounded-xl text-white"
               >
                 <MdOutlineTimer />
                 <button className="text-xl">Experience Details</button>

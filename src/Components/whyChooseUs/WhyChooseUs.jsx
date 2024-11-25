@@ -106,7 +106,7 @@ const WhyChooseUs = () => {
           {keyPoints.map((point, index) => (
             <motion.div
               key={index}
-              className="flex items-start gap-4 bg-white p-4 rounded-lg shadow-md"
+              className="flex items-start gap-4 bg-white p-4 rounded-lg "
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 200 }}
             >

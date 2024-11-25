@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { FaImage } from "react-icons/fa6";
-  
+
 const AddFamilyMembers = ({
   setFamilyPopUp,
   setActiveSection,
@@ -125,7 +125,7 @@ const AddFamilyMembers = ({
   console.log(getFamilyEdit);
 
   return (
-    <div className="max-w-xl mx-auto mt-5 py-1 px-5 rounded-xl bg-gray-100">
+    <div className="sm:max-w-xl mx-auto mt-5 py-1 px-5 rounded-xl bg-gray-100">
       <div className="form-section border mt-10 p-5 rounded-xl relative">
         <form onSubmit={handleSubmit}>
           <div className="absolute w-16 h-16 -top-8 right-[20px] border-4 border-white rounded-full bg-gray-300 overflow-hidden shadow-md cursor-pointer flex items-center justify-center">
