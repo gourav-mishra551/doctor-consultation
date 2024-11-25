@@ -7,7 +7,7 @@ import {
   FaChevronUp,
   FaQuestion,
 } from "react-icons/fa";
-import { FaUserDoctor } from "react-icons/fa6";
+import { FaCheckToSlot, FaUserDoctor } from "react-icons/fa6";
 import { TbBrandBooking } from "react-icons/tb";
 import Bookings from "./Bookings";
 import SelfProfile from "./SelfProfile";
@@ -23,6 +23,8 @@ import AddFamilyMembers from "./AddFamilyMembers";
 import { RxCross2 } from "react-icons/rx";
 import ViewFamilyMembers from "./ViewFamilyMembers/ViewFamilyMembers";
 import UserBookings from "./UserBookings/UserBookings";
+import EditUserDetails from "./EditUserDetails/EditUserDetails";
+import CreateSlotsByDr from "./CreateSlotsByDr/CreateSlotsByDr";
 const Profile = () => {
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [history, setHistory] = useState([]);
@@ -178,7 +180,7 @@ const Profile = () => {
       <div className="bg-gray-300 bg-opacity-50 w-full h-[1px] mt-5"></div>
       <div className="sm:flex gap-10 p-10">
         {/* desktop section */}
-        <div className="left h-[400px] w-[20%] sm:flex hidden flex-col mt-5 shadow-xl">
+        <div className="left h-[400px] w-[20%] sm:flex hidden flex-col mt-5 shadow-xl sticky top-[200px]">
           <nav className="flex-1 p-2">
             <ul>
               {/* Home Section */}
@@ -217,6 +219,17 @@ const Profile = () => {
                 </li>
               )}
 
+              {userProfileData?.data?.role === "doctor" && (
+                <li className="mb-2">
+                  <p
+                    onClick={() => setActiveSection("create-slots")}
+                    className="flex items-center p-2 cursor-pointer rounded-md hover:bg-[#00768A] hover:text-white text-black font-normal"
+                  >
+                    <FaCheckToSlot className="mr-2" /> Create Slots
+                  </p>
+                </li>
+              )}
+
               {/* Profile Section with Subsections */}
               <li className="mb-2">
                 <div
@@ -243,12 +256,12 @@ const Profile = () => {
                       </p>
                     </li>
                     <li>
-                      <a
-                        href="#"
-                        className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
+                      <p
+                        onClick={() => setActiveSection("edituserprofile")}
+                        className="block cursor-pointer p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
                       >
                         Edit User
-                      </a>
+                      </p>
                     </li>
                   </ul>
                 )}
@@ -440,9 +453,7 @@ const Profile = () => {
                       </button>
                       <button
                         type="button"
-                        onClick={() => {
-                          console.log("Edit User Profile");
-                        }}
+                        onClick={() => setActiveSection("edituserprofile")}
                         className="text-white bg-gray-500 w-full py-2 rounded-lg"
                       >
                         Edit Profile
@@ -488,6 +499,21 @@ const Profile = () => {
                       </button>
                     </div>
                   )}
+                </div>
+              )}
+
+              {userProfileData?.data?.role === "doctor" && (
+                <div
+                  onClick={() => {
+                    setIsProfileOpen(false);
+                    setActiveSection("create-slots");
+                  }}
+                  className="flex justify-center items-center gap-2 border w-[100%] p-2 bg-[#00768A] rounded-xl text-white"
+                >
+                  <FaCheckToSlot />
+                  <button type="button" className="text-xl">
+                    Create Slots
+                  </button>
                 </div>
               )}
 
@@ -549,6 +575,8 @@ const Profile = () => {
               setUserBooking={setUserBooking}
             />
           )}
+          {activeSection === "edituserprofile" && <EditUserDetails />}
+          {activeSection === "create-slots" && <CreateSlotsByDr />}
         </div>
       </div>
 
