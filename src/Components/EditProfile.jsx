@@ -64,7 +64,7 @@ const EditProfile = () => {
       name: "",
     },
   });
-  
+
   const [loadingUpdateBtn, setLoadingState] = useState(false);
   const navigate = useNavigate();
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { FaUserEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -112,7 +112,7 @@ const ViewFamilyMembers = ({ familyData, getFamilyEdit }) => {
               <div className="absolute inset-0"></div>
               <div className="bg-white p-6 rounded-lg border-2 z-10">
                 <p className="text-lg mb-4">
-                  Are you sure you want to delete this member?
+                  Do you sure you want to delete this member?
                 </p>
                 <div className="flex justify-end">
                   <button

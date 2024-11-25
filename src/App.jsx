@@ -52,6 +52,8 @@ import BookingSlot from "./Pages/BookingSlot/BookingSlot";
 import Navbar from "./Components/Navbar";
 import TopHeader from "./Components/TopHeader";
 import VideoCallApp from "./features/VideoCall/VideoCallApp";
+import EditUserDetails from "./Components/EditUserDetails/EditUserDetails";
+import CreateSlotsByDr from "./Components/CreateSlotsByDr/CreateSlotsByDr";
 
 function App() {
   const location = useLocation();
@@ -145,6 +147,7 @@ function App() {
           element={<ConsultwithNewDoctor />}
         />
         <Route path="/video-call" element={<VideoCallApp />} />
+        <Route path="/slots-creation" element={<CreateSlotsByDr />} />
       </Routes>
     </div>
   );
