@@ -7,6 +7,8 @@ import TopHeader from "./TopHeader";
 import Faq from "./Faq";
 import DoctorCard from "./DoctorCard/DoctorCard";
 import Footer from "./Footer";
+import Loader from "./Loading/Loader";
+
 
 function CategoriesDetails() {
   const location = useLocation();
@@ -50,7 +52,7 @@ function CategoriesDetails() {
   useEffect(() => {
     FetchCategory();
     FetchDoctersData();
-    window.scroll(0,0)
+    window.scroll(0, 0);
   }, []);
 
   // useEffect(() => {
@@ -98,11 +100,8 @@ function CategoriesDetails() {
   return (
     <div>
       {isLoading ? (
-        <div className="flex justify-center  min-h-screen">
-          <img
-            src="src/Assests/Spinner@1x-0.5s-200px-200px.svg"
-            alt="Loading..."
-          />
+        <div>
+          <Loader/>
         </div>
       ) : (
         <div className="bg-[#CEDDE4]">
@@ -272,7 +271,7 @@ function CategoriesDetails() {
           )}
           <div className="max-w-[1200px] justify-between mx-auto mt-10 flex flex-col-reverse md:flex-row gap-10 bg-[#CEDDE4] p-5">
             {/* Filter Section (Desktop Only) */}
-            <div className="hidden md:flex flex-col gap-5 w-[25%] h-max rounded-xl shadow-md bg-white py-6 px-6 sticky top-0">
+            <div className="hidden md:flex flex-col gap-5 sm:w-[30%] md:w-[40%] h-max rounded-xl shadow-md bg-white py-6 px-6 sticky top-0  ">
               <p className="font-semibold text-center text-2xl text-[#00768A]">
                 Doctor Profile
               </p>

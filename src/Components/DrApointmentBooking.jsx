@@ -175,7 +175,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
 
 
   return (
-    <div className="flex flex-col md:flex-row gap-8  mx-auto md:p-4">
+    <div className="flex flex-col justify-center md:flex-row gap-8  mx-auto md:p-4 ">
       {/* Header Section */}
       <div className="md:w-[600px] w-full bg-white shadow-lg rounded-lg p-6">
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-700">

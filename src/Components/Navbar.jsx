@@ -49,24 +49,20 @@ const Navbar = () => {
       "Pay Online",
       "Medical Feed",
     ],
-    CenterOfExcellence: [
-      "Cardiology",
-      "Orthopedics",
-      "Spine",
-      "Neurology",
-      "Gastroenterology",
-      "Oncology",
-      "TransPlant",
-      "ICU",
-      "Emergency",
-      "Preventive Health",
-      "Robotics",
-      "Bariatric Surgery",
-      "Nephrology and Urology",
-      "Colorectal Surgery",
-      "Obstetrics and Gynaecology",
-      "Pulmonology",
-    ],
+    CenterOfExcellence: (
+      <div className="grid grid-cols-2 gap-4 mt-5">
+        {Categoriesdata.map((ele, index) => (
+          <div key={index} className="flex flex-col gap-3 items-start">
+            <img
+              src={ele.image}
+              alt="image"
+              className="h-[35px] w-[35px] -mt-1"
+            />
+            <p>{ele.specialtyName}</p>
+          </div>
+        ))}
+      </div>
+    ),
     HealthInformation: [
       "Diseases and Condition",
       "Tests and Procedures",
@@ -96,6 +92,13 @@ const Navbar = () => {
     ],
   };
 
+  const FetchCategories = async () => {
+    try {
+      const result = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/dc/user/Category?limit=${totalCount}`
+      );
+    } catch (error) {}
+  };
   const toggleSubMenu = (menuKey) => {
     setOpenSubMenus((prevState) => ({
       ...prevState,
@@ -188,6 +191,10 @@ const Navbar = () => {
         { opacity: 1, y: 0, duration: 0.5 }
       );
     }
+  };
+
+  const HandleProfile = () => {
+    setIsOpen(false);
   };
 
   const logout = () => {
@@ -285,6 +292,7 @@ const Navbar = () => {
         "https://api.assetorix.com/ah/api/v1/dc/user/Category"
       );
       setCategorydata(res.data.data);
+      console.log("cate", Categoriesdata);
     } catch (error) {}
   };
 
@@ -463,12 +471,13 @@ const Navbar = () => {
         {/* Mobile Menu */}
         <div>
           {isOpen && (
-            <div className="md:hidden w-full -translate-x-4 bg-white text-black h-max pb-32 absolute z-50 border  overflow-y-auto max-h-screen">
+            <div className="md:hidden w-full -translate-x-3 bg-white text-black h-max pb-32 absolute z-50 border  overflow-y-auto max-h-screen">
               <div className="flex flex-col justify-between p-4 space-y-6">
                 {/* Profile Section */}
                 <Link
                   to="/profile"
                   className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-md hover:shadow-xl transition-all"
+                  onClick={HandleProfile}
                 >
                   <div className="relative h-[60px] w-[60px] flex justify-center items-center bg-[#00768A] rounded-full shadow-lg">
                     <CgProfile className="h-[40px] w-[40px] text-white" />
@@ -504,10 +513,11 @@ const Navbar = () => {
                   {Object.keys(submenuData).map((menu, index) => (
                     <div key={index}>
                       <div
-                        className=" px-3 py-2 rounded-md text-sm hover:bg-blue-500 hover:text-white cursor-pointer flex"
+                        className="font-bold py-2 rounded-md text-sm hover:bg-blue-500 hover:text-white cursor-pointer flex"
                         onClick={() => toggleSubMenu(menu)}
                       >
-                        {menu.replace(/([A-Z])/g, " $1")}
+                        {menu.replace(/([A-Z])/g, " $1")}{" "}
+                        {/* Format the menu name */}
                         {openSubMenus[menu] ? (
                           <span className="ml-2 p-1">
                             <FaChevronUp />
@@ -520,15 +530,21 @@ const Navbar = () => {
                       </div>
                       {openSubMenus[menu] && (
                         <ul className="pl-4 space-y-1">
-                          {submenuData[menu].map((subItem, index) => (
-                            <li
-                              key={index}
-                              className="block px-3 py-2 rounded-md text-sm hover:bg-blue-100 border-red-700"
-                            >
-                              <span className="p-2 mt-2">{subItem}</span>
-                              <hr />
-                            </li>
-                          ))}
+                          {/* Check if submenuData[menu] is an array */}
+                          {Array.isArray(submenuData[menu])
+                            ? submenuData[menu].map((subItem, index) => (
+                                <li
+                                  key={index}
+                                  className="block px-3 py-2 rounded-md text-sm hover:bg-blue-100 border-red-700"
+                                >
+                                  <span className="p-2 mt-2">{subItem}</span>
+                                  <hr />
+                                </li>
+                              ))
+                            : submenuData[
+                                menu
+                              ] // Render the component (like CenterOfExcellence) for non-array data
+                          }
                         </ul>
                       )}
                     </div>

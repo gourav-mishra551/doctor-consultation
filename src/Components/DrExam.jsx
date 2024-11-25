@@ -330,6 +330,7 @@ const DrExam = () => {
                 required
                 name="selectDate"
                 value={data.selectDate}
+                min={new Date().toISOString().split("T")[0]}
                 className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
               />
             </div>
