@@ -9,16 +9,12 @@ import DoctorCard from "./DoctorCard/DoctorCard";
 import Footer from "./Footer";
 
 function CategoriesDetails() {
-  const location = useLocation();
   const [showFilter, setShowFilter] = useState(false);
-  const { title } = location.state || {};
   const [result, setResult] = useState({});
+  const [loading, setLoading] = useState(false);
   const [DoctorsData, setDoctersData] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
-
-  const [openIndex, setOpenIndex] = useState(null);
   const [filters, setFilters] = useState({
     name: "",
     gender: "",
@@ -48,24 +44,13 @@ function CategoriesDetails() {
   };
 
   useEffect(() => {
-    FetchCategory();
-    FetchDoctersData();
+    FetchCategory(id);
+    FetchDoctersData(id);
     window.scroll(0,0)
-  }, []);
+  }, [id]);
 
-  // useEffect(() => {
-  //   window.scrollTo(0, 0); // Scroll to top when the component mounts
 
-  //   // Simulate data fetching or component loading with a timer
-  //   const timer = setTimeout(() => {
-  //     setIsLoading(false); // Set loading to false after 500ms (adjust if necessary)
-  //   }, 500);
-
-  //   // Cleanup the timer when the component unmounts
-  //   return () => clearTimeout(timer);
-  // }, []); // The empty dependency array ensures the effect runs only once when the component mounts
-
-  const FetchCategory = async () => {
+  const FetchCategory = async (id) => {
     try {
       setIsLoading(true);
       const res = await axios.get(
@@ -74,20 +59,24 @@ function CategoriesDetails() {
       console.log(res);
 
       setResult(res.data.data);
-      const categoryData = res.data.data;
+    
     } catch (error) {
+      console.error("Error fetching category data", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const FetchDoctersData = async () => {
+  const FetchDoctersData = async (id) => {
     try {
+      setLoading
       const res = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/user/doctors?categoryID=${id}`
       );
       setDoctersData(res.data.data);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
   };
 
   const stripHtmlTags = (str) => {
