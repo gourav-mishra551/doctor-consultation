@@ -14,10 +14,10 @@ const ViewFamilyMembers = ({ familyData, getFamilyEdit }) => {
   const [addFamilyPopup, setAddFamilyPopup] = useState(false);
 
   const token = localStorage.getItem("token");
-  const id = localStorage.getItem("id");
+  const id = localStorage.getItem("Id");
   const user = localStorage.getItem("user");
 
-  console.log(user);
+  console.log(id, user);
 
   const deleteFamily = async () => {
     try {
@@ -108,11 +108,11 @@ const ViewFamilyMembers = ({ familyData, getFamilyEdit }) => {
             </div>
           ))}
           {deleteAlert && (
-            <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 backdrop-blur-sm p-3 sm:p-0 lg:p-2">
               <div className="absolute inset-0"></div>
               <div className="bg-white p-6 rounded-lg border-2 z-10">
                 <p className="text-lg mb-4">
-                  Are you sure you want to delete this item?
+                  Are you sure you want to delete this member?
                 </p>
                 <div className="flex justify-end">
                   <button
@@ -139,13 +139,15 @@ const ViewFamilyMembers = ({ familyData, getFamilyEdit }) => {
               <div className="bg-white rounded-lg border-2 z-10 w-full max-w-md mx-4 md:mx-0">
                 {/* Scrollable container with a fixed height */}
                 <div className="flex justify-between gap-10 items-center px-10 translate-y-5">
-                  <p className="uppercase font-bold">Edit Family members</p>
+                  <p className="uppercase sm:font-bold sm:text-xl text-sm">
+                    Edit Family members
+                  </p>
                   <RxCross2
                     className="font-bold cursor-pointer"
                     onClick={() => setEditFamilyPopUp(false)}
                   />
                 </div>
-                <div className="h-[90vh] overflow-y-auto p-6 space-y-6">
+                <div className="sm:h-[90vh] h-[550px] overflow-y-auto sm:p-6 px-3 py-2 sm:space-y-6">
                   <div className="bg-gray-500 h-[1px] w-full bg-opacity-30 mt-5">
                     <EditFamilyMemebrs
                       deleteId={deleteId}
@@ -162,14 +164,14 @@ const ViewFamilyMembers = ({ familyData, getFamilyEdit }) => {
             <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 backdrop-blur-sm p-3 sm:p-0 lg:p-2">
               <div className="bg-white rounded-lg border-2 z-10 w-full max-w-md mx-4 md:mx-0">
                 {/* Scrollable container with a fixed height */}
-                <div className="flex justify-between gap-10 items-center px-10 translate-y-5">
-                  <p className="uppercase font-bold">Add Family members</p>
+                <div className="flex justify-between gap-10 items-center sm:px-10 px-5 translate-y-5">
+                  <p className="uppercase sm:font-bold">Add Family members</p>
                   <RxCross2
                     className="font-bold cursor-pointer"
                     onClick={() => setAddFamilyPopup(false)}
                   />
                 </div>
-                <div className="h-[90vh] overflow-y-auto p-6 space-y-6">
+                <div className="sm:h-[90vh] h-[550px] overflow-y-auto sm:p-6 px-3 py-2 sm:space-y-6">
                   <div className="bg-gray-500 h-[1px] w-full bg-opacity-30 mt-5">
                     <AddFamilyMembers
                       addFamilyPopup={addFamilyPopup}
