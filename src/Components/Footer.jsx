@@ -40,7 +40,7 @@ const Footer = () => {
                   <IoMdMail className="text-xl mt-2 text-black" />
                   <div className="cta-text">
                     <h4>Mail us</h4>
-                    <span>mail@info.com</span>
+                    <span>info@ametheus.com</span>
                   </div>
                 </div>
               </div>
