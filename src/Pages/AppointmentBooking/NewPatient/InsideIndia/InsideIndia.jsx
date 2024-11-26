@@ -19,7 +19,7 @@ const InsideIndia = () => {
                     <button className='bg-[#1C8E81] text-lg flex gap-4 px-6 py-2 rounded-full text-white font-semibold shadow-md w-fit'>Book Appointment by call  <FiPhoneCall className='text-lg mt-1 ' /></button>
                 </div>
                 <div className='flex flex-col border-y-2 h-min border-gray-600 sm:w-[40%] my-10 sm:my-0'>
-                    <Link to="/drs-profile">
+                    <Link to="/all-doctors">
                         <div className='py-6 hover:cursor-pointer'>
                             <h1 className='text-2xl font-semibold text-[#1C8E81]'>View all doctors</h1>
                             <p className='text-lg text-gray-400 font-medium my-4 flex justify-between mt-2 gap-5'>By clicking here you can see all the listed doctors on our site.  <SlArrowRight className='text-xl text-[#1C8E81]' /> </p>
