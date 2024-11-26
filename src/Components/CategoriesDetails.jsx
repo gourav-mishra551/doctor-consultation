@@ -536,7 +536,7 @@ function CategoriesDetails() {
           </div>
 
           {/* FAQ */}
-          <Faq result={result} />
+          <Faq result={result}   />
           <Footer />
         </div>
       )}

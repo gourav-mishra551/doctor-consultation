@@ -484,20 +484,21 @@ const Navbar = () => {
 
                 <Link
                   to="/about"
-                  className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white"
+                  className="block px-3 py-2 rounded-md font-bold uppercase text-sm"
                 >
                   About
                 </Link>
 
                 {/* MegaMenu Dropdown */}
-                <div className="pl-4 space-y-1">
+                <div className="pl-3 space-y-1">
                   {Object.keys(submenuData).map((menu, index) => (
                     <div key={index}>
                       <div
-                        className="font-bold py-2 rounded-md text-sm hover:bg-blue-500 hover:text-white cursor-pointer flex"
+                        className="font-bold py-2 rounded-md text-sm  cursor-pointer flex "
                         onClick={() => toggleSubMenu(menu)}
                       >
-                        {menu.replace(/([A-Z])/g, " $1")}{" "}
+                       { menu.replace(/([A-Z])/g, " $1").toUpperCase()}
+
                         {/* Format the menu name */}
                         {openSubMenus[menu] ? (
                           <span className="ml-2 p-1">
@@ -533,14 +534,16 @@ const Navbar = () => {
                 </div>
 
                 <Link
-                  to="/categories-details/:id"
-                  className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white"
+                  to="/all-doctors"
+                  onClick={()=>setIsOpen(false)}
+                  className="block px-3 py-2 rounded-md font-bold uppercase text-sm"
                 >
                   Doctors
                 </Link>
                 <Link
                   to="/contact-us"
-                  className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white"
+                  onClick={()=>setIsOpen(false)}
+                  className="block px-3 py-2 rounded-md font-bold uppercase text-sm "
                 >
                   Contact
                 </Link>
