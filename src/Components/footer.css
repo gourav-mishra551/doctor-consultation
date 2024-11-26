@@ -139,9 +139,7 @@
   display: inline-block;
   margin-left: 20px;
 }
-.footer-menu li:hover a{
-  color: #1C8E81;
-}
+
 .footer-menu li a {
   font-size: 14px;
   color: #ffff;

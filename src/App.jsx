@@ -95,21 +95,19 @@ function App() {
           path="/dr-profile-show"
           element={<AuthRoute element={DRProfileShow} />}
         />
-        <Route path="/calender" element={<Calendar />} />
         <Route path="/faq" element={<FaqPage />} />
         <Route path="/dr-otp" element={<DrVerifyOtp />} />
         <Route path="/brand-ametheus" element={<BrandAmPage />} />
         <Route path="/why-we-are-different" element={<WhyWeDiffPage />} />
         <Route path="/wellness-and-safety" element={<WellnessSafetyPage />} />
         <Route path="/price-promise" element={<PricePromisePage />} />
-        <Route path="/our-treatments/" element={<OurTreatmentPage />} />
         <Route path="/delivery" element={<DeliveryPage />} />
         <Route path="/how-amatheus-work" element={<HowAmWorkPage />} />
         <Route
           path="/purchase-terms-conditions/"
           element={<PurchaseTermsCondtionsPage />}
         />
-        <Route path="/return-refunds/" element={<ReturnRefundsPage />} />
+        <Route path="/return-refunds" element={<ReturnRefundsPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms-of-use/" element={<TermsOfUsePage />} />
         <Route path="/shipping-information/" element={<ShippingInfoPage />} />

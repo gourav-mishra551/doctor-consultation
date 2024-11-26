@@ -31,7 +31,7 @@ const Footer = () => {
                   <IoIosCall className="text-xl mt-2" />
                   <div className="cta-text">
                     <h4>Call us</h4>
-                    <span>9999099538</span>
+                    <span>+91-9999099538</span>
                   </div>
                 </div>
               </div>
@@ -61,9 +61,7 @@ const Footer = () => {
                   </div>
                   <div className="footer-text">
                     <p>
-                      Lorem ipsum dolor sit amet, consec tetur adipisicing elit,
-                      sed do eiusmod tempor incididuntut consec tetur
-                      adipisicing elit,Lorem ipsum dolor sit amet.
+                      At Ametheus, we believe that access to affordable prescription medicines is a basic right. We are committed to delivering essential, top-of-the-line medicines at fair prices to patients worldwide.
                     </p>
                   </div>
                   <div className="footer-social-icon ">
@@ -99,31 +97,31 @@ const Footer = () => {
                       <a href="#">Home</a>
                     </li>
                     <li>
-                      <a href="#">about</a>
+                      <a href="/about">about</a>
                     </li>
                     <li>
                       <a href="#">services</a>
                     </li>
                     <li>
-                      <a href="#">portfolio</a>
+                      <a href="/price-promise">price promise</a>
                     </li>
                     <li>
-                      <a href="#">Contact</a>
+                      <a href="/contact-us">Contact</a>
                     </li>
                     <li>
-                      <a href="#">About us</a>
+                      <a href="/return-refunds">Return & Refund</a>
                     </li>
                     <li>
-                      <a href="#">Our Services</a>
+                      <a href="/terms-of-use">Term of website</a>
                     </li>
                     <li>
-                      <a href="#">Expert Team</a>
+                      <a href="/faq">FAQ</a>
                     </li>
                     <li>
-                      <a href="#">Contact us</a>
+                      <a href="/why-we-are-different">Why we are different</a>
                     </li>
                     <li>
-                      <a href="#">Latest News</a>
+                      <a href="/disclaimer/">Disclamer</a>
                     </li>
                   </ul>
                 </div>
@@ -160,23 +158,23 @@ const Footer = () => {
                   <p>Copyright &copy; 2024, All Right Reserved </p>
                 </div>
               </div>
-              <div className="col-xl-6 col-lg-6 d-none d-lg-block text-right">
+              <div className="col-xl-6 col-lg-6 d-none d-lg-block text-right hover:text-white">
                 <div className="footer-menu">
                   <ul>
                     <li>
                       <a href="#">Home</a>
                     </li>
                     <li>
-                      <a href="#">Terms</a>
+                      <a href="/support-center">Support center</a>
                     </li>
                     <li>
-                      <a href="#">Privacy</a>
+                      <a href="/privacy">Privacy</a>
                     </li>
                     <li>
-                      <a href="#">Policy</a>
+                      <a href="/wellness-and-safety">wellness and safety</a>
                     </li>
                     <li>
-                      <a href="#">Contact</a>
+                      <a href="/support-center">Contact</a>
                     </li>
                   </ul>
                 </div>
