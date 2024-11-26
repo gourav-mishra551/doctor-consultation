@@ -60,12 +60,14 @@ const DoctorCard = ({ doctorData }) => {
   }, [doctorData]);
 
   return (
+
     <div className="flex  flex-wrap gap-8 md:gap-10 m-auto">
+
       {doctorData?.map((doctor, index) => (
         <div
           
           key={index}
-          className="w-full h-min sm:w-[48%] md:w-full lg:flex bg-white p-4 md:p-6 flex flex-col lg:flex-row items-start rounded-lg shadow-md border border-gray-200 transition-transform duration-300 hover:scale-105"
+          className="w-full h-min sm:w-[48%] md:w-[100%] lg:flex bg-white p-4 md:p-6 flex flex-col lg:flex-row items-start rounded-lg shadow-md border border-gray-200 transition-transform duration-300 hover:scale-105"
         >
           <div>
             <div className="flex flex-col lg:flex-row gap-6 items-center lg:items-start w-full">
@@ -140,15 +142,16 @@ const DoctorCard = ({ doctorData }) => {
 
             {/* Buttons */}
             <div className="flex flex-col md:flex-row gap-3 mt-4 w-full lg:w-auto">
-              <Link to={`/dr-indi/${doctor._id}`}>
-                <button class="md:w-[160px] w-full relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600  focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
-                  <span class="relative w-full px-8 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
+              <Link to={`/doctors-individual-profile/${doctor._id}`}>
+                <button class="md:w-[160px] w-full relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600  dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
+                  <span class="relative w-full px-8 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+
                     View Profile
                   </span>
                 </button>
               </Link>
 
-              <Link to={`/BookingSlot/${doctor._id}`}>
+              <Link to={`/booking-slot/${doctor._id}`}>
               <button
                 type="button"
                 class="text-white md:w-[160px] w-full font-semibold bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800  rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 shadow-md"

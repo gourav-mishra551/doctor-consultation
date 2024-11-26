@@ -9,6 +9,8 @@ import { IoStarHalfOutline } from "react-icons/io5";
 import { AiOutlineStar } from "react-icons/ai";
 import { AiFillStar } from "react-icons/ai";
 import { RiHospitalLine } from "react-icons/ri";
+import DrAppointmentBooking from "./DrApointmentBooking";
+import Loader from "./Loading/Loader";
 
 const DrIndividualProfile = () => {
   const [IndiProfile, setIndiProfile] = useState({});
@@ -23,6 +25,10 @@ const DrIndividualProfile = () => {
     window.scrollTo(0, 0);
     DrIndiProfile();
   }, []);
+
+  const handleNextStep = () => {
+    setStep(step + 1);
+  };
 
   const DrIndiProfile = async () => {
     try {
@@ -39,13 +45,7 @@ const DrIndividualProfile = () => {
     // Loading state when data is not fetched yet
     return (
       <div className="loading-state text-center text-lg font-semibold text-gray-700">
-        <div className="spinner">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+       <Loader/>
       </div>
     );
   }
@@ -175,7 +175,12 @@ const DrIndividualProfile = () => {
               <DrIndividualProfileReviews profile={IndiProfile} />
             )}
             {activeNav === 4 && (
-              <DrIndividualProfileAvailibility profile={IndiProfile} />
+              // <DrIndividualProfileAvailibility profile={IndiProfile} />
+              <DrAppointmentBooking
+                IndiProfile={IndiProfile}
+                onNext={handleNextStep}
+              
+              />
             )}
           </div>
         </div>
