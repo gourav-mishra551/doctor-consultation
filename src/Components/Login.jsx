@@ -15,7 +15,7 @@ const Login = () => {
     password: "",
     confirmPassword: "",
     gender: "",
-    dob: "",
+    dob: "", 
   });
 
   const navigate = useNavigate();
@@ -40,18 +40,6 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateEmail(formData.email)) {
-      toast.error("Invalid email address.");
-      return;
-    }
-
-    if (!validatePassword(formData.password)) {
-      toast.error(
-        "Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
-      );
-      return;
-    }
 
     if (!isLogin && formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match.");
