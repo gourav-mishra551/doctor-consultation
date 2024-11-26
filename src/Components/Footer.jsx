@@ -5,7 +5,8 @@ import { FaSquareXTwitter } from "react-icons/fa6";
 import { FaLinkedin } from "react-icons/fa6";
 import { IoMdMail } from "react-icons/io";
 import { IoIosCall } from "react-icons/io";
-import  AmethusImage  from "../Assests/ametheus-logo.webp";
+import { FaLocationDot } from "react-icons/fa6";
+import AmethusImage from "../Assests/ametheus-logo.webp";
 
 const Footer = () => {
   return (
@@ -15,11 +16,13 @@ const Footer = () => {
           <div className="footer-cta pt-5 pb-5">
             <div className="row">
               <div className="col-xl-4 col-md-4 mb-30">
-                <div className="single-cta">
-                  <i className="fas fa-map-marker-alt"></i>
-                  <div className="cta-text">
-                    <h4>Find us</h4>
-                    <span>f-11 , green park extension new delhi</span>
+                <div className="">
+                  <div className=" single-cta flex">
+                    <FaLocationDot className="text-xl mt-2" />
+                    <div className="cta-text">
+                      <h4>Find us</h4>
+                      <span>f-11 , green park extension new delhi</span>
+                    </div>
                   </div>
                 </div>
               </div>
