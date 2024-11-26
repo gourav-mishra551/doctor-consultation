@@ -9,11 +9,14 @@ import { IoStarHalfOutline } from "react-icons/io5";
 import { AiOutlineStar } from "react-icons/ai";
 import { AiFillStar } from "react-icons/ai";
 import { RiHospitalLine } from "react-icons/ri";
+import DrAppointmentBooking from "./DrApointmentBooking";
+import Loader from "./Loading/Loader";
 
 const DrIndividualProfile = () => {
   const [IndiProfile, setIndiProfile] = useState({});
   const { id } = useParams(); // To get doctor ID from URL params
   const [activeNav, setActiveNav] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNavClick = (navNumber) => {
     setActiveNav(navNumber);
@@ -24,8 +27,13 @@ const DrIndividualProfile = () => {
     DrIndiProfile();
   }, []);
 
+  const handleNextStep = () => {
+    setStep(step + 1);
+  };
+
   const DrIndiProfile = async () => {
     try {
+      setIsLoading(true);
       const res = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/user/doctors/${id}`
       );
@@ -33,19 +41,15 @@ const DrIndividualProfile = () => {
       console.log(IndiProfile);
     } catch (error) {
       console.error("Error fetching doctor profile:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
-  if (!IndiProfile || Object.keys(IndiProfile).length === 0) {
+  if (isLoading) {
     // Loading state when data is not fetched yet
     return (
-      <div className="loading-state text-center text-lg font-semibold text-gray-700">
-        <div className="spinner">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="loader"></div>
       </div>
     );
   }
@@ -84,7 +88,7 @@ const DrIndividualProfile = () => {
         <div className="relative z-10 text-center sm:text-left px-6 sm:px-12">
           {/* Doctor Name */}
           <p className="font-bold text-2xl sm:text-4xl mb-2 capitalize text-white">
-            {IndiProfile?.userData.name}
+            {IndiProfile?.userData?.name}
           </p>
           <div className="h-[4px] w-[140px] bg-[#00768A] mb-3 mx-auto sm:mx-0"></div>
 
@@ -175,7 +179,11 @@ const DrIndividualProfile = () => {
               <DrIndividualProfileReviews profile={IndiProfile} />
             )}
             {activeNav === 4 && (
-              <DrIndividualProfileAvailibility profile={IndiProfile} />
+              // <DrIndividualProfileAvailibility profile={IndiProfile} />
+              <DrAppointmentBooking
+                IndiProfile={IndiProfile}
+                onNext={handleNextStep}
+              />
             )}
           </div>
         </div>

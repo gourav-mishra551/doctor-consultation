@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { FaChevronRight } from "react-icons/fa6";
 import { NavLink, useNavigate } from "react-router-dom";
 
 function CategoryCard({ item, navigate }) {
@@ -7,9 +8,9 @@ function CategoryCard({ item, navigate }) {
     <div
       key={item._id}
     
-      className="categories cursor-pointer sm:grid sm:grid-cols-4 md:grid-cols-3 grid-cols-2 justify-start items-start  "
+      className="categories cursor-pointer sm:grid sm:grid-cols-4 md:grid-cols-3 grid-cols-2 justify-start items-start "
       onClick={() =>
-        navigate(`/CategoriesDetails/${item._id}`, {
+        navigate(`/categories-details/${item._id}`, {
           state: { title: item.title },
         })
       }
@@ -27,13 +28,15 @@ function CategoryCard({ item, navigate }) {
         </div>
 
         {/* Title and Description */}
-        <div className="flex flex-col items-center sm:p-2 space-y-2 sm:absolute mb-[50px] top-[50px] sm:top-[100px]">
+        <div className="flex flex-col -translate-y-8 items-center sm:p-2 space-y-2 sm:absolute mb-[50px] top-[50px] sm:top-[100px]">
           <p className="font-semibold text-md sm:text-xl text-center text-gray-800">
             {item.specialtyName}
           </p>
           <p className="px-2 sm:px-5 text-sm sm:text-md text-gray-600 text-center font-medium">
             {item.sortDescription.substring(0, 25) + "..."}
           </p>
+
+          
         </div>
       </div>
     </div>
@@ -44,7 +47,7 @@ function CategoriesHome() {
   const [categories, setCategories] = useState([]);
   const [totalCount, setTotalCount] = useState(8);
   const navigate = useNavigate();
-
+  const [isLoading,setIsLoading]=useState(false)
   // Adjust category count based on screen size
   const updateScreenSize = () => {
     const width = window.innerWidth;
@@ -60,6 +63,7 @@ function CategoriesHome() {
 
   useEffect(() => {
     const fetchCategories = async () => {
+      setIsLoading(true)
       try {
         const response = await axios.get(
           `https://api.assetorix.com/ah/api/v1/dc/user/Category?limit=${totalCount}`
@@ -67,11 +71,19 @@ function CategoriesHome() {
         setCategories(response.data.data || []);
       } catch (error) {
         console.error("Error fetching categories:", error);
+      }finally{
+        setIsLoading(false)
       }
     };
 
     fetchCategories();
   }, [totalCount]);
+
+  if(isLoading){
+    return <div className="flex justify-center items-center min-h-screen">
+    <div className="loader"></div>
+  </div>
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:mt-3 -mt-12">

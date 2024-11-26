@@ -124,13 +124,11 @@ const DoctorsProfile = () => {
   }, [DoctorData, isLoading]); // Dependency on DoctorData and isLoading
 
   if (isLoading) {
-    return <div className="spinner">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>; // Show loading state if data is still being fetched
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+      <div className="loader"></div>
+    </div>
+    )
   }
 
   const handleFilterChange = (filterType, value) => {
@@ -183,7 +181,7 @@ const DoctorsProfile = () => {
           <div className="bg-[#CEDDE4]">
             <div className="max-w-[1200px] justify-between mx-auto mt-10 flex flex-col-reverse md:flex-row gap-10 bg-[#CEDDE4] p-5">
               {/* filter section */}
-              <div className="hidden md:flex flex-col gap-5 w-[25%] h-max rounded-xl shadow-md bg-white py-6 px-6 sticky top-0">
+              <div className="hidden md:flex flex-col gap-5 md:w-[40%] w-[40%] sm:w-[25%] h-max rounded-xl shadow-md bg-white py-6 px-6 sticky top-0 ">
                 <p className="font-semibold text-center text-2xl text-[#00768A]">
                   Doctor Profile
                 </p>

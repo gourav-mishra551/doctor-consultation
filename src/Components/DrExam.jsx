@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
 import TopHeader from "./TopHeader";
 import Footer from "./Footer";
@@ -138,14 +138,10 @@ const DrExam = () => {
   // Handle form submission and console log form data
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // setData((prev) => ({
-    //   ...prev,
-    //   selectSlotDuration: prev.selectSlotDuration, // Don't split the value, use as is
-    // }));
-    console.log(data);
 
     const token = localStorage.getItem("token");
     const id = localStorage.getItem("id");
+
     try {
       const res = await axios.post(
         "https://api.assetorix.com/ah/api/v1/dc/doctor/availbility",
@@ -166,12 +162,23 @@ const DrExam = () => {
           },
         }
       );
-      console.log("result", res.data);
-    } catch (error) {
-      setErrorShow(true);
-      toast.success(error.message, {
-        position: "top-right",
-      });
+      toast.success(res.data.msg);
+      console.log(res.data.msg);
+      toast.success("Added successfully...");
+      // If the response has a success message or something useful:
+      // if (res.data && res.data.msg) {
+      //   toast.success(res.data.msg);
+      // } else {
+      //   toast.success("Successfully saved availability!", {
+      //     position: "top-right",
+      //   });
+      // }
+
+      // console.log("result", res.data);
+    } catch (res) {
+      console.log(res.response.data.msg)
+      
+      toast.error(res.response.data.msg);
     }
   };
 
@@ -287,12 +294,13 @@ const DrExam = () => {
           <h2 className="text-3xl font-bold text-center mb-8 text-gray-700">
             Appointment Creation
           </h2>
-          {(data.visitingMode === "offline" || data.visitingMode==="both") &&
+          {(data.visitingMode === "offline" || data.visitingMode === "both") &&
             (GetDrProfile.hospitalName === "" ||
             GetDrProfile.clinicHospitalAddress?.permanentAddress === "" ||
             GetDrProfile.clinicHospitalAddress?.city === "" ? (
               <p className=" text-red-600  p-4 rounded-lg  max-w-3xl mx-auto mt-4">
-              You haven't added your hospital/clinic details Please add it first 
+                You haven't added your hospital/clinic details Please add it
+                first
               </p>
             ) : null)}
 
@@ -330,6 +338,7 @@ const DrExam = () => {
                 required
                 name="selectDate"
                 value={data.selectDate}
+                min={new Date().toISOString().split("T")[0]}
                 className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
               />
             </div>

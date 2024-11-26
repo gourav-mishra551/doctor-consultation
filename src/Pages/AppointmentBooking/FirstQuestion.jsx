@@ -25,7 +25,7 @@ const FirstQuestion = () => {
                             <p className='text-lg text-gray-400 font-medium my-4 flex justify-between mt-2 gap-5'>Provide your info and set a follow-up time.  <SlArrowRight className='text-xl text-[#1C8E81]' /> </p>
                         </div>
                     </Link>
-                   <Link to="/ReturningPatientPage
+                   <Link to="/returning-patient-page
                    ">
                     <div className=' border-t-2 py-6 border-gray-600 hover:cursor-pointer'>
                         <h1 className='text-2xl font-semibold text-[#1C8E81]'>

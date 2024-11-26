@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Footer from "./Footer";
+import { FaChevronRight } from "react-icons/fa6";
 
 const Categories = () => {
   const [result, setResult] = useState([]); // State for the categories
@@ -11,7 +12,7 @@ const Categories = () => {
   const [totalCount, setTotalCount] = useState(100);
   useEffect(() => {
     fetchCategories();
-    window.scroll(0,0)
+    window.scroll(0, 0);
   }, []);
 
   // Function to fetch categories (initial fetch or when "View More" is clicked)
@@ -44,19 +45,19 @@ const Categories = () => {
           </p>
         </div>
 
-        <div className="flex justify-center items-center w-full">
+        <div className="flex justify-center items-center w-full border-collapse">
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-8 justify-center">
             {result.map((item) => (
               <div
                 key={item._id}
                 className="categories cursor-pointer sm:grid sm:grid-cols-4 md:grid-cols-2  grid-cols-1 justify-start items-center"
                 onClick={() =>
-                  navigate(`/CategoriesDetails/${item._id}`, {
+                  navigate(`/categories-details/${item._id}`, {
                     state: { title: item.title },
                   })
                 }
               >
-                <div className="cardio h-[200px] w-[180px] sm:h-[200px] sm:w-[260px] flex flex-col justify-between items-center bg-[#e4f8f6] rounded-3xl hover:bg-white hover:border-2 hover:border-[#1c8e81] transition-transform duration-300 transform hover:-translate-y-2 shadow-lg mt-[30px]">
+                <div className="cardio h-[170px] w-auto sm:h-[200px] sm:w-[260px] flex flex-col justify-between items-center bg-[#e4f8f6] rounded-3xl hover:bg-white hover:border-2 hover:border-[#1c8e81] transition-transform duration-300 transform hover:-translate-y-2 shadow-lg mt-[30px]">
                   {/* Image Container */}
                   <div className="bg-white -translate-y-10 h-[90px] w-[90px] sm:h-[100px] sm:w-[100px] flex justify-center items-center rounded-full shadow-lg ">
                     <div className="cardio-logo  h-[80px] w-[80px] sm:h-[90px] sm:w-[90px] rounded-full bg-gray-200 flex justify-center items-center">
@@ -69,13 +70,15 @@ const Categories = () => {
                   </div>
 
                   {/* Title and Description */}
-                  <div className="flex flex-col items-center p-2 space-y-2 sm:absolute mb-[50px] top-[50px] sm:top-[100px]">
+                  <div className="flex flex-col -translate-y-8 items-center p-2 space-y-2 sm:absolute mb-[50px] top-[50px] sm:top-[100px]">
                     <p className="font-semibold text-md sm:text-xl text-center text-gray-800">
                       {item.specialtyName}
                     </p>
                     <p className="px-2 sm:px-5 text-sm sm:text-md text-gray-600 text-center font-medium">
                       {item.sortDescription.substring(0, 25) + "..."}
                     </p>
+
+                    
                   </div>
                 </div>
               </div>
@@ -84,7 +87,7 @@ const Categories = () => {
         </div>
 
         {/* Show View More button if there is more data to load */}
-        {hasMore && !loading && (
+        {/* {hasMore && !loading && (
           <div className="text-center my-6">
             <button
               onClick={loadMore}
@@ -93,16 +96,12 @@ const Categories = () => {
               {loading ? "Loading..." : "View More"}
             </button>
           </div>
-        )}
+        )} */}
 
         {loading && (
-          <div className="spinner">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
+           <div className="flex justify-center items-center min-h-screen">
+           <div className="loader"></div>
+         </div>
         )}
       </div>
       <Footer />

@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { FaCheckCircle } from "react-icons/fa";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 function DrAppointmentBooking({ IndiProfile, onNext }) {
   const { doctorAvailability } = IndiProfile;
@@ -15,14 +16,28 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
     name: "",
     gender: "",
     dateOfBirth: "",
-    reasonForAppointment: ""
-  })
+    reasonForAppointment: "",
+  });
+
+  const sliderRef = useState(null);
+
+  const scrollLeft = () => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({ left: -100, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({ left: 100, behavior: "smooth" });
+    }
+  };
 
   const bookingSlot = async (e) => {
     e.preventDefault();
     try {
       const id = localStorage.getItem("Id");
-      const token = localStorage.getItem("token")
+      const token = localStorage.getItem("token");
 
       const response = await axios.post(
         `https://api.assetorix.com/ah/api/v1/dc/user/booking/${IndiProfile._id}`,
@@ -52,11 +67,11 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       console.log("Error Details: ", error.response);
 
       const errorMessage =
-        error.response?.data?.message || "Failed to book slot. Please try again.";
+        error.response?.data?.message ||
+        "Failed to book slot. Please try again.";
       toast.error(errorMessage);
     }
   };
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -94,17 +109,16 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
     );
   };
 
-  const settings = {
-    dots: false,
-    infinite: false,
-    slidesToShow: Math.min(5, doctorAvailability.length), // Show up to 5 or less if data is fewer
-    slidesToScroll: 1,
-    autoplay: false,
-    cssEase: "linear",
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
-  };
-
+  // const settings = {
+  //   dots: false,
+  //   infinite: false,
+  //   slidesToShow: Math.min(5, doctorAvailability.length), // Show up to 5 or less if data is fewer
+  //   slidesToScroll: 1,
+  //   autoplay: false,
+  //   cssEase: "linear",
+  //   nextArrow: <SampleNextArrow />,
+  //   prevArrow: <SamplePrevArrow />,
+  // };
 
   // Filter slots based on the selected filter
   const getFilteredSlots = (availability) => {
@@ -146,7 +160,6 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
         {slot.startTime >= 12 ? "PM" : "AM"} -{" "}
         {slot.endTime > 12 ? slot.endTime - 12 : slot.endTime}{" "}
         {slot.endTime >= 12 ? "PM" : "AM"}
-
       </p>
       <p className="text-sm">
         <span className="font-medium">Charge:</span> ₹ {slot.doctorCharge}
@@ -167,15 +180,12 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
           : selectedSlot?._id === slot?._id
           ? "Selected"
           : "Book"}
-
       </button>
     </div>
   );
 
-
-
   return (
-    <div className="flex flex-col md:flex-row gap-8  mx-auto md:p-4">
+    <div className="flex flex-col justify-center md:flex-row gap-8  mx-auto md:p-4 ">
       {/* Header Section */}
       <div className="md:w-[600px] w-full bg-white shadow-lg rounded-lg p-6">
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-700">
@@ -187,12 +197,12 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
           {["online", "offline", "both"].map((type) => (
             <button
               key={type}
-
               type="button"
-              className={`px-6 py-2 text-sm font-medium rounded-lg transition-all ${filter === type
-                ? "bg-[#00768A] text-white shadow-md"
-                : "bg-gray-200 hover:bg-blue-100"
-                }`}
+              className={`px-6 py-2 text-sm font-medium rounded-lg transition-all ${
+                filter === type
+                  ? "bg-[#00768A] text-white shadow-md"
+                  : "bg-gray-200 hover:bg-blue-100"
+              }`}
               onClick={() => setFilter(type)}
             >
               {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -200,32 +210,65 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
           ))}
         </div>
 
-
         {/* Date Slider */}
         {doctorAvailability.length > 1 ? (
-          <Slider {...settings} className="flex items-center">
-            {doctorAvailability.map((availability, index) => (
-              <div
-                key={index}
-                className={`w-[90px] md:w-[100px] mx-auto text-center p-3 rounded-lg cursor-pointer transition-all ${selectedDate?.selectDate === availability?.selectDate
-                  ? "bg-[#00768A] text-white"
-                  : "bg-gray-200 hover:bg-blue-100"
-                  }`}
-                onClick={() => setSelectedDate(availability)}
-              >
-                <p className="text-sm font-medium">
-                  {new Date(availability?.selectDate).toLocaleDateString("en-US", { month: "short" })}
-                </p>
-                <p className="text-lg font-bold">
-                  {new Date(availability?.selectDate).toLocaleDateString("en-US", { day: "numeric" })}
-                </p>
-              </div>
-            ))}
-          </Slider>
-        ) : (
-          <div className="text-center text-gray-500 mt-4">No availability to display</div>
-        )}
+          <div className="relative">
+            {/* Left Button */}
+            <button
+              onClick={scrollLeft}
+              className="absolute flex justify-center items-center z-50 h-[40px] w-[40px] focus:border-none focus:outline-none top-1/2 -left-6 transform -translate-y-1/2 bg-transparent border-2 border-gray-300 text-black p-0 rounded-full shadow-lg hover:bg-gray-100 transition-all duration-300 ease-in-out"
+            >
+              <MdKeyboardArrowLeft className="text-3xl font-bold" />
+            </button>
 
+            {/* Slot container */}
+            <div
+              ref={sliderRef}
+              className="flex space-x-6 p-6 bg-blue-50 rounded-md overflow-hidden transition-all duration-300 ease-in-out"
+            >
+              {doctorAvailability.map((availability, index) => (
+                <div
+                  key={index}
+                  className={`w-[100px] mx-auto text-center p-4 rounded-lg cursor-pointer transition-all border transform ${
+                    selectedDate?.selectDate === availability?.selectDate
+                      ? "bg-[#00768A] text-white scale-105 shadow-lg"
+                      : "bg-gray-200 hover:bg-blue-100 hover:scale-105"
+                  }`}
+                  onClick={() => setSelectedDate(availability)}
+                >
+                  <p className="text-sm font-medium text-gray-600 ">
+                    {new Date(availability?.selectDate).toLocaleDateString(
+                      "en-US",
+                      {
+                        month: "short",
+                      }
+                    )}
+                  </p>
+                  <p className="text-lg font-bold text-gray-800">
+                    {new Date(availability?.selectDate).toLocaleDateString(
+                      "en-US",
+                      {
+                        day: "numeric",
+                      }
+                    )}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Right Button */}
+            <button
+              onClick={scrollRight}
+              className="absolute flex justify-center items-center z-50 h-[40px] w-[40px] focus:outline-none top-1/2 -right-6 transform -translate-y-1/2 bg-transparent text-black p-0 border-2 border-gray-300 rounded-full shadow-lg hover:bg-gray-100 transition-all duration-300 ease-in-out"
+            >
+              <MdKeyboardArrowRight className="text-3xl font-bold" />
+            </button>
+          </div>
+        ) : (
+          <div className="text-center text-gray-500 mt-4">
+            No availability to display
+          </div>
+        )}
 
         {/* Slots Section */}
         <div className="mt-8 space-y-6">
@@ -234,19 +277,21 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               (availability) =>
                 getFilteredSlots(availability).length > 0 &&
                 new Date(availability?.selectDate).toDateString() ===
-                new Date(selectedDate?.selectDate).toDateString()
+                  new Date(selectedDate?.selectDate).toDateString()
             )
             .map((availability) => (
               <div
                 key={availability._id}
-                className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow "
               >
                 <p className="font-bold text-lg text-[#00768A] mb-2">
-
-                  {new Date(availability?.selectDate).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  })}
+                  {new Date(availability?.selectDate).toLocaleDateString(
+                    "en-US",
+                    {
+                      month: "short",
+                      day: "numeric",
+                    }
+                  )}
                 </p>
                 <p className="text-sm font-semibold text-gray-600 bg-blue-100 px-3 py-1 rounded-lg inline-block">
                   Showing {filter} Slots
@@ -286,7 +331,10 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="gender" className="block text-sm font-semibold text-gray-700">
+              <label
+                htmlFor="gender"
+                className="block text-sm font-semibold text-gray-700"
+              >
                 Gender:
               </label>
               <select
@@ -303,7 +351,10 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="dob" className="block text-sm font-semibold text-gray-700">
+              <label
+                htmlFor="dob"
+                className="block text-sm font-semibold text-gray-700"
+              >
                 Date of Birth:
               </label>
               <input
@@ -315,7 +366,6 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
                 className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[#00768A]"
               />
             </div>
-
 
             <div className="mb-4">
               <label
@@ -338,7 +388,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
 
             <button
               type="submit"
-                onClick={bookingSlot}
+              onClick={bookingSlot}
               className="mt-6 w-full px-6 py-3 bg-[#00768A] text-white rounded-lg text-lg transition-all duration-300 hover:bg-[#005f6e]"
             >
               Confirm Booking
@@ -347,7 +397,6 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
         </div>
       )}
     </div>
-
   );
 }
 

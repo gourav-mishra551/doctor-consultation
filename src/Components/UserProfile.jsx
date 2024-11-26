@@ -31,13 +31,9 @@ const UserProfile = () => {
 
   if (loading)
     return (
-      <div className="spinner">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
+      <div className="flex justify-center items-center min-h-screen">
+    <div className="loader"></div>
+  </div>
     );
   if (error) return <div>{error.message}</div>;
   if (!userData) return null;

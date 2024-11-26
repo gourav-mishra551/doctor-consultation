@@ -32,7 +32,6 @@ import VaccinePage from "./Pages/VaccinePage";
 import HowItWorks from "./Components/HowItWorks";
 import CategoriesDetails from "./Components/CategoriesDetails";
 import DRProfileShow from "./Components/DRProfileShow";
-import DrAppointmentCreation from "./Components/DrAppoinmentCreation";
 import FirstQuestion from "./Pages/AppointmentBooking/FirstQuestion";
 import NewPatient from "./Pages/AppointmentBooking/NewPatient/NewPatient";
 import Login from "./Components/Login";
@@ -52,9 +51,11 @@ import BookingSlot from "./Pages/BookingSlot/BookingSlot";
 import Navbar from "./Components/Navbar";
 import TopHeader from "./Components/TopHeader";
 import VideoCallApp from "./features/VideoCall/VideoCallApp";
-import EditUserDetails from "./Components/EditUserDetails/EditUserDetails";
 import CreateSlotsByDr from "./Components/CreateSlotsByDr/CreateSlotsByDr";
 import AllSlots from "./Components/AllSlots/AllSlots";
+
+import CreateMeetingPage from "./features/VideoCall/CreateMeetingPage";
+import JoinMeetingPage from "./features/VideoCall/JoinMeetingPage";
 
 function App() {
   const location = useLocation();
@@ -76,23 +77,20 @@ function App() {
           element={<AuthRoute element={DoctorForm} />}
         />
         <Route path="/categories" element={<Categories />} />
-        <Route path="/CategoriesDetails/:id" element={<CategoriesDetails />} />
-        <Route path="/CategoryHome" element={<CategoriesHome />} />
+        <Route path="/categories-details/:id" element={<CategoriesDetails />} />
+        <Route path="/category-home" element={<CategoriesHome />} />
         <Route
           path="/user-profile"
           element={<AuthRoute element={UserProfile} />}
         />
         <Route path="/about" element={<About />} />
         <Route path="/contact-us" element={<ContactPage />} />
-        <Route path="/drs-profile" element={<DrProfilePage />} />
-        <Route path="/BookingSlot/:id" element={<BookingSlot />} />
-        <Route path="/dr-indi/:id" element={<DrIndividualProfilePage />} />
+        <Route path="/all-doctors" element={<DrProfilePage />} />
+        <Route path="/booking-slot/:id" element={<BookingSlot />} />
+        <Route path="/doctors-individual-profile/:id" element={<DrIndividualProfilePage />} />
+        
         <Route
-          path="/DrAppointmentCreation"
-          element={<AuthRoute element={DrAppointmentCreation} />}
-        />
-        <Route
-          path="/DRProfileShow"
+          path="/dr-profile-show"
           element={<AuthRoute element={DRProfileShow} />}
         />
         <Route path="/calender" element={<Calendar />} />
@@ -137,17 +135,22 @@ function App() {
             element={<ViewFamilyMembersPage />}
           /> */}
         <Route path="/appointment/inside-india" element={<InsideIndia />} />
-        <Route path="/OutSideIndia" element={<OutSideIndia />} />
-        <Route path="/ReturningPatientPage" element={<ReturningPatient />} />
+        <Route path="/out-side-india" element={<OutSideIndia />} />
+        <Route path="/returning-patient-page" element={<ReturningPatient />} />
         <Route
-          path="/ConsultWithLastDoctor"
+          path="/consult-with-last-doctor"
           element={<ConsultwithLastDoctor />}
         />
         <Route
-          path="/ConsultwithNewDoctor"
+          path="/consult-with-new-doctor"
           element={<ConsultwithNewDoctor />}
         />
-        <Route path="/video-call" element={<VideoCallApp />} />
+
+        <Route path="/video-call" element={<AuthRoute element={VideoCallApp } />} />
+        <Route path="/meeting" element={<AuthRoute element={CreateMeetingPage}  />} />
+        <Route path="/join" element={<AuthRoute element={JoinMeetingPage}  />} />
+        <Route path="/slots-creation" element={<CreateSlotsByDr />} />
+
       </Routes>
     </div>
   );
