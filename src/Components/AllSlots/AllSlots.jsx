@@ -35,13 +35,6 @@ const AllSlots = () => {
     return `${formattedHours}:${minutes.toString().padStart(2, "0")} ${period}`;
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A"; // Handle null or undefined dates
-    const date = new Date(dateString);
-    const options = { day: "2-digit", month: "short", year: "numeric" }; // Format options
-    return new Intl.DateTimeFormat("en-US", options).format(date);
-  };
-
   function formatDateWithTodayOrTomorrow(dateString) {
     if (!dateString) return "N/A";
 
@@ -81,7 +74,7 @@ const AllSlots = () => {
           <p>Offline slots</p>
         </div>
       </div>
-      <div className="grid sm:grid-cols-2 grid-cols-1 gap-5 p-6 h-auto">
+      <div className="grid sm:grid-cols-2 grid-cols-1 gap-5 sm:p-6 h-auto">
         {slotsData?.doctorAvailabilities?.map((data, index) => (
           <div
             key={index}
@@ -89,7 +82,7 @@ const AllSlots = () => {
           >
             {/* Header */}
             <div className="mb-6">
-              <h2 className="text-2xl text-center font-bold text-[#00768A]">
+              <h2 className="sm:text-2xl text-xl text-center font-bold text-[#00768A]">
                 Appointment Details
               </h2>
               <p className="text-sm text-gray-500 font-semibold text-end">
