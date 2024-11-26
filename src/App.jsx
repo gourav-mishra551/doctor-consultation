@@ -145,8 +145,8 @@ function App() {
           element={<ConsultwithNewDoctor />}
         />
         <Route path="/video-call" element={<AuthRoute element={VideoCallApp } />} />
-        <Route path="/meeting" element={<CreateMeetingPage />} />
-        <Route path="/join" element={<JoinMeetingPage />} />
+        <Route path="/meeting" element={<AuthRoute element={CreateMeetingPage}  />} />
+        <Route path="/join" element={<AuthRoute element={JoinMeetingPage}  />} />
         <Route path="/slots-creation" element={<CreateSlotsByDr />} />
       </Routes>
     </div>
