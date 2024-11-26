@@ -19,7 +19,6 @@ const CreateSlotsByDr = () => {
   });
   const [GetDrProfile, SetDrProfile] = useState({});
   const [ErrorShow, setErrorShow] = useState(false);
-  const [Error, setError] = useState("");
   const [PriceData, setPriceData] = useState("");
   const [editingSlot, setEditingSlot] = useState(null); // { type: 'offline' or 'online', index: number }
 
