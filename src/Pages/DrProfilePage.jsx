@@ -8,6 +8,10 @@ import { img } from "framer-motion/m";
 
 const DrProfilePage = () => {
 
+  useEffect(()=>{
+    window.scroll(0,0)
+  })
+
   return (
     <div>
           <DoctorsProfile />

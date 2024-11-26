@@ -138,7 +138,7 @@ function MegaMenu() {
           {hoveredItem === "CenterOfExcellence" ? (
             <div className="grid grid-cols-4 gap-10 w-[88%] mx-auto cursor-pointer">
               {category.map((subItem, index) => (
-                <a href={`/CategoriesDetails/${subItem._id}`}>
+                <a href={`/categories-details/${subItem._id}`}>
                   <div key={index} className="flex items-start gap-3 cursor-pointer ">
                     <img src={subItem.image} alt={subItem.specialtyName} className="h-16 hover:scale-105 transition ease-out shadow-md shadow-slate-400 w-16 border p-2 bg-gray-200 rounded-md" />
                     <div className="ml-2">

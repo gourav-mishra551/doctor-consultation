@@ -13,11 +13,13 @@ import {
 import PrescriptionUpload from "../../Components/PrescriptionUpload/PrescriptionUpload";
 import Payment from "../../Components/Payment/Payment";
 import { RiNumber1, RiNumber2, RiNumber3 } from "react-icons/ri";
+import Loader from "../../Components/Loading/Loader";
 
 function BookingSlot() {
   const [DrProfile, setDrProfile] = useState(null);
   const { id } = useParams();
   const [step, setStep] = useState(1);
+  const [Loading,setLoading]=useState(false)
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -35,6 +37,7 @@ function BookingSlot() {
   }, []);
 
   const DrProfileFetch = async () => {
+   setLoading(true)
     try {
       const res = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/user/doctors/${id}`
@@ -42,18 +45,19 @@ function BookingSlot() {
       setDrProfile(res.data.data);
     } catch (error) {
       console.error("Error fetching doctor profile data:", error);
+    }finally{
+      setLoading(false)
     }
   };
 
+
   if (!DrProfile) {
     return (
-      <div className="spinner">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+      
+        <div className="flex justify-center items-center min-h-screen">
+        <div className="loader"></div>
       </div>
+      
     );
   }
 

@@ -1,312 +1,363 @@
-import React, { useEffect, useState } from 'react'
-import { CgProfile } from 'react-icons/cg'
-import { FaCommentDots, FaEdit, FaGraduationCap } from 'react-icons/fa'
-import { RiQuestionnaireFill } from 'react-icons/ri'
-import { Link } from 'react-router-dom'
-import ContactUs from './ContactUs'
-import axios from 'axios'
-import { IoMdStopwatch } from 'react-icons/io'
-import { MdOutlineAddLocation } from 'react-icons/md'
-import { SiClockify } from 'react-icons/si'
-import { TiDelete } from 'react-icons/ti'
-import EditDrProfileShow from './EditDrProfileShow'
+import React, { useEffect, useState } from "react";
+import { CgProfile } from "react-icons/cg";
+import { FaCommentDots, FaEdit, FaGraduationCap } from "react-icons/fa";
+import { RiQuestionnaireFill } from "react-icons/ri";
+import { Link } from "react-router-dom";
+import ContactUs from "./ContactUs";
+import axios from "axios";
+import { IoMdStopwatch } from "react-icons/io";
+import { MdOutlineAddLocation } from "react-icons/md";
+import { SiClockify } from "react-icons/si";
+import { TiDelete } from "react-icons/ti";
+import EditDrProfileShow from "./EditDrProfileShow";
 
 function DRProfileShow() {
-    const [openIndex, setOpenIndex] = useState(null);
-    const [activeSection, setActiveSection] = useState("ManageProfile");
-    const [selectLang, setSelectLang] = useState([])
-    const dummyLanguages = [
-        "English",
-        "Hindi",
-        "Spanish",
-        "French",
-        "German",
-        "Mandarin",
-    ];
+  const [openIndex, setOpenIndex] = useState(null);
+  const [activeSection, setActiveSection] = useState("ManageProfile");
+  const [selectLang, setSelectLang] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const dummyLanguages = [
+    "English",
+    "Hindi",
+    "Spanish",
+    "French",
+    "German",
+    "Mandarin",
+  ];
 
-    const [profileShow, setProfileShow] = useState({ });
-    const [formData, setFormData] = useState({
-        name: profileShow?.userData?.name || '',
-        specialities: profileShow?.specialities || [],
-        language: profileShow?.language || [],
-        aboutDoctor: profileShow?.aboutDoctor || '',
-        hospitalName: profileShow?.hospitalName || '',
-        clinicAddress: profileShow?.clinic_hospital_address || {},
-        qualifications: profileShow?.qualifications || [],
-        experience: profileShow?.years_of_experience || []
-    });
+  const [profileShow, setProfileShow] = useState({});
+  const [formData, setFormData] = useState({
+    name: profileShow?.userData?.name || "",
+    specialities: profileShow?.specialities || [],
+    language: profileShow?.language || [],
+    aboutDoctor: profileShow?.aboutDoctor || "",
+    hospitalName: profileShow?.hospitalName || "",
+    clinicAddress: profileShow?.clinic_hospital_address || {},
+    qualifications: profileShow?.qualifications || [],
+    experience: profileShow?.years_of_experience || [],
+  });
 
+  const specialityNames = Array.isArray(profileShow.specialities)
+    ? profileShow.specialities
+        .map((speciality) => speciality.specialtyName)
+        .join(", ")
+    : "";
 
+  const language = Array.isArray(profileShow.language)
+    ? profileShow.language.join(", ") // Display as a comma-separated string in the input
+    : "";
 
-    const specialityNames = Array.isArray(profileShow.specialities)
-        ? profileShow.specialities.map(speciality => speciality.specialtyName).join(', ')
-        : '';
+  useEffect(() => {
+    ProfileFetchingData();
+  }, []);
 
-    const language = Array.isArray(profileShow.language)
-        ? profileShow.language.join(', ') // Display as a comma-separated string in the input
-        : '';
-
-
-    useEffect(() => {
-        ProfileFetchingData();
-    }, []);
-
-
-
-    const ProfileFetchingData = async () => {
-        const token = localStorage.getItem("token");
-        const id = localStorage.getItem("id");
-        try {
-            const response = await axios.get("https://api.assetorix.com/ah/api/v1/dc/doctor", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    id: id,
-                }
-            });
-            console.log(response.data);
-
-            setProfileShow(response.data.data);
-        } catch (error) {
-            console.error("Failed to fetch profile data:", error);
+  const ProfileFetchingData = async () => {
+    const token = localStorage.getItem("token");
+    const id = localStorage.getItem("id");
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        "https://api.assetorix.com/ah/api/v1/dc/doctor",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            id: id,
+          },
         }
-    };
-   
-    console.log("profile",profileShow);
-    
+      );
+      console.log(response.data);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value
-        }));
-    };
+      setProfileShow(response.data.data);
+    } catch (error) {
+      console.error("Failed to fetch profile data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    const handleSpecialityChange = (index, value) => {
-        const updatedSpecialities = [...formData.specialities];
-        updatedSpecialities[index] = value;
-        setFormData({ ...formData, specialities: updatedSpecialities });
-    };
-
-    const handleQualificationChange = (index, field, value) => {
-        const updatedQualifications = [...formData.qualifications];
-        updatedQualifications[index][field] = value;
-        setFormData({ ...formData, qualifications: updatedQualifications });
-    };
-
-    const handleExperienceChange = (index, field, value) => {
-        const updatedExperience = [...formData.experience];
-        updatedExperience[index][field] = value;
-        setFormData({ ...formData, experience: updatedExperience });
-    };
-
-
-    // Additional logic to handle when the language is changed
-    const handleAdditionalLogic = (value) => {
-        console.log(`Selected Language: ${value}`);
-        // Add any other logic you want here
-        setSelectLang(prevLangs => [...prevLangs, value]);
-    };
-    console.log(selectLang);
-
-
-    // Combined handleChange function
-    const combinedHandleChange = (e) => {
-        handleChange(e); // Call original handleChange
-        handleAdditionalLogic(e.target.value); // Call additional logic
-    };
-
-    const languageRemove = (languageToRemove) => {
-        setSelectLang(prevLangs => prevLangs.filter(lang => lang !== languageToRemove));
-        setFormData(prevData => ({
-            ...prevData,
-            language: prevData.language.filter(lang => lang !== languageToRemove) // Update formData language
-        }));
-    };
-
-    const handleSelectLanguage = (value) => {
-        if (!selectLang.includes(value)) {
-            setSelectLang(prevLangs => [...prevLangs, value]);
-            setFormData(prevData => ({
-                ...prevData,
-                language: [...prevData.language, value] // Update formData language
-            }));
-        }
-    };
-
-    // Function to submit updated data
-    const handleUpdate = async () => {
-        const token = localStorage.getItem("token");
-        const id = localStorage.getItem("id");
-        try {
-            const response = await fetch("https://api.assetorix.com/ah/api/v1/dc/doctor", {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                    id: id,
-
-                },
-                body: JSON.stringify(formData),
-            });
-            if (response.ok) {
-                console.log("Profile updated successfully!");
-            }
-        } catch (error) {
-            console.error("Failed to update profile:", error);
-        }
-    };
-
+  if (isLoading) {
     return (
-        <div className="flex flex-col bg-[#DAF5F3] min-h-screen">
-        <div className="flex flex-1" >
-            <div className='btn-sections h-max w-[20%] m-12 sticky top-[20px] bg-white border border-gray-200 rounded-lg shadow-lg p-4'>
-                <button
-                    type='button'
-                    onClick={() => setActiveSection("ManageProfile")}
-                    className='w-full mb-4 p-3 rounded-lg flex justify-between bg-[#F9F9F9] hover:bg-[#E5E5E5] transition-colors'
-                    style={{ border: "1px solid #1A5B6A" }}
-                >
-                    <Link className='flex items-center gap-2 text-[#1A5B6A]'>
-                        <CgProfile className='text-xl' /> My Profile
-                    </Link>
-                </button>
-                <button
-                    type='button'
-                    onClick={() => setActiveSection("NeedHelp")}
-                    className='w-full mb-4 p-3 rounded-lg flex justify-between bg-[#F9F9F9] hover:bg-[#E5E5E5] transition-colors'
-                    style={{ border: "1px solid #1A5B6A" }}
-                >
-                    <span className='flex items-center gap-2 text-[#1A5B6A]'>
-                        <RiQuestionnaireFill className='text-xl' /> Need Help
-                    </span>
-                </button>
-                <button
-                    type='button'
-                    onClick={() => setActiveSection("EditProfile")}
-                    className='w-full mb-4 p-3 rounded-lg flex justify-between bg-[#F9F9F9] hover:bg-[#E5E5E5] transition-colors'
-                    style={{ border: "1px solid #1A5B6A" }}
-                >
-                    <span className='flex items-center gap-2 text-[#1A5B6A]'>
-                        <FaEdit className='text-xl' /> Edit Profile
-                    </span>
-                </button>
-            </div>
-    
-            <div className='sections-show w-[65%] m-12 bg-white rounded-lg shadow-lg p-6'>
-                {activeSection === "ManageProfile" && profileShow.userData && (
-                    <div>
-                        <div className="border border-gray-300 rounded-xl p-6 max-w-5xl mx-auto bg-white shadow-lg">
-                            <div className="flex gap-8 items-start">
-                                <div className="w-44 h-44 rounded-full overflow-hidden border border-gray-200">
-                                    <img
-                                        src={profileShow.userData.avatar}
-                                        alt={profileShow.userData.name}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                                <div className="flex-1">
-                                    <div className="mb-4">
-                                        <p className="text-3xl font-bold text-gray-800">{profileShow.userData.name}</p>
-                                        <p className="text-gray-500 text-lg">5+ years experience</p>
-                                    </div>
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <span className="font-semibold text-gray-600">Specialty:</span>
-                                        <div className="flex flex-wrap gap-1">
-                                            {profileShow.specialities?.map((speciality, index) => (
-                                                <span className="font-semibold text-gray-700" key={index}>
-                                                    {speciality.specialtyName}
-                                                    {index < profileShow.specialities.length - 1 && ","}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <FaCommentDots className="text-gray-500" />
-                                        <div className="flex flex-wrap gap-2">
-                                            {profileShow.language?.map((lang, index) => (
-                                                <span className="font-semibold text-gray-700" key={index}>{lang}</span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg mb-6">
-                                        <MdOutlineAddLocation className="text-gray-500" />
-                                        <div className="text-gray-700">
-                                            <p className="font-bold">{profileShow.hospitalName}</p>
-                                            <p>{profileShow.clinic_hospital_address?.permanentAddress}</p>
-                                            <p>{profileShow.clinic_hospital_address?.state}, {profileShow.clinic_hospital_address?.city}, {profileShow.clinic_hospital_address?.PinCode}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-    
-                            <div className="mt-6">
-                                <h2 className="flex items-center gap-2 text-3xl font-bold text-gray-800 mb-4">
-                                    <FaGraduationCap /> Education
-                                </h2>
-                                {profileShow.qualifications?.map((qual, index) => (
-                                    <div className="mb-4" key={index}>
-                                        <h3 className="text-xl font-bold text-gray-800">{qual.degree}</h3>
-                                        <p className="text-gray-600">{qual.instituteName}</p>
-                                        <p className="text-gray-500">{qual.startDate.month} {qual.startDate.year} - {qual.endDate.month} {qual.endDate.year}</p>
-                                    </div>
-                                ))}
-                            </div>
-                            
-                            <hr className="my-6" />
-    
-                            <div>
-                                <h2 className="flex items-center gap-2 text-3xl font-bold text-gray-800 mb-4">
-                                    <SiClockify /> Experience
-                                </h2>
-                                {profileShow.years_of_experience?.map((exp, index) => (
-                                    <div className="mb-4" key={index}>
-                                        <h3 className="text-xl font-bold text-gray-800">{exp.organizationName}, {exp.organizationLocation}</h3>
-                                        <p className="text-gray-600">{exp.jobTitle} - {exp.employmentType}</p>
-                                        <p className="text-gray-500">{exp.startDate.month} {exp.startDate.year} - {exp.endDate.month} {exp.endDate.year}</p>
-                                        <hr className="my-3" />
-                                    </div>
-                                ))}
-                            </div>
-    
-                            <div className="about-dr mt-8">
-                                <h2 className="text-3xl font-bold text-gray-800 mb-4">About Doctor</h2>
-                                <p className="text-gray-600">{profileShow.aboutDoctor}</p>
-                            </div>
-                        </div>
-                    </div>
-                )}
-                {activeSection === "NeedHelp" && <ContactUs />}
-                {activeSection === "EditProfile" && <EditDrProfileShow profileShow={profileShow} setProfileShow={setProfileShow} />}
-            </div>
-        </div>
-    
-        <div className="w-full border-t border-gray-200 p-6 bg-white">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">FAQ’s</h2>
-            {profileShow?.FAQ?.map((faq, index) => (
-                <div key={index} className="mb-4">
-                    <div className="bg-gray-100 p-4 rounded-lg shadow-md">
-                        <div className="flex justify-between items-center cursor-pointer" onClick={() => setOpenIndex(openIndex === index ? null : index)}>
-                            <h3 className="font-bold text-gray-800">{faq.title}</h3>
-                            <span>{openIndex === index ? '-' : '+'}</span>
-                        </div>
-                        {openIndex === index && (
-                            <p className="mt-2 text-gray-600">{faq.value}</p>
-                        )}
-                    </div>
-                </div>
-            ))}
-        </div>
-    </div>
-    
-
-
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="loader"></div>
+      </div>
     );
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSpecialityChange = (index, value) => {
+    const updatedSpecialities = [...formData.specialities];
+    updatedSpecialities[index] = value;
+    setFormData({ ...formData, specialities: updatedSpecialities });
+  };
+
+  const handleQualificationChange = (index, field, value) => {
+    const updatedQualifications = [...formData.qualifications];
+    updatedQualifications[index][field] = value;
+    setFormData({ ...formData, qualifications: updatedQualifications });
+  };
+
+  const handleExperienceChange = (index, field, value) => {
+    const updatedExperience = [...formData.experience];
+    updatedExperience[index][field] = value;
+    setFormData({ ...formData, experience: updatedExperience });
+  };
+
+  // Additional logic to handle when the language is changed
+  const handleAdditionalLogic = (value) => {
+    console.log(`Selected Language: ${value}`);
+    // Add any other logic you want here
+    setSelectLang((prevLangs) => [...prevLangs, value]);
+  };
+  console.log(selectLang);
+
+  // Combined handleChange function
+  const combinedHandleChange = (e) => {
+    handleChange(e); // Call original handleChange
+    handleAdditionalLogic(e.target.value); // Call additional logic
+  };
+
+  const languageRemove = (languageToRemove) => {
+    setSelectLang((prevLangs) =>
+      prevLangs.filter((lang) => lang !== languageToRemove)
+    );
+    setFormData((prevData) => ({
+      ...prevData,
+      language: prevData.language.filter((lang) => lang !== languageToRemove), // Update formData language
+    }));
+  };
+
+  const handleSelectLanguage = (value) => {
+    if (!selectLang.includes(value)) {
+      setSelectLang((prevLangs) => [...prevLangs, value]);
+      setFormData((prevData) => ({
+        ...prevData,
+        language: [...prevData.language, value], // Update formData language
+      }));
+    }
+  };
+
+  // Function to submit updated data
+  const handleUpdate = async () => {
+    const token = localStorage.getItem("token");
+    const id = localStorage.getItem("id");
+    try {
+      const response = await fetch(
+        "https://api.assetorix.com/ah/api/v1/dc/doctor",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            id: id,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+      if (response.ok) {
+        console.log("Profile updated successfully!");
+      }
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+    }
+  };
+
+  return (
+    <div className="flex flex-col bg-[#DAF5F3] min-h-screen">
+      <div className="flex flex-1">
+        <div className="btn-sections h-max w-[20%] m-12 sticky top-[20px] bg-white border border-gray-200 rounded-lg shadow-lg p-4">
+          <button
+            type="button"
+            onClick={() => setActiveSection("ManageProfile")}
+            className="w-full mb-4 p-3 rounded-lg flex justify-between bg-[#F9F9F9] hover:bg-[#E5E5E5] transition-colors"
+            style={{ border: "1px solid #1A5B6A" }}
+          >
+            <Link className="flex items-center gap-2 text-[#1A5B6A]">
+              <CgProfile className="text-xl" /> My Profile
+            </Link>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveSection("NeedHelp")}
+            className="w-full mb-4 p-3 rounded-lg flex justify-between bg-[#F9F9F9] hover:bg-[#E5E5E5] transition-colors"
+            style={{ border: "1px solid #1A5B6A" }}
+          >
+            <span className="flex items-center gap-2 text-[#1A5B6A]">
+              <RiQuestionnaireFill className="text-xl" /> Need Help
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveSection("EditProfile")}
+            className="w-full mb-4 p-3 rounded-lg flex justify-between bg-[#F9F9F9] hover:bg-[#E5E5E5] transition-colors"
+            style={{ border: "1px solid #1A5B6A" }}
+          >
+            <span className="flex items-center gap-2 text-[#1A5B6A]">
+              <FaEdit className="text-xl" /> Edit Profile
+            </span>
+          </button>
+        </div>
+
+        <div className="sections-show w-[65%] m-12 bg-white rounded-lg shadow-lg p-6">
+          {activeSection === "ManageProfile" && profileShow.userData && (
+            <div>
+              <div className="border border-gray-300 rounded-xl p-6 max-w-5xl mx-auto bg-white shadow-lg">
+                <div className="flex gap-8 items-start">
+                  <div className="w-44 h-44 rounded-full overflow-hidden border border-gray-200">
+                    <img
+                      src={profileShow.userData.avatar}
+                      alt={profileShow.userData.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <div className="mb-4">
+                      <p className="text-3xl font-bold text-gray-800">
+                        {profileShow.userData.name}
+                      </p>
+                      <p className="text-gray-500 text-lg">
+                        5+ years experience
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-4 mb-4">
+                      <span className="font-semibold text-gray-600">
+                        Specialty:
+                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {profileShow.specialities?.map((speciality, index) => (
+                          <span
+                            className="font-semibold text-gray-700"
+                            key={index}
+                          >
+                            {speciality.specialtyName}
+                            {index < profileShow.specialities.length - 1 && ","}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4 mb-4">
+                      <FaCommentDots className="text-gray-500" />
+                      <div className="flex flex-wrap gap-2">
+                        {profileShow.language?.map((lang, index) => (
+                          <span
+                            className="font-semibold text-gray-700"
+                            key={index}
+                          >
+                            {lang}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg mb-6">
+                      <MdOutlineAddLocation className="text-gray-500" />
+                      <div className="text-gray-700">
+                        <p className="font-bold">{profileShow.hospitalName}</p>
+                        <p>
+                          {
+                            profileShow.clinic_hospital_address
+                              ?.permanentAddress
+                          }
+                        </p>
+                        <p>
+                          {profileShow.clinic_hospital_address?.state},{" "}
+                          {profileShow.clinic_hospital_address?.city},{" "}
+                          {profileShow.clinic_hospital_address?.PinCode}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6">
+                  <h2 className="flex items-center gap-2 text-3xl font-bold text-gray-800 mb-4">
+                    <FaGraduationCap /> Education
+                  </h2>
+                  {profileShow.qualifications?.map((qual, index) => (
+                    <div className="mb-4" key={index}>
+                      <h3 className="text-xl font-bold text-gray-800">
+                        {qual.degree}
+                      </h3>
+                      <p className="text-gray-600">{qual.instituteName}</p>
+                      <p className="text-gray-500">
+                        {qual.startDate.month} {qual.startDate.year} -{" "}
+                        {qual.endDate.month} {qual.endDate.year}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <hr className="my-6" />
+
+                <div>
+                  <h2 className="flex items-center gap-2 text-3xl font-bold text-gray-800 mb-4">
+                    <SiClockify /> Experience
+                  </h2>
+                  {profileShow.years_of_experience?.map((exp, index) => (
+                    <div className="mb-4" key={index}>
+                      <h3 className="text-xl font-bold text-gray-800">
+                        {exp.organizationName}, {exp.organizationLocation}
+                      </h3>
+                      <p className="text-gray-600">
+                        {exp.jobTitle} - {exp.employmentType}
+                      </p>
+                      <p className="text-gray-500">
+                        {exp.startDate.month} {exp.startDate.year} -{" "}
+                        {exp.endDate.month} {exp.endDate.year}
+                      </p>
+                      <hr className="my-3" />
+                    </div>
+                  ))}
+                </div>
+
+                <div className="about-dr mt-8">
+                  <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                    About Doctor
+                  </h2>
+                  <p className="text-gray-600">{profileShow.aboutDoctor}</p>
+                </div>
+              </div>
+            </div>
+          )}
+          {activeSection === "NeedHelp" && <ContactUs />}
+          {activeSection === "EditProfile" && (
+            <EditDrProfileShow
+              profileShow={profileShow}
+              setProfileShow={setProfileShow}
+            />
+          )}
+        </div>
+      </div>
+
+      <div className="w-full border-t border-gray-200 p-6 bg-white">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">FAQ’s</h2>
+        {profileShow?.FAQ?.map((faq, index) => (
+          <div key={index} className="mb-4">
+            <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+              <div
+                className="flex justify-between items-center cursor-pointer"
+                onClick={() => setOpenIndex(openIndex === index ? null : index)}
+              >
+                <h3 className="font-bold text-gray-800">{faq.title}</h3>
+                <span>{openIndex === index ? "-" : "+"}</span>
+              </div>
+              {openIndex === index && (
+                <p className="mt-2 text-gray-600">{faq.value}</p>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default DRProfileShow;
-
-
 
 // import React, { useEffect, useState } from 'react';
 // import Navbar from './Navbar';

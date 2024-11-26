@@ -2,8 +2,8 @@ import React from 'react'
 import './Loader.css'
 function Loader() {
   return (
-    <div>
-      <main>
+  
+      <main style={{display:"flex",alignItems:"center",justifyContent:"center",height:"600px"}}>
 	<svg class="ip" viewBox="0 0 256 128" width="256px" height="128px" xmlns="http://www.w3.org/2000/svg">
 		<defs>
 			<linearGradient id="grad1" x1="0" y1="0" x2="1" y2="0">
@@ -31,7 +31,7 @@ function Loader() {
 		</g>
 	</svg>
 </main>
-    </div>
+    
   )
 }
 

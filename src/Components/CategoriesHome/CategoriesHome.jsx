@@ -47,7 +47,7 @@ function CategoriesHome() {
   const [categories, setCategories] = useState([]);
   const [totalCount, setTotalCount] = useState(8);
   const navigate = useNavigate();
-
+  const [isLoading,setIsLoading]=useState(false)
   // Adjust category count based on screen size
   const updateScreenSize = () => {
     const width = window.innerWidth;
@@ -63,6 +63,7 @@ function CategoriesHome() {
 
   useEffect(() => {
     const fetchCategories = async () => {
+      setIsLoading(true)
       try {
         const response = await axios.get(
           `https://api.assetorix.com/ah/api/v1/dc/user/Category?limit=${totalCount}`
@@ -70,11 +71,19 @@ function CategoriesHome() {
         setCategories(response.data.data || []);
       } catch (error) {
         console.error("Error fetching categories:", error);
+      }finally{
+        setIsLoading(false)
       }
     };
 
     fetchCategories();
   }, [totalCount]);
+
+  if(isLoading){
+    return <div className="flex justify-center items-center min-h-screen">
+    <div className="loader"></div>
+  </div>
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:mt-3 -mt-12">
