@@ -11,18 +11,7 @@
 	--trans-dur: 0.3s;
 	
 }
-body {
-	
-	color: var(--fg);
-	font: 1em/1.5 sans-serif;
-	height: 100vh;
-	display: grid;
-	place-items: center;
-	
-}
-main {
-	padding: 1.5em 0;
-}
+
 .ip {
 	width: 16em;
 	height: 8em;
