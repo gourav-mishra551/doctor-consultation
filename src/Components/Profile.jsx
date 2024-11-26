@@ -25,6 +25,7 @@ import ViewFamilyMembers from "./ViewFamilyMembers/ViewFamilyMembers";
 import UserBookings from "./UserBookings/UserBookings";
 import EditUserDetails from "./EditUserDetails/EditUserDetails";
 import CreateSlotsByDr from "./CreateSlotsByDr/CreateSlotsByDr";
+import AllSlots from "./AllSlots/AllSlots";
 const Profile = () => {
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [history, setHistory] = useState([]);
@@ -219,14 +220,42 @@ const Profile = () => {
                 </li>
               )}
 
+              {/* slots creation */}
               {userProfileData?.data?.role === "doctor" && (
                 <li className="mb-2">
-                  <p
-                    onClick={() => setActiveSection("create-slots")}
-                    className="flex items-center p-2 cursor-pointer rounded-md hover:bg-[#00768A] hover:text-white text-black font-normal"
+                  <div
+                    className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
+                    onClick={() => toggleMenu("create-slots")}
                   >
-                    <FaCheckToSlot className="mr-2" /> Create Slots
-                  </p>
+                    <div className="flex items-center">
+                      <FaCheckToSlot className="mr-2" /> Slots
+                    </div>
+                    {selectedMenu === "create-slots" ? (
+                      <FaChevronUp />
+                    ) : (
+                      <FaChevronDown />
+                    )}
+                  </div>
+                  {selectedMenu === "create-slots" && (
+                    <ul className="ml-6 mt-2 space-y-1 text-gray-300">
+                      <li>
+                        <p
+                          onClick={() => setActiveSection("create-slots")}
+                          className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
+                        >
+                          Create Slots
+                        </p>
+                      </li>
+                      <li>
+                        <p
+                          onClick={() => setActiveSection("view-slots")}
+                          className="block cursor-pointer p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
+                        >
+                          View Slots
+                        </p>
+                      </li>
+                    </ul>
+                  )}
                 </li>
               )}
 
@@ -502,7 +531,7 @@ const Profile = () => {
                 </div>
               )}
 
-              {userProfileData?.data?.role === "doctor" && (
+              {/* {userProfileData?.data?.role === "doctor" && (
                 <div
                   onClick={() => {
                     setIsProfileOpen(false);
@@ -514,6 +543,48 @@ const Profile = () => {
                   <button type="button" className="text-xl">
                     Create Slots
                   </button>
+                </div>
+              )} */}
+
+              {/* slots */}
+              {userProfileData?.data?.role === "doctor" && (
+                <div>
+                  <div
+                    onClick={toggleUserProfile}
+                    className="flex justify-center items-center gap-2 border w-full p-2 bg-[#00768A] rounded-xl text-white cursor-pointer"
+                  >
+                    <IoPerson />
+                    <button
+                      type="button"
+                      className="text-xl focus:outline-none"
+                    >
+                      Slots
+                    </button>
+                  </div>
+                  {isUserProfileOpen && (
+                    <div className="flex flex-col space-y-2 mt-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveSection("create-slots");
+                          setIsProfileOpen(false);
+                        }}
+                        className="text-white bg-gray-500 w-full py-2 rounded-lg"
+                      >
+                        Create Slots
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveSection("view-slots");
+                          setIsProfileOpen(false);
+                        }}
+                        className="text-white bg-gray-500 w-full py-2 rounded-lg"
+                      >
+                        View Slots
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -577,6 +648,7 @@ const Profile = () => {
           )}
           {activeSection === "edituserprofile" && <EditUserDetails />}
           {activeSection === "create-slots" && <CreateSlotsByDr />}
+          {activeSection === "view-slots" && <AllSlots />}
         </div>
       </div>
 

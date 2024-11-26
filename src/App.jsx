@@ -52,6 +52,7 @@ import Navbar from "./Components/Navbar";
 import TopHeader from "./Components/TopHeader";
 import VideoCallApp from "./features/VideoCall/VideoCallApp";
 import CreateSlotsByDr from "./Components/CreateSlotsByDr/CreateSlotsByDr";
+import AllSlots from "./Components/AllSlots/AllSlots";
 
 import CreateMeetingPage from "./features/VideoCall/CreateMeetingPage";
 import JoinMeetingPage from "./features/VideoCall/JoinMeetingPage";
@@ -146,10 +147,12 @@ function App() {
           path="/consult-with-new-doctor"
           element={<ConsultwithNewDoctor />}
         />
+
         <Route path="/video-call" element={<AuthRoute element={VideoCallApp } />} />
         <Route path="/meeting" element={<AuthRoute element={CreateMeetingPage}  />} />
         <Route path="/join" element={<AuthRoute element={JoinMeetingPage}  />} />
         <Route path="/slots-creation" element={<CreateSlotsByDr />} />
+
       </Routes>
     </div>
   );

@@ -599,9 +599,8 @@ const DoctorForm = () => {
         );
 
         console.log("result", res.data);
-      } catch (error) {
-        console.error("Error submitting the form", error);
-        toast.error("Something went wrong. Please try again.");
+      } catch (res) {
+        toast.error(res.response.data.msg);
       }
     }
   };

@@ -67,7 +67,7 @@ const DoctorCard = ({ doctorData }) => {
         <div
           
           key={index}
-          className="w-full h-min sm:w-[48%] md:w-[100%] lg:flex bg-white p-4 md:p-6 flex flex-col lg:flex-row items-start rounded-lg shadow-md border border-gray-200 transition-transform duration-300 hover:scale-105"
+          className="w-full h-min sm:w-[48%] md:w-[90%] lg:flex bg-white p-4 md:p-6 flex flex-col lg:flex-row items-start rounded-lg shadow-md border border-gray-200 transition-transform duration-300 hover:scale-105"
         >
           <div>
             <div className="flex flex-col lg:flex-row gap-6 items-center lg:items-start w-full">

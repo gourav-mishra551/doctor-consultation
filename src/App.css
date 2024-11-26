@@ -6,6 +6,11 @@
   fill: #e0e0e0;
 }
 
+.loader {
+  width: 55px;
+  aspect-ratio: 1;
+  display: grid;
+}
 .loader::before,
 .loader::after {
   content: "";
@@ -109,3 +114,5 @@
   min-width: 0;
   max-width: 100%;
 }
+
+
