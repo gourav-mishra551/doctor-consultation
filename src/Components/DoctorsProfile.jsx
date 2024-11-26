@@ -124,9 +124,11 @@ const DoctorsProfile = () => {
   }, [DoctorData, isLoading]); // Dependency on DoctorData and isLoading
 
   if (isLoading) {
-    return  <div>
-      <img src="src/Assests/Spinner@1x-0.5s-200px-200px.svg" alt="" />
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+      <div className="loader"></div>
     </div>
+    )
   }
 
   const handleFilterChange = (filterType, value) => {

@@ -533,7 +533,7 @@ const Navbar = () => {
                 </div>
 
                 <Link
-                  to="/CategoriesDetails/:id"
+                  to="/categories-details/:id"
                   className="block px-3 py-2 rounded-md font-bold uppercase text-sm hover:bg-blue-500 hover:text-white"
                 >
                   Doctors

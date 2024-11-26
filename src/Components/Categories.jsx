@@ -99,7 +99,9 @@ const Categories = () => {
         )} */}
 
         {loading && (
-          <div>Loading...</div>
+           <div className="flex justify-center items-center min-h-screen">
+           <div className="loader"></div>
+         </div>
         )}
       </div>
       <Footer />

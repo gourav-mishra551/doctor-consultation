@@ -83,14 +83,14 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
               </div>
 
               <div className="flex justify-center">
-                <img src={IndiProfile.userData.avatar} alt={IndiProfile.userData.name} className="md:max-w-[200px] mx-auto md:rounded-full md:h-auto h-[250px] my-3 md:w-auto w-screen shadow-md" />
+                <img src={IndiProfile?.userData?.avatar} alt={IndiProfile?.userData?.name} className="md:max-w-[200px] mx-auto md:rounded-full md:h-auto h-[250px] my-3 md:w-auto w-screen shadow-md" />
               </div>
             </div>
 
             <div className="bg-gray-50 p-6 rounded-lg shadow-md">
               <h2 className="text-3xl font-bold text-[#00768A] mb-5">Work Experience</h2>
               <div className="space-y-4">
-                {IndiProfile?.years_of_experience.map((experience) => (
+                {IndiProfile?.years_of_experience?.map((experience) => (
                   <ExperienceCard key={experience._id} experience={experience} />
                 ))}
               </div>
