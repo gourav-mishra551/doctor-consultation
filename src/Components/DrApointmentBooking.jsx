@@ -109,17 +109,6 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
     );
   };
 
-  // const settings = {
-  //   dots: false,
-  //   infinite: false,
-  //   slidesToShow: Math.min(5, doctorAvailability.length), // Show up to 5 or less if data is fewer
-  //   slidesToScroll: 1,
-  //   autoplay: false,
-  //   cssEase: "linear",
-  //   nextArrow: <SampleNextArrow />,
-  //   prevArrow: <SamplePrevArrow />,
-  // };
-
   // Filter slots based on the selected filter
   const getFilteredSlots = (availability) => {
     switch (filter) {
@@ -137,15 +126,24 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
     }
   };
 
+  function formatTime(time) {
+    const [hours, minutes] = time.split(":").map(Number); // Split and convert to numbers
+    const period = hours >= 12 ? "PM" : "AM"; // Determine AM or PM
+    const formattedHours = hours % 12 || 12; // Convert 24-hour to 12-hour format (handle 0 and 12)
+    return `${formattedHours}:${String(minutes).padStart(2, "0")} ${period}`; // Pad minutes with 0 if needed
+  }
+
+
+
   // Render individual slot
   const renderSlot = (slot) => (
+
     <div
       key={slot._id}
-      className={`p-4 relative border rounded-lg transition-transform ${
-        slot.isBooked
-          ? "bg-red-100 text-gray-700 cursor-not-allowed"
-          : "bg-green-100 hover:scale-105"
-      }`}
+      className={`p-4 relative border rounded-lg transition-transform ${slot.isBooked
+        ? "bg-red-100 text-gray-700 cursor-not-allowed"
+        : "bg-green-100 hover:scale-105"
+        }`}
     >
       <FaCheckCircle
         className={
@@ -155,31 +153,28 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
         }
       />
       <p className="text-sm">
-        <span className="font-semibold font-serif ">Time:</span>{" "}
-        {slot.startTime > 12 ? slot.startTime - 12 : slot.startTime}{" "}
-        {slot.startTime >= 12 ? "PM" : "AM"} -{" "}
-        {slot.endTime > 12 ? slot.endTime - 12 : slot.endTime}{" "}
-        {slot.endTime >= 12 ? "PM" : "AM"}
+        <span className="font-semibold font-serif">Time:</span>{" "}
+        {formatTime(slot.startTime)} - {formatTime(slot.endTime)}
       </p>
+
       <p className="text-sm">
         <span className="font-medium">Charge:</span> ₹ {slot.doctorCharge}
       </p>
       <button
         disabled={slot.isBooked}
         onClick={() => setSelectedSlot(slot)}
-        className={`mt-4 w-full px-4 py-2 rounded-lg font-medium transition ${
-          slot.isBooked
-            ? "bg-gray-400 text-white"
-            : selectedSlot?._id === slot?._id
+        className={`mt-4 w-full px-4 py-2 rounded-lg font-medium transition ${slot.isBooked
+          ? "bg-gray-400 text-white"
+          : selectedSlot?._id === slot?._id
             ? "bg-green-700 text-white font-semibold shadow-xl"
             : "bg-[#00768A] text-white "
-        }`}
+          }`}
       >
         {slot.isBooked
           ? "Slot is booked"
           : selectedSlot?._id === slot?._id
-          ? "Selected"
-          : "Book"}
+            ? "Selected"
+            : "Book"}
       </button>
     </div>
   );
@@ -198,11 +193,10 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
             <button
               key={type}
               type="button"
-              className={`px-6 py-2 text-sm font-medium rounded-lg transition-all ${
-                filter === type
-                  ? "bg-[#00768A] text-white shadow-md"
-                  : "bg-gray-200 hover:bg-blue-100"
-              }`}
+              className={`px-6 py-2 text-sm font-medium rounded-lg transition-all ${filter === type
+                ? "bg-[#00768A] text-white shadow-md"
+                : "bg-gray-200 hover:bg-blue-100"
+                }`}
               onClick={() => setFilter(type)}
             >
               {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -229,19 +223,17 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               {doctorAvailability.map((availability, index) => (
                 <div
                   key={index}
-                  className={`w-[100px] mx-auto text-center p-4 rounded-lg cursor-pointer transition-all transform ${
-                    selectedDate?.selectDate === availability?.selectDate
-                      ? "bg-[#00768A] text-white scale-105 shadow-lg"
-                      : "bg-gray-200 hover:bg-blue-100 hover:scale-105"
-                  }`}
+                  className={`w-[100px] mx-auto text-center p-4 rounded-lg cursor-pointer transition-all transform ${selectedDate?.selectDate === availability?.selectDate
+                    ? "bg-[#00768A] text-white scale-105 shadow-lg"
+                    : "bg-gray-200 hover:bg-blue-100 hover:scale-105"
+                    }`}
                   onClick={() => setSelectedDate(availability)}
                 >
                   <p
-                    className={`text-sm font-medium ${
-                      selectedDate?.selectDate === availability?.selectDate
-                        ? "text-white"
-                        : "text-gray-600"
-                    }`}
+                    className={`text-sm font-medium ${selectedDate?.selectDate === availability?.selectDate
+                      ? "text-white"
+                      : "text-gray-600"
+                      }`}
                   >
                     {new Date(availability?.selectDate).toLocaleDateString(
                       "en-US",
@@ -251,11 +243,10 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
                     )}
                   </p>
                   <p
-                    className={`text-lg font-bold ${
-                      selectedDate?.selectDate === availability?.selectDate
-                        ? "text-white"
-                        : "text-gray-800"
-                    }`}
+                    className={`text-lg font-bold ${selectedDate?.selectDate === availability?.selectDate
+                      ? "text-white"
+                      : "text-gray-800"
+                      }`}
                   >
                     {new Date(availability?.selectDate).toLocaleDateString(
                       "en-US",
@@ -289,7 +280,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               (availability) =>
                 getFilteredSlots(availability).length > 0 &&
                 new Date(availability?.selectDate).toDateString() ===
-                  new Date(selectedDate?.selectDate).toDateString()
+                new Date(selectedDate?.selectDate).toDateString()
             )
             .map((availability) => (
               <div
