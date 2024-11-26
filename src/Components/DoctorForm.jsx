@@ -554,7 +554,7 @@ const DoctorForm = () => {
       console.log("formvalue", formValues);
 
       const token = localStorage.getItem("token");
-      const id = localStorage.getItem("id");
+      const id = localStorage.getItem("Id");
 
       // Check if token and id are available
       if (!token || !id) {

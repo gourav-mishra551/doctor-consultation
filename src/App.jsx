@@ -55,6 +55,7 @@ import CreateSlotsByDr from "./Components/CreateSlotsByDr/CreateSlotsByDr";
 
 import CreateMeetingPage from "./features/VideoCall/CreateMeetingPage";
 import JoinMeetingPage from "./features/VideoCall/JoinMeetingPage";
+import Otp from "./Pages/Otp/Otp";
 
 function App() {
   const location = useLocation();
@@ -71,6 +72,7 @@ function App() {
           element={<AuthRoute element={DrExam} />}
         />
         <Route path="/auth" element={<Login />} />
+        <Route path="/otp" element={<Otp />} />
         <Route
           path="/doctor-onboarding-form"
           element={<AuthRoute element={DoctorForm} />}

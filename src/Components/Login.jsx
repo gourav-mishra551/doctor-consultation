@@ -14,6 +14,8 @@ const Login = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    gender: "",
+    dob: "",
   });
 
   const navigate = useNavigate();
@@ -62,8 +64,6 @@ const Login = () => {
         ? "https://api.assetorix.com/ah/api/v1/user/login"
         : "https://api.assetorix.com/ah/api/v1/user/register";
       const response = await axios.post(endpoint, formData);
-      console.log("API response:", response.data);
-      console.log(response);
       if (response.status === 200) {
         toast.success(response.data?.msg);
         localStorage.setItem("token", response.data.x_auth_token);
@@ -221,6 +221,30 @@ const Login = () => {
                     placeholder="user@email.com"
                     className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-[#1c8e81] focus:outline-none focus:ring focus:ring-opacity-40"
                     required
+                  />
+                </div>
+                <div className= {isLogin ? "hidden" : "block"}>
+                  <label className="block mb-2 text-sm text-[#1c8e81] font-bold">
+                    Gender
+                  </label>
+                  <select  className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-[#1c8e81] focus:outline-none focus:ring focus:ring-opacity-40" name="gender" id="gender" value={formData.gender} onChange={handleChange}>
+                    <option value="male">Male</option>
+                    <option value="femail">Femail</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div className= {isLogin ? "hidden" : "block"}>
+                  <label className="block mb-2 text-sm text-[#1c8e81] font-bold">
+                    Date of Birth (DOB)
+                  </label>
+                  <input
+                    type="date"
+                    name="dob"
+                    value={formData.dob}
+                    onChange={handleChange}
+                    placeholder="user@email.com"
+                    className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-[#1c8e81] focus:outline-none focus:ring focus:ring-opacity-40"
+                   
                   />
                 </div>
                 <div>
