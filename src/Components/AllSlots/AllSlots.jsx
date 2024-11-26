@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { CiBookmarkCheck } from "react-icons/ci";
 
 const AllSlots = () => {
   const [slotsData, setSlotsData] = useState([]);
@@ -57,20 +58,20 @@ const AllSlots = () => {
       year: "numeric",
     });
   }
-
+  
   return (
     <>
-      <div className="indictors">
-        <div className="red flex items-center gap-2">
-          <div className="h-[10px] w-[10px] bg-blue-800"></div>
+      <div className="indictors flex justify-center items-center gap-5">
+        <div className="red flex items-center gap-1">
+          <div className="h-[15px] w-[15px] bg-blue-800"></div>
           <p>Online slots</p>
         </div>
-        <div className="green flex items-center gap-2">
-          <div className="h-[10px] w-[10px] bg-red-800"></div>
+        <div className="green flex items-center gap-1">
+          <div className="h-[15px] w-[15px] bg-red-800"></div>
           <p>Booked slots</p>
         </div>
-        <div className="blue flex items-center gap-2">
-          <div className="h-[10px] w-[10px] bg-green-800"></div>
+        <div className="blue flex items-center gap-1">
+          <div className="h-[15px] w-[15px] bg-green-800"></div>
           <p>Offline slots</p>
         </div>
       </div>
@@ -123,6 +124,9 @@ const AllSlots = () => {
                               : "bg-blue-100 text-blue-800"
                           }`}
                         >
+                          {slot?.isBooked && (
+                            <CiBookmarkCheck className="inline-block mr-2" />
+                          )}
                           {convertTo12HourFormat(slot?.startTime)} -{" "}
                           {convertTo12HourFormat(slot?.endTime)}
                         </div>
