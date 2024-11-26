@@ -47,7 +47,7 @@ function CategoriesHome() {
   const [categories, setCategories] = useState([]);
   const [totalCount, setTotalCount] = useState(8);
   const navigate = useNavigate();
-  const [isLoading,setIsLoading]=useState(false)
+
   // Adjust category count based on screen size
   const updateScreenSize = () => {
     const width = window.innerWidth;
@@ -63,7 +63,6 @@ function CategoriesHome() {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      setIsLoading(true)
       try {
         const response = await axios.get(
           `https://api.assetorix.com/ah/api/v1/dc/user/Category?limit=${totalCount}`
@@ -71,26 +70,20 @@ function CategoriesHome() {
         setCategories(response.data.data || []);
       } catch (error) {
         console.error("Error fetching categories:", error);
-      }finally{
-        setIsLoading(false)
       }
     };
 
     fetchCategories();
   }, [totalCount]);
 
-  if(isLoading){
-    return <div className="flex justify-center items-center min-h-screen">
-    <div className="loader"></div>
-  </div>
-  }
-
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:mt-3 -mt-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:mt-3 -mt-[8rem]">
       <div className="flex flex-row sm:flex-row gap-3 justify-between items-center max-w-5xl mx-auto mb-8">
-        <p className="sm:text-4xl text-2xl font-bold tracking-wide text-center sm:text-start capitalize text-[#1c8e81]">
+        <div className="md:justify-start justify-center flex items-center w-full">
+        <p  className="text-4xl font-bold text-[#1c8e81] mb-4 flex text-center ">
           Top Specialties
         </p>
+        </div>
         <NavLink to="/categories" className="hidden sm:block md:block">
           <button
             className="sm:w-[250px] w-[150px] sm:h-[60px] h-[50px] md:text-lg text-xs rounded-lg bg-[#1c8e81] text-white font-semibold hover:scale-105 transition-transform duration-300"
@@ -101,7 +94,7 @@ function CategoriesHome() {
         </NavLink>
       </div>
 
-      <div className="flex justify-center items-center w-full mt-[80px]">
+      <div className="flex justify-center items-center w-full sm:mt-[80px] mt-[50px] md:mt-[80px]">
         {categories.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 w-[100%]  md:px-8 lg:px-16">
             {categories.map((item) => (
