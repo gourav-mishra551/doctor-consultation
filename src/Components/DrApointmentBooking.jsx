@@ -35,6 +35,18 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
 
   const bookingSlot = async (e) => {
     e.preventDefault();
+
+    // Validate patient details
+    if (
+      !patientDetails.name.trim() ||
+      !patientDetails.gender.trim() ||
+      !patientDetails.dateOfBirth.trim() ||
+      !patientDetails.reasonForAppointment.trim()
+    ) {
+      toast.error("Please fill in all patient details before booking the slot.");
+      return; // Exit the function without making the API call
+    }
+
     try {
       const id = localStorage.getItem("Id");
       const token = localStorage.getItem("token");
@@ -56,8 +68,6 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
         }
       );
 
-      
-
       if (response.status === 201) {
         toast.success("Slot Data saved Successfully!");
         onNext();
@@ -67,8 +77,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       
 
       const errorMessage =
-        error.response?.data?.message ||
-        "Failed to book slot. Please try again.";
+        error.response?.data?.message || "Failed to book slot. Please try again.";
       toast.error(errorMessage);
     }
   };
@@ -79,34 +88,6 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       ...prevDetails,
       [name]: value,
     }));
-  };
-
-  const SampleNextArrow = (props) => {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={`${className} bg-[#00768A] text-white rounded-full p-3 shadow-lg hover:bg-gray-400`}
-        style={{ ...style, right: "-25px", zIndex: 2 }}
-        onClick={onClick}
-      >
-        ➡️
-      </div>
-    );
-  };
-
- 
-
-  const SamplePrevArrow = (props) => {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={`${className} bg-[#00768A] text-white rounded-full p-3 shadow-lg hover:bg-gray-400`}
-        style={{ ...style, left: "-25px", zIndex: 2 }}
-        onClick={onClick}
-      >
-        ⬅️
-      </div>
-    );
   };
 
   // Filter slots based on the selected filter
@@ -306,7 +287,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               htmlFor="name"
               className="block text-sm font-semibold text-gray-700"
             >
-              Name:
+              Name: <span className="text-red-500">*</span>
             </label>
             <input
               id="name"
@@ -325,7 +306,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               htmlFor="gender"
               className="block text-sm font-semibold text-gray-700"
             >
-              Gender:
+              Gender:  <span className="text-red-500">*</span>
             </label>
             <select
               name="gender"
@@ -345,7 +326,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               htmlFor="dob"
               className="block text-sm font-semibold text-gray-700"
             >
-              Date of Birth:
+              Date of Birth:  <span className="text-red-500">*</span>
             </label>
             <input
               id="dob"
@@ -354,6 +335,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               onChange={handleChange}
               type="date"
               className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[#00768A]"
+              required
             />
           </div>
 
@@ -362,7 +344,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               htmlFor="reason"
               className="block text-sm font-semibold text-gray-700"
             >
-              Reason for Appointment:
+              Reason for Appointment:  <span className="text-red-500">*</span>
             </label>
             <textarea
               id="reason"
