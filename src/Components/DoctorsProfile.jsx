@@ -180,14 +180,12 @@ const DoctorsProfile = () => {
 
               {/* Content */}
               <div className="relative text-center text-white p-4 max-w-[600px]">
-                <h1 className="font-bold text-3xl lg:text-4xl tracking-wide mb-2">Our Expert Doctors</h1>
+                <h1 className="font-bold text-3xl lg:text-4xl tracking-wide mb-2 text-[#a4f1ff]">Our Expert Doctors</h1>
                 <div className="h-[2px] w-[80px] mx-auto bg-white mb-4"></div>
-                <p className="font-light text-lg lg:text-xl">
+                <p className=" text-lg lg:text-xl font-semibold">
                   At the forefront of healthcare innovation, our dedicated team of doctors is committed to delivering personalized, top-quality care.
                 </p>
-                <p className="mt-4 text-sm lg:text-base">
-                  Whether you need routine check-ups or specialized treatments, our experts are here to guide you every step of the way. Compassion, precision, and excellence define our approach.
-                </p>
+               
               </div>
             </div>
 
