@@ -179,7 +179,7 @@ function BookingSlot() {
           </div>
         )}
       </div>
-      <div className="flex flex-col items-center w-full py-6">
+      <div className="flex flex-col items-center w-full py-6 ">
         <div className="relative flex items-center w-full max-w-md justify-between">
           {/* Step 1 */}
           <div

@@ -133,17 +133,15 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
     return `${formattedHours}:${String(minutes).padStart(2, "0")} ${period}`; // Pad minutes with 0 if needed
   }
 
-
-
   // Render individual slot
   const renderSlot = (slot) => (
-
     <div
       key={slot._id}
-      className={`p-4 relative border rounded-lg transition-transform ${slot.isBooked
-        ? "bg-red-100 text-gray-700 cursor-not-allowed"
-        : "bg-green-100 hover:scale-105"
-        }`}
+      className={`p-4 relative border rounded-lg transition-transform ${
+        slot.isBooked
+          ? "bg-red-100 text-gray-700 cursor-not-allowed"
+          : "bg-green-100 hover:scale-105"
+      }`}
     >
       <FaCheckCircle
         className={
@@ -163,26 +161,27 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       <button
         disabled={slot.isBooked}
         onClick={() => setSelectedSlot(slot)}
-        className={`mt-4 w-full px-4 py-2 rounded-lg font-medium transition ${slot.isBooked
-          ? "bg-gray-400 text-white"
-          : selectedSlot?._id === slot?._id
+        className={`mt-4 w-full px-4 py-2 rounded-lg font-medium transition ${
+          slot.isBooked
+            ? "bg-gray-400 text-white"
+            : selectedSlot?._id === slot?._id
             ? "bg-green-700 text-white font-semibold shadow-xl"
             : "bg-[#00768A] text-white "
-          }`}
+        }`}
       >
         {slot.isBooked
           ? "Slot is booked"
           : selectedSlot?._id === slot?._id
-            ? "Selected"
-            : "Book"}
+          ? "Selected"
+          : "Book"}
       </button>
     </div>
   );
 
   return (
-    <div className="flex flex-col justify-center md:flex-row gap-8  mx-auto md:p-4 ">
+    <div className="flex flex-col md:flex-col justify-center gap-8 sm:mx-auto p-4 sm:max-w-7xl">
       {/* Header Section */}
-      <div className="md:w-[600px] w-full bg-white shadow-lg rounded-lg p-6">
+      <div className="sm:w-full md:max-w-[600px] max-w-[340px] bg-white sm:shadow-lg rounded-lg sm:p-6 px-6 sm:ml-0 -ml-4">
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-700">
           Book Your Appointment
         </h2>
@@ -193,10 +192,11 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
             <button
               key={type}
               type="button"
-              className={`px-6 py-2 text-sm font-medium rounded-lg transition-all ${filter === type
-                ? "bg-[#00768A] text-white shadow-md"
-                : "bg-gray-200 hover:bg-blue-100"
-                }`}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                filter === type
+                  ? "bg-[#00768A] text-white shadow-md"
+                  : "bg-gray-200 hover:bg-blue-100"
+              }`}
               onClick={() => setFilter(type)}
             >
               {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -207,34 +207,28 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
         {/* Date Slider */}
         {doctorAvailability.length > 1 ? (
           <div className="relative">
-            {/* Left Button */}
             <button
               onClick={scrollLeft}
-              className="absolute flex justify-center items-center z-50 h-[40px] w-[40px] focus:border-none focus:outline-none top-1/2 -left-6 transform -translate-y-1/2 bg-transparent border-2 border-gray-300 text-black p-0 rounded-full shadow-lg hover:bg-gray-100 transition-all duration-300 ease-in-out"
+              className="absolute flex justify-center items-center z-40 h-10 w-10 focus:outline-none top-1/2 -left-4 transform -translate-y-1/2 bg-transparent border-2 border-gray-300 text-black rounded-full shadow-lg hover:bg-gray-100 transition-all"
             >
-              <MdKeyboardArrowLeft className="text-3xl font-bold" />
+              <MdKeyboardArrowLeft className="text-2xl" />
             </button>
 
-            {/* Slot container */}
             <div
               ref={sliderRef}
-              className="flex space-x-6 p-6 bg-blue-50 rounded-md overflow-hidden transition-all duration-300 ease-in-out"
+              className="flex space-x-4 p-4 bg-blue-50 rounded-md overflow-hidden "
             >
               {doctorAvailability.map((availability, index) => (
                 <div
                   key={index}
-                  className={`w-[100px] mx-auto text-center p-4 rounded-lg cursor-pointer transition-all transform ${selectedDate?.selectDate === availability?.selectDate
-                    ? "bg-[#00768A] text-white scale-105 shadow-lg"
-                    : "bg-gray-200 hover:bg-blue-100 hover:scale-105"
-                    }`}
+                  className={`w-24 sm:mx-auto text-center p-4 rounded-lg cursor-pointer ${
+                    selectedDate?.selectDate === availability?.selectDate
+                      ? "bg-[#00768A] text-white scale-105 shadow-lg"
+                      : "bg-gray-200 hover:bg-blue-100 hover:scale-105"
+                  }`}
                   onClick={() => setSelectedDate(availability)}
                 >
-                  <p
-                    className={`text-sm font-medium ${selectedDate?.selectDate === availability?.selectDate
-                      ? "text-white"
-                      : "text-gray-600"
-                      }`}
-                  >
+                  <p className={`text-sm font-medium`}>
                     {new Date(availability?.selectDate).toLocaleDateString(
                       "en-US",
                       {
@@ -242,12 +236,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
                       }
                     )}
                   </p>
-                  <p
-                    className={`text-lg font-bold ${selectedDate?.selectDate === availability?.selectDate
-                      ? "text-white"
-                      : "text-gray-800"
-                      }`}
-                  >
+                  <p className={`text-lg font-bold`}>
                     {new Date(availability?.selectDate).toLocaleDateString(
                       "en-US",
                       {
@@ -259,12 +248,11 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               ))}
             </div>
 
-            {/* Right Button */}
             <button
               onClick={scrollRight}
-              className="absolute flex justify-center items-center z-50 h-[40px] w-[40px] focus:outline-none top-1/2 -right-6 transform -translate-y-1/2 bg-transparent text-black p-0 border-2 border-gray-300 rounded-full shadow-lg hover:bg-gray-100 transition-all duration-300 ease-in-out"
+              className="absolute flex justify-center items-center z-40 h-10 w-10 focus:outline-none top-1/2 -right-4 transform -translate-y-1/2 bg-transparent text-black border-2 border-gray-300 rounded-full shadow-lg hover:bg-gray-100 transition-all"
             >
-              <MdKeyboardArrowRight className="text-3xl font-bold" />
+              <MdKeyboardArrowRight className="text-2xl" />
             </button>
           </div>
         ) : (
@@ -280,12 +268,12 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               (availability) =>
                 getFilteredSlots(availability).length > 0 &&
                 new Date(availability?.selectDate).toDateString() ===
-                new Date(selectedDate?.selectDate).toDateString()
+                  new Date(selectedDate?.selectDate).toDateString()
             )
             .map((availability) => (
               <div
                 key={availability._id}
-                className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow "
+                className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow"
               >
                 <p className="font-bold text-lg text-[#00768A] mb-2">
                   {new Date(availability?.selectDate).toLocaleDateString(
@@ -311,7 +299,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       {selectedSlot && (
         <form
           onSubmit={bookingSlot}
-          className="flex flex-col max-w-3xl md:w-[450px] p-6 bg-white shadow-lg rounded-lg "
+          className="flex flex-col w-full md:w-[450px] p-6 bg-white shadow-lg rounded-lg"
         >
           <div className="mb-4">
             <label
@@ -390,7 +378,6 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
 
           <button
             type="submit"
-            onClick={bookingSlot}
             className="mt-6 w-full px-6 py-3 bg-[#00768A] text-white rounded-lg text-lg transition-all duration-300 hover:bg-[#005f6e]"
           >
             Confirm Booking
