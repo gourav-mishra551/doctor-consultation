@@ -32,11 +32,7 @@ const Login = () => {
     return re.test(String(email).toLowerCase());
   };
 
-  const validatePassword = (password) => {
-    const re =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-    return re.test(password);
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
 import 'react-toastify/dist/ReactToastify.css';
 
 const Otp = () => {
@@ -24,9 +24,13 @@ const Otp = () => {
         try {
             setLoading(true);
             const response = await axios.post('https://api.assetorix.com/ah/api/v1/user/verify', formData);
-            if(response.statusCode === 201) {
+            if (response.status === 201) {
                 toast.success('OTP verified successfully!');
-            }
+                localStorage.setItem("token", response.data.x_auth_token);
+                localStorage.setItem("user", response.data.x_user);
+                localStorage.setItem("Id", response.data.x_userid);
+              }
+           
             navigate('/');
         } catch (error) {
             toast.error('OTP verification failed: ' + error.message);
@@ -92,7 +96,7 @@ const Otp = () => {
                         </div>
                     </div>
                 </div>
-             
+
             </section>
         </div>
     );
