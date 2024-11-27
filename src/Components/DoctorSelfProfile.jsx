@@ -6,6 +6,11 @@ import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 const DoctorSelfProfile = ({ doctorProfileData }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFAQOpen, setIsFAQOpen] = useState(false);
+  const [openIndex, setOpenIndex] = useState(null); // To track which box is open
+
+  const toggleBox = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
   // Set the first speciality's ID as the default open box
   const [activeSpecialityId, setActiveSpecialityId] = useState(() => {
     const specialityCategories =
@@ -36,8 +41,6 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
       ...options,
     });
   };
-
- 
 
   return (
     <div>
@@ -90,68 +93,108 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
               <div className="h-[2px] bg-gray-300 w-[100%] bg-opacity-40 mt-8"></div>
 
               <div className="experience mt-10 border border-gray-300 rounded-lg p-4 shadow-sm">
-                <div
-                  className="flex justify-between items-center cursor-pointer"
-                  onClick={() => setIsOpen(!isOpen)}
-                >
-                  <p className="text-2xl font-light">Experience</p>
-                  {isOpen ? (
-                    <AiFillCaretUp className="text-xl text-gray-600 transition-transform" />
-                  ) : (
-                    <AiFillCaretDown className="text-xl text-gray-600 transition-transform" />
-                  )}
-                </div>
+                {doctorProfileData.data.years_of_experience.map(
+                  (experience, index) => (
+                    <div
+                      key={index}
+                      className="experience-box border-b border-gray-200 py-3 last:border-none"
+                    >
+                      {/* Header Section */}
+                      <div
+                        className="flex justify-between items-center cursor-pointer"
+                        onClick={() => toggleBox(index)}
+                      >
+                        <p className="text-2xl font-light">
+                          Experience {index + 1}
+                        </p>
+                        {openIndex === index ? (
+                          <AiFillCaretUp className="text-xl text-gray-600 transition-transform" />
+                        ) : (
+                          <AiFillCaretDown className="text-xl text-gray-600 transition-transform" />
+                        )}
+                      </div>
 
-                <div
-                  className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                    isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div className="flex justify-between mt-3">
-                    <p className="text-gray-800 text-sm">Job Title</p>
-                    <p className="text-gray-500 text-sm">Resident Doctor</p>
-                  </div>
-                  <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+                      {/* Content Section */}
+                      <div
+                        className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                          openIndex === index
+                            ? "max-h-screen opacity-100"
+                            : "max-h-0 opacity-0"
+                        }`}
+                      >
+                        <div className="flex justify-between mt-3">
+                          <p className="text-gray-800 text-sm">Job Title</p>
+                          <p className="text-gray-500 text-sm">
+                            {experience.jobTitle}
+                          </p>
+                        </div>
+                        <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
 
-                  <div className="flex justify-between mt-3">
-                    <p className="text-gray-800 text-sm">
-                      Organisation Location
-                    </p>
-                    <p className="text-gray-500 text-sm">Cardiac Clinic</p>
-                  </div>
-                  <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+                        <div className="flex justify-between mt-3">
+                          <p className="text-gray-800 text-sm">
+                            Organisation Location
+                          </p>
+                          <p className="text-gray-500 text-sm">
+                            {experience.organizationLocation}
+                          </p>
+                        </div>
+                        <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
 
-                  <div className="flex justify-between mt-3">
-                    <p className="text-gray-800 text-sm">Organisation Name</p>
-                    <p className="text-gray-500 text-sm">Cardiac Clinic</p>
-                  </div>
-                  <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+                        <div className="flex justify-between mt-3">
+                          <p className="text-gray-800 text-sm">
+                            Organisation Name
+                          </p>
+                          <p className="text-gray-500 text-sm">
+                            {experience.organizationName}
+                          </p>
+                        </div>
+                        <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
 
-                  <div className="flex justify-between mt-3">
-                    <p className="text-gray-800 text-sm">Employment Type</p>
-                    <p className="text-gray-500 text-sm">Full time</p>
-                  </div>
-                  <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+                        <div className="flex justify-between mt-3">
+                          <p className="text-gray-800 text-sm">
+                            Employment Type
+                          </p>
+                          <p className="text-gray-500 text-sm">
+                            {experience.employmentType}
+                          </p>
+                        </div>
+                        <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
 
-                  <div className="flex justify-between mt-3">
-                    <p className="text-gray-800 text-sm">Skills</p>
-                    <p className="text-gray-500 text-sm">
-                      Patient Management, Surgical Assistance, Emergency Care
-                    </p>
-                  </div>
-                  <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+                        <div className="flex justify-between mt-3">
+                          <p className="text-gray-800 text-sm">Skills</p>
+                          <div className="text-gray-500 text-sm flex flex-wrap gap-2">
+                            {experience.skills.map((skill, i) => (
+                              <span
+                                key={i}
+                                className="bg-gray-200 rounded px-2 py-1 text-gray-600"
+                              >
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
 
-                  <div className="flex justify-between mt-3">
-                    <p className="text-gray-800 text-sm">Start Date</p>
-                    <p className="text-gray-500 text-sm">August, 2020</p>
-                  </div>
-                  <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+                        <div className="flex justify-between mt-3">
+                          <p className="text-gray-800 text-sm">Start Date</p>
+                          <p className="text-gray-500 text-sm">
+                            {experience.startDate.month},{" "}
+                            {experience.startDate.year}
+                          </p>
+                        </div>
+                        <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
 
-                  <div className="flex justify-between mt-3">
-                    <p className="text-gray-800 text-sm">End Date</p>
-                    <p className="text-gray-500 text-sm">August, 2021</p>
-                  </div>
-                </div>
+                        <div className="flex justify-between mt-3">
+                          <p className="text-gray-800 text-sm">End Date</p>
+                          <p className="text-gray-500 text-sm">
+                            {experience.endDate.month},{" "}
+                            {experience.endDate.year}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                )}
               </div>
             </div>
 
@@ -275,50 +318,55 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
               ))}
 
               {/* hospital details */}
-              <div className="Hospital Details mt-10">
-                <p className="text-2xl font-light">Hospital Address</p>
-                <div className="flex gap-1 mt-3">
-                  <div className="h-[2px] bg-[#00768A] w-[30%]"></div>
-                  <div className="h-[2px] bg-gray-300 w-[70%] bg-opacity-40"></div>
+              {doctorProfileData?.data?.clinic_hospital_address ? (
+                <div className="hospital-details mt-10">
+                  <p className="text-2xl font-light">Hospital Address</p>
+                  <div className="flex gap-1 mt-3">
+                    <div className="h-[2px] bg-[#00768A] w-[30%]"></div>
+                    <div className="h-[2px] bg-gray-300 w-[70%] bg-opacity-40"></div>
+                  </div>
+                  <div className="flex justify-between mt-3">
+                    <p className="text-gray-800 text-sm">Permanent Address</p>
+                    <p className="text-gray-500 text-sm">
+                      {doctorProfileData.data.clinic_hospital_address
+                        .permanentAddress || "N/A"}
+                    </p>
+                  </div>
+                  <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+                  <div className="flex justify-between mt-3">
+                    <p className="text-gray-800 text-sm">City</p>
+                    <p className="text-gray-500 text-sm">
+                      {doctorProfileData.data.clinic_hospital_address.city ||
+                        "N/A"}
+                    </p>
+                  </div>
+                  <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+                  <div className="flex justify-between mt-3">
+                    <p className="text-gray-800 text-sm">Pincode</p>
+                    <p className="text-gray-500 text-sm">
+                      {doctorProfileData.data.clinic_hospital_address.PinCode ||
+                        "N/A"}
+                    </p>
+                  </div>
+                  <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+                  <div className="flex justify-between mt-3">
+                    <p className="text-gray-800 text-sm">State</p>
+                    <p className="text-gray-500 text-sm">
+                      {doctorProfileData.data.clinic_hospital_address.state ||
+                        "N/A"}
+                    </p>
+                  </div>
+                  <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
                 </div>
-                <div className="flex justify-between mt-3">
-                  <p className="text-gray-800 text-sm">Permanent Address</p>
-                  <p className="text-gray-500 text-sm">
-                    {
-                      doctorProfileData?.data?.clinic_hospital_address
-                        ?.permanentAddress
-                    }
-                  </p>
-                </div>
-                <div className="h-[2px] bg-gray-300 w-[100%] bg-opacity-40 mt-3"></div>
-                <div className="flex justify-between mt-3">
-                  <p className="text-gray-800 text-sm">City</p>
-                  <p className="text-gray-500 text-sm">
-                    {doctorProfileData?.data?.clinic_hospital_address?.city}
-                  </p>
-                </div>
-                <div className="h-[2px] bg-gray-300 w-[100%] bg-opacity-40 mt-3"></div>
-                <div className="flex justify-between mt-3">
-                  <p className="text-gray-800 text-sm">Pincode</p>
-                  <p className="text-gray-500 text-sm">
-                    {doctorProfileData?.data?.clinic_hospital_address?.PinCode}
-                  </p>
-                </div>
-                <div className="h-[2px] bg-gray-300 w-[100%] bg-opacity-40 mt-3"></div>
-                <div className="flex justify-between mt-3">
-                  <p className="text-gray-800 text-sm">State</p>
-                  <p className="text-gray-500 text-sm">
-                    {doctorProfileData?.data?.clinic_hospital_address?.state}
-                  </p>
-                </div>
-                <div className="h-[2px] bg-gray-300 w-[100%] bg-opacity-40 mt-3"></div>
-              </div>
+              ) : (
+                <p className="text-gray-500 mt-3">No data found</p>
+              )}
             </div>
           </div>
         </div>
 
         {/* faq section */}
-
+              
         <div className="faq mt-10 border border-gray-300 rounded-lg p-4 shadow-sm">
           <div
             className="flex justify-between items-center cursor-pointer"

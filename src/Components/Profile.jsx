@@ -64,13 +64,8 @@ const Profile = () => {
         }
       );
       setHistory(response.data);
-     
-    } catch (error) {
-     
-    }
+    } catch (error) {}
   };
-
-  
 
   const userData = async () => {
     try {
@@ -84,10 +79,7 @@ const Profile = () => {
         }
       );
       setUserProfileData(response.data);
-      
-    } catch (error) {
-   
-    }
+    } catch (error) {}
   };
 
   const userBookings = async () => {
@@ -102,10 +94,7 @@ const Profile = () => {
         }
       );
       setUserBooking(response.data);
-     
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const docotrData = async () => {
@@ -120,9 +109,7 @@ const Profile = () => {
         }
       );
       setDoctorProfileData(response.data);
-    } catch (error) {
-     
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -163,13 +150,8 @@ const Profile = () => {
         }
       );
       setFamilyData(response.data);
-      
-    } catch (error) {
-   
-    }
+    } catch (error) {}
   };
-
-
 
   if (loading) {
     return <div className="loader"></div>; // Loader is displayed
@@ -265,7 +247,7 @@ const Profile = () => {
                   onClick={() => toggleMenu("profile")}
                 >
                   <div className="flex items-center">
-                    <FaUser className="mr-2" /> User Profile
+                    <FaUser className="mr-2" /> My Profile
                   </div>
                   {selectedMenu === "profile" ? (
                     <FaChevronUp />
@@ -303,7 +285,7 @@ const Profile = () => {
                     onClick={() => toggleMenu("settings")}
                   >
                     <div className="flex items-center">
-                      <FaUserDoctor className="mr-2" /> Doctor Profile
+                      <FaUserDoctor className="mr-2" />My Doctor Profile
                     </div>
                     {selectedMenu === "settings" ? (
                       <FaChevronUp />
@@ -464,7 +446,7 @@ const Profile = () => {
                       type="button"
                       className="text-xl focus:outline-none"
                     >
-                      User Profile
+                      My Profile
                     </button>
                   </div>
                   {isUserProfileOpen && (
