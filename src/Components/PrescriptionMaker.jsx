@@ -44,7 +44,7 @@ const PrescriptionMaker = () => {
   const id = localStorage.getItem("id");
 
   const loadEditData = (data) => {
-    console.log("data", data);
+  
     setEditMedicineData({
       id: data.id, // Store the ID for tracking edits
       medicineName: data.medicineName,

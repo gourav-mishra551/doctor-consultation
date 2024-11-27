@@ -38,7 +38,7 @@ const EditUserDetails = () => {
         }
       );
       setUserData(userData);
-      console.log(response.data.data);
+    
       const data = response.data.data;
       setFormData({
         avatar: data.avatar,
@@ -49,7 +49,7 @@ const EditUserDetails = () => {
         email: data.email || "N/A",
       });
     } catch (error) {
-      console.log(error);
+      
     } finally {
       setLoading(false);
     }
@@ -101,7 +101,7 @@ const EditUserDetails = () => {
         }
       );
     } catch (error) {
-      console.log(error);
+      
     } finally {
       setUpdateLoader(false);
     }
@@ -122,7 +122,7 @@ const EditUserDetails = () => {
       setFormData((prev) => ({ ...prev, avatar: "" })); // Clear the avatar in state
     } catch (error) {
       toast.error("Error deleting Avatar");
-      console.log(error);
+      
     }
   };
 

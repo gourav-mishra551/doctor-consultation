@@ -7,7 +7,7 @@ import { ImCross } from "react-icons/im";
 import Footer from "./Footer";
 import "./DoctorForm.css";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Import icons
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 const DoctorForm = () => {
   const [formValues, setFormValues] = useState({
     specialitycategories: [],
@@ -44,7 +44,7 @@ const DoctorForm = () => {
     ],
   });
 
-  console.log("fgffb", formValues.verification);
+const navigate=useNavigate()
 
   const isNextDisabled =
     formValues.specialitycategories.length === 0 ||
@@ -106,7 +106,7 @@ const DoctorForm = () => {
       setCustomLanguage(""); // Clear the input field
       CustomLangSetOpen(false); // Close the dropdown
     }
-    console.log(formValues.language);
+    
   };
 
   // Remove selected language from the list
@@ -142,7 +142,7 @@ const DoctorForm = () => {
   };
 
   useEffect(() => {
-    console.log(formValues.language); // Logs the updated language value
+   
   }, [formValues.language]);
 
   const handleLanguageChange = (event) => {
@@ -159,15 +159,13 @@ const DoctorForm = () => {
 
   // This useEffect will trigger when formValues.councilName changes
   useEffect(() => {
-    if (formValues.councilName) {
-      console.log("Updated Council Name:", formValues.councilName);
-    }
+   
   }, [formValues.councilName]); // Only triggers when councilName changes
 
   const HandleSkillOfQualification = (index) => {
     if (!QualificationSkill.trim()) return; // Prevent empty skill submission
 
-    console.log("Adding skill: ", QualificationSkill); // Check if this logs twice
+  
 
     // Handle the submission of the custom input value
 
@@ -199,7 +197,7 @@ const DoctorForm = () => {
   const HandleSkillOfExperience = (index) => {
     if (!skillInput.trim()) return; // Prevent empty skill submission
 
-    console.log("Adding skill: ", skillInput); // Check if this logs twice
+  
 
     setFormValues((prevState) => {
       // Copy the previous state
@@ -550,8 +548,7 @@ const DoctorForm = () => {
         formValues.years_of_experience = [];
       }
 
-      // Proceed with form submission
-      console.log("formvalue", formValues);
+     
 
       const token = localStorage.getItem("token");
       const id = localStorage.getItem("Id");
@@ -597,17 +594,17 @@ const DoctorForm = () => {
             },
           }
         );
+        toast.success(res.response.data.msg)
+        navigate("/")
 
-        console.log("result", res.data);
+  
       } catch (res) {
         toast.error(res.response.data.msg);
       }
     }
   };
 
-  const HandlexamSubmit = () => {
-    console.log(formValues.qualifications);
-  };
+ 
 
   const qualificationsOptions = [
     "MBBS",
@@ -635,7 +632,7 @@ const DoctorForm = () => {
   };
 
   const handleQualificationSubmit = () => {
-    console.log(formValues);
+   
   };
 
   const CouncilName = [
@@ -661,7 +658,7 @@ const DoctorForm = () => {
 
   return (
     <div className="bg-[#E3EAF0]">
-      <div className="bg-transparent my-10 sm:max-w-5xl w-full mx-auto h-auto p-10 rounded-xl shadow-lg">
+      <div className="bg-transparent  sm:max-w-5xl w-full mx-auto h-auto p-10 rounded-xl shadow-lg">
         {/* Step Indicator */}
         <div className="flex justify-center mb-8">
           <div className="w-1/2 flex justify-between">
@@ -884,7 +881,7 @@ const DoctorForm = () => {
                     />
                   </div>
                 ) : null}
-                {console.log(formValues.RegistrationNumber)}
+                
                 {/* <div>
                   <label
                     className="text-[#00768A]"
@@ -1098,7 +1095,7 @@ const DoctorForm = () => {
                           <option value="12">December</option>
                         </select>
                       </div>
-                      {console.log(formValues.qualifications[0])}
+                      
                       <div>
                         <label className="block text-sm font-medium text-[#00768A]">
                           Start Year: <span style={{ color: "red" }}>*</span>

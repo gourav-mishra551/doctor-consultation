@@ -19,7 +19,7 @@ const DataFillingForm = () => {
     <div className='max-w-6xl mx-auto flex flex-col gap-10'>
 
       <Formik initialValues={initialValues} onSubmit={(values) => {
-        console.log(values)
+        
       }}>
         {({ values, handleChange, handleSubmit }) => (
           <form onSubmit={handleSubmit}>

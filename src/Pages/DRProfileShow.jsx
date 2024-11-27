@@ -80,7 +80,7 @@ function DRProfileShow() {
                     "id": id
                 }
             });
-            console.log(result.data.data);
+          
             SetDrProfileData(result.data.data);
         } catch (error) {
             console.error(error);
