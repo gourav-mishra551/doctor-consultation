@@ -107,7 +107,7 @@ function DrAppointmentCreation() {
             });
 
             const result = await response.json();  // No need to pass requestData here
-            console.log("result", result);
+         
         } catch (error) {
             console.error("Error:", error);  // Log any errors
         }

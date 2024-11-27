@@ -38,7 +38,7 @@ const DrIndividualProfile = () => {
         `https://api.assetorix.com/ah/api/v1/dc/user/doctors/${id}`
       );
       setIndiProfile(res.data.data);
-      console.log(IndiProfile);
+     
     } catch (error) {
       console.error("Error fetching doctor profile:", error);
     } finally {
@@ -138,20 +138,22 @@ const DrIndividualProfile = () => {
           </p>
 
           {/* Hospital Name */}
-          <p className="text-lg sm:text-xl font-semibold text-white flex items-center gap-2 my-2">
-            Doctor at:
-            <RiHospitalLine className="text-[#00768A] text-2xl sm:text-3xl" />
-            <span className="font-semibold capitalize text-gray-300">
-              {IndiProfile?.hospitalName || "Hospital not available"}
-            </span>
-          </p>
+          {IndiProfile?.hospitalName?.length > 0 ? (
+            <p className="text-lg sm:text-xl font-semibold text-white flex items-center gap-2 my-2">
+              Doctor at:
+              <RiHospitalLine className="text-[#00768A] text-2xl sm:text-3xl" />
+              <span className="font-semibold capitalize text-gray-300">
+                {IndiProfile?.hospitalName || "Hospital not available"}
+              </span>
+            </p>
+          ) : null}
         </div>
       </div>
 
       <div className="sm:max-w-6xl w-full mx-auto mt-10 md:p-5">
         <div className="bg-white rounded-lg shadow-xl transition-shadow hover:shadow-2xl md:p-8 p-4">
-          <ul className="flex justify-center gap-6 text-gray-600 font-medium text-lg border-b-2 pb-3">
-            {["Overview", "Locations", "Reviews", "Availability"].map(
+          <ul className="flex justify-center sm:gap-6 md:gap-6 gap-3 text-gray-600 font-medium text-lg border-b-2 pb-3">
+            {["Overview", "Availability", "Locations", "Reviews"].map(
               (tab, index) => (
                 <li
                   key={index}
@@ -172,13 +174,15 @@ const DrIndividualProfile = () => {
             {activeNav === 1 && (
               <DrIndividualProfileOverview IndiProfile={IndiProfile} />
             )}
-            {activeNav === 2 && (
+
+            {IndiProfile?.hospitalName?.length > 0 && activeNav === 3 && (
               <DrIndividualprofileLocation profile={IndiProfile} />
             )}
-            {activeNav === 3 && (
+
+            {activeNav === 4 && (
               <DrIndividualProfileReviews profile={IndiProfile} />
             )}
-            {activeNav === 4 && (
+            {activeNav === 2 && (
               // <DrIndividualProfileAvailibility profile={IndiProfile} />
               <DrAppointmentBooking
                 IndiProfile={IndiProfile}

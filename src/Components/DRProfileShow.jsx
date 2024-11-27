@@ -65,7 +65,7 @@ function DRProfileShow() {
           },
         }
       );
-      console.log(response.data);
+      
 
       setProfileShow(response.data.data);
     } catch (error) {
@@ -111,11 +111,11 @@ function DRProfileShow() {
 
   // Additional logic to handle when the language is changed
   const handleAdditionalLogic = (value) => {
-    console.log(`Selected Language: ${value}`);
+   
     // Add any other logic you want here
     setSelectLang((prevLangs) => [...prevLangs, value]);
   };
-  console.log(selectLang);
+
 
   // Combined handleChange function
   const combinedHandleChange = (e) => {
@@ -160,9 +160,7 @@ function DRProfileShow() {
           body: JSON.stringify(formData),
         }
       );
-      if (response.ok) {
-        console.log("Profile updated successfully!");
-      }
+     
     } catch (error) {
       console.error("Failed to update profile:", error);
     }

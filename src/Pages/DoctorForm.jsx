@@ -212,12 +212,12 @@ const DoctorForm = () => {
             toast.success('Doctor information submitted successfully!');
         }
 
-        console.log("formvalue", formValues);
+     
         const { permanentAddress, city, state, PinCode } = formValues.clinic_hospital_address;
         const token = localStorage.getItem("token");
         const id = localStorage.getItem("id");
 
-        console.log(formValues.qualifications);
+        
 
         try {
             const res = await axios.post("https://api.assetorix.com/ah/api/v1/dc/user/doctor/temp/add", {
@@ -244,7 +244,7 @@ const DoctorForm = () => {
                 }
             });
 
-            console.log("result", res.data);
+      
         } catch (error) {
             console.error("Error submitting the form", error);
         }

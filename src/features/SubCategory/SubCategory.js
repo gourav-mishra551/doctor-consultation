@@ -21,10 +21,10 @@ const SubCategories = () => {
       try {
         const response = await axios.get(`https://api.assetorix.com/ah/dctr_ctgry`)
         setSubCategoryData(response.data.subCategoryData)
-        console.log(response.data)
+        
       }
       catch (err) {
-        console.log(err)
+     
       }
       finally {
         setLoading(false)

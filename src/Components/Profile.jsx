@@ -64,13 +64,13 @@ const Profile = () => {
         }
       );
       setHistory(response.data);
-      console.log(response.data);
+     
     } catch (error) {
-      console.log(error);
+     
     }
   };
 
-  console.log(userProfileData?.data?.role);
+  
 
   const userData = async () => {
     try {
@@ -84,9 +84,9 @@ const Profile = () => {
         }
       );
       setUserProfileData(response.data);
-      console.log("userdata", response.data);
+      
     } catch (error) {
-      console.log(error);
+   
     }
   };
 
@@ -102,9 +102,9 @@ const Profile = () => {
         }
       );
       setUserBooking(response.data);
-      console.log("user-history", response.data);
+     
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -121,7 +121,7 @@ const Profile = () => {
       );
       setDoctorProfileData(response.data);
     } catch (error) {
-      console.log(error);
+     
     }
   };
 
@@ -163,14 +163,13 @@ const Profile = () => {
         }
       );
       setFamilyData(response.data);
-      console.log(familyData.data);
+      
     } catch (error) {
-      console.log(error);
-      // toast.error(error.response.data);
+   
     }
   };
 
-  console.log(getFamilyEdit);
+
 
   if (loading) {
     return <div className="loader"></div>; // Loader is displayed

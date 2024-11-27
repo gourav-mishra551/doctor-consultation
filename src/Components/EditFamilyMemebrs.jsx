@@ -44,7 +44,7 @@ const EditFamilyMemebrs = ({
           data.relation === "OTHER" ? data.otherRelation || "" : "",
       });
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -89,14 +89,14 @@ const EditFamilyMemebrs = ({
         }
       );
     } catch (error) {
-      console.log(error);
+      
     } finally {
       setEditFamilyPopUp(false);
       getFamilyEdit();
     }
   };
 
-  console.log(getFamilyEdit);
+
 
   return (
     <div className="max-w-xl mx-auto mt-5 py-1 px-5 rounded-xl bg-gray-100">

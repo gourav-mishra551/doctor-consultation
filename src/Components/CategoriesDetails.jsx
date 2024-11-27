@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
-
+import { useParams } from "react-router-dom";
 import { CiSearch } from "react-icons/ci";
 import axios from "axios";
-import TopHeader from "./TopHeader";
 import Faq from "./Faq";
 import DoctorCard from "./DoctorCard/DoctorCard";
 import Footer from "./Footer";
-import Loader from "./Loading/Loader";
+import { RxCross1 } from "react-icons/rx";
 
 
 function CategoriesDetails() {
@@ -18,11 +16,11 @@ function CategoriesDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const [filters, setFilters] = useState({
+    categoryID: "",
     name: "",
     gender: "",
     rating: "",
     visitingMode: "",
-    specialtyName: "",
   });
 
   const handleFilterChange = (filterType, value) => {
@@ -36,7 +34,7 @@ function CategoriesDetails() {
         .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
         .join("&");
       const res = await axios.get(
-        `https://api.assetorix.com/ah/api/v1/dc/user/doctors?categoryID=${id}&${query}`
+        `https://api.assetorix.com/ah/api/v1/dc/user/doctors?${query}`
       );
       setDoctersData(res.data.data);
     } catch (error) {
@@ -46,15 +44,6 @@ function CategoriesDetails() {
   };
 
   useEffect(() => {
-
-
-  // useEffect(() => {
-  //   window.scrollTo(0, 0); // Scroll to top when the component mounts
-
-  //   // Simulate data fetching or component loading with a timer
-  //   const timer = setTimeout(() => {
-  //     setIsLoading(false); // Set loading to false after 500ms (adjust if necessary)
-  //   }, 500);
     FetchCategory(id);
     FetchDoctersData(id);
     window.scroll(0,0)
@@ -67,9 +56,9 @@ function CategoriesDetails() {
       const res = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/user/category/${id}`
       );
-      console.log(res);
+      
 
-      setResult(res.data.data);
+      setResult(res.data);
     
     } catch (error) {
       console.error("Error fetching category data", error);
@@ -109,7 +98,7 @@ function CategoriesDetails() {
           <div
             className="relative h-[40vh] flex justify-center items-center"
             style={{
-              backgroundImage: `url(${result?.image})`,
+              backgroundImage: `url(${result?.data?.image})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -120,10 +109,10 @@ function CategoriesDetails() {
             {/* Content with animation */}
             <div className="relative text-center text-white px-4 flex flex-col justify-center items-center animate-slideIn">
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 transform transition-transform duration-500 ease-in-out hover:scale-105">
-                Consult {result?.specialtyName}
+                Consult {result?.data?.specialtyName}
               </h1>
               <p className="max-w-[500px] text-base sm:text-lg md:text-xl transform transition-transform duration-500 ease-in-out hover:scale-105">
-                {result?.sortDescription}
+                {result?.data?.sortDescription}
               </p>
             </div>
           </div>
@@ -144,9 +133,9 @@ function CategoriesDetails() {
                 {/* Close Button */}
                 <button
                   onClick={() => setShowFilter(false)}
-                  className="absolute top-3 right-3 text-black text-xl sm:text-lg  focus:outline-none"
+                  className="absolute top-3 right-3 text-black text-2xl   focus:outline-none"
                 >
-                  X
+                <RxCross1 />
                 </button>
 
                 {/* Modal Content */}
@@ -231,24 +220,12 @@ function CategoriesDetails() {
                       <select
                         className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
                         onChange={(e) =>
-                          handleFilterChange("specialtyName", e.target.value)
+                          handleFilterChange("categoryID", e.target.value)
                         }
                       >
                         <option value="">All</option>
-                        {[
-                          "Cardiologist",
-                          "Dermatologist",
-                          "Orthopedic Surgeon",
-                          "Gynecologist",
-                          "Neurologist",
-                          "Ophthalmologist",
-                          "Pediatrician",
-                          "Endocrinologist",
-                          "Gastroenterologist",
-                          "Pulmonologist",
-                          "Orthopedic",
-                        ].map((specialist) => (
-                          <option key={specialist} value={specialist}>
+                        {result?.categoryList?.map((specialist , index) => (
+                          <option key={index} value={specialist?._id}>
                             {specialist}
                           </option>
                         ))}
@@ -350,25 +327,13 @@ function CategoriesDetails() {
                   <select
                     className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
                     onChange={(e) =>
-                      handleFilterChange("specialtyName", e.target.value)
+                      handleFilterChange("categoryID", e.target.value)
                     }
                   >
                     <option value="">All</option>
-                    {[
-                      "Cardiologist",
-                      "Dermatologist",
-                      "Orthopedic Surgeon",
-                      "Gynecologist",
-                      "Neurologist",
-                      "Ophthalmologist",
-                      "Pediatrician",
-                      "Endocrinologist",
-                      "Gastroenterologist",
-                      "Pulmonologist",
-                      "Orthopedic",
-                    ].map((specialist) => (
-                      <option key={specialist} value={specialist}>
-                        {specialist}
+                    {result?.categoryList?.map((specialist , index) => (
+                      <option key={index} value={specialist?._id}>
+                        {specialist.specialtyName}
                       </option>
                     ))}
                   </select>
@@ -385,130 +350,6 @@ function CategoriesDetails() {
                 </button>
               </div>
             </div>
-
-            {/* Mobile/Tablet Filter Modal */}
-            {showFilter && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                <div className="bg-white p-5 sm:p-4 w-[90%] sm:w-[80%] md:w-[400px] rounded-lg shadow-lg overflow-hidden">
-                  {/* Close Button */}
-                  <button
-                    onClick={() => setShowFilter(false)}
-                    className="absolute top-3 right-3 text-black text-xl sm:text-lg"
-                  >
-                    X
-                  </button>
-
-                  {/* Modal Content */}
-                  <div className="flex flex-col h-full">
-                    <h2 className="text-xl sm:text-2xl font-semibold text-[#00768A] mb-4">
-                      Filter
-                    </h2>
-
-                    {/* Scrollable Filter Content */}
-                    <div className="overflow-y-auto flex-1 max-h-[70vh] sm:max-h-[60vh]">
-                      {/* Search Input */}
-                      <div className="relative mb-4">
-                        <input
-                          type="text"
-                          placeholder="Search..."
-                          className="p-2 sm:p-3 border border-[#00768A] rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-[#49a8ad] bg-[#e4eaec] text-sm sm:text-base"
-                        />
-                        <CiSearch className="absolute top-3 right-5 text-xl sm:text-2xl font-bold text-[#00768A]" />
-                      </div>
-
-                      {/* Date Range */}
-                      <div className="mb-4">
-                        <p className="font-semibold text-sm sm:text-base">
-                          Date Range
-                        </p>
-                        <input
-                          type="date"
-                          className="p-2 sm:p-3 border border-[#00768A] bg-[#e4eaec] rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-[#49a8ad]"
-                        />
-                      </div>
-
-                      <hr className="my-4" />
-
-                      {/* Gender Filter */}
-                      <div className="flex flex-col mb-4">
-                        <p className="font-semibold text-sm sm:text-base">
-                          Gender
-                        </p>
-                        <label className="inline-flex items-center mb-2 text-sm sm:text-base">
-                          <input
-                            type="radio"
-                            className="form-checkbox text-[#00768A] h-4 w-4"
-                            name="Gender"
-                          />
-                          <span className="ml-1">Male</span>
-                        </label>
-                        <label className="inline-flex items-center text-sm sm:text-base">
-                          <input
-                            type="radio"
-                            className="form-checkbox text-[#00768A] h-4 w-4"
-                            name="Gender"
-                          />
-                          <span className="ml-1">Female</span>
-                        </label>
-                      </div>
-
-                      <hr className="my-4" />
-
-                      {/* Price Range */}
-                      <div className="mb-4">
-                        <p className="font-semibold text-sm sm:text-base">
-                          Price Range
-                        </p>
-                        <input type="range" className="w-full" />
-                      </div>
-
-                      <hr className="my-4" />
-
-                      {/* Specialist Filter */}
-                      <div className="flex flex-col mb-4">
-                        <p className="font-semibold text-sm sm:text-base">
-                          Select Specialist
-                        </p>
-
-                        {[
-                          "Cardiologist",
-                          "Dermatologist",
-                          "Orthopedic Surgeon",
-                          "Gynecologist",
-                          "Neurologist",
-                          "Ophthalmologist",
-                          "Pediatrician",
-                          "Endocrinologist",
-                          "Gastroenterologist",
-                          "Pulmonologist",
-                          "Orthopedic",
-                        ].map((specialist) => (
-                          <label
-                            key={specialist}
-                            className="inline-flex items-center mb-2 text-sm sm:text-base"
-                          >
-                            <input
-                              type="radio"
-                              className="form-checkbox text-[#00768A] h-4 w-4"
-                              name="Specialist"
-                            />
-                            <span className="ml-1">{specialist}</span>
-                          </label>
-                        ))}
-                      </div>
-
-                      {/* Search Button */}
-                      <div className="text-white flex justify-center items-center">
-                        <button className="h-[40px] sm:h-[45px] w-full bg-[#00768A] rounded-xl text-sm sm:text-base">
-                          Search
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {/* Doctor Profile Section */}
             <DoctorCard doctorData={DoctorsData} />
           </div>
@@ -531,12 +372,12 @@ function CategoriesDetails() {
                 justifyContent: "center",
               }}
             >
-              {stripHtmlTags(result.longDescription)}
+              {stripHtmlTags(result?.data.longDescription)}
             </p>
           </div>
 
           {/* FAQ */}
-          <Faq result={result} />
+          <Faq result={result?.data}   />
           <Footer />
         </div>
       )}

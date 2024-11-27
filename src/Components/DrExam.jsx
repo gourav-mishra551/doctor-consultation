@@ -22,7 +22,7 @@ const DrExam = () => {
   const [Error, setError] = useState("");
   const [PriceData, setPriceData] = useState("");
   const [editingSlot, setEditingSlot] = useState(null); // { type: 'offline' or 'online', index: number }
-
+  const [Loading, setLoading] = useState(false);
   //slotDuration
 
   const updatedPrice = Number(PriceData);
@@ -138,7 +138,7 @@ const DrExam = () => {
   // Handle form submission and console log form data
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     const token = localStorage.getItem("token");
     const id = localStorage.getItem("id");
 
@@ -163,24 +163,25 @@ const DrExam = () => {
         }
       );
       toast.success(res.data.msg);
-      console.log(res.data.msg);
-      toast.success("Added successfully...");
-      // If the response has a success message or something useful:
-      // if (res.data && res.data.msg) {
-      //   toast.success(res.data.msg);
-      // } else {
-      //   toast.success("Successfully saved availability!", {
-      //     position: "top-right",
-      //   });
-      // }
-
-      // console.log("result", res.data);
-    } catch (res) {
-      console.log(res.response.data.msg)
       
+      toast.success("Added successfully...");
+     
+    } catch (res) {
+     
+
       toast.error(res.response.data.msg);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (Loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="loader"></div>
+      </div>
+    );
+  }
 
   // Submit function
   function Submit() {

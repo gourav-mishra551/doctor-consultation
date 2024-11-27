@@ -14,6 +14,8 @@ const Login = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    gender: "",
+    dob: "", 
   });
 
   const navigate = useNavigate();
@@ -30,26 +32,10 @@ const Login = () => {
     return re.test(String(email).toLowerCase());
   };
 
-  const validatePassword = (password) => {
-    const re =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-    return re.test(password);
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateEmail(formData.email)) {
-      toast.error("Invalid email address.");
-      return;
-    }
-
-    if (!validatePassword(formData.password)) {
-      toast.error(
-        "Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
-      );
-      return;
-    }
 
     if (!isLogin && formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match.");
@@ -62,8 +48,6 @@ const Login = () => {
         ? "https://api.assetorix.com/ah/api/v1/user/login"
         : "https://api.assetorix.com/ah/api/v1/user/register";
       const response = await axios.post(endpoint, formData);
-      console.log("API response:", response.data);
-      console.log(response);
       if (response.status === 200) {
         toast.success(response.data?.msg);
         localStorage.setItem("token", response.data.x_auth_token);
@@ -76,7 +60,7 @@ const Login = () => {
         }
       }
     } catch (error) {
-      console.log(error);
+      
     
       // Check if the error response contains an array of errors
       if (Array.isArray(error.response?.data?.errors) && error.response.data.errors.length > 0) {
@@ -104,7 +88,7 @@ const Login = () => {
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      console.log("Google Sign-In success:", credentialResponse);
+      
   
       const { data } = await axios.post('https://api.assetorix.com/ah/auth/google/callback', {
         token: credentialResponse.credential,
@@ -116,7 +100,7 @@ const Login = () => {
         withCredentials: true, // Ensure cookies are sent if needed
       });
   
-      console.log("Backend response:", data);
+    
   
       // Store received data in local storage
       localStorage.setItem("token", data.x_auth_token);
@@ -126,7 +110,7 @@ const Login = () => {
      
       navigate("/");
     } catch (error) {
-      console.log("Google Sign-In error:", error.response ? error.response.data.msg : "");
+    
       toast.error("Google Sign-In failed. Please try again.");
     }
   };
@@ -221,6 +205,30 @@ const Login = () => {
                     placeholder="user@email.com"
                     className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-[#1c8e81] focus:outline-none focus:ring focus:ring-opacity-40"
                     required
+                  />
+                </div>
+                <div className= {isLogin ? "hidden" : "block"}>
+                  <label className="block mb-2 text-sm text-[#1c8e81] font-bold">
+                    Gender
+                  </label>
+                  <select  className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-[#1c8e81] focus:outline-none focus:ring focus:ring-opacity-40" name="gender" id="gender" value={formData.gender} onChange={handleChange}>
+                    <option value="male">Male</option>
+                    <option value="femail">Femail</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div className= {isLogin ? "hidden" : "block"}>
+                  <label className="block mb-2 text-sm text-[#1c8e81] font-bold">
+                    Date of Birth (DOB)
+                  </label>
+                  <input
+                    type="date"
+                    name="dob"
+                    value={formData.dob}
+                    onChange={handleChange}
+                    placeholder="user@email.com"
+                    className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-[#1c8e81] focus:outline-none focus:ring focus:ring-opacity-40"
+                   
                   />
                 </div>
                 <div>

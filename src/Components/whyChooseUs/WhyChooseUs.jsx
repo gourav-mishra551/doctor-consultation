@@ -70,7 +70,7 @@ const WhyChooseUs = () => {
   return (
     <div
       ref={sectionRef}
-      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-20"
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:my-20 my-10"
     >
       <div className="text-center mb-12">
         <h2 className="text-4xl font-bold text-[#1c8e81] mb-4">Why Choose Us?</h2>

@@ -35,6 +35,18 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
 
   const bookingSlot = async (e) => {
     e.preventDefault();
+
+    // Validate patient details
+    if (
+      !patientDetails.name.trim() ||
+      !patientDetails.gender.trim() ||
+      !patientDetails.dateOfBirth.trim() ||
+      !patientDetails.reasonForAppointment.trim()
+    ) {
+      toast.error("Please fill in all patient details before booking the slot.");
+      return; // Exit the function without making the API call
+    }
+
     try {
       const id = localStorage.getItem("Id");
       const token = localStorage.getItem("token");
@@ -56,19 +68,16 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
         }
       );
 
-      console.log("Response: ", response);
-
       if (response.status === 201) {
         toast.success("Slot Data saved Successfully!");
         onNext();
       }
     } catch (error) {
       console.error("Error booking slot: ", error);
-      console.log("Error Details: ", error.response);
+      
 
       const errorMessage =
-        error.response?.data?.message ||
-        "Failed to book slot. Please try again.";
+        error.response?.data?.message || "Failed to book slot. Please try again.";
       toast.error(errorMessage);
     }
   };
@@ -80,45 +89,6 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       [name]: value,
     }));
   };
-
-  const SampleNextArrow = (props) => {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={`${className} bg-[#00768A] text-white rounded-full p-3 shadow-lg hover:bg-gray-400`}
-        style={{ ...style, right: "-25px", zIndex: 2 }}
-        onClick={onClick}
-      >
-        ➡️
-      </div>
-    );
-  };
-
-  console.log(IndiProfile);
-
-  const SamplePrevArrow = (props) => {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={`${className} bg-[#00768A] text-white rounded-full p-3 shadow-lg hover:bg-gray-400`}
-        style={{ ...style, left: "-25px", zIndex: 2 }}
-        onClick={onClick}
-      >
-        ⬅️
-      </div>
-    );
-  };
-
-  // const settings = {
-  //   dots: false,
-  //   infinite: false,
-  //   slidesToShow: Math.min(5, doctorAvailability.length), // Show up to 5 or less if data is fewer
-  //   slidesToScroll: 1,
-  //   autoplay: false,
-  //   cssEase: "linear",
-  //   nextArrow: <SampleNextArrow />,
-  //   prevArrow: <SamplePrevArrow />,
-  // };
 
   // Filter slots based on the selected filter
   const getFilteredSlots = (availability) => {
@@ -136,6 +106,13 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
         return [];
     }
   };
+
+  function formatTime(time) {
+    const [hours, minutes] = time.split(":").map(Number); // Split and convert to numbers
+    const period = hours >= 12 ? "PM" : "AM"; // Determine AM or PM
+    const formattedHours = hours % 12 || 12; // Convert 24-hour to 12-hour format (handle 0 and 12)
+    return `${formattedHours}:${String(minutes).padStart(2, "0")} ${period}`; // Pad minutes with 0 if needed
+  }
 
   // Render individual slot
   const renderSlot = (slot) => (
@@ -155,12 +132,10 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
         }
       />
       <p className="text-sm">
-        <span className="font-semibold font-serif ">Time:</span>{" "}
-        {slot.startTime > 12 ? slot.startTime - 12 : slot.startTime}{" "}
-        {slot.startTime >= 12 ? "PM" : "AM"} -{" "}
-        {slot.endTime > 12 ? slot.endTime - 12 : slot.endTime}{" "}
-        {slot.endTime >= 12 ? "PM" : "AM"}
+        <span className="font-semibold font-serif">Time:</span>{" "}
+        {formatTime(slot.startTime)} - {formatTime(slot.endTime)}
       </p>
+
       <p className="text-sm">
         <span className="font-medium">Charge:</span> ₹ {slot.doctorCharge}
       </p>
@@ -185,9 +160,9 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
   );
 
   return (
-    <div className="flex flex-col justify-center md:flex-row gap-8  mx-auto md:p-4 ">
+    <div className="flex flex-col md:flex-col justify-center gap-8 sm:mx-auto p-4 sm:max-w-7xl">
       {/* Header Section */}
-      <div className="md:w-[600px] w-full bg-white shadow-lg rounded-lg p-6">
+      <div className="sm:w-full md:max-w-[600px] max-w-[340px] bg-white sm:shadow-lg rounded-lg sm:p-6 px-6 sm:ml-0 -ml-4">
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-700">
           Book Your Appointment
         </h2>
@@ -198,7 +173,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
             <button
               key={type}
               type="button"
-              className={`px-6 py-2 text-sm font-medium rounded-lg transition-all ${
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
                 filter === type
                   ? "bg-[#00768A] text-white shadow-md"
                   : "bg-gray-200 hover:bg-blue-100"
@@ -213,30 +188,28 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
         {/* Date Slider */}
         {doctorAvailability.length > 1 ? (
           <div className="relative">
-            {/* Left Button */}
             <button
               onClick={scrollLeft}
-              className="absolute flex justify-center items-center z-50 h-[40px] w-[40px] focus:border-none focus:outline-none top-1/2 -left-6 transform -translate-y-1/2 bg-transparent border-2 border-gray-300 text-black p-0 rounded-full shadow-lg hover:bg-gray-100 transition-all duration-300 ease-in-out"
+              className="absolute flex justify-center items-center z-40 h-10 w-10 focus:outline-none top-1/2 -left-4 transform -translate-y-1/2 bg-transparent border-2 border-gray-300 text-black rounded-full shadow-lg hover:bg-gray-100 transition-all"
             >
-              <MdKeyboardArrowLeft className="text-3xl font-bold" />
+              <MdKeyboardArrowLeft className="text-2xl" />
             </button>
 
-            {/* Slot container */}
             <div
               ref={sliderRef}
-              className="flex space-x-6 p-6 bg-blue-50 rounded-md overflow-hidden transition-all duration-300 ease-in-out"
+              className="flex space-x-4 p-4 bg-blue-50 rounded-md overflow-hidden "
             >
               {doctorAvailability.map((availability, index) => (
                 <div
                   key={index}
-                  className={`w-[100px] mx-auto text-center p-4 rounded-lg cursor-pointer transition-all border transform ${
+                  className={`w-24 sm:mx-auto text-center p-4 rounded-lg cursor-pointer ${
                     selectedDate?.selectDate === availability?.selectDate
                       ? "bg-[#00768A] text-white scale-105 shadow-lg"
                       : "bg-gray-200 hover:bg-blue-100 hover:scale-105"
                   }`}
                   onClick={() => setSelectedDate(availability)}
                 >
-                  <p className="text-sm font-medium text-gray-600 ">
+                  <p className={`text-sm font-medium`}>
                     {new Date(availability?.selectDate).toLocaleDateString(
                       "en-US",
                       {
@@ -244,7 +217,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
                       }
                     )}
                   </p>
-                  <p className="text-lg font-bold text-gray-800">
+                  <p className={`text-lg font-bold`}>
                     {new Date(availability?.selectDate).toLocaleDateString(
                       "en-US",
                       {
@@ -256,12 +229,11 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               ))}
             </div>
 
-            {/* Right Button */}
             <button
               onClick={scrollRight}
-              className="absolute flex justify-center items-center z-50 h-[40px] w-[40px] focus:outline-none top-1/2 -right-6 transform -translate-y-1/2 bg-transparent text-black p-0 border-2 border-gray-300 rounded-full shadow-lg hover:bg-gray-100 transition-all duration-300 ease-in-out"
+              className="absolute flex justify-center items-center z-40 h-10 w-10 focus:outline-none top-1/2 -right-4 transform -translate-y-1/2 bg-transparent text-black border-2 border-gray-300 rounded-full shadow-lg hover:bg-gray-100 transition-all"
             >
-              <MdKeyboardArrowRight className="text-3xl font-bold" />
+              <MdKeyboardArrowRight className="text-2xl" />
             </button>
           </div>
         ) : (
@@ -282,7 +254,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
             .map((availability) => (
               <div
                 key={availability._id}
-                className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow "
+                className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow"
               >
                 <p className="font-bold text-lg text-[#00768A] mb-2">
                   {new Date(availability?.selectDate).toLocaleDateString(
@@ -306,95 +278,93 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
 
       {/* Booking Form */}
       {selectedSlot && (
-        <div className="md:w-[40%] mx-auto w-[90vw] bg-white shadow-lg rounded-lg md:p-6">
-          <form
-            onSubmit={bookingSlot}
-            className="flex flex-col max-w-3xl md:w-[450px] p-6 bg-white shadow-lg rounded-lg"
-          >
-            <div className="mb-4">
-              <label
-                htmlFor="name"
-                className="block text-sm font-semibold text-gray-700"
-              >
-                Name:
-              </label>
-              <input
-                id="name"
-                name="name"
-                value={patientDetails.name}
-                onChange={handleChange}
-                required
-                type="text"
-                placeholder="Enter Your Name"
-                className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[#00768A]"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label
-                htmlFor="gender"
-                className="block text-sm font-semibold text-gray-700"
-              >
-                Gender:
-              </label>
-              <select
-                name="gender"
-                value={patientDetails.gender}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[#00768A]"
-              >
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-
-            <div className="mb-4">
-              <label
-                htmlFor="dob"
-                className="block text-sm font-semibold text-gray-700"
-              >
-                Date of Birth:
-              </label>
-              <input
-                id="dob"
-                name="dateOfBirth"
-                value={patientDetails.dateOfBirth}
-                onChange={handleChange}
-                type="date"
-                className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[#00768A]"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label
-                htmlFor="reason"
-                className="block text-sm font-semibold text-gray-700"
-              >
-                Reason for Appointment:
-              </label>
-              <textarea
-                id="reason"
-                name="reasonForAppointment"
-                value={patientDetails.reasonForAppointment}
-                onChange={handleChange}
-                rows="4"
-                required
-                placeholder="Please describe the reason for your visit"
-                className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[#00768A]"
-              ></textarea>
-            </div>
-
-            <button
-              type="submit"
-              onClick={bookingSlot}
-              className="mt-6 w-full px-6 py-3 bg-[#00768A] text-white rounded-lg text-lg transition-all duration-300 hover:bg-[#005f6e]"
+        <form
+          onSubmit={bookingSlot}
+          className="flex flex-col w-full md:w-[450px] p-6 bg-white shadow-lg rounded-lg"
+        >
+          <div className="mb-4">
+            <label
+              htmlFor="name"
+              className="block text-sm font-semibold text-gray-700"
             >
-              Confirm Booking
-            </button>
-          </form>
-        </div>
+              Name: <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="name"
+              name="name"
+              value={patientDetails.name}
+              onChange={handleChange}
+              required
+              type="text"
+              placeholder="Enter Your Name"
+              className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[#00768A]"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="gender"
+              className="block text-sm font-semibold text-gray-700"
+            >
+              Gender:  <span className="text-red-500">*</span>
+            </label>
+            <select
+              name="gender"
+              value={patientDetails.gender}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[#00768A]"
+            >
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="dob"
+              className="block text-sm font-semibold text-gray-700"
+            >
+              Date of Birth:  <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="dob"
+              name="dateOfBirth"
+              value={patientDetails.dateOfBirth}
+              onChange={handleChange}
+              type="date"
+              className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[#00768A]"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="reason"
+              className="block text-sm font-semibold text-gray-700"
+            >
+              Reason for Appointment:  <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              id="reason"
+              name="reasonForAppointment"
+              value={patientDetails.reasonForAppointment}
+              onChange={handleChange}
+              rows="4"
+              required
+              placeholder="Please describe the reason for your visit"
+              className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[#00768A]"
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            className="mt-6 w-full px-6 py-3 bg-[#00768A] text-white rounded-lg text-lg transition-all duration-300 hover:bg-[#005f6e]"
+          >
+            Confirm Booking
+          </button>
+        </form>
       )}
     </div>
   );

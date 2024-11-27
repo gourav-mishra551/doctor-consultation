@@ -15,7 +15,7 @@ const DrProfilePage = () => {
   return (
     <div>
           <DoctorsProfile />
-          <div className="mt-20">
+          <div>
             <Footer />
           </div>
      
