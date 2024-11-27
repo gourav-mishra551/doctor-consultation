@@ -272,8 +272,8 @@ const DoctorsProfile = () => {
                         }
                       >
                         <option value="">All</option>
-                        {result.map((specialist, index) => (
-                          <option key={index} value={specialist._id}>
+                        {result?.map((specialist, index) => (
+                          <option key={index} value={specialist?._id}>
                             {specialist?.specialtyName}
                           </option>
                         ))}
@@ -401,7 +401,7 @@ const DoctorsProfile = () => {
                               >
                                 <option value="">All</option>
                                 {result.map((specialist, index) => (
-                                  <option key={index} value={specialist._id}>
+                                  <option key={index} value={specialist?._id}>
                                     {specialist?.specialtyName}
                                   </option>
                                 ))}
