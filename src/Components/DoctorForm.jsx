@@ -44,16 +44,14 @@ const DoctorForm = () => {
     ],
   });
 
-const navigate=useNavigate()
+  const navigate = useNavigate();
 
   const isNextDisabled =
     formValues.specialitycategories.length === 0 ||
     formValues.language.length === 0 ||
     !formValues.RegistrationNumber ||
-    !formValues.councilName
-    !formValues.verification;
-
-
+    !formValues.councilName;
+  !formValues.verification;
 
   const selectRef = useRef(null);
   const yearsOfExperience = formValues?.years_of_experience || [];
@@ -106,7 +104,6 @@ const navigate=useNavigate()
       setCustomLanguage(""); // Clear the input field
       CustomLangSetOpen(false); // Close the dropdown
     }
-    
   };
 
   // Remove selected language from the list
@@ -141,9 +138,7 @@ const navigate=useNavigate()
     CustomLangSetOpen(false);
   };
 
-  useEffect(() => {
-   
-  }, [formValues.language]);
+  useEffect(() => {}, [formValues.language]);
 
   const handleLanguageChange = (event) => {
     const selectedLanguage = event.target.value;
@@ -158,14 +153,10 @@ const navigate=useNavigate()
   };
 
   // This useEffect will trigger when formValues.councilName changes
-  useEffect(() => {
-   
-  }, [formValues.councilName]); // Only triggers when councilName changes
+  useEffect(() => {}, [formValues.councilName]); // Only triggers when councilName changes
 
   const HandleSkillOfQualification = (index) => {
     if (!QualificationSkill.trim()) return; // Prevent empty skill submission
-
-  
 
     // Handle the submission of the custom input value
 
@@ -196,8 +187,6 @@ const navigate=useNavigate()
 
   const HandleSkillOfExperience = (index) => {
     if (!skillInput.trim()) return; // Prevent empty skill submission
-
-  
 
     setFormValues((prevState) => {
       // Copy the previous state
@@ -329,7 +318,7 @@ const navigate=useNavigate()
         "https://api.assetorix.com/ah/api/v1/dc/user/Category"
       );
       const result = await response.json();
-      const specialty = result.data.map((ele) => ({
+      const specialty = result?.data?.map((ele) => ({
         _id: ele._id,
         specialtyName: ele.specialtyName,
       }));
@@ -548,8 +537,6 @@ const navigate=useNavigate()
         formValues.years_of_experience = [];
       }
 
-     
-
       const token = localStorage.getItem("token");
       const id = localStorage.getItem("Id");
 
@@ -580,7 +567,7 @@ const navigate=useNavigate()
         language,
         years_of_experience,
         qualifications,
-        verification
+        verification,
       };
 
       try {
@@ -594,17 +581,14 @@ const navigate=useNavigate()
             },
           }
         );
-        toast.success(res.response.data.msg)
-        navigate("/")
-
-  
+        console.log("something", res.data.msg);
+        toast.success(res.data.msg);
+        navigate("/");
       } catch (res) {
-        toast.error(res.response.data.msg);
+        toast.error(res?.response?.data?.msg);
       }
     }
   };
-
- 
 
   const qualificationsOptions = [
     "MBBS",
@@ -631,9 +615,7 @@ const navigate=useNavigate()
     });
   };
 
-  const handleQualificationSubmit = () => {
-   
-  };
+  const handleQualificationSubmit = () => {};
 
   const CouncilName = [
     "Punjab Medical Council",
@@ -881,7 +863,7 @@ const navigate=useNavigate()
                     />
                   </div>
                 ) : null}
-                
+
                 {/* <div>
                   <label
                     className="text-[#00768A]"
@@ -947,8 +929,6 @@ const navigate=useNavigate()
                   Next
                 </button>
               </div>
-
-              
             </div>
           )}
 
@@ -1095,7 +1075,7 @@ const navigate=useNavigate()
                           <option value="12">December</option>
                         </select>
                       </div>
-                      
+
                       <div>
                         <label className="block text-sm font-medium text-[#00768A]">
                           Start Year: <span style={{ color: "red" }}>*</span>
