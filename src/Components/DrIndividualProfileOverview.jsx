@@ -6,7 +6,7 @@ import Education from "./Education/Education";
 
 const DrIndividualProfileOverview = ({ IndiProfile }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  console.log(IndiProfile);
+  
   const toggleDescription = () => setIsExpanded(!isExpanded);
 
   return (

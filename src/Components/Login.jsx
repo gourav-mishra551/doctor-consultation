@@ -60,7 +60,7 @@ const Login = () => {
         }
       }
     } catch (error) {
-      console.log(error);
+      
     
       // Check if the error response contains an array of errors
       if (Array.isArray(error.response?.data?.errors) && error.response.data.errors.length > 0) {
@@ -88,7 +88,7 @@ const Login = () => {
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      console.log("Google Sign-In success:", credentialResponse);
+      
   
       const { data } = await axios.post('https://api.assetorix.com/ah/auth/google/callback', {
         token: credentialResponse.credential,
@@ -100,7 +100,7 @@ const Login = () => {
         withCredentials: true, // Ensure cookies are sent if needed
       });
   
-      console.log("Backend response:", data);
+    
   
       // Store received data in local storage
       localStorage.setItem("token", data.x_auth_token);
@@ -110,7 +110,7 @@ const Login = () => {
      
       navigate("/");
     } catch (error) {
-      console.log("Google Sign-In error:", error.response ? error.response.data.msg : "");
+    
       toast.error("Google Sign-In failed. Please try again.");
     }
   };

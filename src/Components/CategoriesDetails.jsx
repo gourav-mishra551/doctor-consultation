@@ -56,7 +56,7 @@ function CategoriesDetails() {
       const res = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/user/category/${id}`
       );
-      console.log(res.data);
+      
 
       setResult(res.data);
     

@@ -24,11 +24,7 @@ const AddFamilyMembers = ({
   });
   const [check, setCheck] = useState(familyPopUp);
 
-  // console.log(setFamilyPopUp);
-  // console.log(familyPopUp);
-  console.log(getFamilyEdit);
-  console.log("Add family popup", addFamilyPopup);
-  console.log("set Add family popup", setAddFamilyPopup);
+
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -95,7 +91,7 @@ const AddFamilyMembers = ({
           },
         }
       );
-      console.log(response.data);
+     
 
       // Success actions
       setSaveLoader(false);
@@ -119,10 +115,7 @@ const AddFamilyMembers = ({
     }
   };
 
-  console.log(addFamilyPopup);
-  console.log("100 number", setFamilyPopUp);
-  console.log("101 number", check);
-  console.log(getFamilyEdit);
+ 
 
   return (
     <div className="sm:max-w-xl mx-auto mt-5 py-1 px-5 rounded-xl bg-gray-100">

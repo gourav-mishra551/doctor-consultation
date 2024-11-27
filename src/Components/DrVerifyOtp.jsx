@@ -16,7 +16,7 @@ const DrVerifyOtp = () => {
         setOtp(otp)
     }
 
-    console.log(storedSignupEmail)
+   
 
     const submitOtp = async (e) => {
         e.preventDefault()
@@ -29,7 +29,7 @@ const DrVerifyOtp = () => {
             }
         }
         catch (error) {
-            console.log(error)
+           
         }
     }
 

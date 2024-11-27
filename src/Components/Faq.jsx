@@ -9,7 +9,7 @@ const Faq = ({result}) => {
 
     const faqs = Array.isArray(result?.FAQ) ? result.FAQ : [];
     
-   console.log(faqs);
+
    
 
     return (

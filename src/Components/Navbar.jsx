@@ -113,7 +113,7 @@ const Navbar = () => {
   };
 
   const handleCategoryClick = (Categoriesdata) => {
-    console.log(Categoriesdata);
+    
   };
   handleCategoryClick();
 
@@ -285,7 +285,7 @@ const Navbar = () => {
         "https://api.assetorix.com/ah/api/v1/dc/user/Category"
       );
       setCategorydata(res.data.data);
-      console.log("cate", Categoriesdata);
+      
     } catch (error) {}
   };
 

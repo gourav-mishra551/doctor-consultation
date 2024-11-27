@@ -10,7 +10,7 @@ import {
 } from "react-icons/md";
 
 const Bookings = ({ history }) => {
-  console.log("History", history);
+  
   const [openSection, setOpenSection] = useState(null);
   const [name, setName] = useState("");
 
@@ -37,7 +37,7 @@ const Bookings = ({ history }) => {
     });
   };
 
-  console.log("name", name);
+  
 
   return (
     <div>

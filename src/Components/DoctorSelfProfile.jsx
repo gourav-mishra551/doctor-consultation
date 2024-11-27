@@ -37,7 +37,7 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
     });
   };
 
-  console.log("doctorProfileData", doctorProfileData);
+ 
 
   return (
     <div>

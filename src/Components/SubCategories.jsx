@@ -28,13 +28,13 @@ const SubCategories = () => {
         setActiveIndex(activeIndex === index ? null : index);
     };
 
-    console.log(id)
+  
 
     const dispatch = useDispatch()
 
     const SubCategoriesData = useSelector((prev) => prev.reducer.doctorsData)
 
-    console.log(SubCategoriesData)
+  
 
     useEffect(() => {
         dispatch(getDrDataById(id))

@@ -34,7 +34,7 @@ const UserBookings = ({ setUserBooking, userBooking }) => {
     });
   };
 
-  console.log(userBooking);
+ 
 
   return (
     <div>
