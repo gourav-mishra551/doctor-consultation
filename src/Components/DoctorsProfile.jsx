@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import axios from "axios";
 import DoctorCard from "./DoctorCard/DoctorCard";
+import { RxCross1 } from "react-icons/rx";
 const DoctorsProfile = () => {
   const [DoctorData, setDoctorData] = useState([]);
   const [Price, setPrice] = useState(null);
@@ -272,8 +273,8 @@ const DoctorsProfile = () => {
                         }
                       >
                         <option value="">All</option>
-                        {result.map((specialist, index) => (
-                          <option key={index} value={specialist._id}>
+                        {result?.map((specialist, index) => (
+                          <option key={index} value={specialist?._id}>
                             {specialist?.specialtyName}
                           </option>
                         ))}
@@ -401,7 +402,7 @@ const DoctorsProfile = () => {
                               >
                                 <option value="">All</option>
                                 {result.map((specialist, index) => (
-                                  <option key={index} value={specialist._id}>
+                                  <option key={index} value={specialist?._id}>
                                     {specialist?.specialtyName}
                                   </option>
                                 ))}

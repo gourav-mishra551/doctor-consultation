@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { IoMdStar } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import noDoctor from "../../Assests/no-dcotor.png"
+import Avatar from '../../../public/DrAvatar.jpg'
+
 
 const DoctorCard = ({ doctorData }) => {
   const [minPrice, setMinPrice] = useState(null);
@@ -24,7 +26,7 @@ const DoctorCard = ({ doctorData }) => {
           if (availableOnlineSlots?.length > 0) {
             minPrice = Math.min(
               minPrice,
-              ...availableOnlineSlots.map((slot) => slot.doctorCharge)
+              ...availableOnlineSlots?.map((slot) => slot.doctorCharge)
             );
           }
         }
@@ -43,7 +45,7 @@ const DoctorCard = ({ doctorData }) => {
           if (availableOfflineSlots?.length > 0) {
             minPrice = Math.min(
               minPrice,
-              ...availableOfflineSlots.map((slot) => slot.doctorCharge)
+              ...availableOfflineSlots?.map((slot) => slot.doctorCharge)
             );
           }
         }
@@ -68,27 +70,27 @@ const DoctorCard = ({ doctorData }) => {
         <div
 
           key={index}
-          className="w-full h-min sm:w-[48%] md:w-[90%] lg:flex bg-white p-4 md:p-6 flex flex-col lg:flex-row items-start rounded-lg shadow-md border border-gray-200 transition-transform duration-300 hover:scale-105"
+          className="w-[95%] mx-auto   h-min  sm:w-[48%] md:w-[90%] lg:flex bg-white p-3 -translate-x-1 sm:translate-x-0  md:p-6 flex flex-col justify-center items-center lg:flex-row  rounded-lg shadow-md border border-gray-200 transition-transform duration-300 hover:scale-105"
         >
           <div>
-            <div className="flex flex-col lg:flex-row gap-6 items-center lg:items-start w-full">
+            <div className="flex flex-col lg:flex-row gap-6 items-center  lg:items-start w-full ">
               {/* Profile Image */}
               <div className="flex-shrink-0 bg-[#f3f3f3] rounded-full border-2 border-[#00768A] h-24 w-24 md:h-32 md:w-32 lg:h-40 lg:w-40 overflow-hidden">
                 <img
-                  src={doctor.userData.avatar}
-                  alt="Doctor"
+                  src={doctor?.userData?.avatar || Avatar}
+                  alt={Avatar}
                   className="h-full w-full object-cover"
                 />
               </div>
 
               {/* Doctor Info */}
               <div className="flex-1 text-center lg:text-left">
-                <div className="flex  justify-between border-b pb-2 flex-row md:justify-between items-center lg:items-start">
+                <div className="flex  justify-between border-b pb-2 flex-row md:justify-between items-center lg:items-start border min-w-[350px]">
                   <div className="flex flex-col md:flex-row md:gap-4 items-center">
-                    <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-[#00768A] capitalize">
-                      Dr. {doctor.userData.name}
+                    <h2 className="text-lg md:text-xl lg:text-2xl sm:w-[100%] w-[70%] font-bold text-[#00768A] capitalize">
+                      Dr. {doctor?.userData?.name}
                     </h2>
-                    <p className="text-md text-sm md:text-lg text-[#8B4513] font-semibold">
+                    <p className="text-md text-sm md:text-lg text-[#8B4513] font-semibold w-full">
                       Experience: {doctor?.totalExperience} years
                     </p>
                   </div>
@@ -111,7 +113,7 @@ const DoctorCard = ({ doctorData }) => {
                 </div>
 
                 <div className="flex gap-2 flex-wrap mt-2 justify-center lg:justify-start">
-                  {doctor.services_offered.map((service, idx) => (
+                  {doctor?.services_offered?.map((service, idx) => (
                     <span
                       key={idx}
                       className="bg-[#f0f9f9] px-3 py-1 rounded-lg text-[#00768A] font-medium text-sm"
@@ -124,7 +126,7 @@ const DoctorCard = ({ doctorData }) => {
                 <div className="flex flex-wrap gap-2 mt-2 justify-center lg:justify-start">
                   {doctor?.years_of_experience?.map((experience, idx) => (
                     <React.Fragment key={idx}>
-                      {experience.skills.map((skill, skillIdx) => (
+                      {experience?.skills?.map((skill, skillIdx) => (
                         <span
                           key={skillIdx}
                           className="text-sm text-gray-600 font-semibold"

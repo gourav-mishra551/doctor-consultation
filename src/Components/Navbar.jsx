@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiSearch, FiUser } from "react-icons/fi";
 import axios from "axios";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
@@ -52,14 +52,17 @@ const Navbar = () => {
     CenterOfExcellence: (
       <div className="grid grid-cols-2 gap-4 mt-5">
         {Categoriesdata.map((ele, index) => (
-          <div key={index} className="flex flex-col gap-3 items-start">
+          <Link to={`/categories-details/${ele._id}`} onClick={()=>setIsOpen(false)}>
+          <div key={index} className="flex flex-col gap-3 items-start cursor-pointer">
             <img
               src={ele.image}
               alt="image"
               className="h-[35px] w-[35px] -mt-1"
             />
             <p>{ele.specialtyName}</p>
+            <p>See all Doctors</p>
           </div>
+          </Link>
         ))}
       </div>
     ),
@@ -372,32 +375,26 @@ const Navbar = () => {
                 >
                   {isLogin ? (
                     <div className="flex flex-col justify-between">
-                      <div className="border rounded-lg ">
-                        <p className="text-semibold text-gray-400 text-[16px] capitalize text-center ">
-                          Welcome {localStorage.getItem("user")}
+                      <div className="shadow-sm rounded-lg ">
+                        <p className="text-semibold text-gray-400 text-[16px] capitalize leading-4 py-1 text-center ">
+                          Welcome <br /> <span className=" font-bold text-[#00768A] opacity-85">
+                          {localStorage.getItem("user")}
+                             </span>
                         </p>
                       </div>
-                      <div>
+                      <div className="py-3">
                         <Link to="/profile">
                           <h4 className="sm:text-[16px] text-[14px] my-1">
                             Profile
                           </h4>
                         </Link>
-                        <Link to="/profile">
-                          <h4 className="sm:text-[16px] text-[14px] my-1">
-                            Your Order
-                          </h4>
-                        </Link>
+                      
                         <Link to="/support-center">
                           <h4 className="sm:text-[16px] text-[14px] my-1">
                             Report a problem
                           </h4>
                         </Link>
-                        <Link to="/contact">
-                          <h4 className="sm:text-[16px] text-[14px] my-1">
-                            Bulk Buy
-                          </h4>
-                        </Link>
+                       
                       </div>
                       <div className="float-end ">
                         <button
@@ -416,19 +413,13 @@ const Navbar = () => {
                       >
                         Login
                       </h4>
-                      <Link to="/profile">
-                        <h4 className="sm:text-[16px] text-[14px] my-1">
-                          Your Order
-                        </h4>
-                      </Link>
+                    
                       <Link to="/support-center">
                         <h4 className="sm:text-[16px] text-[14px] my-1">
                           Report a problem
                         </h4>
                       </Link>
-                      <h4 className="sm:text-[16px] text-[14px] my-1">
-                        Bulk Buy
-                      </h4>
+                      
                     </div>
                   )}
                 </div>
