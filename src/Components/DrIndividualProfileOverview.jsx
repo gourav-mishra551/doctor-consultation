@@ -3,7 +3,7 @@ import { FaGraduationCap, FaCommentDots } from "react-icons/fa";
 import { MdOutlineAddLocation } from "react-icons/md";
 import ExperienceCard from "./DrExperience/ExperienceCard";
 import Education from "./Education/Education";
-
+import DrAvatar from '../../src/Assests/DrAvatar.jpg'
 const DrIndividualProfileOverview = ({ IndiProfile }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
@@ -87,7 +87,7 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
 
               <div className="flex justify-center">
                 <img
-                  src={IndiProfile?.userData?.avatar}
+                  src={IndiProfile?.userData?.avatar || DrAvatar}
                   alt={IndiProfile?.userData?.name}
                   className="md:max-w-[200px] mx-auto md:rounded-full md:h-auto h-[250px] my-3 md:w-auto w-screen shadow-md"
                 />

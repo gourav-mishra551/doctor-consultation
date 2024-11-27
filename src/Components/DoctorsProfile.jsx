@@ -147,7 +147,7 @@ const DoctorsProfile = () => {
       const res = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/user/doctors?${query}`
       );
-      setDoctersData(res.data.data);
+      setDoctorData(res.data.data);
     } catch (error) {
       console.error("Error fetching filtered data", error);
     }
