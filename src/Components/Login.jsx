@@ -14,8 +14,8 @@ const Login = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    gender: "",
-    dob: "", 
+    gender: "male",
+    dateOfBirth: "", 
   });
 
   const navigate = useNavigate();
@@ -211,7 +211,7 @@ const Login = () => {
                   <label className="block mb-2 text-sm text-[#1c8e81] font-bold">
                     Gender
                   </label>
-                  <select  className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-[#1c8e81] focus:outline-none focus:ring focus:ring-opacity-40" name="gender" id="gender" value={formData.gender} onChange={handleChange}>
+                  <select  className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-[#1c8e81] focus:outline-none focus:ring focus:ring-opacity-40" defaultValue={"male"} name="gender" id="gender" value={formData.gender} onChange={handleChange}>
                     <option value="male">Male</option>
                     <option value="femail">Femail</option>
                     <option value="other">Other</option>
@@ -223,8 +223,8 @@ const Login = () => {
                   </label>
                   <input
                     type="date"
-                    name="dob"
-                    value={formData.dob}
+                    name="dateOfBirth"
+                    value={formData.dateOfBirth}
                     onChange={handleChange}
                     placeholder="user@email.com"
                     className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-[#1c8e81] focus:outline-none focus:ring focus:ring-opacity-40"
