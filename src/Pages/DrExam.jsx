@@ -146,7 +146,7 @@ const DrExam = () => {
     //   ...prev,
     //   selectSlotDuration: prev.selectSlotDuration, // Don't split the value, use as is
     // }));
-    console.log(data);
+   
 
     const token = localStorage.getItem("token");
     const id = localStorage.getItem("id");
@@ -169,7 +169,7 @@ const DrExam = () => {
         }
 
       )
-      console.log("result", res.data);
+ 
     } catch (error) {
       setErrorShow(true)
       toast.success(error.message, {

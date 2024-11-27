@@ -72,7 +72,7 @@ const EditProfile = () => {
   const id = localStorage.getItem("id");
 
   const getDoctorsForEdit = async () => {
-    console.log("checking get dr daata");
+   
     try {
       const response = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/doctor`,
@@ -155,13 +155,13 @@ const EditProfile = () => {
         ],
       });
 
-      console.log(response.data);
+      
     } catch (error) {
-      console.log(error);
+     
     }
   };
 
-  console.log("Data to edit", dataToEdit.name);
+
 
   const patchDoctorData = async (e) => {
     e.preventDefault();
@@ -178,7 +178,7 @@ const EditProfile = () => {
       );
       toast.success("Data updated successfully!");
     } catch (error) {
-      console.log(error);
+     
     }
   };
 

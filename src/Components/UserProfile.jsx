@@ -18,9 +18,9 @@ const UserProfile = () => {
           },
         });
         setUserData(userData);
-        console.log(userData);
+     
       } catch (error) {
-        console.log(error);
+        
       } finally {
         setLoading(false);
       }

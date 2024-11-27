@@ -56,7 +56,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
         }
       );
 
-      console.log("Response: ", response);
+      
 
       if (response.status === 201) {
         toast.success("Slot Data saved Successfully!");
@@ -64,7 +64,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       }
     } catch (error) {
       console.error("Error booking slot: ", error);
-      console.log("Error Details: ", error.response);
+      
 
       const errorMessage =
         error.response?.data?.message ||
@@ -94,7 +94,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
     );
   };
 
-  console.log(IndiProfile);
+ 
 
   const SamplePrevArrow = (props) => {
     const { className, style, onClick } = props;

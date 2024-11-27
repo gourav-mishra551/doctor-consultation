@@ -17,7 +17,7 @@ const ViewFamilyMembers = ({ familyData, getFamilyEdit }) => {
   const id = localStorage.getItem("Id");
   const user = localStorage.getItem("user");
 
-  console.log(id, user);
+
 
   const deleteFamily = async () => {
     try {
@@ -33,7 +33,7 @@ const ViewFamilyMembers = ({ familyData, getFamilyEdit }) => {
       );
       toast.success("Deleted Successfully...");
     } catch (error) {
-      console.log(error);
+     
     } finally {
       getFamilyEdit();
     }
@@ -45,8 +45,7 @@ const ViewFamilyMembers = ({ familyData, getFamilyEdit }) => {
     return new Intl.DateTimeFormat("en-US", options).format(date);
   }
 
-  console.log(addFamilyPopup);
-  console.log(setAddFamilyPopup);
+
 
   return (
     <>

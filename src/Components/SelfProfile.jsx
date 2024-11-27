@@ -1,7 +1,7 @@
 import React from "react";
 
 const SelfProfile = ({ userprofiledata }) => {
-  console.log("user profile data", userprofiledata);
+  
   return (
     <div>
       <div className="bg-white shadow-md rounded-lg p-6 max-w-4xl mx-auto my-8">

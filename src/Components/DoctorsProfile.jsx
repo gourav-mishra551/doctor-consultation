@@ -41,7 +41,7 @@ const DoctorsProfile = () => {
         "https://api.assetorix.com/ah/api/v1/dc/user/doctors"
       );
       setDoctorData(res.data.data);
-      console.log(DoctorData);
+      
     } catch (error) { }
     finally {
       setIsLoading(false)
@@ -72,7 +72,7 @@ const DoctorsProfile = () => {
         .flat() ?? [];
     // const onlineSlots = DoctorData[0]?.doctorAvailability[0]?.onlineSlots ?? [];
 
-    console.log("dfgjfdjb", offlineSlots);
+   
 
     // Extract doctor charges
     const offlineCharge = offlineSlots
@@ -82,8 +82,7 @@ const DoctorsProfile = () => {
       .map((drCharge) => drCharge?.doctorCharge)
       .filter((charge) => charge != null);
 
-    console.log("onlineCharge", onlineCharge);
-    console.log("offlineCharge", offlineCharge);
+ 
 
     // Initialize price variable
     let price = null;
@@ -109,7 +108,6 @@ const DoctorsProfile = () => {
       }
     }
 
-    console.log("Lowest price:", price);
     setPrice(price); // Update state with the lowest price
     setIsLoading(false); // Set loading to false when done
     return price;
@@ -117,7 +115,7 @@ const DoctorsProfile = () => {
 
   // Effect for logging Price updates
   useEffect(() => {
-    console.log("Price updated:", Price);
+   
   }, [Price]);
 
   // Effect to run CheckLowestPrice once DoctorData is available
@@ -156,7 +154,7 @@ const DoctorsProfile = () => {
   };
 
   return (
-    <div className="bg-[#CEDDE4]">
+    <div className="bg-[#CEDDE4] pb-9">
       {
         isLoading ? (
           <div>

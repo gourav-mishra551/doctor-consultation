@@ -38,7 +38,7 @@ const DrIndividualProfile = () => {
         `https://api.assetorix.com/ah/api/v1/dc/user/doctors/${id}`
       );
       setIndiProfile(res.data.data);
-      console.log(IndiProfile);
+     
     } catch (error) {
       console.error("Error fetching doctor profile:", error);
     } finally {
