@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import axios from "axios";
 import DoctorCard from "./DoctorCard/DoctorCard";
+import { RxCross1 } from "react-icons/rx";
 const DoctorsProfile = () => {
   const [DoctorData, setDoctorData] = useState([]);
   const [Price, setPrice] = useState(null);

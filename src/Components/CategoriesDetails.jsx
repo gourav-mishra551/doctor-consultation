@@ -226,7 +226,7 @@ function CategoriesDetails() {
                         <option value="">All</option>
                         {result?.categoryList?.map((specialist , index) => (
                           <option key={index} value={specialist?._id}>
-                            {specialist}
+                            {specialist?.specialtyName}
                           </option>
                         ))}
                       </select>

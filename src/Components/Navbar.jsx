@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiSearch, FiUser } from "react-icons/fi";
 import axios from "axios";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
@@ -52,14 +52,17 @@ const Navbar = () => {
     CenterOfExcellence: (
       <div className="grid grid-cols-2 gap-4 mt-5">
         {Categoriesdata.map((ele, index) => (
-          <div key={index} className="flex flex-col gap-3 items-start">
+          <Link to={`/categories-details/${ele._id}`} onClick={()=>setIsOpen(false)}>
+          <div key={index} className="flex flex-col gap-3 items-start cursor-pointer">
             <img
               src={ele.image}
               alt="image"
               className="h-[35px] w-[35px] -mt-1"
             />
             <p>{ele.specialtyName}</p>
+            <p>See all Doctors</p>
           </div>
+          </Link>
         ))}
       </div>
     ),
