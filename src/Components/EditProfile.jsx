@@ -72,7 +72,6 @@ const EditProfile = () => {
   const id = localStorage.getItem("id");
 
   const getDoctorsForEdit = async () => {
-   
     try {
       const response = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/doctor`,
@@ -154,14 +153,8 @@ const EditProfile = () => {
           },
         ],
       });
-
-      
-    } catch (error) {
-     
-    }
+    } catch (error) {}
   };
-
-
 
   const patchDoctorData = async (e) => {
     e.preventDefault();
@@ -177,9 +170,7 @@ const EditProfile = () => {
         }
       );
       toast.success("Data updated successfully!");
-    } catch (error) {
-     
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -834,7 +825,7 @@ const EditProfile = () => {
                 <div className="flex flex-col gap-1">
                   <label className="px-2 font-bold">Services</label>
                   <div className="flex flex-col gap-2">
-                    {dataToEdit.services_offered.map((service, index) => (
+                    {dataToEdit?.services_offered?.map((service, index) => (
                       <div key={index} className="flex gap-3 items-center">
                         <input
                           type="text"
@@ -843,7 +834,9 @@ const EditProfile = () => {
                           value={service || ""}
                           onChange={(e) => handleServiceChange(e, index)}
                           onBlur={() =>
-                            updateServicesInBackend(dataToEdit.services_offered)
+                            updateServicesInBackend(
+                              dataToEdit?.services_offered
+                            )
                           } // Update backend on blur
                         />
                         <button

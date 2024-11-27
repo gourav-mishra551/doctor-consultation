@@ -10,7 +10,6 @@ import {
 } from "react-icons/md";
 
 const Bookings = ({ history }) => {
-  
   const [openSection, setOpenSection] = useState(null);
   const [name, setName] = useState("");
 
@@ -37,19 +36,16 @@ const Bookings = ({ history }) => {
     });
   };
 
-  
-
   return (
     <div>
-      <div className="sm:max-w-5xl w-full mx-auto sm:my-8 space-y-4">
-        <div className="top-detail-section">
-          <p className="text-gray-500 font-light">Your Previous Bookings</p>
-        </div>
-        {history?.data?.map((consultation, index) => (
-          <>
+      <div>
+        <div className="sm:max-w-5xl w-full mx-auto sm:my-8 space-y-4">
+          <div className="top-detail-section">
+            <p className="text-gray-500 font-light">Your Previous Bookings</p>
+          </div>
+          {history?.data?.map((consultation, index) => (
             <div key={index} className="bg-white shadow-lg rounded-lg">
               <div
-                key={index}
                 className="flex justify-between items-center p-4 cursor-pointer bg-[#1495AB] text-white rounded-t-lg"
                 onClick={() => toggleSection(index)}
               >
@@ -166,7 +162,7 @@ const Bookings = ({ history }) => {
                     </span>
                   </div>
 
-                  {/* make prescription */}
+                  {/* Make prescription */}
                   <div className="flex flex-col sm:w-[150px] w-full ">
                     <button className="bg-[#944120] hover:bg-[#6e341d] transition-all duration-500 ease-in-out p-2 text-white rounded-md">
                       Make prescription
@@ -175,8 +171,8 @@ const Bookings = ({ history }) => {
                 </div>
               )}
             </div>
-          </>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
