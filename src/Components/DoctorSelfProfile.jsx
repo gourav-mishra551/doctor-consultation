@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaPhoneAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 const DoctorSelfProfile = ({ doctorProfileData }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +18,8 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
       doctorProfileData?.data?.specialitycategories || [];
     return specialityCategories.length > 0 ? specialityCategories[0]._id : null;
   });
+
+  const navigate = useNavigate();
 
   const handleSpecialityClick = (id) => {
     // If the clicked ID is already open, close it; otherwise, open it and close others
@@ -73,12 +76,12 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
           <div className="h-[1px] bg-gray-300 w-[100%] bg-opacity-40 sm:mt-3"></div>
 
           <div className="mt-10 sm:flex sm:gap-10">
-            <div className="image sm:w-[60%] w-[100%]">
+            <div className="image sm:w-[50%] w-[100%]">
               <div>
                 <img
                   src={doctorProfileData?.data?.userData?.avatar}
                   alt=""
-                  className="opacity-80"
+                  className="opacity-80 w-[50%]"
                 />
               </div>
 
@@ -92,110 +95,125 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
               </div>
               <div className="h-[2px] bg-gray-300 w-[100%] bg-opacity-40 mt-8"></div>
 
-              <div className="experience mt-10 border border-gray-300 rounded-lg p-4 shadow-sm">
-                {doctorProfileData.data.years_of_experience.map(
-                  (experience, index) => (
-                    <div
-                      key={index}
-                      className="experience-box border-b border-gray-200 py-3 last:border-none"
-                    >
-                      {/* Header Section */}
+              {/* experience section added */}
+              {doctorProfileData.data.years_of_experience.length > 0 ? (
+                <div className="experience mt-10 border border-gray-300 rounded-lg p-4 shadow-sm">
+                  {doctorProfileData.data.years_of_experience.map(
+                    (experience, index) => (
                       <div
-                        className="flex justify-between items-center cursor-pointer"
-                        onClick={() => toggleBox(index)}
+                        key={index}
+                        className="experience-box border-b border-gray-200 py-3 last:border-none"
                       >
-                        <p className="text-2xl font-light">
-                          Experience {index + 1}
-                        </p>
-                        {openIndex === index ? (
-                          <AiFillCaretUp className="text-xl text-gray-600 transition-transform" />
-                        ) : (
-                          <AiFillCaretDown className="text-xl text-gray-600 transition-transform" />
-                        )}
-                      </div>
-
-                      {/* Content Section */}
-                      <div
-                        className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                          openIndex === index
-                            ? "max-h-screen opacity-100"
-                            : "max-h-0 opacity-0"
-                        }`}
-                      >
-                        <div className="flex justify-between mt-3">
-                          <p className="text-gray-800 text-sm">Job Title</p>
-                          <p className="text-gray-500 text-sm">
-                            {experience.jobTitle}
+                        {/* Header Section */}
+                        <div
+                          className="flex justify-between items-center cursor-pointer"
+                          onClick={() => toggleBox(index)}
+                        >
+                          <p className="text-2xl font-light">
+                            Experience {index + 1}
                           </p>
+                          {openIndex === index ? (
+                            <AiFillCaretUp className="text-xl text-gray-600 transition-transform" />
+                          ) : (
+                            <AiFillCaretDown className="text-xl text-gray-600 transition-transform" />
+                          )}
                         </div>
-                        <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
 
-                        <div className="flex justify-between mt-3">
-                          <p className="text-gray-800 text-sm">
-                            Organisation Location
-                          </p>
-                          <p className="text-gray-500 text-sm">
-                            {experience.organizationLocation}
-                          </p>
-                        </div>
-                        <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+                        {/* Content Section */}
+                        <div
+                          className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                            openIndex === index
+                              ? "max-h-screen opacity-100"
+                              : "max-h-0 opacity-0"
+                          }`}
+                        >
+                          <div className="flex justify-between mt-3">
+                            <p className="text-gray-800 text-sm">Job Title</p>
+                            <p className="text-gray-500 text-sm">
+                              {experience.jobTitle}
+                            </p>
+                          </div>
+                          <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
 
-                        <div className="flex justify-between mt-3">
-                          <p className="text-gray-800 text-sm">
-                            Organisation Name
-                          </p>
-                          <p className="text-gray-500 text-sm">
-                            {experience.organizationName}
-                          </p>
-                        </div>
-                        <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+                          <div className="flex justify-between mt-3">
+                            <p className="text-gray-800 text-sm">
+                              Organisation Location
+                            </p>
+                            <p className="text-gray-500 text-sm">
+                              {experience.organizationLocation}
+                            </p>
+                          </div>
+                          <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
 
-                        <div className="flex justify-between mt-3">
-                          <p className="text-gray-800 text-sm">
-                            Employment Type
-                          </p>
-                          <p className="text-gray-500 text-sm">
-                            {experience.employmentType}
-                          </p>
-                        </div>
-                        <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+                          <div className="flex justify-between mt-3">
+                            <p className="text-gray-800 text-sm">
+                              Organisation Name
+                            </p>
+                            <p className="text-gray-500 text-sm">
+                              {experience.organizationName}
+                            </p>
+                          </div>
+                          <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
 
-                        <div className="flex justify-between mt-3">
-                          <p className="text-gray-800 text-sm">Skills</p>
-                          <div className="text-gray-500 text-sm flex flex-wrap gap-2">
-                            {experience.skills.map((skill, i) => (
-                              <span
-                                key={i}
-                                className="bg-gray-200 rounded px-2 py-1 text-gray-600"
-                              >
-                                {skill}
-                              </span>
-                            ))}
+                          <div className="flex justify-between mt-3">
+                            <p className="text-gray-800 text-sm">
+                              Employment Type
+                            </p>
+                            <p className="text-gray-500 text-sm">
+                              {experience.employmentType}
+                            </p>
+                          </div>
+                          <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+
+                          <div className="flex justify-between mt-3">
+                            <p className="text-gray-800 text-sm">Skills</p>
+                            <div className="text-gray-500 text-sm flex flex-wrap gap-2">
+                              {experience.skills.map((skill, i) => (
+                                <span
+                                  key={i}
+                                  className="bg-gray-200 rounded px-2 py-1 text-gray-600"
+                                >
+                                  {skill}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+
+                          <div className="flex justify-between mt-3">
+                            <p className="text-gray-800 text-sm">Start Date</p>
+                            <p className="text-gray-500 text-sm">
+                              {experience.startDate.month},{" "}
+                              {experience.startDate.year}
+                            </p>
+                          </div>
+                          <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+
+                          <div className="flex justify-between mt-3">
+                            <p className="text-gray-800 text-sm">End Date</p>
+                            <p className="text-gray-500 text-sm">
+                              {experience.endDate.month},{" "}
+                              {experience.endDate.year}
+                            </p>
                           </div>
                         </div>
-                        <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
-
-                        <div className="flex justify-between mt-3">
-                          <p className="text-gray-800 text-sm">Start Date</p>
-                          <p className="text-gray-500 text-sm">
-                            {experience.startDate.month},{" "}
-                            {experience.startDate.year}
-                          </p>
-                        </div>
-                        <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
-
-                        <div className="flex justify-between mt-3">
-                          <p className="text-gray-800 text-sm">End Date</p>
-                          <p className="text-gray-500 text-sm">
-                            {experience.endDate.month},{" "}
-                            {experience.endDate.year}
-                          </p>
-                        </div>
                       </div>
-                    </div>
-                  )
-                )}
-              </div>
+                    )
+                  )}
+                </div>
+              ) : (
+                <div className="flex justify-center items-center flex-col gap-5 h-[200px] w-auto">
+                  <p className="font-normal">
+                    No experience found Please add experience
+                  </p>
+                  <button
+                    onClick={() => navigate("/edit-profile")}
+                    className="bg-[#00768A] text-white px-3 py-1 rounded-md"
+                  >
+                    Add Experience
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col sm:w-[40%] w-[100%]">
@@ -319,12 +337,15 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
 
               {/* hospital details */}
               {doctorProfileData?.data?.clinic_hospital_address ? (
+                // If the hospital address exists, show the details
                 <div className="hospital-details mt-10">
                   <p className="text-2xl font-light">Hospital Address</p>
                   <div className="flex gap-1 mt-3">
                     <div className="h-[2px] bg-[#00768A] w-[30%]"></div>
                     <div className="h-[2px] bg-gray-300 w-[70%] bg-opacity-40"></div>
                   </div>
+
+                  {/* Permanent Address */}
                   <div className="flex justify-between mt-3">
                     <p className="text-gray-800 text-sm">Permanent Address</p>
                     <p className="text-gray-500 text-sm">
@@ -333,6 +354,8 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
                     </p>
                   </div>
                   <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+
+                  {/* City */}
                   <div className="flex justify-between mt-3">
                     <p className="text-gray-800 text-sm">City</p>
                     <p className="text-gray-500 text-sm">
@@ -341,6 +364,8 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
                     </p>
                   </div>
                   <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+
+                  {/* Pincode */}
                   <div className="flex justify-between mt-3">
                     <p className="text-gray-800 text-sm">Pincode</p>
                     <p className="text-gray-500 text-sm">
@@ -349,6 +374,8 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
                     </p>
                   </div>
                   <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
+
+                  {/* State */}
                   <div className="flex justify-between mt-3">
                     <p className="text-gray-800 text-sm">State</p>
                     <p className="text-gray-500 text-sm">
@@ -359,39 +386,61 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
                   <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
                 </div>
               ) : (
-                <p className="text-gray-500 mt-3">No data found</p>
+                // If no hospital address exists, show the message and button
+                <div className="flex justify-center items-center flex-col gap-5 h-[200px] w-auto">
+                  <p className="font-normal">
+                    No hospital address found. Please add a hospital address.
+                  </p>
+                  <button
+                    onClick={() => navigate("/edit-profile")}
+                    className="bg-[#00768A] text-white px-3 py-1 rounded-md"
+                  >
+                    Add Hospital Address
+                  </button>
+                </div>
               )}
             </div>
           </div>
         </div>
 
         {/* faq section */}
-              
-        <div className="faq mt-10 border border-gray-300 rounded-lg p-4 shadow-sm">
-          <div
-            className="flex justify-between items-center cursor-pointer"
-            onClick={() => setIsFAQOpen(!isFAQOpen)}
-          >
-            <p className="text-gray-800 font-light text-xl">FAQ's</p>
-            {isFAQOpen ? (
-              <AiFillCaretUp className="text-xl text-gray-600 transition-transform" />
-            ) : (
-              <AiFillCaretDown className="text-xl text-gray-600 transition-transform" />
-            )}
-          </div>
-          {doctorProfileData?.data?.FAQ?.map((faq) => (
+        {doctorProfileData?.data?.FAQ.length > 0 ? (
+          <div className="faq mt-10 border border-gray-300 rounded-lg p-4 shadow-sm">
             <div
-              className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                isFAQOpen
-                  ? "max-h-screen opacity-100 mt-2"
-                  : "max-h-0 opacity-0"
-              }`}
+              className="flex justify-between items-center cursor-pointer"
+              onClick={() => setIsFAQOpen(!isFAQOpen)}
             >
-              <p>{faq?.title}</p>
-              <p className="text-gray-500 font-light">{faq?.value}</p>
+              <p className="text-gray-800 font-light text-xl">FAQ's</p>
+              {isFAQOpen ? (
+                <AiFillCaretUp className="text-xl text-gray-600 transition-transform" />
+              ) : (
+                <AiFillCaretDown className="text-xl text-gray-600 transition-transform" />
+              )}
             </div>
-          ))}
-        </div>
+            {doctorProfileData?.data?.FAQ?.map((faq) => (
+              <div
+                className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                  isFAQOpen
+                    ? "max-h-screen opacity-100 mt-2"
+                    : "max-h-0 opacity-0"
+                }`}
+              >
+                <p>{faq?.title}</p>
+                <p className="text-gray-500 font-light">{faq?.value}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex justify-center items-center flex-col gap-5 h-[200px] w-auto">
+            <p className="font-normal">No FAQ found. Please add a FAQ.</p>
+            <button
+              onClick={() => navigate("/edit-profile")}
+              className="bg-[#00768A] text-white px-3 py-1 rounded-md"
+            >
+              Add FAQ
+            </button>
+          </div>
+        )}
       </>
       {/* ))}  */}
     </div>
