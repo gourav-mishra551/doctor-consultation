@@ -5,7 +5,7 @@ import { CiBookmarkCheck } from "react-icons/ci";
 import { FaEdit } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 
-const AllSlots = () => {
+const AllSlots = ({ activeSection, setActiveSection }) => {
   const [slotsData, setSlotsData] = useState([]);
   const [popUp, setPopUp] = useState(false);
   const [appointmentId, setAppointmentId] = useState(null);
@@ -120,132 +120,150 @@ const AllSlots = () => {
 
   return (
     <>
-      <div className="indictors flex justify-center items-center gap-5">
-        <div className="red flex items-center gap-1">
-          <div className="h-[15px] w-[15px] bg-blue-800"></div>
-          <p>Online slots</p>
-        </div>
-        <div className="green flex items-center gap-1">
-          <div className="h-[15px] w-[15px] bg-red-800"></div>
-          <p>Booked slots</p>
-        </div>
-        <div className="blue flex items-center gap-1">
-          <div className="h-[15px] w-[15px] bg-green-800"></div>
-          <p>Offline slots</p>
-        </div>
-      </div>
-      <div className="grid sm:grid-cols-2 grid-cols-1 gap-5 sm:p-6 h-auto">
-        {slotsData?.doctorAvailabilities?.map((data, index) => (
-          <div
-            key={index}
-            className="w-full mx-auto p-6 bg-white rounded-lg shadow-lg border border-gray-200 h-auto"
-          >
-            <div className="mb-6">
-              <h2 className="sm:text-2xl text-xl text-center font-bold text-[#00768A]">
-                Appointment Details
-              </h2>
-              <p className="text-sm text-gray-500 font-semibold text-end">
-                {formatDateWithTodayOrTomorrow(data?.selectDate)}
-              </p>
+      {slotsData?.doctorAvailabilities?.length > 0 ? (
+        <>
+          <div className="indictors flex justify-center items-center gap-5">
+            <div className="red flex items-center gap-1">
+              <div className="h-[15px] w-[15px] bg-blue-800"></div>
+              <p>Online slots</p>
             </div>
-            <div className="grid grid-cols-2 gap-2 mb-8">
-              <div>
-                <p className="text-sm font-semibold text-gray-600">Currency</p>
-                <p className="text-gray-800">{data?.currency || "N/A"}</p>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-600">
-                  Visiting Mode
-                </p>
-                <p className="text-gray-800">{data?.visitingMode || "N/A"}</p>
-              </div>
+            <div className="green flex items-center gap-1">
+              <div className="h-[15px] w-[15px] bg-red-800"></div>
+              <p>Booked slots</p>
             </div>
-            <div>
-              <div className="space-y-6">
-                {data?.onlineSlots?.length > 0 && (
-                  <div>
-                    <h4 className="text-md font-medium text-blue-600 mb-2">
-                      Online Slots
-                    </h4>
-                    <div className="flex overflow-x-auto scrollbar-hide space-x-4 p-4 bg-blue-50 rounded-md">
-                      {data?.onlineSlots.map((slot) => (
-                        <div
-                          key={slot._id}
-                          className={`min-w-max px-4 py-2 rounded-lg shadow-md text-center ${
-                            slot?.isBooked
-                              ? "bg-red-100 text-red-800"
-                              : "bg-blue-100 text-blue-800"
-                          }`}
-                        >
-                          {slot?.isBooked ? (
-                            <CiBookmarkCheck className="inline-block mr-2" />
-                          ) : (
-                            <FaEdit
-                              onClick={() => {
-                                handleEditClick(slot), setSubId(slot._id);
-                                setAppointmentId(data._id);
-                              }}
-                              className="inline-block mr-2 cursor-pointer text-sm"
-                            />
-                          )}
-                          {convertTo12HourFormat(slot?.startTime)} -{" "}
-                          {convertTo12HourFormat(slot?.endTime)}
-                          {data.currency && (
-                            <span className="ml-4 bg-[#00768A] text-white rounded-sm px-3">
-                              {data.currency === "INR" &&
-                                `₹ ${slot.doctorCharge}`}
-                            </span>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {data?.offlineSlots?.length > 0 && (
-                  <div>
-                    <h4 className="text-md font-medium text-green-600 mb-2">
-                      Offline Slots
-                    </h4>
-                    <div className="flex overflow-x-auto scrollbar-hide space-x-4 p-4 bg-green-50 rounded-md">
-                      {data?.offlineSlots.map((slot) => (
-                        <div
-                          key={slot._id}
-                          className={`min-w-max px-4 py-2 rounded-lg shadow-md text-center ${
-                            slot?.isBooked
-                              ? "bg-red-100 text-red-800"
-                              : "bg-green-100 text-green-800"
-                          }`}
-                        >
-                          {slot?.isBooked ? (
-                            <CiBookmarkCheck className="inline-block mr-2" />
-                          ) : (
-                            <FaEdit
-                              onClick={() => {
-                                handleEditClick(slot), setSubId(slot._id);
-                                setAppointmentId(data._id);
-                              }}
-                              className="inline-block mr-2 cursor-pointer text-sm"
-                            />
-                          )}
-                          {convertTo12HourFormat(slot?.startTime)} -{" "}
-                          {convertTo12HourFormat(slot?.endTime)}
-                          {data.currency && (
-                            <span className="ml-4 bg-[#00768A] text-white rounded-sm px-3">
-                              {data.currency === "INR" &&
-                                `₹ ${slot.doctorCharge}`}
-                            </span>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
+            <div className="blue flex items-center gap-1">
+              <div className="h-[15px] w-[15px] bg-green-800"></div>
+              <p>Offline slots</p>
             </div>
           </div>
-        ))}
-      </div>
+          <div className="grid sm:grid-cols-2 grid-cols-1 gap-5 sm:p-6 h-auto">
+            {slotsData?.doctorAvailabilities?.map((data, index) => (
+              <div
+                key={index}
+                className="w-full mx-auto p-6 bg-white rounded-lg shadow-lg border border-gray-200 h-auto"
+              >
+                <div className="mb-6">
+                  <h2 className="sm:text-2xl text-xl text-center font-bold text-[#00768A]">
+                    Appointment Details
+                  </h2>
+                  <p className="text-sm text-gray-500 font-semibold text-end">
+                    {formatDateWithTodayOrTomorrow(data?.selectDate)}
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-2 mb-8">
+                  <div>
+                    <p className="text-sm font-semibold text-gray-600">
+                      Currency
+                    </p>
+                    <p className="text-gray-800">{data?.currency || "N/A"}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-600">
+                      Visiting Mode
+                    </p>
+                    <p className="text-gray-800">
+                      {data?.visitingMode || "N/A"}
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <div className="space-y-6">
+                    {data?.onlineSlots?.length > 0 && (
+                      <div>
+                        <h4 className="text-md font-medium text-blue-600 mb-2">
+                          Online Slots
+                        </h4>
+                        <div className="flex overflow-x-auto scrollbar-hide space-x-4 p-4 bg-blue-50 rounded-md">
+                          {data?.onlineSlots.map((slot) => (
+                            <div
+                              key={slot._id}
+                              className={`min-w-max px-4 py-2 rounded-lg shadow-md text-center ${
+                                slot?.isBooked
+                                  ? "bg-red-100 text-red-800"
+                                  : "bg-blue-100 text-blue-800"
+                              }`}
+                            >
+                              {slot?.isBooked ? (
+                                <CiBookmarkCheck className="inline-block mr-2" />
+                              ) : (
+                                <FaEdit
+                                  onClick={() => {
+                                    handleEditClick(slot), setSubId(slot._id);
+                                    setAppointmentId(data._id);
+                                  }}
+                                  className="inline-block mr-2 cursor-pointer text-sm"
+                                />
+                              )}
+                              {convertTo12HourFormat(slot?.startTime)} -{" "}
+                              {convertTo12HourFormat(slot?.endTime)}
+                              {data.currency && (
+                                <span className="ml-4 bg-[#00768A] text-white rounded-sm px-3">
+                                  {data.currency === "INR" &&
+                                    `₹ ${slot.doctorCharge}`}
+                                </span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {data?.offlineSlots?.length > 0 && (
+                      <div>
+                        <h4 className="text-md font-medium text-green-600 mb-2">
+                          Offline Slots
+                        </h4>
+                        <div className="flex overflow-x-auto scrollbar-hide space-x-4 p-4 bg-green-50 rounded-md">
+                          {data?.offlineSlots.map((slot) => (
+                            <div
+                              key={slot._id}
+                              className={`min-w-max px-4 py-2 rounded-lg shadow-md text-center ${
+                                slot?.isBooked
+                                  ? "bg-red-100 text-red-800"
+                                  : "bg-green-100 text-green-800"
+                              }`}
+                            >
+                              {slot?.isBooked ? (
+                                <CiBookmarkCheck className="inline-block mr-2" />
+                              ) : (
+                                <FaEdit
+                                  onClick={() => {
+                                    handleEditClick(slot), setSubId(slot._id);
+                                    setAppointmentId(data._id);
+                                  }}
+                                  className="inline-block mr-2 cursor-pointer text-sm"
+                                />
+                              )}
+                              {convertTo12HourFormat(slot?.startTime)} -{" "}
+                              {convertTo12HourFormat(slot?.endTime)}
+                              {data.currency && (
+                                <span className="ml-4 bg-[#00768A] text-white rounded-sm px-3">
+                                  {data.currency === "INR" &&
+                                    `₹ ${slot.doctorCharge}`}
+                                </span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <div className="flex flex-col gap-3 justify-center items-center">
+          <p className="text-center text-gray-500">No Slots Available</p>
+          <button
+            onClick={() => setActiveSection("create-slots")}
+            className="bg-[#00768A] text-white py-1 px-2 rounded-xl"
+          >
+            Create Slots
+          </button>
+        </div>
+      )}
 
       {popUp && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 backdrop-blur-sm p-3 sm:p-0 lg:p-2">

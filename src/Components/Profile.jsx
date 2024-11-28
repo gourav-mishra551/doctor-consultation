@@ -164,7 +164,7 @@ const Profile = () => {
       <div className="bg-gray-300 bg-opacity-50 w-full h-[1px] mt-5"></div>
       <div className="sm:flex gap-10 p-10">
         {/* desktop section */}
-        <div className="left h-[400px] w-[20%] sm:flex hidden flex-col mt-5 shadow-xl sticky top-[200px]">
+        <div className="left h-[600px] w-[20%] sm:flex hidden flex-col mt-5 shadow-xl sticky top-[100px]">
           <nav className="flex-1 p-2">
             <ul>
               {/* Home Section */}
@@ -632,7 +632,12 @@ const Profile = () => {
           )}
           {activeSection === "edituserprofile" && <EditUserDetails />}
           {activeSection === "create-slots" && <CreateSlotsByDr />}
-          {activeSection === "view-slots" && <AllSlots />}
+          {activeSection === "view-slots" && (
+            <AllSlots
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
+            />
+          )}
         </div>
       </div>
 
