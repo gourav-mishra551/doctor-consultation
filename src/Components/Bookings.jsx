@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CiChat1 } from "react-icons/ci";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoIosTimer } from "react-icons/io";
@@ -9,9 +9,29 @@ import {
   MdSpatialAudioOff,
 } from "react-icons/md";
 
-const Bookings = ({ history }) => {
+const Bookings = () => {
   const [openSection, setOpenSection] = useState(null);
   const [name, setName] = useState("");
+  const [history, setHistory] = useState([]);
+
+  const bookings = async () => {
+    try {
+      const response = await axios.get(
+        "https://api.assetorix.com/ah/api/v1/dc/doctor/history",
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      setHistory(response.data);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    bookings();
+  });
 
   const toggleSection = (index) => {
     setOpenSection(openSection === index ? null : index);
@@ -35,8 +55,6 @@ const Bookings = ({ history }) => {
       ...options,
     });
   };
-
-  console.log(history);
 
   return (
     <div>
