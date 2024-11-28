@@ -43,7 +43,9 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       !patientDetails.dateOfBirth.trim() ||
       !patientDetails.reasonForAppointment.trim()
     ) {
-      toast.error("Please fill in all patient details before booking the slot.");
+      toast.error(
+        "Please fill in all patient details before booking the slot."
+      );
       return; // Exit the function without making the API call
     }
 
@@ -74,10 +76,10 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       }
     } catch (error) {
       console.error("Error booking slot: ", error);
-      
 
       const errorMessage =
-        error.response?.data?.message || "Failed to book slot. Please try again.";
+        error.response?.data?.message ||
+        "Failed to book slot. Please try again.";
       toast.error(errorMessage);
     }
   };
@@ -160,7 +162,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
   );
 
   return (
-    <div className="flex flex-col md:flex-col justify-center gap-8 sm:mx-auto p-4 sm:max-w-7xl">
+    <div className="flex flex-col md:flex-col sm:flex-row justify-center gap-8 sm:mx-auto p-4 sm:max-w-7xl">
       {/* Header Section */}
       <div className="sm:w-full md:max-w-[600px] max-w-[340px] bg-white sm:shadow-lg rounded-lg sm:p-6 px-6 sm:ml-0 -ml-4">
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-700">
@@ -293,7 +295,12 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               id="name"
               name="name"
               value={patientDetails.name}
-              onChange={handleChange}
+              onChange={(e) => {
+                const regex = /^[a-zA-Z\s]*$/; // Allows only letters and spaces
+                if (regex.test(e.target.value)) {
+                  handleChange(e); // Update state only if the input is valid
+                }
+              }}
               required
               type="text"
               placeholder="Enter Your Name"
@@ -306,7 +313,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               htmlFor="gender"
               className="block text-sm font-semibold text-gray-700"
             >
-              Gender:  <span className="text-red-500">*</span>
+              Gender: <span className="text-red-500">*</span>
             </label>
             <select
               name="gender"
@@ -326,7 +333,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               htmlFor="dob"
               className="block text-sm font-semibold text-gray-700"
             >
-              Date of Birth:  <span className="text-red-500">*</span>
+              Date of Birth: <span className="text-red-500">*</span>
             </label>
             <input
               id="dob"
@@ -344,7 +351,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               htmlFor="reason"
               className="block text-sm font-semibold text-gray-700"
             >
-              Reason for Appointment:  <span className="text-red-500">*</span>
+              Reason for Appointment: <span className="text-red-500">*</span>
             </label>
             <textarea
               id="reason"

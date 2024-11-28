@@ -375,7 +375,7 @@ const Navbar = () => {
                 >
                   {isLogin ? (
                     <div className="flex flex-col justify-between">
-                      <div className="border rounded-lg ">
+                      <div className="border rounded-lg " onClick={()=>navigate("/profile")}>
                         <p className="text-semibold text-gray-400 text-[16px] capitalize text-center ">
                           Welcome {localStorage.getItem("user")}
                         </p>
