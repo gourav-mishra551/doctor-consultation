@@ -31,7 +31,6 @@ const Profile = () => {
   const [history, setHistory] = useState([]);
   const [userProfileData, setUserProfileData] = useState([]);
   const [doctorProfileData, setDoctorProfileData] = useState([]);
-  const [activeSection, setActiveSection] = useState("bookings");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
   const [isDoctorProfileOpen, setIsDoctorProfileOpen] = useState(false);
@@ -40,6 +39,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [isFamilyOpen, setIsFamilyOpen] = useState(false);
   const [userBooking, setUserBooking] = useState([]);
+  const [activeSection, setActiveSection] = useState("selfuserprofile");
 
   const toggleMenu = (menu) => {
     if (selectedMenu === menu) {
@@ -48,6 +48,8 @@ const Profile = () => {
       setSelectedMenu(menu);
     }
   };
+
+  console.log(userProfileData?.data?.role);
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -285,7 +287,8 @@ const Profile = () => {
                     onClick={() => toggleMenu("settings")}
                   >
                     <div className="flex items-center">
-                      <FaUserDoctor className="mr-2" />My Doctor Profile
+                      <FaUserDoctor className="mr-2" />
+                      My Doctor Profile
                     </div>
                     {selectedMenu === "settings" ? (
                       <FaChevronUp />

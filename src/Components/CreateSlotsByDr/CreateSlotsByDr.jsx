@@ -81,7 +81,7 @@ const CreateSlotsByDr = () => {
   const handleChange = (e, slotIndex, isOffline) => {
     const { name, value } = e.target;
 
-    // If handling doctorCharge, update specific slot's doctorCharge as a number
+    // Case: Updating doctorCharge (convert value to number)
     if (name === "doctorCharge") {
       const updatedSlots = (
         isOffline ? data.offlineSlots : data.onlineSlots
@@ -93,17 +93,17 @@ const CreateSlotsByDr = () => {
         [isOffline ? "offlineSlots" : "onlineSlots"]: updatedSlots,
       }));
     }
-    // Handle selectSlotDuration to convert string into an array of strings
+    // Case: Updating selectSlotDuration (convert string to array of strings)
     else if (name === "selectSlotDuration") {
-      // Split the input by commas or spaces and leave as strings
-      const updatedSlotDuration = value.split(","); // Assuming comma-separated input like "30, 45, 60"
-
+      const updatedSlotDuration = value
+        .split(",")
+        .map((duration) => duration.trim());
       setData((prev) => ({
         ...prev,
-        selectSlotDuration: updatedSlotDuration, // Set it as an array of strings
+        selectSlotDuration: updatedSlotDuration,
       }));
     }
-    // Handle other fields
+    // Default Case: Updating other fields directly
     else {
       setData((prev) => ({
         ...prev,
@@ -142,7 +142,6 @@ const CreateSlotsByDr = () => {
     //   selectSlotDuration: prev.selectSlotDuration, // Don't split the value, use as is
     // }));
 
-
     const token = localStorage.getItem("token");
     const id = localStorage.getItem("id");
     try {
@@ -165,7 +164,7 @@ const CreateSlotsByDr = () => {
           },
         }
       );
-   
+      toast.success("Slot successfully generated...");
     } catch (error) {
       setErrorShow(true);
       toast.success(error.message, {
@@ -344,6 +343,7 @@ const CreateSlotsByDr = () => {
                 To
               </label>
               <input
+                step="1"
                 type="time"
                 required
                 onChange={handleChange}
@@ -361,6 +361,7 @@ const CreateSlotsByDr = () => {
                 Select Slot Duration (minutes)
               </label>
               <input
+                step="1"
                 type="number"
                 required
                 onChange={handleChange}
