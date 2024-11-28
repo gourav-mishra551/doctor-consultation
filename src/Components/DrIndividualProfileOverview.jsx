@@ -3,11 +3,21 @@ import { FaGraduationCap, FaCommentDots } from "react-icons/fa";
 import { MdOutlineAddLocation } from "react-icons/md";
 import ExperienceCard from "./DrExperience/ExperienceCard";
 import Education from "./Education/Education";
-import DrAvatar from '../../src/Assests/DrAvatar.jpg'
+import DrAvatar from "../../src/Assests/DrAvatar.jpg";
 const DrIndividualProfileOverview = ({ IndiProfile }) => {
+  // const [isExpanded, setIsExpanded] = useState(false);
+
+  // const toggleDescription = () => setIsExpanded(!isExpanded);
   const [isExpanded, setIsExpanded] = useState(false);
+  const aboutText = IndiProfile?.aboutDoctor || "";
+
+  // Split the text into words
+  const words = aboutText.split(/\s+/);
   
-  const toggleDescription = () => setIsExpanded(!isExpanded);
+
+  const toggleDescription = () => {
+    setIsExpanded((prev) => !prev);
+  };
 
   return (
     <div className=" bg-gray-100 md:py-10 md:px-5">
@@ -15,7 +25,7 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
         {/* Profile Section */}
         <div className=" flex sm:flex-row justify-center items-center  flex-col md:gap-10 mt-5 md:p-6 md:w-auto  mx-auto rounded-xl shadow-lg bg-[#e1f0f3]">
           {/* Left Section: Doctor Profile */}
-          <div className="border-2 border-gray-300 rounded-xl md:p-6 p-2 flex-1 h-auto">
+          <div className="border-2 border-gray-300 rounded-xl md:p-6 p-2 flex-1 h-auto w-[100%] ">
             <div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -95,8 +105,9 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
             </div>
 
             {/* About Doctor Section */}
-            <div
-              className="about-dr mt-8 p-6 bg-gray-50 rounded-xl shadow-md transition-colors duration-300 hover:bg-blue-50"
+
+            {/* <div
+              className="about-dr mt-8 p-6 bg-gray-50 rounded-xl shadow-md transition-colors duration-300 hover:bg-blue-50 w-full overflow-hidden box-border"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
@@ -109,14 +120,41 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
                   isExpanded ? "line-clamp-none" : "line-clamp-5"
                 } transition-all duration-300`}
               >
-               {IndiProfile?.aboutDoctor}
+                {IndiProfile?.aboutDoctor}
               </p>
+             
               <button
                 onClick={toggleDescription}
                 className="mt-3 text-[#00768A] font-semibold"
               >
                 {isExpanded ? "Read Less" : "Read More"}
               </button>
+              <div className="w-full bg-[#00768A] h-[2px] mt-5"></div>
+            </div> */}
+
+            <div className="about-dr mt-8 p-6 bg-gray-50 rounded-xl shadow-md transition-colors duration-300 hover:bg-blue-50 w-full max-w-4xl mx-auto">
+              <p className="font-bold text-3xl text-[#00768A] mb-4">
+                About Doctor
+              </p>
+
+              {/* Show text conditionally based on state */}
+              <p className="text-gray-700 transition-all duration-300 whitespace-normal break-words">
+                {isExpanded
+                  ? aboutText
+                  : words.slice(0, 71).join(" ") +
+                    (words.length > 71 ? "..." : "")}
+              </p>
+
+              {/* Conditionally render the Read More/Less button */}
+              {words.length > 71 && (
+                <button
+                  onClick={toggleDescription}
+                  className="mt-3 text-[#00768A] font-semibold focus:outline-none"
+                >
+                  {isExpanded ? "Read Less" : "Read More"}
+                </button>
+              )}
+
               <div className="w-full bg-[#00768A] h-[2px] mt-5"></div>
             </div>
 

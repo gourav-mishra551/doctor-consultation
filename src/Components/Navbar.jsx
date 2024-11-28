@@ -375,6 +375,7 @@ const Navbar = () => {
                 >
                   {isLogin ? (
                     <div className="flex flex-col justify-between">
+
                       <div className="shadow-sm rounded-lg ">
                         <p className="text-semibold text-gray-400 text-[16px] capitalize leading-4 py-1 text-center ">
                           Welcome <br /> <span className=" font-bold text-[#00768A] opacity-85">
