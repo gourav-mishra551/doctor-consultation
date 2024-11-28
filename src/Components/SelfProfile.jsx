@@ -8,16 +8,16 @@ const SelfProfile = ({ userprofiledata }) => {
         {/* Header with Avatar and Name */}
         <div className="flex items-center space-x-4 border-b pb-4 mb-4">
           <img
-            src={userprofiledata.data.avatar}
+            src={userprofiledata?.data?.avatar}
             alt="userprofiledata.data Avatar"
             className="w-20 h-20 rounded-full object-cover"
           />
           <div>
             <h2 className="text-2xl font-bold text-gray-800">
-              {userprofiledata.data.name}
+              {userprofiledata?.data?.name}
             </h2>
             <p className="text-sm text-gray-500">
-              UHID: {userprofiledata.data.uhid}
+              UHID: {userprofiledata?.data?.uhid}
             </p>
           </div>
         </div>
@@ -28,7 +28,7 @@ const SelfProfile = ({ userprofiledata }) => {
           <div className="flex flex-col">
             <span className="text-sm text-gray-500">Authentication Method</span>
             <span className="text-lg font-semibold text-gray-800 uppercase">
-              {userprofiledata.data.authMethod}
+              {userprofiledata?.data?.authMethod}
             </span>
           </div>
 
@@ -36,7 +36,7 @@ const SelfProfile = ({ userprofiledata }) => {
           <div className="flex flex-col">
             <span className="text-sm text-gray-500">Date of Birth</span>
             <span className="text-lg font-semibold text-gray-800">
-              {userprofiledata.data.dateOfBirth || "N/A"}
+              {userprofiledata?.data?.dateOfBirth || "N/A"}
             </span>
           </div>
 
@@ -44,7 +44,7 @@ const SelfProfile = ({ userprofiledata }) => {
           <div className="flex flex-col">
             <span className="text-sm text-gray-500">Email</span>
             <span className="text-lg font-semibold text-gray-800">
-              {userprofiledata.data.email}
+              {userprofiledata?.data?.email}
             </span>
           </div>
 
@@ -52,7 +52,7 @@ const SelfProfile = ({ userprofiledata }) => {
           <div className="flex flex-col">
             <span className="text-sm text-gray-500">Gender</span>
             <span className="text-lg font-semibold text-gray-800">
-              {userprofiledata.data.gender || "N/A"}
+              {userprofiledata?.data?.gender || "N/A"}
             </span>
           </div>
 
@@ -60,7 +60,7 @@ const SelfProfile = ({ userprofiledata }) => {
           <div className="flex flex-col">
             <span className="text-sm text-gray-500">Google ID</span>
             <span className="text-lg font-semibold text-gray-800">
-              {userprofiledata.data.googleId || "N/A"}
+              {userprofiledata?.data?.googleId || "N/A"}
             </span>
           </div>
 
@@ -68,7 +68,7 @@ const SelfProfile = ({ userprofiledata }) => {
           <div className="flex flex-col">
             <span className="text-sm text-gray-500">Mobile</span>
             <span className="text-lg font-semibold text-gray-800">
-              {userprofiledata.data.mobile || "N/A"}
+              {userprofiledata?.data?.mobile || "N/A"}
             </span>
           </div>
         </div>

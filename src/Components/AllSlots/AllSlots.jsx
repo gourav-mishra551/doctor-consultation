@@ -10,12 +10,13 @@ const AllSlots = () => {
   const [popUp, setPopUp] = useState(false);
   const [appointmentId, setAppointmentId] = useState(null);
   const [subId, setSubId] = useState(null);
+  const [updateLoader, setUpdateLoader] = useState(false);
 
   const [formData, setFormData] = useState({
     startTime: "",
     endTime: "",
     doctorCharge: "",
-    isBooked: false,
+    isBooked: "",
   });
 
   const token = localStorage.getItem("token");
@@ -33,10 +34,7 @@ const AllSlots = () => {
         }
       );
       setSlotsData(response.data.data);
-      
-    } catch (error) {
-   
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -92,6 +90,7 @@ const AllSlots = () => {
   const patchSlots = async (e) => {
     e.preventDefault();
     try {
+      setUpdateLoader(true);
       const response = await axios.patch(
         `https://api.assetorix.com/ah/api/v1/dc/doctor/availbility/${appointmentId}/${subId}`,
         formData,
@@ -105,12 +104,14 @@ const AllSlots = () => {
       toast.success("Updated Successfully...");
       allSlots();
       setPopUp(false);
+      console.log(formData);
     } catch (error) {
       console.log(error.response.data.msg);
       toast.error(error.response.data.msg);
       setPopUp(false);
     } finally {
       allSlots();
+      setUpdateLoader(false);
     }
   };
 
@@ -302,10 +303,15 @@ const AllSlots = () => {
                     type="number"
                     name="doctorCharge"
                     value={formData.doctorCharge}
-                    onChange={handleInputChange}
+                    onChange={(e) => {
+                      const value = Math.max(0, e.target.value); // Ensure the value is not less than 0
+                      handleInputChange(e, value); // Assuming you update formData correctly here
+                    }}
+                    min="0" // Ensures the input cannot be less than 0
                     className="w-full p-2 border rounded-md focus:ring-2 focus:outline-none"
                   />
                 </div>
+
                 <div className="mb-4 ">
                   <label
                     htmlFor="Change Booking?"
@@ -314,6 +320,9 @@ const AllSlots = () => {
                     Change Booking?
                   </label>
                   <select
+                    name="isBooked"
+                    value={formData.isBooked}
+                    onChange={handleInputChange}
                     id="Change Booking?"
                     className="w-full p-2 border rounded-md focus:outline-none text-gray-700 bg-white mb-2"
                   >
@@ -326,7 +335,7 @@ const AllSlots = () => {
                   type="submit"
                   className="bg-blue-600 text-white px-4 py-2 rounded-md mt-4"
                 >
-                  Save Changes
+                  {updateLoader ? "updating..." : "Save Changes"}
                 </button>
               </form>
             </div>

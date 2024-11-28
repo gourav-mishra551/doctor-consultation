@@ -55,9 +55,7 @@ function EditDrProfileShow() {
       permanentAddress: "",
     },
     hospitalName: "",
-
     services_offered: [],
-
     aboutDoctor: "",
     language: [],
     FAQ: [
@@ -268,8 +266,6 @@ function EditDrProfileShow() {
     }));
   };
 
-  
-
   const FetchSpecialityName = async () => {
     try {
       const res = await axios.get(
@@ -282,7 +278,7 @@ function EditDrProfileShow() {
   const ProfileFetchData = async () => {
     // const token=localStorage.getItem("token")
     // const id=localStorage.getItem("id")
- 
+
     try {
       const getProfile = await axios.get(
         "https://api.assetorix.com/ah/api/v1/dc/doctor",
@@ -306,7 +302,6 @@ function EditDrProfileShow() {
         language: getProfile.data.data.language || "",
         FAQ: getProfile.data.data.FAQ || "",
       }));
-      
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
@@ -325,7 +320,6 @@ function EditDrProfileShow() {
           },
         }
       );
-      
     } catch (error) {
       console.error("Error updating profile:", error);
     }
@@ -964,7 +958,6 @@ function EditDrProfileShow() {
           )}
 
           {semibtns === "HospitalAddress" && (
-           
             <div className="space-y-6 p-6 bg-white shadow-lg rounded-lg max-w-md mx-auto">
               {/* City */}
               <div>
@@ -1124,7 +1117,6 @@ export default EditDrProfileShow;
 //     const [specialtyoptions, setSpecialityOptions] = useState([])
 //     const [isOpen, setIsOpen] = useState(false);
 
-
 //     const backendSpecialist=profileShow.specialitycategories.map((ele)=>ele.specialtyName)
 
 //     useEffect(() => {
@@ -1145,7 +1137,6 @@ export default EditDrProfileShow;
 
 //         }
 //     }
-
 
 //     // Toggle function to open/close dropdown
 //     const toggleDropdown = () => {

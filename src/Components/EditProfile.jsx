@@ -71,8 +71,9 @@ const EditProfile = () => {
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
 
+  console.log(dataToEdit);
+
   const getDoctorsForEdit = async () => {
-   
     try {
       const response = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/doctor`,
@@ -84,7 +85,6 @@ const EditProfile = () => {
         }
       );
 
-      // Mapping the response data into dataToEdit format
       const doctorData = response.data.data;
 
       setDataToEdit({
@@ -98,13 +98,16 @@ const EditProfile = () => {
           state: doctorData.clinic_hospital_address?.state || "",
         },
         hospitalName: doctorData.hospitalName || "",
-        services_offered: doctorData.services_offered || "",
+        services_offered: doctorData?.services_offered || "",
         name: doctorData?.userData?.name || "",
         years_of_experience: doctorData.years_of_experience?.map(
           (experience) => ({
             description: experience.description || "",
             employmentType: experience.employmentType || "",
-            endDate: experience.endDate || "",
+            endDate: {
+              month: experience.endDate?.month || "",
+              year: experience.endDate?.year || "",
+            },
             jobTitle: experience.jobTitle || "",
             organizationLocation: experience.organizationLocation || "",
             organizationName: experience.organizationName || "",
@@ -118,7 +121,7 @@ const EditProfile = () => {
           {
             description: "",
             employmentType: "",
-            endDate: "",
+            endDate: { month: "", year: "" },
             jobTitle: "",
             organizationLocation: "",
             organizationName: "",
@@ -129,7 +132,6 @@ const EditProfile = () => {
         qualifications: doctorData.qualifications?.map((qualification) => ({
           degree: qualification.degree || "",
           description: qualification.description || "",
-          endDate: qualification.endDate || "",
           fieldOfStudy: qualification.fieldOfStudy || "",
           instituteName: qualification.instituteName || "",
           skills: qualification.skills || [],
@@ -145,7 +147,6 @@ const EditProfile = () => {
           {
             degree: "",
             description: "",
-            endDate: "",
             fieldOfStudy: "",
             instituteName: "",
             skills: [],
@@ -154,14 +155,10 @@ const EditProfile = () => {
           },
         ],
       });
-
-      
     } catch (error) {
-     
+      console.error("Error fetching doctor data:", error);
     }
   };
-
-
 
   const patchDoctorData = async (e) => {
     e.preventDefault();
@@ -177,9 +174,7 @@ const EditProfile = () => {
         }
       );
       toast.success("Data updated successfully!");
-    } catch (error) {
-     
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -834,7 +829,7 @@ const EditProfile = () => {
                 <div className="flex flex-col gap-1">
                   <label className="px-2 font-bold">Services</label>
                   <div className="flex flex-col gap-2">
-                    {dataToEdit.services_offered.map((service, index) => (
+                    {dataToEdit?.services_offered?.map((service, index) => (
                       <div key={index} className="flex gap-3 items-center">
                         <input
                           type="text"
@@ -843,7 +838,9 @@ const EditProfile = () => {
                           value={service || ""}
                           onChange={(e) => handleServiceChange(e, index)}
                           onBlur={() =>
-                            updateServicesInBackend(dataToEdit.services_offered)
+                            updateServicesInBackend(
+                              dataToEdit?.services_offered
+                            )
                           } // Update backend on blur
                         />
                         <button
@@ -957,37 +954,156 @@ const EditProfile = () => {
 
                           {/* Start Date and End Date */}
                           <div className="flex gap-4">
+                            {/* Start Date */}
                             <div className="flex flex-col gap-1 w-full">
                               <label className="px-2 font-bold">
                                 Start Date
                               </label>
-                              <input
-                                type="date"
-                                value={qualification.startDate || ""}
-                                className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
-                                onChange={(e) =>
-                                  handleChangeQualification(
-                                    qualificationIndex,
-                                    "startDate",
-                                    e.target.value
-                                  )
-                                }
-                              />
+                              <div className="flex gap-2">
+                                {/* Month Selector */}
+                                <select
+                                  value={qualification.startDate?.month || ""}
+                                  onChange={(e) =>
+                                    handleChangeQualification(
+                                      qualificationIndex,
+                                      "startDate",
+                                      {
+                                        ...qualification.startDate,
+                                        month: e.target.value,
+                                      }
+                                    )
+                                  }
+                                  className="border border-gray-400 p-2 rounded-xl focus:border-[#4358f6]"
+                                >
+                                  <option value="" disabled>
+                                    Select Month
+                                  </option>
+                                  {[
+                                    "January",
+                                    "February",
+                                    "March",
+                                    "April",
+                                    "May",
+                                    "June",
+                                    "July",
+                                    "August",
+                                    "September",
+                                    "October",
+                                    "November",
+                                    "December",
+                                  ].map((month, index) => (
+                                    <option
+                                      key={index}
+                                      value={String(index + 1).padStart(2, "0")}
+                                    >
+                                      {month}
+                                    </option>
+                                  ))}
+                                </select>
+
+                                {/* Year Selector */}
+                                <select
+                                  value={qualification.startDate?.year || ""}
+                                  onChange={(e) =>
+                                    handleChangeQualification(
+                                      qualificationIndex,
+                                      "startDate",
+                                      {
+                                        ...qualification.startDate,
+                                        year: e.target.value,
+                                      }
+                                    )
+                                  }
+                                  className="border border-gray-400 p-2 rounded-xl focus:border-[#4358f6]"
+                                >
+                                  <option value="" disabled>
+                                    Select Year
+                                  </option>
+                                  {Array.from({ length: 70 }, (_, i) => {
+                                    const year = new Date().getFullYear() - i; // Generate the past 50 years
+                                    return (
+                                      <option key={year} value={year}>
+                                        {year}
+                                      </option>
+                                    );
+                                  })}
+                                </select>
+                              </div>
                             </div>
+
+                            {/* End Date */}
                             <div className="flex flex-col gap-1 w-full">
                               <label className="px-2 font-bold">End Date</label>
-                              <input
-                                type="date"
-                                value={qualification.endDate || ""}
-                                className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
-                                onChange={(e) =>
-                                  handleChangeQualification(
-                                    qualificationIndex,
-                                    "endDate",
-                                    e.target.value
-                                  )
-                                }
-                              />
+                              <div className="flex gap-2">
+                                {/* Month Selector */}
+                                <select
+                                  value={qualification.endDate?.month || ""}
+                                  onChange={(e) =>
+                                    handleChangeQualification(
+                                      qualificationIndex,
+                                      "endDate",
+                                      {
+                                        ...qualification.endDate,
+                                        month: e.target.value,
+                                      }
+                                    )
+                                  }
+                                  className="border border-gray-400 p-2 rounded-xl focus:border-[#4358f6]"
+                                >
+                                  <option value="" disabled>
+                                    Select Month
+                                  </option>
+                                  {[
+                                    "January",
+                                    "February",
+                                    "March",
+                                    "April",
+                                    "May",
+                                    "June",
+                                    "July",
+                                    "August",
+                                    "September",
+                                    "October",
+                                    "November",
+                                    "December",
+                                  ].map((month, index) => (
+                                    <option
+                                      key={index}
+                                      value={String(index + 1).padStart(2, "0")}
+                                    >
+                                      {month}
+                                    </option>
+                                  ))}
+                                </select>
+
+                                {/* Year Selector */}
+                                <select
+                                  value={qualification.endDate?.year || ""}
+                                  onChange={(e) =>
+                                    handleChangeQualification(
+                                      qualificationIndex,
+                                      "endDate",
+                                      {
+                                        ...qualification.endDate,
+                                        year: e.target.value,
+                                      }
+                                    )
+                                  }
+                                  className="border border-gray-400 p-2 rounded-xl focus:border-[#4358f6]"
+                                >
+                                  <option value="" disabled>
+                                    Select Year
+                                  </option>
+                                  {Array.from({ length: 70 }, (_, i) => {
+                                    const year = new Date().getFullYear() - i; // Generate the past 50 years
+                                    return (
+                                      <option key={year} value={year}>
+                                        {year}
+                                      </option>
+                                    );
+                                  })}
+                                </select>
+                              </div>
                             </div>
                           </div>
 
@@ -1227,37 +1343,138 @@ const EditProfile = () => {
 
                         {/* Start Date and End Date */}
                         <div className="flex gap-4">
+                          {/* Start Date */}
                           <div className="flex flex-col gap-1 w-full">
                             <label className="px-2 font-bold">Start Date</label>
-                            <input
-                              type="date"
-                              value={formatDate(
-                                experience.startDate.month || ""
-                              )}
-                              className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
-                              onChange={(e) =>
-                                handleExperienceChange(
-                                  index,
-                                  "startDate",
-                                  e.target.value
-                                )
-                              }
-                            />
+                            <div className="flex gap-2">
+                              {/* Month Selector */}
+                              <select
+                                value={experience.startDate?.month || ""}
+                                onChange={(e) =>
+                                  handleExperienceChange(index, "startDate", {
+                                    ...experience.startDate,
+                                    month: e.target.value,
+                                  })
+                                }
+                                className="border border-gray-400 p-2 rounded-xl focus:border-[#4358f6]"
+                              >
+                                <option value="" disabled>
+                                  Select Month
+                                </option>
+                                {[
+                                  "January",
+                                  "February",
+                                  "March",
+                                  "April",
+                                  "May",
+                                  "June",
+                                  "July",
+                                  "August",
+                                  "September",
+                                  "October",
+                                  "November",
+                                  "December",
+                                ].map((month, index) => (
+                                  <option
+                                    key={index}
+                                    value={String(index + 1).padStart(2, "0")}
+                                  >
+                                    {month}
+                                  </option>
+                                ))}
+                              </select>
+
+                              {/* Year Selector */}
+                              <select
+                                value={experience.startDate?.year || ""}
+                                onChange={(e) =>
+                                  handleExperienceChange(index, "startDate", {
+                                    ...experience.startDate,
+                                    year: e.target.value,
+                                  })
+                                }
+                                className="border border-gray-400 p-2 rounded-xl focus:border-[#4358f6]"
+                              >
+                                <option value="" disabled>
+                                  Select Year
+                                </option>
+                                {Array.from({ length: 50 }, (_, i) => {
+                                  const year = new Date().getFullYear() - i; // Generate the past 50 years
+                                  return (
+                                    <option key={year} value={year}>
+                                      {year}
+                                    </option>
+                                  );
+                                })}
+                              </select>
+                            </div>
                           </div>
+
+                          {/* End Date */}
                           <div className="flex flex-col gap-1 w-full">
                             <label className="px-2 font-bold">End Date</label>
-                            <input
-                              type="date"
-                              value={experience.endDate || ""}
-                              className="border border-gray-400 p-2 w-full rounded-xl focus:border-[#4358f6]"
-                              onChange={(e) =>
-                                handleExperienceChange(
-                                  index,
-                                  "endDate",
-                                  e.target.value
-                                )
-                              }
-                            />
+                            <div className="flex gap-2">
+                              {/* Month Selector */}
+                              <select
+                                value={experience.endDate?.month || ""}
+                                onChange={(e) =>
+                                  handleExperienceChange(index, "endDate", {
+                                    ...experience.endDate,
+                                    month: e.target.value,
+                                  })
+                                }
+                                className="border border-gray-400 p-2 rounded-xl focus:border-[#4358f6]"
+                              >
+                                <option value="" disabled>
+                                  Select Month
+                                </option>
+                                {[
+                                  "January",
+                                  "February",
+                                  "March",
+                                  "April",
+                                  "May",
+                                  "June",
+                                  "July",
+                                  "August",
+                                  "September",
+                                  "October",
+                                  "November",
+                                  "December",
+                                ].map((month, index) => (
+                                  <option
+                                    key={index}
+                                    value={String(index + 1).padStart(2, "0")}
+                                  >
+                                    {month}
+                                  </option>
+                                ))}
+                              </select>
+
+                              {/* Year Selector */}
+                              <select
+                                value={experience.endDate?.year || ""}
+                                onChange={(e) =>
+                                  handleExperienceChange(index, "endDate", {
+                                    ...experience.endDate,
+                                    year: e.target.value,
+                                  })
+                                }
+                                className="border border-gray-400 p-2 rounded-xl focus:border-[#4358f6]"
+                              >
+                                <option value="" disabled>
+                                  Select Year
+                                </option>
+                                {Array.from({ length: 50 }, (_, i) => {
+                                  const year = new Date().getFullYear() - i; // Generate the past 50 years
+                                  return (
+                                    <option key={year} value={year}>
+                                      {year}
+                                    </option>
+                                  );
+                                })}
+                              </select>
+                            </div>
                           </div>
                         </div>
 
@@ -1380,14 +1597,13 @@ const EditProfile = () => {
                 </button>
               </div>
             )}
-            <div className="bg-[#00768A] flex justify-center items-center rounded-xl mt-5">
-              <button
-                className="text-white p-2 focus:outline-none"
-                onClick={patchDoctorData}
-              >
-                {loadingUpdateBtn ? "Updating..." : "Update"}
-              </button>
-            </div>
+
+            <button
+              className="mt-5 text-white bg-[#00768A] p-2 focus:outline-none rounded-xl w-full"
+              onClick={patchDoctorData}
+            >
+              {loadingUpdateBtn ? "Updating..." : "Update"}
+            </button>
           </form>
         </div>
       </div>

@@ -375,32 +375,27 @@ const Navbar = () => {
                 >
                   {isLogin ? (
                     <div className="flex flex-col justify-between">
-                      <div className="border rounded-lg " onClick={()=>navigate("/profile")}>
-                        <p className="text-semibold text-gray-400 text-[16px] capitalize text-center ">
-                          Welcome {localStorage.getItem("user")}
+
+                      <div className="shadow-sm rounded-lg ">
+                        <p className="text-semibold text-gray-400 text-[16px] capitalize leading-4 py-1 text-center ">
+                          Welcome <br /> <span className=" font-bold text-[#00768A] opacity-85">
+                          {localStorage.getItem("user")}
+                             </span>
                         </p>
                       </div>
-                      <div>
+                      <div className="py-3">
                         <Link to="/profile">
                           <h4 className="sm:text-[16px] text-[14px] my-1">
                             Profile
                           </h4>
                         </Link>
-                        <Link to="/profile">
-                          <h4 className="sm:text-[16px] text-[14px] my-1">
-                            Your Order
-                          </h4>
-                        </Link>
+                      
                         <Link to="/support-center">
                           <h4 className="sm:text-[16px] text-[14px] my-1">
                             Report a problem
                           </h4>
                         </Link>
-                        <Link to="/contact">
-                          <h4 className="sm:text-[16px] text-[14px] my-1">
-                            Bulk Buy
-                          </h4>
-                        </Link>
+                       
                       </div>
                       <div className="float-end ">
                         <button
@@ -419,19 +414,13 @@ const Navbar = () => {
                       >
                         Login
                       </h4>
-                      <Link to="/profile">
-                        <h4 className="sm:text-[16px] text-[14px] my-1">
-                          Your Order
-                        </h4>
-                      </Link>
+                    
                       <Link to="/support-center">
                         <h4 className="sm:text-[16px] text-[14px] my-1">
                           Report a problem
                         </h4>
                       </Link>
-                      <h4 className="sm:text-[16px] text-[14px] my-1">
-                        Bulk Buy
-                      </h4>
+                      
                     </div>
                   )}
                 </div>
