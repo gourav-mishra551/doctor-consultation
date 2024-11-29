@@ -7,19 +7,20 @@ import Avatar from "../../Assests/DrAvatar.jpg";
 const DoctorCard = ({ doctorData }) => {
   const [minPrice, setMinPrice] = useState(null);
 
-
-  
-  
   const calculateMinimumPrice = (doctor) => {
     let minPrice = Infinity;
-  
+
     // Extract visiting mode (array of modes from all availabilities)
-    const visitingMode = doctor.doctorAvailability.map((doc) => doc.visitingMode);
-  
+    const visitingMode = doctor.doctorAvailability.map(
+      (doc) => doc.visitingMode
+    );
+
     // Map offline and online slots
-    const offlineSlots = doctor.doctorAvailability.map((doc) => doc.offlineSlots);
+    const offlineSlots = doctor.doctorAvailability.map(
+      (doc) => doc.offlineSlots
+    );
     const onlineSlots = doctor.doctorAvailability.map((doc) => doc.onlineSlots);
-  
+
     // Map prices for offline and online slots
     const offlineSlotsPrice = doctor.doctorAvailability.map((price) =>
       price.offlineSlots.map((slot) => ({
@@ -27,43 +28,41 @@ const DoctorCard = ({ doctorData }) => {
         isBooked: slot.isBooked,
       }))
     );
-  
+
     const onlineSlotsPrice = doctor.doctorAvailability.map((price) =>
       price.onlineSlots.map((slot) => ({
         doctorCharge: slot.doctorCharge,
         isBooked: slot.isBooked,
       }))
     );
-  
+
     // Flatten and filter slots where isBooked is false
     const availableOfflinePrices = offlineSlotsPrice
       .flat()
       .filter((slot) => slot.isBooked === false)
       .map((slot) => slot.doctorCharge);
-  
+
     const availableOnlinePrices = onlineSlotsPrice
       .flat()
       .filter((slot) => slot.isBooked === false)
       .map((slot) => slot.doctorCharge);
-  
+
     // Find minimum prices from available slots
     if (availableOfflinePrices.length > 0) {
       minPrice = Math.min(minPrice, ...availableOfflinePrices);
     }
-  
+
     if (availableOnlinePrices.length > 0) {
       minPrice = Math.min(minPrice, ...availableOnlinePrices);
     }
-   
-    
+
     // Handle case where no unbooked slots are available
     if (minPrice === Infinity) {
       return "Not available";
     }
-  
+
     return `INR ${minPrice}`;
   };
-  
 
   // useEffect(() => {
   //   if (doctorData && doctorData.length > 0) {
@@ -76,14 +75,10 @@ const DoctorCard = ({ doctorData }) => {
     <div className="flex  flex-wrap gap-8 md:gap-10 m-auto">
       {doctorData && doctorData.length > 0 ? (
         doctorData?.map((doctor, index) => (
-
-        
           <div
             key={index}
             className="w-[95%] mx-auto   h-min  sm:w-[48%] md:w-[90%] lg:flex bg-white p-3 -translate-x-1 sm:translate-x-0  md:p-6 flex flex-col justify-start items-start lg:flex-row  rounded-lg shadow-md border border-gray-200 transition-transform duration-300 hover:scale-105"
           >
-
-           
             <div className="w-[100%]">
               <div className="flex flex-col lg:flex-row gap-6 items-center  lg:items-start w-full ">
                 {/* Profile Image */}
@@ -94,7 +89,6 @@ const DoctorCard = ({ doctorData }) => {
                     className="h-full w-full object-cover"
                   />
                 </div>
-
 
                 {/* Doctor Info */}
                 <div className="flex-1 md:justify-center md:gap-[128px] lg:text-left">
@@ -117,17 +111,14 @@ const DoctorCard = ({ doctorData }) => {
 
                     {/* Pricing Section */}
                     <div className="w-full md:w-auto lg:flex lg:flex-col lg:items-center mt-3 lg:mt-0">
-                      <div className="flex items-center justify-center mb-2 bg-[#47A7B5] rounded-md px-3 py-1">
+                      <div className="flex items-center justify-center mb-2 bg-[#47A7B5] rounded-md px-3 py-1 w-[80px] mx-auto md:mx-0">
                         <IoMdStar className="text-yellow-500 text-lg" />
                         <span className="ml-2 text-sm text-white">4.0</span>
                       </div>
                       <div className="text-sm text-center md:text-start font-semibold text-gray-700">
                         Price:
                         <span className="ml-2 text-green-600">
-                          {/* {minPrice !== null
-                            ? `INR ${minPrice}`
-                            : "Not available"} */}
-                         {doctor && calculateMinimumPrice(doctor)}
+                          {doctor && calculateMinimumPrice(doctor)}
                         </span>
                       </div>
                     </div>
