@@ -29,11 +29,23 @@ const Otp = () => {
                 localStorage.setItem("token", response.data.x_auth_token);
                 localStorage.setItem("user", response.data.x_user);
                 localStorage.setItem("Id", response.data.x_userid);
-              }
-           
+            }
+
             navigate('/');
         } catch (error) {
-            toast.error('OTP verification failed: ' + error.message);
+            // Check if the error response contains an array of errors
+            if (Array.isArray(error.response?.data?.errors) && error.response.data.errors.length > 0) {
+                // Loop through the array and show each error message
+                error.response.data.errors.forEach(err => {
+                    toast.error("Error: " + err.msg);
+                });
+            } else if (typeof error.response?.data?.msg === 'string') {
+                // Show the error message directly if it's a string
+                toast.error("Error: " + error.response.data.msg);
+            } else {
+                // Fallback in case the error structure is unexpected
+                toast.error("An unknown error occurred. Please try again.");
+            }
         } finally {
             setLoading(false);
         }

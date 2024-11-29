@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { CiLogin } from "react-icons/ci";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import {  toast } from "react-toastify";
+import toast from "react-hot-toast"
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
