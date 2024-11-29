@@ -369,14 +369,14 @@ const Navbar = () => {
                 <FiUser />
                 <div
                   ref={dropdownRef}
-                  className={`absolute bg-white rounded-xl shadow-lg p-4 z-50 flex -left-[6rem] flex-col w-[15vw] h-max ${
+                  className={`absolute bg-white rounded-xl shadow-lg p-4 z-50 flex -left-[6rem] flex-col w-[20vw] h-max ${
                     dropdown ? "block" : "hidden"
                   }`}
                 >
                   {isLogin ? (
                     <div className="flex flex-col justify-between">
 
-                      <div className="shadow-sm rounded-lg ">
+                      <div className="shadow-sm rounded-lg " onClick={()=>navigate("/profile")}>
                         <p className="text-semibold text-gray-400 text-[16px] capitalize leading-4 py-1 text-center ">
                           Welcome <br /> <span className=" font-bold text-[#00768A] opacity-85">
                           {localStorage.getItem("user")}
