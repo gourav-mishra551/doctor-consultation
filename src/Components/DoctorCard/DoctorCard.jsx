@@ -6,69 +6,84 @@ import Avatar from "../../Assests/DrAvatar.jpg";
 
 const DoctorCard = ({ doctorData }) => {
   const [minPrice, setMinPrice] = useState(null);
-  const calculateMinPrice = (doctors) => {
+
+
+  
+  
+  const calculateMinimumPrice = (doctor) => {
     let minPrice = Infinity;
-
-    doctors.forEach((doctor) => {
-      if (doctor.slots) {
-        if (
-          doctor.slots.visitingMode === "online" ||
-          doctor.slots.visitingMode === "both"
-        ) {
-          const availableOnlineSlots = doctor.slots.onlineSlots?.filter(
-            (slot) =>
-              !slot.isBooked &&
-              typeof slot.doctorCharge === "number" &&
-              !isNaN(slot.doctorCharge)
-          );
-
-          if (availableOnlineSlots?.length > 0) {
-            minPrice = Math.min(
-              minPrice,
-              ...availableOnlineSlots?.map((slot) => slot.doctorCharge)
-            );
-          }
-        }
-
-        if (
-          doctor.slots.visitingMode === "offline" ||
-          doctor.slots.visitingMode === "both"
-        ) {
-          const availableOfflineSlots = doctor.slots.offlineSlots?.filter(
-            (slot) =>
-              !slot.isBooked &&
-              typeof slot.doctorCharge === "number" &&
-              !isNaN(slot.doctorCharge)
-          );
-
-          if (availableOfflineSlots?.length > 0) {
-            minPrice = Math.min(
-              minPrice,
-              ...availableOfflineSlots?.map((slot) => slot.doctorCharge)
-            );
-          }
-        }
-      }
-    });
-
-    return minPrice === Infinity ? null : minPrice;
-  };
-
-  useEffect(() => {
-    if (doctorData && doctorData.length > 0) {
-      const calculatedMinPrice = calculateMinPrice(doctorData);
-      setMinPrice(calculatedMinPrice);
+  
+    // Extract visiting mode (array of modes from all availabilities)
+    const visitingMode = doctor.doctorAvailability.map((doc) => doc.visitingMode);
+  
+    // Map offline and online slots
+    const offlineSlots = doctor.doctorAvailability.map((doc) => doc.offlineSlots);
+    const onlineSlots = doctor.doctorAvailability.map((doc) => doc.onlineSlots);
+  
+    // Map prices for offline and online slots
+    const offlineSlotsPrice = doctor.doctorAvailability.map((price) =>
+      price.offlineSlots.map((slot) => ({
+        doctorCharge: slot.doctorCharge,
+        isBooked: slot.isBooked,
+      }))
+    );
+  
+    const onlineSlotsPrice = doctor.doctorAvailability.map((price) =>
+      price.onlineSlots.map((slot) => ({
+        doctorCharge: slot.doctorCharge,
+        isBooked: slot.isBooked,
+      }))
+    );
+  
+    // Flatten and filter slots where isBooked is false
+    const availableOfflinePrices = offlineSlotsPrice
+      .flat()
+      .filter((slot) => slot.isBooked === false)
+      .map((slot) => slot.doctorCharge);
+  
+    const availableOnlinePrices = onlineSlotsPrice
+      .flat()
+      .filter((slot) => slot.isBooked === false)
+      .map((slot) => slot.doctorCharge);
+  
+    // Find minimum prices from available slots
+    if (availableOfflinePrices.length > 0) {
+      minPrice = Math.min(minPrice, ...availableOfflinePrices);
     }
-  }, [doctorData]);
+  
+    if (availableOnlinePrices.length > 0) {
+      minPrice = Math.min(minPrice, ...availableOnlinePrices);
+    }
+   
+    
+    // Handle case where no unbooked slots are available
+    if (minPrice === Infinity) {
+      return "Not available";
+    }
+  
+    return `INR ${minPrice}`;
+  };
+  
+
+  // useEffect(() => {
+  //   if (doctorData && doctorData.length > 0) {
+  //     const calculatedMinPrice = calculateMinPrice(doctorData);
+  //     setMinPrice(calculatedMinPrice);
+  //   }
+  // }, [doctorData]);
 
   return (
     <div className="flex  flex-wrap gap-8 md:gap-10 m-auto">
       {doctorData && doctorData.length > 0 ? (
         doctorData?.map((doctor, index) => (
+
+        
           <div
             key={index}
             className="w-[95%] mx-auto   h-min  sm:w-[48%] md:w-[90%] lg:flex bg-white p-3 -translate-x-1 sm:translate-x-0  md:p-6 flex flex-col justify-start items-start lg:flex-row  rounded-lg shadow-md border border-gray-200 transition-transform duration-300 hover:scale-105"
           >
+
+           
             <div className="w-[100%]">
               <div className="flex flex-col lg:flex-row gap-6 items-center  lg:items-start w-full ">
                 {/* Profile Image */}
@@ -80,36 +95,46 @@ const DoctorCard = ({ doctorData }) => {
                   />
                 </div>
 
+
                 {/* Doctor Info */}
-                <div className="flex-1   lg:text-left ">
-                  <div className="flex    border-b pb-2 flex-col justify-center sm:justify-start sm:flex-row md:justify-between  lg:items-start ">
-                    <div className="md:w-auto w-[100%] lg:flex flex-col items-center  mt-3 lg:mt-0">
-                      <h2 className="text-lg  sm:text-start text-center md:text-xl lg:text-2xl sm:w-[100%] w-[100%] font-bold text-[#00768A] capitalize">
-                        Dr. {doctor?.userData?.name}
-                      </h2>
-                      <p className="text-md sm:text-start text-center text-sm md:text-lg text-[#8B4513] font-semibold w-full">
-                        Experience: {doctor?.totalExperience} years
-                      </p>
+                <div className="flex-1 md:justify-center md:gap-[128px] lg:text-left">
+                  {/* Doctor's Header */}
+                  <div className="flex flex-col justify-center border-b pb-2 md:flex-row md:justify-between md:gap-[20px] lg:gap-0 lg:items-start">
+                    {/* Doctor's Details */}
+                    <div className="w-full md:w-auto lg:flex lg:flex-col lg:items-start mt-3 lg:mt-0">
+                      {doctor?.userData?.name == 0 ? null : (
+                        <h2 className="text-lg text-center sm:text-start md:text-xl  w-full  lg:text-2xl font-bold text-[#00768A] capitalize">
+                          Dr. {doctor?.userData?.name}
+                        </h2>
+                      )}
+
+                      {doctor?.totalExperience <= 0 ? null : (
+                        <p className="text-sm text-center sm:text-start md:text-lg font-semibold text-[#8B4513]">
+                          Experience: {doctor?.totalExperience} years
+                        </p>
+                      )}
                     </div>
 
-                    {/* Price for larger screens */}
-                    <div className="md:w-auto w-[100%] sm:w-[40%] lg:flex flex-col items-center mt-3 lg:mt-0">
+                    {/* Pricing Section */}
+                    <div className="w-full md:w-auto lg:flex lg:flex-col lg:items-center mt-3 lg:mt-0">
                       <div className="flex items-center justify-center mb-2 bg-[#47A7B5] rounded-md px-3 py-1">
                         <IoMdStar className="text-yellow-500 text-lg" />
                         <span className="ml-2 text-sm text-white">4.0</span>
                       </div>
-                      <div className="text-sm text-center sm:text-start font-semibold text-gray-700">
+                      <div className="text-sm text-center md:text-start font-semibold text-gray-700">
                         Price:
                         <span className="ml-2 text-green-600">
-                          {minPrice !== null
+                          {/* {minPrice !== null
                             ? `INR ${minPrice}`
-                            : "Not available"}
+                            : "Not available"} */}
+                         {doctor && calculateMinimumPrice(doctor)}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex gap-2 flex-wrap mt-2 justify-center lg:justify-start">
+                  {/* Services Offered */}
+                  <div className="flex flex-wrap gap-2 mt-2 justify-center md:justify-start">
                     {doctor?.services_offered?.map((service, idx) => (
                       <span
                         key={idx}
@@ -120,7 +145,8 @@ const DoctorCard = ({ doctorData }) => {
                     ))}
                   </div>
 
-                  <div className="flex flex-wrap gap-2 mt-2 justify-center lg:justify-start">
+                  {/* Skills */}
+                  <div className="flex flex-wrap gap-2 mt-2 justify-center md:justify-start">
                     {doctor?.years_of_experience?.map((experience, idx) => (
                       <React.Fragment key={idx}>
                         {experience?.skills?.map((skill, skillIdx) => (
@@ -134,7 +160,9 @@ const DoctorCard = ({ doctorData }) => {
                       </React.Fragment>
                     ))}
                   </div>
-                  <p className="mt-4 text-sm text-gray-600">
+
+                  {/* About Doctor */}
+                  <p className="mt-4 text-sm text-gray-600 text-center md:text-start">
                     {doctor.aboutDoctor}
                   </p>
                 </div>

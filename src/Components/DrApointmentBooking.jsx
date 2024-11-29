@@ -162,7 +162,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
   );
 
   return (
-    <div className="flex flex-col md:flex-col sm:flex-row justify-center gap-8 sm:mx-auto p-4 sm:max-w-7xl">
+    <div className="flex flex-col lg:flex-row md:flex-col  border-2 sm:flex-row justify-center gap-8 sm:mx-auto p-4 sm:max-w-7xl">
       {/* Header Section */}
       <div className="sm:w-full md:max-w-[600px] max-w-[340px] bg-white sm:shadow-lg rounded-lg sm:p-6 px-6 sm:ml-0 -ml-4">
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-700">
