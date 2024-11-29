@@ -57,9 +57,6 @@ import AllSlots from "./Components/AllSlots/AllSlots";
 import CreateMeetingPage from "./features/VideoCall/CreateMeetingPage";
 import JoinMeetingPage from "./features/VideoCall/JoinMeetingPage";
 import Otp from "./Pages/Otp/Otp";
-import Prescription from "./Components/presception/Prescription";
-import PrescriptionUI from "./Components/presception/Prescription";
-import PDFGenerator from "./Components/presception/Prescription";
 
 function App() {
   const location = useLocation();
@@ -92,8 +89,11 @@ function App() {
         <Route path="/contact-us" element={<ContactPage />} />
         <Route path="/all-doctors" element={<DrProfilePage />} />
         <Route path="/booking-slot/:id" element={<BookingSlot />} />
-        <Route path="/doctors-individual-profile/:id" element={<DrIndividualProfilePage />} />
-        <Route path="/prescription" element={<PDFGenerator/>}/>
+        <Route
+          path="/doctors-individual-profile/:id"
+          element={<DrIndividualProfilePage />}
+        />
+
         <Route
           path="/dr-profile-show"
           element={<AuthRoute element={DRProfileShow} />}
@@ -149,11 +149,17 @@ function App() {
           element={<ConsultwithNewDoctor />}
         />
 
-        <Route path="/video-call" element={<AuthRoute element={VideoCallApp } />} />
-        <Route path="/meeting" element={<AuthRoute element={CreateMeetingPage}  />} />
-        <Route path="/join" element={<AuthRoute element={JoinMeetingPage}  />} />
+        <Route
+          path="/video-call"
+          element={<AuthRoute element={VideoCallApp} />}
+        />
+        <Route
+          path="/meeting"
+          element={<AuthRoute element={CreateMeetingPage} />}
+        />
+        <Route path="/join" element={<AuthRoute element={JoinMeetingPage} />} />
         <Route path="/slots-creation" element={<CreateSlotsByDr />} />
-
+        <Route path="/pdf-genrate" element={<PdfGeneratorPrescription />} />
       </Routes>
     </div>
   );
