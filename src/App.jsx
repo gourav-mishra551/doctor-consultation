@@ -89,8 +89,11 @@ function App() {
         <Route path="/contact-us" element={<ContactPage />} />
         <Route path="/all-doctors" element={<DrProfilePage />} />
         <Route path="/booking-slot/:id" element={<BookingSlot />} />
-        <Route path="/doctors-individual-profile/:id" element={<DrIndividualProfilePage />} />
-        
+        <Route
+          path="/doctors-individual-profile/:id"
+          element={<DrIndividualProfilePage />}
+        />
+
         <Route
           path="/dr-profile-show"
           element={<AuthRoute element={DRProfileShow} />}
