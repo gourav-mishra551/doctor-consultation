@@ -1,23 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import { AiOutlineDelete } from "react-icons/ai";
-import { FaClipboard, FaEdit, FaPlus } from "react-icons/fa";
-import { MdCancel, MdDelete } from "react-icons/md";
-import axios from "axios";
-import { Table, Tbody, Td, Th, Thead, Tr } from "react-super-responsive-table";
+import { FaPlus } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import PdfGeneratorPrescription from "./PdfGeneratorPrescription/PdfGeneratorPrescription";
+import { useNavigate } from "react-router-dom";
 
 const PrescriptionMaker = () => {
-  const [sections, setSections] = useState([]);
-  const [openPopUp, setPopUp] = useState(false);
+  const [showPdfGenerator, setShowPdfGenerator] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [frequency, setFrequency] = useState("");
-  const [duration, setDuration] = useState("");
-  const [instruction, setInstruction] = useState("");
-  const [medicineData, setMedicineData] = useState([]);
-  const [medicineSelected, setMedicineSelected] = useState(false);
   const [editForm, setEditForm] = useState(false);
-  const [medicineName, setMedicineName] = useState("");
   const [deleteAlert, setDeleteAlert] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [editMedicineData, setEditMedicineData] = useState({
@@ -26,17 +17,74 @@ const PrescriptionMaker = () => {
     duration: "",
     instruction: "",
   });
-
-  const [prescriptionData, setPrescriptionData] = useState({
-    problems: "",
-    observations: "",
-    notes: "",
+  const [medicineData, setMedicineData] = useState([]);
+  const [formData, setFormData] = useState([
+    { problems: "", observations: "", notes: "" },
+  ]);
+  const [medication, setMedication] = useState({
     medicineName: "",
     frequency: "",
     duration: "",
-    action: "",
     instruction: "",
   });
+
+  const navigate = useNavigate();
+
+  const handleAddMore = () => {
+    setFormData([
+      ...formData,
+      { problems: "", observations: "", notes: "" }, // Add a new section
+    ]);
+  };
+
+  const handleFormDataChange = (index, fieldName, value) => {
+    const updatedFormData = [...formData];
+    updatedFormData[index][fieldName] = value;
+    setFormData(updatedFormData);
+  };
+
+  const handleMedicationChange = (e) => {
+    setMedication({
+      ...medication,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleAddMedication = () => {
+    if (
+      medication.medicineName &&
+      medication.frequency &&
+      medication.duration &&
+      medication.instruction
+    ) {
+      setMedicineData([...medicineData, medication]);
+      setMedication({
+        medicineName: "",
+        frequency: "",
+        duration: "",
+        instruction: "",
+      });
+    } else {
+      alert("Please fill all medication fields.");
+    }
+  };
+
+  const handleDeleteMedication = (index) => {
+    setMedicineData(medicineData.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log({
+      formData,
+      medicineData,
+    });
+
+    // Navigate to /pdf and pass data through state
+    navigate("/pdf-genrate", {
+      state: { formData, medicineData },
+    });
+  };
 
   const popupRef = useRef(null);
 
@@ -44,7 +92,6 @@ const PrescriptionMaker = () => {
   const id = localStorage.getItem("id");
 
   const loadEditData = (data) => {
-  
     setEditMedicineData({
       id: data.id, // Store the ID for tracking edits
       medicineName: data.medicineName,
@@ -55,89 +102,6 @@ const PrescriptionMaker = () => {
     setEditForm(true); // Open the form popup
   };
 
-  // Function to handle input changes for the edit form
-  const handleEditInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditMedicineData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  // Function to submit the edited data
-  const handleEditSubmit = (e) => {
-    e.preventDefault();
-    setMedicineData((prevData) =>
-      prevData.map((item) =>
-        item.id === editMedicineData.id
-          ? { ...item, ...editMedicineData }
-          : item
-      )
-    );
-    setEditForm(false); // Close the form popup after submission
-    setEditMedicineData({
-      id: "",
-      medicineName: "",
-      frequency: "",
-      duration: "",
-      instruction: "",
-    });
-  };
-
-  const addSection = () => {
-    setSections((prevSections) => [
-      ...prevSections,
-      { id: Date.now(), problem: "", observation: "", notes: "" },
-    ]);
-  };
-
-  const deleteSection = (id) => {
-    setSections((prevSections) =>
-      prevSections.filter((section) => section.id !== id)
-    );
-  };
-
-  // / Handle input change and search products
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    if (value.length > 2) {
-      // Optional: Trigger search after 3 characters
-      searchProduct(value);
-      setMedicineSelected(false); // Reset the selection flag
-    } else {
-      setProducts([]); // Clear products when search term is short
-    }
-  };
-
-  // Handle product selection
-  const handleClickProduct = (productName) => {
-    setSearchTerm(productName); // Set selected product name in the input field
-    setMedicineSelected(true); // Set flag to true, indicating that a medicine was selected
-    setProducts([]); // Hide search suggestions after selection
-  };
-
-  // Search product API
-  const searchProduct = async (term) => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `https://api.assetorix.com/ah/api/v1/product/search?search=${term}`,
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-            id: id,
-          },
-        }
-      );
-      setProducts(response.data.data); // Assuming the data is in the 'data' field
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
-    }
-  };
-  
   // Close product list if clicked outside the popup or input
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -154,31 +118,15 @@ const PrescriptionMaker = () => {
     };
   }, []);
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    const newMedicine = {
-      id: Date.now(),
-      medicineName: searchTerm,
-      frequency,
-      duration,
-      instruction,
-    };
-    setMedicineData([...medicineData, newMedicine]);
-    setSearchTerm("");
-    setFrequency("");
-    setDuration("");
-    setInstruction("");
-    setMedicineSelected(false);
-    setPopUp(false);
-  };
-
-  const handleDeleteClick = (id) => {
-    setDeleteAlert(true);
-    setDeleteId(id);
-  };
-
   const deleteProduct = (id) => {
     setMedicineData((prevData) => prevData.filter((item) => item.id !== id));
+  };
+
+  const handleDeleteFormData = (index) => {
+    if (formData.length > 1) {
+      const updatedFormData = formData.filter((_, i) => i !== index);
+      setFormData(updatedFormData);
+    }
   };
 
   return (
@@ -221,378 +169,209 @@ const PrescriptionMaker = () => {
 
       {/* Right section */}
       <div className="prescription-detail sm:w-3/4 space-y-5 sm:mt-0 mt-5">
-        <div className="flex justify-end">
-          <button
-            onClick={addSection}
-            className="text-[16px] font-normal text-white px-4 py-2 rounded-md bg-[#00768A]"
-          >
-            Add More
-          </button>
-        </div>
-
-        {/* Initial input section */}
-        <div className="flex gap-5 bg-white p-5 rounded-lg shadow-md">
-          <div className="w-1/3">
-            <p className="text-gray-800 font-semibold">Problems</p>
-            <div className="mt-5">
-              <textarea
-                placeholder=""
-                className="w-full border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none min-h-[100px]"
-              />
-            </div>
-          </div>
-          <div className="w-1/3">
-            <p className="text-gray-800 font-semibold">Observation</p>
-            <div className="mt-5">
-              <textarea
-                placeholder=""
-                className="w-full border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none min-h-[100px]"
-              />
-            </div>
-          </div>
-          <div className="w-1/3">
-            <p className="text-gray-800 font-semibold">Notes</p>
-            <div className="mt-5">
-              <textarea
-                placeholder=""
-                className="w-full border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none min-h-[100px]"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Additional sections */}
-        {sections.map((section) => (
-          <div
-            key={section.id}
-            className="flex gap-5 bg-white p-5 rounded-lg shadow-md relative"
-          >
-            <button
-              onClick={() => deleteSection(section.id)}
-              className="absolute top-2 right-2 text-gray-600 hover:text-red-500"
+        <form onSubmit={handleSubmit}>
+          {/* Problems, Observations, Notes */}
+          {formData.map((data, index) => (
+            <div
+              key={index}
+              className="relative flex gap-5 bg-white p-5 rounded-lg shadow-md mt-5"
             >
-              <AiOutlineDelete className="text-xl" />
-            </button>
-            <div className="w-1/3">
-              <p className="text-gray-800 font-semibold">Problems</p>
-              <div className="mt-5">
-                <textarea
-                  placeholder=""
-                  className="w-full border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none min-h-[100px]"
-                />
-              </div>
-            </div>
-            <div className="w-1/3">
-              <p className="text-gray-800 font-semibold">Observation</p>
-              <div className="mt-5">
-                <textarea
-                  placeholder=""
-                  className="w-full border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none min-h-[100px]"
-                />
-              </div>
-            </div>
-            <div className="w-1/3">
-              <p className="text-gray-800 font-semibold">Notes</p>
-              <div className="mt-5">
-                <textarea
-                  placeholder=""
-                  className="w-full border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none min-h-[100px]"
-                />
-              </div>
-            </div>
-          </div>
-        ))}
+              {/* Delete Button */}
+              {formData.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => handleDeleteFormData(index)}
+                  className="absolute top-3 right-3 text-red-500 hover:text-red-600"
+                  title="Delete Section"
+                >
+                  <MdDelete size={20} />
+                </button>
+              )}
 
-        {/* prescription details */}
-        <div className="bg-white p-5">
-          <div className="flex justify-between">
-            <p className="text-gray-800 font-semibold mt-1 sm:mt-0">
-              Prescription Detials
-            </p>
-            <div className="">
+              <div className="w-1/3">
+                <p className="text-gray-800 font-semibold">Problems</p>
+                <textarea
+                  name={`problems-${index}`}
+                  value={data.problems}
+                  onChange={(e) =>
+                    handleFormDataChange(index, "problems", e.target.value)
+                  }
+                  className="w-full border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none min-h-[100px]"
+                />
+              </div>
+              <div className="w-1/3">
+                <p className="text-gray-800 font-semibold">Observation</p>
+                <textarea
+                  name={`observations-${index}`}
+                  value={data.observations}
+                  onChange={(e) =>
+                    handleFormDataChange(index, "observations", e.target.value)
+                  }
+                  className="w-full border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none min-h-[100px]"
+                />
+              </div>
+              <div className="w-1/3">
+                <p className="text-gray-800 font-semibold">Notes</p>
+                <textarea
+                  name={`notes-${index}`}
+                  value={data.notes}
+                  onChange={(e) =>
+                    handleFormDataChange(index, "notes", e.target.value)
+                  }
+                  className="w-full border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none min-h-[100px]"
+                />
+              </div>
+            </div>
+          ))}
+
+          <div className="text-right mt-4">
+            <button
+              type="button"
+              onClick={handleAddMore}
+              className="px-4 py-2 flex gap-1 items-center text-white rounded-md bg-[#00768A]"
+            >
+              Add More <FaPlus />
+            </button>
+          </div>
+
+          {/* Medication Section */}
+          <div className="bg-white p-5 mt-5">
+            <div className="flex justify-between items-center">
+              <p className="text-gray-800 font-semibold">Medication Details</p>
               <button
-                onClick={() => setPopUp(true)}
-                className="px-4 py-2 flex gap-1 justify-center items-center sm:text-[16px] text-[14px] font-normal text-white rounded-md bg-[#00768A]"
+                type="button"
+                onClick={handleAddMedication}
+                className="px-4 py-2 flex gap-1 items-center text-white rounded-md bg-[#00768A]"
               >
-                Add Medication
-                <FaPlus />
+                Add Medication <FaPlus />
               </button>
             </div>
-          </div>
-          <div className="overflow-x-auto block mt-5 border-2 p-5">
-            <div className="overflow-x-auto mt-6">
-              <Table className="min-w-full table-auto border-collapse">
-                <Thead>
-                  <Tr>
-                    <Th className="py-2 px-4 border-b border-gray-300 text-left">
+
+            {/* Medication Inputs */}
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <input
+                type="text"
+                name="medicineName"
+                placeholder="Medicine Name"
+                value={medication.medicineName}
+                onChange={handleMedicationChange}
+                className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none"
+              />
+              <textarea
+                name="frequency"
+                placeholder="Frequency"
+                value={medication.frequency}
+                onChange={handleMedicationChange}
+                className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none resize-none"
+              />
+              <input
+                type="text"
+                name="duration"
+                placeholder="Duration (in days)"
+                value={medication.duration}
+                onChange={handleMedicationChange}
+                className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none"
+              />
+              <textarea
+                name="instruction"
+                placeholder="Instruction"
+                value={medication.instruction}
+                onChange={handleMedicationChange}
+                className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none resize-none"
+              />
+            </div>
+
+            {/* Display Medication Table */}
+            <div className="overflow-x-auto block mt-5 border-2 p-5">
+              <table className="min-w-full table-auto border-collapse">
+                <thead>
+                  <tr>
+                    <th className="py-2 px-4 border-b border-gray-300 text-left">
                       Medicine Name
-                    </Th>
-                    <Th className="py-2 px-4 border-b border-gray-300 text-left">
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-300 text-left">
                       Frequency
-                    </Th>
-                    <Th className="py-2 px-4 border-b border-gray-300 text-left">
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-300 text-left">
                       Duration
-                    </Th>
-                    <Th className="py-2 px-4 border-b border-gray-300 text-left">
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-300 text-left">
                       Action
-                    </Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
                   {medicineData.map((data, index) => (
-                    <Tr key={index}>
-                      <Td className="py-2 px-4 border-b border-gray-300">
+                    <tr key={index}>
+                      <td className="py-2 px-4 border-b border-gray-300">
                         {data.medicineName}
-                      </Td>
-                      <Td className="py-2 px-4 border-b border-gray-300">
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-300">
                         {data.frequency}
-                      </Td>
-                      <Td className="py-2 px-4 border-b border-gray-300">
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-300">
                         {data.duration}
-                      </Td>
-                      <Td className="py-2 px-4 border-b border-gray-300">
-                        <div className="flex gap-2">
-                          <FaEdit
-                            onClick={() => loadEditData(data)}
-                            className="text-[#00768A] cursor-pointer"
-                          />
-                          <MdDelete
-                            onClick={() => handleDeleteClick(data.id)}
-                            className="text-red-500 cursor-pointer"
-                          />
-                        </div>
-                      </Td>
-                    </Tr>
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-300">
+                        <MdDelete
+                          onClick={() => handleDeleteMedication(index)}
+                          className="text-red-500 cursor-pointer"
+                        />
+                      </td>
+                    </tr>
                   ))}
-                </Tbody>
-              </Table>
+                </tbody>
+              </table>
             </div>
           </div>
-          {openPopUp && (
-            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 backdrop-blur-sm p-3 sm:p-0 lg:p-2">
-              <div
-                ref={popupRef}
-                className="bg-white p-6 rounded-lg border-2 z-10 w-full max-w-3xl mx-4 md:mx-0 space-y-6"
-              >
-                <div className="flex justify-between items-center">
-                  <p className="text-lg font-bold">Add Medication</p>
-                  <MdCancel
-                    onClick={() => setPopUp(false)}
-                    className="cursor-pointer text-gray-500 hover:text-gray-800"
-                  />
-                </div>
 
-                <div className="space-y-4">
-                  <form onSubmit={handleFormSubmit} className="space-y-5">
-                    {/* Medicine and Frequency fields */}
-                    <div className="relative sm:flex flex-col space-y-4 sm:space-y-0 gap-4">
-                      <div className="w-full">
-                        <input
-                          name="search"
-                          placeholder="Enter/search medicines with strength"
-                          type="text"
-                          value={searchTerm}
-                          onChange={handleInputChange}
-                          className="px-4 py-2 rounded-lg border w-full focus:outline-none focus:border-[#1495AB] focus:ring-2 focus:ring-[#1495AB] h-[68px]"
-                        />
-                        {loading && (
-                          <div className="spinner">
-                          <div></div>
-                          <div></div>
-                          <div></div>
-                          <div></div>
-                          <div></div>
-                        </div>
-                        )}
-                        {/* Show suggestions only if no medicine is selected */}
-                        {searchTerm &&
-                          !medicineSelected &&
-                          products.length > 0 && (
-                            <ul className="absolute z-50 bg-white border border-gray-200 rounded-lg mt-1 w-full max-h-40 overflow-y-auto shadow-lg">
-                              {products.map((product, index) => (
-                                <li
-                                  key={index}
-                                  className="flex justify-between items-center py-2 px-4 hover:bg-[#f0f0f0] cursor-pointer"
-                                  onClick={() => {
-                                    handleClickProduct(product.title);
-                                    setMedicineName(product.title);
-                                  }}
-                                >
-                                  <span>{product.title}</span>
-                                  <FaClipboard
-                                    onClick={() => handleCopy(product.title)}
-                                    className="cursor-pointer text-gray-500 hover:text-gray-800"
-                                  />
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        {/* Show a message if no products found */}
-                        {searchTerm &&
-                          !medicineSelected &&
-                          products.length === 0 && (
-                            <p className="text-sm text-gray-500">
-                              No products found, you can type the name manually.
-                            </p>
-                          )}
-                      </div>
-                      <textarea
-                        name="frequency"
-                        placeholder="Frequency"
-                        value={frequency}
-                        onChange={(e) => setFrequency(e.target.value)}
-                        className="px-4 py-2 rounded-lg border w-full resize-none focus:outline-none focus:border-[#1495AB] focus:ring-[#1495AB]"
-                      />
-                    </div>
+          {/* Submit Button */}
 
-                    {/* Duration and Instruction fields */}
-                    <div className="sm:flex gap-4 space-y-4 sm:space-y-0">
-                      <input
-                        name="duration"
-                        placeholder="Duration (in days)"
-                        type="text"
-                        value={duration}
-                        onChange={(e) => setDuration(e.target.value)}
-                        className="px-4 py-2 rounded-lg border w-full focus:outline-none focus:border-[#1495AB] focus:ring-[#1495AB]"
-                      />
-                      <textarea
-                        name="instruction"
-                        placeholder="Instruction"
-                        value={instruction}
-                        onChange={(e) => setInstruction(e.target.value)}
-                        className="px-4 py-2 rounded-lg border w-full resize-none focus:outline-none focus:border-[#1495AB] focus:ring-[#1495AB]"
-                      />
-                    </div>
+          <div className="text-center mt-5">
+            <button
+              type="submit"
+              className="bg-[#1495AB] text-white px-4 py-2 rounded-md w-full font-semibold hover:bg-[#138c9d] transition-colors"
+              onClick={handleSubmit} // Handle the button click
+            >
+              Submit
+            </button>
+          </div>
 
-                    {/* Submit Button */}
-                    <div className="text-center">
-                      <button
-                        type="submit"
-                        className="bg-[#1495AB] text-white px-4 py-2 rounded-md w-full font-semibold hover:bg-[#138c9d] transition-colors"
-                      >
-                        Add
-                      </button>
-                    </div>
-                  </form>
-                </div>
+          {/* Condition ally render PdfGeneratorPrescription */}
+          {/* {showPdfGenerator && (
+            <PdfGeneratorPrescription
+              formData={formData}
+              medicineData={medicineData}
+            />
+          )} */}
+        </form>
+        {deleteAlert && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="absolute inset-0 bg-gray-900 opacity-50"></div>
+            <div className="bg-white p-6 rounded-lg border-2 z-10">
+              <p className="text-lg mb-4">
+                Are you sure you want to delete this item?
+              </p>
+              <div className="flex justify-end">
+                <button
+                  onClick={() => {
+                    deleteProduct(deleteId);
+                    setDeleteAlert(false);
+                  }}
+                  className="bg-red-500 text-white px-4 py-2 rounded-md mr-2"
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => setDeleteAlert(false)}
+                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md"
+                >
+                  Cancel
+                </button>
               </div>
             </div>
-          )}
-          {editForm && (
-            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 backdrop-blur-sm p-3 sm:p-0 lg:p-2">
-              <div className="bg-white p-6 rounded-lg border-2 z-10 w-full max-w-3xl mx-4 md:mx-0 space-y-6">
-                <div className="flex justify-between items-center">
-                  <p className="text-lg font-bold">Edit Medication</p>
-                  <MdCancel
-                    onClick={() => setEditForm(false)}
-                    className="cursor-pointer text-gray-500 hover:text-gray-800"
-                  />
-                </div>
-                <form onSubmit={handleEditSubmit} className="space-y-5">
-                  <div className="relative sm:flex flex-col gap-4 space-y-4 sm:space-y-0">
-                    <div className="w-full">
-                      <input
-                        name="medicineName"
-                        placeholder="Enter medicine name"
-                        type="text"
-                        value={editMedicineData.medicineName}
-                        onChange={(e) =>
-                          setEditMedicineData({
-                            ...editMedicineData,
-                            medicineName: e.target.value,
-                          })
-                        }
-                        className="px-4 py-2 rounded-lg border w-full focus:outline-none focus:border-[#1495AB] focus:ring-2 focus:ring-[#1495AB] h-[68px]"
-                      />
-                    </div>
-                    <textarea
-                      name="frequency"
-                      placeholder="Frequency"
-                      value={editMedicineData.frequency}
-                      onChange={(e) =>
-                        setEditMedicineData({
-                          ...editMedicineData,
-                          frequency: e.target.value,
-                        })
-                      }
-                      className="px-4 py-2 rounded-lg border w-full resize-none focus:outline-none focus:border-[#1495AB] focus:ring-[#1495AB]"
-                    />
-                  </div>
-
-                  <div className="sm:flex flex-col gap-4 sm:space-y-0 space-y-4">
-                    <input
-                      name="duration"
-                      placeholder="Duration (in days)"
-                      type="text"
-                      value={editMedicineData.duration}
-                      onChange={(e) =>
-                        setEditMedicineData({
-                          ...editMedicineData,
-                          duration: e.target.value,
-                        })
-                      }
-                      className="px-4 py-2 rounded-lg border w-full focus:outline-none focus:border-[#1495AB] focus:ring-[#1495AB]"
-                    />
-                    <textarea
-                      name="instruction"
-                      placeholder="Instruction"
-                      value={editMedicineData.instruction}
-                      onChange={(e) =>
-                        setEditMedicineData({
-                          ...editMedicineData,
-                          instruction: e.target.value,
-                        })
-                      }
-                      className="px-4 py-2 rounded-lg border w-full resize-none focus:outline-none focus:border-[#1495AB] focus:ring-[#1495AB]"
-                    />
-                  </div>
-
-                  <div className="text-center">
-                    <button
-                      type="submit"
-                      className="bg-[#1495AB] text-white px-4 py-2 rounded-md w-full font-semibold hover:bg-[#138c9d] transition-colors"
-                    >
-                      Update
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          )}
-          {deleteAlert && (
-            <div className="fixed inset-0 flex items-center justify-center z-50">
-              <div className="absolute inset-0 bg-gray-900 opacity-50"></div>
-              <div className="bg-white p-6 rounded-lg border-2 z-10">
-                <p className="text-lg mb-4">
-                  Are you sure you want to delete this item?
-                </p>
-                <div className="flex justify-end">
-                  <button
-                    onClick={() => {
-                      deleteProduct(deleteId);
-                      setDeleteAlert(false);
-                    }}
-                    className="bg-red-500 text-white px-4 py-2 rounded-md mr-2"
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() => setDeleteAlert(false)}
-                    className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div>
-          <button className="bg-[#00768A] px-2 py-1 rounded-md text-white">
-            Submit
-          </button>
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
