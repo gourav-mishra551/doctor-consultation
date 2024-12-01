@@ -13,7 +13,7 @@ const ProfilePage = () => {
   return (
     <div>
       <Profile />
-      <div className="mt-20">
+      <div className="mt-20">   
         {/* <Footer /> */}
       </div>
     </div>

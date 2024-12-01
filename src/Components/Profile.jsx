@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+
 import {
   FaHome,
   FaUser,
@@ -40,6 +42,24 @@ const Profile = () => {
   const [isFamilyOpen, setIsFamilyOpen] = useState(false);
   const [userBooking, setUserBooking] = useState([]);
   const [activeSection, setActiveSection] = useState("selfuserprofile");
+  const location = useLocation();
+  
+
+  useEffect(() => {
+    // Extract query parameter from the URL
+    const params = new URLSearchParams(location.search);
+    const section = params.get("section");
+    if (section && section !== activeSection) {
+      setActiveSection(section); // Only update if the value is different
+    }
+  }, [location.search, activeSection]);
+
+  const handleSectionChange = (newSection) => {
+    if (newSection !== activeSection) {
+      setActiveSection(newSection);
+      navigate(`/profile?section=${newSection}`);
+    }
+  };
 
   const toggleMenu = (menu) => {
     if (selectedMenu === menu) {
@@ -48,8 +68,6 @@ const Profile = () => {
       setSelectedMenu(menu);
     }
   };
-
-  console.log(userProfileData?.data?.role);
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -181,7 +199,7 @@ const Profile = () => {
               {userProfileData?.data?.role === "customer" && (
                 <li className="mb-2">
                   <a
-                    onClick={() => setActiveSection("user-bookings")}
+                    onClick={() => handleSectionChange("user-bookings")}
                     href="#"
                     className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
                   >
@@ -194,7 +212,7 @@ const Profile = () => {
               {userProfileData?.data?.role === "doctor" && (
                 <li className="mb-2">
                   <a
-                    onClick={() => setActiveSection("bookings")}
+                    onClick={() => handleSectionChange("bookings")}
                     href="#"
                     className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
                   >
@@ -223,7 +241,7 @@ const Profile = () => {
                     <ul className="ml-6 mt-2 space-y-1 text-gray-300">
                       <li>
                         <p
-                          onClick={() => setActiveSection("create-slots")}
+                          onClick={() => handleSectionChange("create-slots")}
                           className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
                         >
                           Create Slots
@@ -231,7 +249,7 @@ const Profile = () => {
                       </li>
                       <li>
                         <p
-                          onClick={() => setActiveSection("view-slots")}
+                          onClick={() => handleSectionChange("view-slots")}
                           className="block cursor-pointer p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
                         >
                           View Slots
@@ -261,7 +279,7 @@ const Profile = () => {
                   <ul className="ml-6 mt-2 space-y-1 text-gray-300">
                     <li>
                       <p
-                        onClick={() => setActiveSection("selfuserprofile")}
+                        onClick={() => handleSectionChange("selfuserprofile")}
                         className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
                       >
                         View Users
@@ -269,7 +287,7 @@ const Profile = () => {
                     </li>
                     <li>
                       <p
-                        onClick={() => setActiveSection("edituserprofile")}
+                        onClick={() => handleSectionChange("edituserprofile")}
                         className="block cursor-pointer p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
                       >
                         Edit User
@@ -301,7 +319,7 @@ const Profile = () => {
                     <ul className="ml-6 mt-2 space-y-1 text-gray-300">
                       <li>
                         <p
-                          onClick={() => setActiveSection("doctorselfprofile")}
+                          onClick={() => handleSectionChange("doctorselfprofile")}
                           className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
                         >
                           View Profile
@@ -339,7 +357,7 @@ const Profile = () => {
                   <ul className="ml-6 mt-2 space-y-1 text-gray-300">
                     <li>
                       <p
-                        onClick={() => setActiveSection("familyProfile")}
+                        onClick={() => handleSectionChange("familyProfile")}
                         className="block font-normal p-1 hover:bg-[#00768A] rounded-md hover:text-white text-gray-500 cursor-pointer"
                       >
                         View Members
@@ -427,7 +445,7 @@ const Profile = () => {
               <div
                 onClick={() => {
                   setIsProfileOpen(false);
-                  setActiveSection("bookings");
+                  handleSectionChange("bookings");
                 }}
                 className="flex justify-center items-center gap-2 border w-[100%] p-2 bg-[#00768A] rounded-xl text-white"
               >
@@ -457,7 +475,7 @@ const Profile = () => {
                       <button
                         type="button"
                         onClick={() => {
-                          setActiveSection("selfuserprofile");
+                          handleSectionChange("selfuserprofile");
                           setIsProfileOpen(false);
                         }}
                         className="text-white bg-gray-500 w-full py-2 rounded-lg"
@@ -466,7 +484,7 @@ const Profile = () => {
                       </button>
                       <button
                         type="button"
-                        onClick={() => setActiveSection("edituserprofile")}
+                        onClick={() => handleSectionChange("edituserprofile")}
                         className="text-white bg-gray-500 w-full py-2 rounded-lg"
                       >
                         Edit Profile
@@ -496,7 +514,7 @@ const Profile = () => {
                       <button
                         type="button"
                         onClick={() => {
-                          setActiveSection("doctorselfprofile");
+                          handleSectionChange("doctorselfprofile");
                           setIsProfileOpen(false);
                         }}
                         className="text-white bg-gray-500 w-full py-2 rounded-lg"
@@ -514,21 +532,6 @@ const Profile = () => {
                   )}
                 </div>
               )}
-
-              {/* {userProfileData?.data?.role === "doctor" && (
-                <div
-                  onClick={() => {
-                    setIsProfileOpen(false);
-                    setActiveSection("create-slots");
-                  }}
-                  className="flex justify-center items-center gap-2 border w-[100%] p-2 bg-[#00768A] rounded-xl text-white"
-                >
-                  <FaCheckToSlot />
-                  <button type="button" className="text-xl">
-                    Create Slots
-                  </button>
-                </div>
-              )} */}
 
               {/* slots */}
               {userProfileData?.data?.role === "doctor" && (
@@ -550,7 +553,7 @@ const Profile = () => {
                       <button
                         type="button"
                         onClick={() => {
-                          setActiveSection("create-slots");
+                          handleSectionChange("create-slots");
                           setIsProfileOpen(false);
                         }}
                         className="text-white bg-gray-500 w-full py-2 rounded-lg"
@@ -560,7 +563,7 @@ const Profile = () => {
                       <button
                         type="button"
                         onClick={() => {
-                          setActiveSection("view-slots");
+                          handleSectionChange("view-slots");
                           setIsProfileOpen(false);
                         }}
                         className="text-white bg-gray-500 w-full py-2 rounded-lg"
@@ -587,7 +590,7 @@ const Profile = () => {
                   <div className="flex flex-col space-y-2 mt-2">
                     <button
                       onClick={() => {
-                        setActiveSection("familyProfile");
+                        handleSectionChange("familyProfile");
                         setIsProfileOpen(false);
                       }}
                       className="text-white bg-gray-500 w-full py-2 rounded-lg"
@@ -635,7 +638,7 @@ const Profile = () => {
           {activeSection === "view-slots" && (
             <AllSlots
               activeSection={activeSection}
-              setActiveSection={setActiveSection}
+              handleSectionChange={handleSectionChange}
             />
           )}
         </div>
@@ -660,7 +663,7 @@ const Profile = () => {
               {/* Close button to hide the popup */}
               <AddFamilyMembers
                 getFamilyEdit={getFamilyEdit}
-                setActiveSection={setActiveSection}
+                handleSectionChange={handleSectionChange}
                 activeSection={activeSection}
                 familyPopUp={familyPopUp}
                 setFamilyPopUp={setFamilyPopUp}
