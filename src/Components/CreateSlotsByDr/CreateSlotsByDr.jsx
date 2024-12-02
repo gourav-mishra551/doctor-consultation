@@ -167,7 +167,7 @@ const CreateSlotsByDr = () => {
       toast.success("Slot successfully generated...");
     } catch (error) {
       setErrorShow(true);
-      toast.success(error.message, {
+      toast.error(error.message, {
         position: "top-right",
       });
     }
@@ -227,7 +227,6 @@ const CreateSlotsByDr = () => {
         [editingSlot.type + "Slots"]: updatedSlots,
       };
     });
-
     setEditingSlot(null); // Reset editing state
   };
 

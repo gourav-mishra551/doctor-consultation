@@ -5,7 +5,7 @@ import { CiBookmarkCheck } from "react-icons/ci";
 import { FaEdit } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 
-const AllSlots = ({ activeSection, setActiveSection }) => {
+const AllSlots = ({ setActiveSection, handleSectionChange }) => {
   const [slotsData, setSlotsData] = useState([]);
   const [popUp, setPopUp] = useState(false);
   const [appointmentId, setAppointmentId] = useState(null);
@@ -115,8 +115,7 @@ const AllSlots = ({ activeSection, setActiveSection }) => {
     }
   };
 
-  console.log("id", appointmentId);
-  console.log("sid", subId);
+  console.log(setActiveSection);
 
   return (
     <>
@@ -135,6 +134,16 @@ const AllSlots = ({ activeSection, setActiveSection }) => {
               <div className="h-[15px] w-[15px] bg-green-800"></div>
               <p>Offline slots</p>
             </div>
+          </div>
+          <div className="flex justify-end">
+            <button
+              onClick={() => {
+                handleSectionChange("create-slots"), console.log("Clicked");
+              }}
+              className="bg-[#00768A] text-white py-1 px-2 rounded-xl"
+            >
+              Create Slots
+            </button>
           </div>
           <div className="grid sm:grid-cols-2 grid-cols-1 gap-5 sm:p-6 h-auto">
             {slotsData?.doctorAvailabilities?.map((data, index) => (
@@ -257,7 +266,7 @@ const AllSlots = ({ activeSection, setActiveSection }) => {
         <div className="flex flex-col gap-3 justify-center items-center">
           <p className="text-center text-gray-500">No Slots Available</p>
           <button
-            onClick={() => setActiveSection("create-slots")}
+            onClick={() => handleSectionChange("create-slots")}
             className="bg-[#00768A] text-white py-1 px-2 rounded-xl"
           >
             Create Slots

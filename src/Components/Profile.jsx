@@ -44,6 +44,9 @@ const Profile = () => {
   const [activeSection, setActiveSection] = useState("selfuserprofile");
   const location = useLocation();
 
+  const token = localStorage.getItem("token");
+  const id = localStorage.getItem("id");
+
   const bookings = async () => {
     try {
       const response = await axios.get(
@@ -62,7 +65,6 @@ const Profile = () => {
   useEffect(() => {
     bookings();
   }, []);
-  
 
   useEffect(() => {
     // Extract query parameter from the URL
@@ -87,11 +89,6 @@ const Profile = () => {
       setSelectedMenu(menu);
     }
   };
-
-  const token = localStorage.getItem("token");
-  const id = localStorage.getItem("id");
-
- 
 
   const userData = async () => {
     try {
@@ -196,33 +193,35 @@ const Profile = () => {
               </li>
 
               {/* user bookings */}
-              {userProfileData?.data?.role === "customer" || "admin" && (
-                <li className="mb-2">
-                  <a
-                    onClick={() => handleSectionChange("user-bookings")}
-                    href="#"
-                    className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
-                  >
-                    <TbBrandBooking className="mr-2" /> Bookings
-                  </a>
-                </li>
-              )}
+              {userProfileData?.data?.role === "customer" ||
+                ("doctor" && (
+                  <li className="mb-2">
+                    <a
+                      onClick={() => handleSectionChange("user-bookings")}
+                      href="#"
+                      className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
+                    >
+                      <TbBrandBooking className="mr-2" />
+                      My Bookings
+                    </a>
+                  </li>
+                ))}
 
               {/*Doctor Bookings Section */}
-              {userProfileData?.data?.role === "doctor" && (
-                <li className="mb-2">  
+              {/* {userProfileData?.data?.role === "doctor" && (
+                <li className="mb-2">
                   <a
                     onClick={() => handleSectionChange("bookings")}
                     href="#"
                     className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
                   >
-                    <TbBrandBooking className="mr-2" /> Bookings
+                    <TbBrandBooking className="mr-2" /> Appointments
                   </a>
                 </li>
-              )}
+              )} */}
 
               {/* slots creation */}
-              {userProfileData?.data?.role === "doctor" && (
+              {/* {userProfileData?.data?.role === "doctor" && (
                 <li className="mb-2">
                   <div
                     className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
@@ -258,7 +257,7 @@ const Profile = () => {
                     </ul>
                   )}
                 </li>
-              )}
+              )} */}
 
               {/* Profile Section with Subsections */}
               <li className="mb-2">
@@ -319,19 +318,29 @@ const Profile = () => {
                     <ul className="ml-6 mt-2 space-y-1 text-gray-300">
                       <li>
                         <p
-                          onClick={() => handleSectionChange("doctorselfprofile")}
+                          onClick={() =>
+                            handleSectionChange("doctorselfprofile")
+                          }
                           className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
                         >
                           View Profile
                         </p>
                       </li>
-                      <li>
+                      <li className="mb-2">
                         <a
-                          href="/edit-profile"
-                          className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
+                          onClick={() => handleSectionChange("bookings")}
+                          className="flex cursor-pointer items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
                         >
-                          Edit Profile
+                          Appointments
                         </a>
+                      </li>
+                      <li>
+                        <p
+                          onClick={() => handleSectionChange("view-slots")}
+                          className="block cursor-pointer p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
+                        >
+                          View Slots
+                        </p>
                       </li>
                     </ul>
                   )}
@@ -638,6 +647,7 @@ const Profile = () => {
           {activeSection === "view-slots" && (
             <AllSlots
               activeSection={activeSection}
+              setActiveSection={setActiveSection}
               handleSectionChange={handleSectionChange}
             />
           )}
