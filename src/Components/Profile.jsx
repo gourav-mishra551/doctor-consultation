@@ -43,7 +43,6 @@ const Profile = () => {
   const [userBooking, setUserBooking] = useState([]);
   const [activeSection, setActiveSection] = useState("selfuserprofile");
   const location = useLocation();
-  
 
   useEffect(() => {
     // Extract query parameter from the URL
@@ -71,21 +70,6 @@ const Profile = () => {
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
-
-  const bookings = async () => {
-    try {
-      const response = await axios.get(
-        "https://api.assetorix.com/ah/api/v1/dc/doctor/history",
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-            id: id,
-          },
-        }
-      );
-      setHistory(response.data);
-    } catch (error) {}
-  };
 
   const userData = async () => {
     try {
@@ -133,7 +117,6 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    bookings();
     docotrData();
     getFamilyEdit();
     userBookings();
@@ -319,7 +302,9 @@ const Profile = () => {
                     <ul className="ml-6 mt-2 space-y-1 text-gray-300">
                       <li>
                         <p
-                          onClick={() => handleSectionChange("doctorselfprofile")}
+                          onClick={() =>
+                            handleSectionChange("doctorselfprofile")
+                          }
                           className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
                         >
                           View Profile
@@ -614,7 +599,7 @@ const Profile = () => {
         </div>
 
         <div className="right sm:w-[80%] w-[100%] mt-5">
-          {activeSection === "bookings" && <Bookings history={history} />}
+          {activeSection === "bookings" && <Bookings />}
           {activeSection === "selfuserprofile" && (
             <SelfProfile userprofiledata={userProfileData} />
           )}
