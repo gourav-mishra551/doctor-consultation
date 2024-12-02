@@ -157,15 +157,6 @@ const UserBookings = ({ setUserBooking, userBooking }) => {
                       {consultation?._id}
                     </span>
                   </div>
-
-                  {/* make prescription */}
-                  <div className="flex flex-col sm:w-[150px] w-full ">
-                    <Link to={`/prescription-maker/${consultation?._id}`}>
-                      <button className="bg-[#944120] hover:bg-[#6e341d] transition-all duration-500 ease-in-out p-2 text-white rounded-md">
-                        Make Prescription
-                      </button>
-                    </Link>
-                  </div>
                 </div>
               )}
             </div>
