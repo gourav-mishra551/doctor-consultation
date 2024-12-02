@@ -17,6 +17,7 @@ const PrescriptionMaker = () => {
     frequency: "",
     duration: "",
     instruction: "",
+    dose: "",
   });
   const [medicineData, setMedicineData] = useState([]);
   const [formData, setFormData] = useState([
@@ -26,6 +27,7 @@ const PrescriptionMaker = () => {
     medicineName: "",
     frequency: "",
     duration: "",
+    dose: "",
     instruction: "",
   });
   const [searchResults, setSearchResults] = useState([]);
@@ -70,7 +72,8 @@ const PrescriptionMaker = () => {
       medication.medicineName &&
       medication.frequency &&
       medication.duration &&
-      medication.instruction
+      medication.instruction &&
+      medication.dose
     ) {
       setMedicineData([...medicineData, medication]);
       setMedication({
@@ -78,6 +81,7 @@ const PrescriptionMaker = () => {
         frequency: "",
         duration: "",
         instruction: "",
+        dose: "",
       });
     } else {
       alert("Please fill all medication fields.");
@@ -110,6 +114,7 @@ const PrescriptionMaker = () => {
       frequency: data.frequency,
       duration: data.duration,
       instruction: data.instruction,
+      dose: data.dose,
     });
     setEditForm(true); // Open the form popup
   };
@@ -390,7 +395,7 @@ const PrescriptionMaker = () => {
                 <div ref={suggestionBoxRef} className="relative">
                   <textarea
                     name="frequency"
-                    placeholder="1-1-1"
+                    placeholder="1-1-1 (dose)"
                     value={medication.frequency}
                     onFocus={handleFocusFrequency}
                     onChange={(e) => {
@@ -435,6 +440,13 @@ const PrescriptionMaker = () => {
                 name="instruction"
                 placeholder="Instruction"
                 value={medication.instruction}
+                onChange={handleMedicationChange}
+                className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none resize-none"
+              />
+              <textarea
+                name="dose"
+                placeholder="Frequency"
+                value={medication.dose}
                 onChange={handleMedicationChange}
                 className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none resize-none"
               />

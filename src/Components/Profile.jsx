@@ -193,19 +193,19 @@ const Profile = () => {
               </li>
 
               {/* user bookings */}
-              {userProfileData?.data?.role === "customer" ||
-                ("doctor" && (
-                  <li className="mb-2">
-                    <a
-                      onClick={() => handleSectionChange("user-bookings")}
-                      href="#"
-                      className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
-                    >
-                      <TbBrandBooking className="mr-2" />
-                      My Bookings
-                    </a>
-                  </li>
-                ))}
+              {(userProfileData?.data?.role === "customer" ||
+                userProfileData?.data?.role === "doctor") && (
+                <li className="mb-2">
+                  <a
+                    onClick={() => handleSectionChange("user-bookings")}
+                    href="#"
+                    className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
+                  >
+                    <TbBrandBooking className="mr-2" />
+                    My Bookings
+                  </a>
+                </li>
+              )}
 
               {/*Doctor Bookings Section */}
               {/* {userProfileData?.data?.role === "doctor" && (
