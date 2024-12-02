@@ -3,6 +3,7 @@ import { FaPlus } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import PdfGeneratorPrescription from "./PdfGeneratorPrescription/PdfGeneratorPrescription";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const PrescriptionMaker = () => {
   const [showPdfGenerator, setShowPdfGenerator] = useState(false);
@@ -13,6 +14,7 @@ const PrescriptionMaker = () => {
   const [deleteId, setDeleteId] = useState(null);
   const [editMedicineData, setEditMedicineData] = useState({
     medicineSelected: "",
+    dose: "",
     frequency: "",
     duration: "",
     instruction: "",
@@ -23,10 +25,17 @@ const PrescriptionMaker = () => {
   ]);
   const [medication, setMedication] = useState({
     medicineName: "",
+    dose: "",
     frequency: "",
     duration: "",
     instruction: "",
   });
+  const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false); // Loading state
+  const [error, setError] = useState(""); // Error state
+
+  const token = localStorage.getItem("token");
+  const id = localStorage.getItem("id");
 
   const navigate = useNavigate();
 
@@ -44,10 +53,15 @@ const PrescriptionMaker = () => {
   };
 
   const handleMedicationChange = (e) => {
-    setMedication({
-      ...medication,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setMedication((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "medicineName" && value.trim()) {
+      console.log("Search Query: ", value); // Log the search query
+      searchProducts(value); // Trigger search
+    } else if (name === "medicineName" && !value.trim()) {
+      setSearchResults([]); // Clear search results if input is empty
+    }
   };
 
   const handleAddMedication = () => {
@@ -55,12 +69,14 @@ const PrescriptionMaker = () => {
       medication.medicineName &&
       medication.frequency &&
       medication.duration &&
-      medication.instruction
+      medication.instruction &&
+      medication.dose
     ) {
       setMedicineData([...medicineData, medication]);
       setMedication({
         medicineName: "",
         frequency: "",
+        dose: "",
         duration: "",
         instruction: "",
       });
@@ -88,14 +104,12 @@ const PrescriptionMaker = () => {
 
   const popupRef = useRef(null);
 
-  const token = localStorage.getItem("token");
-  const id = localStorage.getItem("id");
-
   const loadEditData = (data) => {
     setEditMedicineData({
       id: data.id, // Store the ID for tracking edits
       medicineName: data.medicineName,
       frequency: data.frequency,
+      dose: data.dose,
       duration: data.duration,
       instruction: data.instruction,
     });
@@ -128,6 +142,60 @@ const PrescriptionMaker = () => {
       setFormData(updatedFormData);
     }
   };
+
+  const searchProducts = async (query) => {
+    try {
+      setLoading(true);
+      setError("");
+      const response = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/product/search`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+          params: { search: query }, // Pass the query as a parameter
+        }
+      );
+      console.log("API Response:", response.data); // Log the response to check the structure
+      setSearchResults(response.data.data); // Ensure default to an empty array
+    } catch (err) {
+      // setError("Failed to fetch products. Please try again.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // const fetchMedicines = async (query) => {
+  //   try {
+  //     if (!query.trim()) {
+  //       setSearchResults([]); // Clear results if the query is empty
+  //       return;
+  //     }
+  //     setLoading(true);
+  //     setError(null);
+
+  //     const response = await axios.get(`/api/medicines?search=${query}`);
+  //     console.log("API response:", response.data); // Log response to check the structure
+
+  //     // Set search results from the 'data' key
+  //     setSearchResults(response.data.data); // Accessing the 'data' property
+  //   } catch (err) {
+  //     console.error("Error fetching data:", err);
+  //     setError("Failed to fetch medicines.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  console.log("searchResults", searchResults);
+
+  useEffect(() => {
+    if (searchTerm.trim()) {
+      fetchMedicines(searchTerm); // Fetch results when the searchTerm changes
+    }
+  }, [searchTerm]);
 
   return (
     <div className="bg-gray-100 p-5 sm:flex gap-5">
@@ -255,13 +323,19 @@ const PrescriptionMaker = () => {
                 placeholder="Medicine Name"
                 value={medication.medicineName}
                 onChange={handleMedicationChange}
-                className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none"
+                className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none w-full mb-2"
               />
               <textarea
                 name="frequency"
                 placeholder="Frequency"
                 value={medication.frequency}
-                onChange={handleMedicationChange}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  // Allow only numbers and dash
+                  if (/^[\d-]*$/.test(value)) {
+                    handleMedicationChange(e); // Proceed with the change if valid
+                  }
+                }}
                 className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none resize-none"
               />
               <input
@@ -279,6 +353,33 @@ const PrescriptionMaker = () => {
                 onChange={handleMedicationChange}
                 className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none resize-none"
               />
+              <div className="mt-4">
+                {loading ? (
+                  <p className="text-blue-500">Loading...</p>
+                ) : error ? (
+                  <p className="text-red-500">{error}</p>
+                ) : searchResults.length > 0 ? (
+                  <ul className="border rounded-md bg-white max-h-48 overflow-y-auto">
+                    {searchResults.map((product) => (
+                      <li
+                        key={product._id}
+                        className="p-2 border-b last:border-b-0 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => {
+                          setMedication((prev) => ({
+                            ...prev,
+                            medicineName: product.title,
+                          }));
+                          setSearchResults([]); // Clear results on selection
+                        }}
+                      >
+                        {product.title}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-500">No results found.</p>
+                )}
+              </div>
             </div>
 
             {/* Display Medication Table */}
@@ -336,14 +437,6 @@ const PrescriptionMaker = () => {
               Submit
             </button>
           </div>
-
-          {/* Condition ally render PdfGeneratorPrescription */}
-          {/* {showPdfGenerator && (
-            <PdfGeneratorPrescription
-              formData={formData}
-              medicineData={medicineData}
-            />
-          )} */}
         </form>
         {deleteAlert && (
           <div className="fixed inset-0 flex items-center justify-center z-50">

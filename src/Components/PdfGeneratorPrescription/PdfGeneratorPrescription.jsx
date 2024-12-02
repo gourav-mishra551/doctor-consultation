@@ -36,10 +36,52 @@ const PdfGeneratorPrescription = () => {
       alignItems: "center",
       marginBottom: 20,
     },
+    data: {
+      color: "#616A76",
+      padding: "4px",
+    },
     doctorSection: {
       flexDirection: "row",
       alignItems: "center",
     },
+    medicineTable: {
+      width: "100%",
+      marginVertical: 10,
+      borderWidth: 0,
+      borderColor: "#ccc",
+      borderRadius: 4,
+      overflow: "hidden",
+    },
+    tableRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      borderBottomWidth: 1,
+      borderColor: "#ccc",
+      paddingVertical: 5,
+      paddingHorizontal: 10,
+    },
+    tableHeader: {
+      backgroundColor: "#f5f5f5",
+      fontWeight: "bold",
+    },
+    tableCell: {
+      paddingHorizontal: 5,
+      textAlign: "center",
+    },
+    medicineName: {
+      flex: 2, // 20% width
+    },
+    frequency: {
+      flex: 2, // 20% width
+    },
+    duration: {
+      flex: 2, // 20% width
+    },
+    instructions: {
+      flex: 4, // 40% width
+      textAlign: "left", // Align text for better readability
+    },
+
     logo: { width: 50, height: 50, marginRight: 10 },
     doctorName: { fontSize: 20, fontWeight: "bold", color: "#0074D9" },
     qualification: { fontSize: 12, color: "#7F8C8D" },
@@ -77,7 +119,19 @@ const PdfGeneratorPrescription = () => {
       padding: 5,
       fontSize: 12,
       flex: 1,
+      textAlign: "left",
+    },
+    signatureSection: {
+      marginTop: 30,
+      display: "flex",
+      flexDirection: "column",
+    },
+    signatureImage: { width: 100, height: 50, objectFit: "contain" },
+    footer: {
       textAlign: "center",
+      marginTop: 30,
+      fontSize: 12,
+      color: "#7F8C8D",
     },
   });
 
@@ -115,41 +169,67 @@ const PdfGeneratorPrescription = () => {
         </View>
 
         {/* Problems and Observations Section */}
-        <View style={styles.notesSection}>
-          <Text style={styles.label}>Problems:</Text>
-          <Text style={styles.text}>Chronic headache and fatigue.</Text>
-        </View>
-        <View style={styles.notesSection}>
-          <Text style={styles.label}>Observations:</Text>
-          <Text style={styles.text}>Blood pressure slightly elevated.</Text>
-        </View>
-        <View style={styles.notesSection}>
-          <Text style={styles.label}>Notes:</Text>
-          <Text style={styles.text}>
-            Recommend further evaluation for hypertension and stress.
-          </Text>
+        <View style={styles.medicineTable}>
+          <View style={[styles.tableRow, styles.tableHeader]}>
+            <Text style={[styles.tableCell, styles.medicineName]}>
+              Problems
+            </Text>
+            <Text style={[styles.tableCell, styles.frequency]}>
+              Observations
+            </Text>
+            <Text style={[styles.tableCell, styles.duration]}>Notes</Text>
+          </View>
+          {formData.map((form, index) => (
+            <React.Fragment key={index}>
+              {/* Table Header */}
+
+              {/* Table Row */}
+              <View style={styles.tableRow}>
+                <Text
+                  style={[styles.tableCell, styles.medicineName, styles.data]}
+                >
+                  {form.problems || "N/A"}
+                </Text>
+                <Text style={[styles.tableCell, styles.frequency, styles.data]}>
+                  {form.observations || "N/A"}
+                </Text>
+                <Text style={[styles.tableCell, styles.duration, styles.data]}>
+                  {form.notes || "N/A"}
+                </Text>
+              </View>
+            </React.Fragment>
+          ))}
         </View>
 
         {/* Medicines Section */}
-
         <View style={styles.medicineTable}>
           <View style={[styles.tableRow, styles.tableHeader]}>
-            <Text style={styles.tableCell}>Medicine Name</Text>
-            <Text style={styles.tableCell}>Frequency</Text>
-            <Text style={styles.tableCell}>Duration</Text>
-            <Text style={styles.tableCell}>Action</Text>
+            <Text style={[styles.tableCell, styles.medicineName]}>
+              Medicine Name
+            </Text>
+            <Text style={[styles.tableCell, styles.frequency]}>Frequency</Text>
+            <Text style={[styles.tableCell, styles.duration]}>Duration</Text>
+            <Text style={[styles.tableCell, styles.instructions]}>
+              Instructions
+            </Text>
           </View>
 
           {medicineData.map((medicine, index) => (
             <View key={index} style={styles.tableRow}>
-              <Text style={styles.tableCell}>
-                {medicine.medicineName || "N/A"}
+              <Text style={[styles.tableRow, styles.medicineName, styles.data]}>
+                {medicine?.medicineName || "N/A"}
               </Text>
-              <Text style={styles.tableCell}>
-                {medicine.frequency || "N/A"}
+              <Text style={[styles.tableCell, styles.frequency, styles.data]}>
+                {medicine?.frequency || "N/A"}
               </Text>
-              <Text style={styles.tableCell}>{medicine.duration || "N/A"}</Text>
-              <Text style={styles.tableCell}>{medicine.action || "N/A"}</Text>
+              <Text style={[styles.tableCell, styles.duration, styles.data]}>
+                {medicine?.duration || "N/A"}
+              </Text>
+              <Text
+                style={[styles.tableCell, styles.instructions, styles.data]}
+              >
+                {medicine?.instruction || "N/A"}
+              </Text>
             </View>
           ))}
         </View>

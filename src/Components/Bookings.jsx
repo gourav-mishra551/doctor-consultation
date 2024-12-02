@@ -26,6 +26,7 @@ const Bookings = () => {
         }
       );
       setHistory(response.data);
+      console.log(response.data);
     } catch (error) {}
   };
 
