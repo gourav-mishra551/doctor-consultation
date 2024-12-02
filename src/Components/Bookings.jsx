@@ -11,8 +11,6 @@ import {
 
 const Bookings = ({ history }) => {
   const [openSection, setOpenSection] = useState(null);
-
-
   const toggleSection = (index) => {
     setOpenSection(openSection === index ? null : index);
   };
@@ -35,6 +33,13 @@ const Bookings = ({ history }) => {
       ...options,
     });
   };
+
+  function formatTime(time) {
+    const [hours, minutes] = time.split(":").map(Number); // Split and convert to numbers
+    const period = hours >= 12 ? "PM" : "AM"; // Determine AM or PM
+    const formattedHours = hours % 12 || 12; // Convert 24-hour to 12-hour format (handle 0 and 12)
+    return `${formattedHours}:${String(minutes).padStart(2, "0")} ${period}`; // Pad minutes with 0 if needed
+  }
 
   return (
     <div>
@@ -121,10 +126,8 @@ const Bookings = ({ history }) => {
                     <div className="flex flex-col">
                       <span className="text-sm text-gray-500">Start Time</span>
                       <span className="text-lg font-semibold text-gray-800">
-                        {
-                          consultation?.bookingDetails?.specificSlotData
-                            ?.startTime
-                        }
+                        {formatTime(consultation?.bookingDetails?.specificSlotData
+                          ?.startTime)}
                       </span>
                     </div>
 
@@ -132,9 +135,8 @@ const Bookings = ({ history }) => {
                     <div className="flex flex-col">
                       <span className="text-sm text-gray-500">End Time</span>
                       <span className="text-lg font-semibold text-gray-800">
-                        {
-                          consultation?.bookingDetails?.specificSlotData
-                            ?.endTime
+                        {formatTime(consultation?.bookingDetails?.specificSlotData
+                          ?.endTime)
                         }
                       </span>
                     </div>
@@ -166,7 +168,7 @@ const Bookings = ({ history }) => {
 
                     {/* Make Prescription */}
                     <div className="flex flex-col sm:w-[150px] w-full">
-                      <Link to= {`/prescription-maker/${consultation?.bookingDetails?._id}`}>
+                      <Link to={`/prescription-maker/${consultation?.bookingDetails?._id}`}>
                         <button className="bg-[#944120] hover:bg-[#6e341d] transition-all duration-500 ease-in-out p-2 text-white rounded-md">
                           Make Prescription
                         </button>
