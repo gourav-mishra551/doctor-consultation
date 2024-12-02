@@ -9,29 +9,9 @@ import {
   MdSpatialAudioOff,
 } from "react-icons/md";
 
-const Bookings = () => {
+const Bookings = ({ history }) => {
   const [openSection, setOpenSection] = useState(null);
-  const [name, setName] = useState("");
-  const [history, setHistory] = useState([]);
 
-  const bookings = async () => {
-    try {
-      const response = await axios.get(
-        "https://api.assetorix.com/ah/api/v1/dc/doctor/history",
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-            id: id,
-          },
-        }
-      );
-      setHistory(response.data);
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    bookings();
-  });
 
   const toggleSection = (index) => {
     setOpenSection(openSection === index ? null : index);
@@ -86,19 +66,19 @@ const Bookings = () => {
                       </span>
                       <span className="text-sm text-gray-800 font-bold">
                         {consultation?.bookingDetails?.consultation_formats ===
-                        "videoCall" ? (
+                          "videoCall" ? (
                           <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-1">
                             <p className="text-xm">Video Call</p>
                             <MdOutlineVideoCall className="text-xl" />
                           </div>
                         ) : consultation?.bookingDetails
-                            ?.consultation_formats === "chat" ? (
+                          ?.consultation_formats === "chat" ? (
                           <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-2">
                             <p>Chat</p>
                             <CiChat1 />
                           </div>
                         ) : consultation?.bookingDetails
-                            ?.consultation_formats === "phoneCall" ? (
+                          ?.consultation_formats === "phoneCall" ? (
                           <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-2">
                             <p>Audio Call</p>
                             <MdSpatialAudioOff />
@@ -112,7 +92,7 @@ const Bookings = () => {
                       <span className="text-sm text-gray-500">Select Mode</span>
                       <span className="text-lg font-semibold text-gray-800">
                         {consultation?.bookingDetails?.selectMode ===
-                        "online" ? (
+                          "online" ? (
                           <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-1">
                             <p className="text-sm">Online</p>
                             <MdOutlineBookOnline className="text-xl" />
@@ -186,9 +166,11 @@ const Bookings = () => {
 
                     {/* Make Prescription */}
                     <div className="flex flex-col sm:w-[150px] w-full">
-                      <button className="bg-[#944120] hover:bg-[#6e341d] transition-all duration-500 ease-in-out p-2 text-white rounded-md">
-                        Make Prescription
-                      </button>
+                      <Link to= {`/prescription-maker/${consultation?.bookingDetails?._id}`}>
+                        <button className="bg-[#944120] hover:bg-[#6e341d] transition-all duration-500 ease-in-out p-2 text-white rounded-md">
+                          Make Prescription
+                        </button>
+                      </Link>
                     </div>
                   </div>
                 )}
@@ -197,7 +179,7 @@ const Bookings = () => {
           </div>
         </div>
       ) : (
-        <div className="text-center text-gray-500">No Booking Till Now</div>
+        <div className="text-center text-gray-500">No Booking Till Now </div>
       )}
     </div>
   );

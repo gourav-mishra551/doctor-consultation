@@ -43,6 +43,25 @@ const Profile = () => {
   const [userBooking, setUserBooking] = useState([]);
   const [activeSection, setActiveSection] = useState("selfuserprofile");
   const location = useLocation();
+
+  const bookings = async () => {
+    try {
+      const response = await axios.get(
+        "https://api.assetorix.com/ah/api/v1/dc/doctor/history",
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      setHistory(response.data);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    bookings();
+  }, []);
   
 
   useEffect(() => {
@@ -72,20 +91,7 @@ const Profile = () => {
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
 
-  const bookings = async () => {
-    try {
-      const response = await axios.get(
-        "https://api.assetorix.com/ah/api/v1/dc/doctor/history",
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-            id: id,
-          },
-        }
-      );
-      setHistory(response.data);
-    } catch (error) {}
-  };
+ 
 
   const userData = async () => {
     try {
@@ -133,17 +139,11 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    bookings();
     docotrData();
     getFamilyEdit();
     userBookings();
     userData();
   }, []);
-
-  const convertToIndianDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-IN");
-  };
 
   const navigate = useNavigate();
 
@@ -196,7 +196,7 @@ const Profile = () => {
               </li>
 
               {/* user bookings */}
-              {userProfileData?.data?.role === "customer" && (
+              {userProfileData?.data?.role === "customer" || "admin" && (
                 <li className="mb-2">
                   <a
                     onClick={() => handleSectionChange("user-bookings")}
@@ -210,7 +210,7 @@ const Profile = () => {
 
               {/*Doctor Bookings Section */}
               {userProfileData?.data?.role === "doctor" && (
-                <li className="mb-2">
+                <li className="mb-2">  
                   <a
                     onClick={() => handleSectionChange("bookings")}
                     href="#"

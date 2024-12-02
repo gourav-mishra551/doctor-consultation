@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { CiChat1 } from "react-icons/ci";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoIosTimer } from "react-icons/io";
+import { Link } from "react-router-dom";
 import {
   MdOutlineBookOnline,
   MdOutlineVideoCall,
   MdSpatialAudioOff,
 } from "react-icons/md";
 import { BsFillPersonLinesFill } from "react-icons/bs";
+import { IoCloudOffline } from "react-icons/io5";
 
 const UserBookings = ({ setUserBooking, userBooking }) => {
   const [openSection, setOpenSection] = useState(null);
@@ -34,7 +36,7 @@ const UserBookings = ({ setUserBooking, userBooking }) => {
     });
   };
 
- 
+
 
   return (
     <div>
@@ -158,9 +160,11 @@ const UserBookings = ({ setUserBooking, userBooking }) => {
 
                   {/* make prescription */}
                   <div className="flex flex-col sm:w-[150px] w-full ">
-                    <button className="bg-[#944120] hover:bg-[#6e341d] transition-all duration-500 ease-in-out p-2 text-white rounded-md">
-                      Make prescription
-                    </button>
+                    <Link to={`/prescription-maker/${consultation?._id}`}>
+                      <button className="bg-[#944120] hover:bg-[#6e341d] transition-all duration-500 ease-in-out p-2 text-white rounded-md">
+                        Make Prescription
+                      </button>
+                    </Link>
                   </div>
                 </div>
               )}
