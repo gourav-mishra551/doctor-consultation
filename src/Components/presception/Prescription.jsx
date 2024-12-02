@@ -9,12 +9,25 @@ import {
   PDFDownloadLink,
 } from "@react-pdf/renderer";
 import Icon from "../../../src/Assests/fav-icon.png"; // Importing the icon image
-// sd.kjsjkjkdsfjkfhjk
+
 const PDFGenerator = () => {
   const [signature, setSignature] = useState(null);
 
   const styles = StyleSheet.create({
-    page: { padding: 30, fontSize: 12, fontFamily: "Helvetica" },
+    main: {
+      border: "1px solid red",
+    },
+    page: {
+      padding: 30,
+      fontSize: 12,
+      fontFamily: "Helvetica",
+      position: "relative",
+    },
+    Name: {
+      display: "flex",
+      flexDirection: "row",
+      gap: "5px",
+    },
     header: {
       display: "flex",
       flexDirection: "row",
@@ -26,21 +39,141 @@ const PDFGenerator = () => {
       flexDirection: "row",
       alignItems: "center",
     },
-    logo: { width: 50, height: 50, marginRight: 10 },
+    medicineTable: {
+      width: "100%",
+      marginVertical: 10,
+      borderWidth: 1,
+      borderColor: "#ccc",
+      borderRadius: 4,
+      overflow: "hidden",
+    },
+
+    tableRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      borderBottomWidth: 1,
+      borderColor: "#ccc",
+      paddingVertical: 5,
+      paddingHorizontal: 10,
+    },
+   
+    tableCell: {
+      paddingHorizontal: 5,
+      textAlign: "center",
+      borderRightWidth: 1,
+      padding: 5,
+      fontSize: 12,
+      flex: 1,
+      textAlign: "left",
+    },
+   
+    medicineName: {
+      flex: 2, // 20% width
+      borderRightWidth: 1,
+    },
+    frequency: {
+      flex: 2, // 20% width
+      borderRightWidth: 1,
+    },
+    duration: {
+      flex: 2, // 20% width
+      borderRightWidth: 1,
+    },
+    instructions: {
+      flex: 4, // 40% width
+      textAlign: "left", // Align text for better readability
+    },
+    heading: {
+      fontSize: "12px",
+    },
+
+    data: {
+      color: "#616A76",
+    },
+    Name: {
+      display: "flex",
+      flexDirection: "row",
+      gap: "10px",
+    },
+    Gender: {
+      display: "flex",
+      flexDirection: "row",
+      gap: "5px",
+    },
+    DOB: {
+      display: "flex",
+      flexDirection: "row",
+      textAlign: "left",
+      marginRight: "20px",
+      gap: "7px",
+    },
+    Date: {
+      display: "flex",
+      flexDirection: "row",
+      gap: "5px",
+    },
+    Age: {
+      display: "flex",
+      flexDirection: "row",
+      gap: "20px",
+    },
+    Address: {
+      display: "flex",
+      flexDirection: "row",
+      gap: "10px",
+    },
+    Mobile: {
+      display: "flex",
+      flexDirection: "row",
+      gap: "15px",
+    },
+
+    logo: { width: 70, height: 70, marginRight: 10 },
     doctorName: { fontSize: 20, fontWeight: "bold", color: "#0074D9" },
     qualification: { fontSize: 12, color: "#7F8C8D" },
-    section: { marginBottom: 10 },
+    section: {
+      padding: 15,
+      borderWidth: 1,
+      borderColor: "#ddd",
+      borderRadius: 8,
+      backgroundColor: "#f9f9f9",
+      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+    },
     labelRow: {
       display: "flex",
       flexDirection: "row",
+      justifyContent: "space-between",
       marginBottom: 10,
+      gap: "0px",
+      alignItems: "center",
     },
-    label: { fontSize: 14, fontWeight: "bold", width: "30%" },
+    labelAddress: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-center",
+      marginBottom: 10,
+
+      alignItems: "center",
+      width: "80%",
+    },
+    label: { fontSize: 14, fontWeight: 900, width: "auto", paddingRight: 5 },
+    labelKg: {
+      fontSize: 14,
+      fontWeight: 900,
+      width: "40%",
+      paddingRight: 5,
+    },
+    labelHeight: {
+      fontSize: 14,
+      fontWeight: 900,
+      paddingRight: 5,
+      width: "55%",
+    },
     text: {
       fontSize: 14,
-      width: "70%",
-    
-      paddingLeft: 5,
+      width: "30%",
+
+      paddingRight: "20px",
     },
     notesSection: {
       marginBottom: 20,
@@ -57,23 +190,65 @@ const PDFGenerator = () => {
     },
     tableHeader: {
       fontWeight: "bold",
-      backgroundColor: "#F0F0F0",
-    },
-    tableCell: {
-      padding: 5,
-      fontSize: 12,
-      flex: 1,
-      textAlign: "center",
+      backgroundColor: "#E4F8F6",
+      backgroundColor: "#f5f5f5",
+      fontWeight: "bold",
+      borderBottomWidth: 2, // Stronger line for header
+      borderColor: "#ccc",
     },
     signatureSection: {
       marginTop: 30,
       display: "flex",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
+      flexDirection: "column",
     },
     signatureImage: { width: 100, height: 50, objectFit: "contain" },
-    footer: { textAlign: "center", marginTop: 30, fontSize: 12, color: "#7F8C8D" },
+    footer: {
+      textAlign: "left",
+      fontSize: 10,
+      color: "#7F8C8D",
+    },
+
+    horizontalLine: {
+      height: 2,
+      backgroundColor: "#0074D9", // Blue color
+      marginVertical: 10,
+      borderRadius: 1, // Smooth edges
+      marginTop: "5px",
+    },
+
+    watermark: {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      fontSize: 100, // Increase font size for better visibility
+      color: "#E0E0E0", // Slightly darker gray for better contrast
+      opacity: 0.2, // Ensure transparency doesn't obscure content
+      textAlign: "center",
+      zIndex: -10, // Keep it behind all other elements
+    },
+    Addr: {
+      width: "100%",
+    },
+    WKG: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center", // Align text vertically
+    },
+    KG: {
+      display: "flex",
+      justifyContent: "center",
+      flexDirection: "row",
+      textAlign: "left",
+      width: "100%",
+      gap: "0px",
+      marginLeft: "40px",
+    },
+    BP: {
+      width: "50%",
+      display: "flex",
+      flexDirection: "row",
+    },
   });
 
   const handleSignatureUpload = (e) => {
@@ -84,89 +259,193 @@ const PDFGenerator = () => {
   };
 
   const PrescriptionPDF = () => (
-    <Document>
+    <Document style={styles.main}>
       <Page style={styles.page}>
+        <Image style={styles.watermark} src={Icon} />
+
         {/* Header Section */}
         <View style={styles.header}>
           <View style={styles.doctorSection}>
             <Image style={styles.logo} src={Icon} />
             <View>
               <Text style={styles.doctorName}>Dr. Martin Jameson</Text>
-              <Text style={styles.qualification}>MBBS, MD - General Physician</Text>
+              <Text style={styles.qualification}>
+                MBBS, MD - General Physician
+              </Text>
+              <Text style={styles.footer}>
+                Clinic Name | 24 Dummy Street Area | +12-345 678 9012
+              </Text>
             </View>
           </View>
-          <Image style={styles.logo} src="https://via.placeholder.com/50" />
         </View>
-
+        <View style={styles.horizontalLine} />
         {/* Patient Details Section */}
         <View style={styles.section}>
           <View style={styles.labelRow}>
-            <Text style={styles.label}>Patient:</Text>
-            <Text style={styles.text}>Arman Ali</Text>
-            <Text style={styles.label}>Date:</Text>
-            <Text style={styles.text}>2024-11-29</Text>
+            <View style={styles.Name}>
+              <Text style={styles.label}>Patient:</Text>
+              <Text style={[styles.text, styles.data]}>Arman Ali</Text>
+            </View>
+
+            <View style={styles.Gender}>
+              <Text style={styles.label}>Gender:</Text>
+              <Text style={[styles.text, styles.data]}>Male</Text>
+            </View>
           </View>
           <View style={styles.labelRow}>
-            <Text style={styles.label}>Age:</Text>
-            <Text style={styles.text}>45</Text>
-            <Text style={styles.label}>Gender:</Text>
-            <Text style={styles.text}>Male</Text>
+            {/* <View style={styles.Age}>
+              <Text style={styles.label}>Age:</Text>
+              <Text style={[styles.text, styles.data]}>45</Text>
+            </View> */}
+
+            <View style={styles.Mobile}>
+              <Text style={styles.label}>Mobile:</Text>
+              <Text style={[styles.text, styles.data]}>49839303922</Text>
+            </View>
+
+            <View style={styles.DOB}>
+              <Text style={styles.label}>DOB:</Text>
+              <Text style={[styles.text, styles.data]}>16-04-2003</Text>
+            </View>
+          </View>
+
+          <View style={styles.labelAddress}>
+            <View style={styles.Address}>
+              <Text style={styles.label}>Address:</Text>
+              <Text style={[styles.text, styles.Addr, styles.data]}>
+                75/106 halsy road kanpur
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.labelRow}>
+            <View style={styles.WKG}>
+              <Text style={styles.labelHeight}>Height (in cms):</Text>
+              <Text style={[styles.text, styles.data]}>175</Text>
+            </View>
+
+            <View style={styles.KG}>
+              <Text style={styles.labelKg}>Weight (in Kg):</Text>
+              <Text style={[styles.text, styles.data]}>65</Text>
+            </View>
+          </View>
+
+          <View style={styles.labelRow}>
+            <View style={styles.BP}>
+              <Text style={styles.labelHeight}>Blood Presure (B.P):</Text>
+              <Text style={[styles.text, styles.data]}>175</Text>
+            </View>
           </View>
         </View>
 
         {/* Problems and Observations Section */}
-        <View style={styles.notesSection}>
-          <Text style={styles.label}>Problems:</Text>
-          <Text style={styles.text}>Chronic headache and fatigue.</Text>
-        </View>
-        <View style={styles.notesSection}>
-          <Text style={styles.label}>Observations:</Text>
-          <Text style={styles.text}>Blood pressure slightly elevated.</Text>
-        </View>
-        <View style={styles.notesSection}>
-          <Text style={styles.label}>Notes:</Text>
-          <Text style={styles.text}>
-            Recommend further evaluation for hypertension and stress.
-          </Text>
+
+        <View style={styles.medicineTable}>
+          <View style={[styles.tableRow, styles.tableHeader]}>
+            <Text
+              style={[styles.tableCell, styles.medicineName, styles.heading]}
+            >
+              Problems
+            </Text>
+            <Text style={[styles.tableCell, styles.frequency, styles.heading]}>
+              Observations
+            </Text>
+            <Text style={[styles.tableCell, styles.duration, styles.heading]}>
+              Advice
+            </Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={[styles.tableCell, styles.medicineName, styles.data]}>
+              Chronic headache and fatigue.
+            </Text>
+            <Text style={[styles.tableCell, styles.frequency, styles.data]}>
+              Blood pressure slightly elevated.
+            </Text>
+            <Text style={[styles.tableCell, styles.duration, styles.data]}>
+              Blood pressure slightly elevated.
+            </Text>
+          </View>
+
+          <View style={styles.tableRow}>
+            <Text style={[styles.tableCell, styles.medicineName, styles.data]}>
+              Chronic headache and fatigue.
+            </Text>
+            <Text style={[styles.tableCell, styles.frequency, styles.data]}>
+              Blood pressure slightly elevated.
+            </Text>
+            <Text style={[styles.tableCell, styles.duration, styles.data]}>
+              Blood pressure slightly elevated.
+            </Text>
+          </View>
         </View>
 
         {/* Medicines Section */}
         <View style={styles.medicineTable}>
           <View style={[styles.tableRow, styles.tableHeader]}>
-            <Text style={styles.tableCell}>Medicine Name</Text>
-            <Text style={styles.tableCell}>Frequency</Text>
-            <Text style={styles.tableCell}>Duration</Text>
-            <Text style={styles.tableCell}>Action</Text>
+            <Text style={[styles.tableCell, styles.medicineName]}>
+              Medicine Name
+            </Text>
+            <Text style={[styles.tableCell, styles.frequency]}>Frequency</Text>
+            <Text style={[styles.tableCell, styles.duration]}>Duration</Text>
+            <Text style={[styles.tableCell, styles.instructions]}>
+              Instructions
+            </Text>
           </View>
           <View style={styles.tableRow}>
-            <Text style={styles.tableCell}>Paracetamol</Text>
-            <Text style={styles.tableCell}>2 times a day</Text>
-            <Text style={styles.tableCell}>5 days</Text>
-            <Text style={styles.tableCell}>Pain relief</Text>
+            <Text style={[styles.tableCell, styles.medicineName, styles.data]}>
+              Paracetamol
+            </Text>
+            <Text style={[styles.tableCell, styles.frequency, styles.data]}>
+              2 times a day
+            </Text>
+            <Text style={[styles.tableCell, styles.duration, styles.data]}>
+              5 days
+            </Text>
+            <Text style={[styles.tableCell, styles.instructions, styles.data]}>
+              Pain relief To create a table-like UI for Problems, Observations,
+              and Notes in your prescription PDF, structure the layout as rows
+              and columns. Use a container for the table with distinct styles
+              for rows, headers, and cells. The header row contains column
+              titles like Category and Details. Each subsequent row represents
+              one section (e.g., Problems, Observations, Notes) with their
+              respective descriptions. Use flexDirection: "row" for alignment
+              and add borders for a structured appearance. Ensure header styles
+              are bold with a background color for distinction. This approach
+              organizes data cleanly, improving readability and giving a
+              professional touch to the document.
+            </Text>
           </View>
+
           <View style={styles.tableRow}>
-            <Text style={styles.tableCell}>Amlodipine</Text>
-            <Text style={styles.tableCell}>Once daily</Text>
-            <Text style={styles.tableCell}>10 days</Text>
-            <Text style={styles.tableCell}>BP Control</Text>
+            <Text style={[styles.tableCell, styles.medicineName, styles.data]}>
+              Dolo
+            </Text>
+            <Text style={[styles.tableCell, styles.frequency, styles.data]}>
+              7 times a day
+            </Text>
+            <Text style={[styles.tableCell, styles.duration, styles.data]}>
+              5 days
+            </Text>
+            <Text style={[styles.tableCell, styles.instructions, styles.data]}>
+              sajdfadhsdfuidh
+            </Text>
           </View>
         </View>
 
         {/* RX Section */}
-        <View style={{ marginTop: 20 }}>
-          <Text style={{ fontSize: 40, color: "#0074D9", fontWeight: "bold" }}>Rx</Text>
-        </View>
+        {/* <View style={{ marginTop: 20 }}>
+          <Text style={{ fontSize: 40, color: "#0074D9", fontWeight: "bold" }}>
+            Rx
+          </Text>
+        </View> */}
 
         {/* Signature Section */}
         <View style={styles.signatureSection}>
-          <Text>Signature:</Text>
           {signature && <Image style={styles.signatureImage} src={signature} />}
+          <Text>Signature:</Text>
         </View>
 
         {/* Footer */}
-        <Text style={styles.footer}>
-          Clinic Name | 24 Dummy Street Area | +12-345 678 9012
-        </Text>
       </Page>
     </Document>
   );
