@@ -14,7 +14,6 @@ const PrescriptionMaker = () => {
   const [deleteId, setDeleteId] = useState(null);
   const [editMedicineData, setEditMedicineData] = useState({
     medicineSelected: "",
-    dose: "",
     frequency: "",
     duration: "",
     instruction: "",
@@ -25,7 +24,6 @@ const PrescriptionMaker = () => {
   ]);
   const [medication, setMedication] = useState({
     medicineName: "",
-    dose: "",
     frequency: "",
     duration: "",
     instruction: "",
@@ -33,11 +31,14 @@ const PrescriptionMaker = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(""); // Error state
+  const [frequencySuggestions, setFrequencySuggestions] = useState([]);
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
 
   const navigate = useNavigate();
+  const searchBoxRef = useRef(null);
+  const suggestionBoxRef = useRef(null);
 
   const handleAddMore = () => {
     setFormData([
@@ -69,14 +70,12 @@ const PrescriptionMaker = () => {
       medication.medicineName &&
       medication.frequency &&
       medication.duration &&
-      medication.instruction &&
-      medication.dose
+      medication.instruction
     ) {
       setMedicineData([...medicineData, medication]);
       setMedication({
         medicineName: "",
         frequency: "",
-        dose: "",
         duration: "",
         instruction: "",
       });
@@ -109,7 +108,6 @@ const PrescriptionMaker = () => {
       id: data.id, // Store the ID for tracking edits
       medicineName: data.medicineName,
       frequency: data.frequency,
-      dose: data.dose,
       duration: data.duration,
       instruction: data.instruction,
     });
@@ -196,6 +194,47 @@ const PrescriptionMaker = () => {
       fetchMedicines(searchTerm); // Fetch results when the searchTerm changes
     }
   }, [searchTerm]);
+
+  const handleClickOutside = (event) => {
+    if (searchBoxRef.current && !searchBoxRef.current.contains(event.target)) {
+      setSearchResults([]);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleFocusFrequency = () => {
+    const predefinedSuggestions = [
+      "1-1-1",
+      "1-0-0",
+      "1-1-0",
+      "0-1-1",
+      "0-1-0",
+      "0-0-1",
+    ];
+    setFrequencySuggestions(predefinedSuggestions);
+  };
+
+  const handleClickOutsideFreq = (event) => {
+    if (
+      suggestionBoxRef.current &&
+      !suggestionBoxRef.current.contains(event.target)
+    ) {
+      setFrequencySuggestions([]); // Close suggestions
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutsideFreq);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideFreq);
+    };
+  }, []);
 
   return (
     <div className="bg-gray-100 p-5 sm:flex gap-5">
@@ -315,29 +354,75 @@ const PrescriptionMaker = () => {
               </button>
             </div>
 
-            {/* Medication Inputs */}
             <div className="grid grid-cols-2 gap-4 mt-4">
-              <input
-                type="text"
-                name="medicineName"
-                placeholder="Medicine Name"
-                value={medication.medicineName}
-                onChange={handleMedicationChange}
-                className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none w-full mb-2"
-              />
-              <textarea
-                name="frequency"
-                placeholder="Frequency"
-                value={medication.frequency}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  // Allow only numbers and dash
-                  if (/^[\d-]*$/.test(value)) {
-                    handleMedicationChange(e); // Proceed with the change if valid
-                  }
-                }}
-                className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none resize-none"
-              />
+              <div ref={searchBoxRef} className="relative">
+                <input
+                  type="text"
+                  name="medicineName"
+                  placeholder="Medicine Name"
+                  value={medication.medicineName}
+                  onChange={handleMedicationChange}
+                  className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none w-full mb-2"
+                />
+                {searchResults.length > 0 && (
+                  <ul className="absolute z-10 border rounded-md bg-white max-h-48 overflow-y-auto w-full mt-1 shadow-md">
+                    {searchResults.map((product) => (
+                      <li
+                        key={product._id}
+                        className="p-2 border-b last:border-b-0 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => {
+                          setMedication((prev) => ({
+                            ...prev,
+                            medicineName: product.title,
+                          }));
+                          setSearchResults([]);
+                        }}
+                      >
+                        {product.title}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              <div className="w-full">
+                {/* Frequency Input with Suggestions */}
+                <div ref={suggestionBoxRef} className="relative">
+                  <textarea
+                    name="frequency"
+                    placeholder="1-1-1"
+                    value={medication.frequency}
+                    onFocus={handleFocusFrequency}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^[\d-]*$/.test(value)) {
+                        handleMedicationChange(e);
+                      }
+                    }}
+                    className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none w-full resize-none"
+                  />
+                  {frequencySuggestions.length > 0 && (
+                    <ul className="absolute z-10 border rounded-md bg-white max-h-48 overflow-y-auto w-full mt-1 shadow-md">
+                      {frequencySuggestions.map((suggestion, index) => (
+                        <li
+                          key={index}
+                          className="p-2 border-b last:border-b-0 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            setMedication((prev) => ({
+                              ...prev,
+                              frequency: suggestion,
+                            }));
+                            setFrequencySuggestions([]);
+                          }}
+                        >
+                          {suggestion}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+
               <input
                 type="text"
                 name="duration"
@@ -353,36 +438,8 @@ const PrescriptionMaker = () => {
                 onChange={handleMedicationChange}
                 className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none resize-none"
               />
-              <div className="mt-4">
-                {loading ? (
-                  <p className="text-blue-500">Loading...</p>
-                ) : error ? (
-                  <p className="text-red-500">{error}</p>
-                ) : searchResults.length > 0 ? (
-                  <ul className="border rounded-md bg-white max-h-48 overflow-y-auto">
-                    {searchResults.map((product) => (
-                      <li
-                        key={product._id}
-                        className="p-2 border-b last:border-b-0 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => {
-                          setMedication((prev) => ({
-                            ...prev,
-                            medicineName: product.title,
-                          }));
-                          setSearchResults([]); // Clear results on selection
-                        }}
-                      >
-                        {product.title}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-gray-500">No results found.</p>
-                )}
-              </div>
             </div>
 
-            {/* Display Medication Table */}
             <div className="overflow-x-auto block mt-5 border-2 p-5">
               <table className="min-w-full table-auto border-collapse">
                 <thead>

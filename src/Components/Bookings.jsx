@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { CiChat1 } from "react-icons/ci";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
@@ -8,34 +9,17 @@ import {
   MdOutlineVideoCall,
   MdSpatialAudioOff,
 } from "react-icons/md";
+import { Link } from "react-router-dom";
 
-const Bookings = () => {
+const Bookings = ({ history }) => {
   const [openSection, setOpenSection] = useState(null);
-  const [name, setName] = useState("");
-  const [history, setHistory] = useState([]);
-
-  const bookings = async () => {
-    try {
-      const response = await axios.get(
-        "https://api.assetorix.com/ah/api/v1/dc/doctor/history",
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-            id: id,
-          },
-        }
-      );
-      setHistory(response.data);
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    bookings();
-  });
-
   const toggleSection = (index) => {
     setOpenSection(openSection === index ? null : index);
   };
+  const [doctorBookingsData, setDoctorBookingsData] = useState([]);
+
+  const token = localStorage.getItem("token");
+  const id = localStorage.getItem("id");
 
   const options = {
     year: "numeric",
@@ -55,6 +39,37 @@ const Bookings = () => {
       ...options,
     });
   };
+
+  function formatTime(time) {
+    const [hours, minutes] = time?.split(":").map(Number); // Split and convert to numbers
+    const period = hours >= 12 ? "PM" : "AM"; // Determine AM or PM
+    const formattedHours = hours % 12 || 12; // Convert 24-hour to 12-hour format (handle 0 and 12)
+    return `${formattedHours}:${String(minutes).padStart(2, "0")} ${period}`; // Pad minutes with 0 if needed
+  }
+
+  const doctorBookings = async () => {
+    try {
+      const response = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/dc/doctor/history`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      setDoctorBookingsData(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    doctorBookings();
+  }, []);
+
+  console.log(history);
 
   return (
     <div>
@@ -138,26 +153,26 @@ const Bookings = () => {
                     </div>
 
                     {/* Start Time */}
-                    <div className="flex flex-col">
+                    {/* <div className="flex flex-col">
                       <span className="text-sm text-gray-500">Start Time</span>
                       <span className="text-lg font-semibold text-gray-800">
-                        {
+                        {formatTime(
                           consultation?.bookingDetails?.specificSlotData
                             ?.startTime
-                        }
+                        )}
                       </span>
-                    </div>
+                    </div> */}
 
                     {/* End Time */}
-                    <div className="flex flex-col">
+                    {/* <div className="flex flex-col">
                       <span className="text-sm text-gray-500">End Time</span>
                       <span className="text-lg font-semibold text-gray-800">
-                        {
+                        {formatTime(
                           consultation?.bookingDetails?.specificSlotData
                             ?.endTime
-                        }
+                        )}
                       </span>
-                    </div>
+                    </div> */}
 
                     {/* Updated At */}
                     <div className="flex flex-col">
@@ -186,9 +201,13 @@ const Bookings = () => {
 
                     {/* Make Prescription */}
                     <div className="flex flex-col sm:w-[150px] w-full">
-                      <button className="bg-[#944120] hover:bg-[#6e341d] transition-all duration-500 ease-in-out p-2 text-white rounded-md">
-                        Make Prescription
-                      </button>
+                      <Link
+                        to={`/prescription-maker/${consultation?.bookingDetails?._id}`}
+                      >
+                        <button className="bg-[#944120] hover:bg-[#6e341d] transition-all duration-500 ease-in-out p-2 text-white rounded-md">
+                          Make Prescription
+                        </button>
+                      </Link>
                     </div>
                   </div>
                 )}
@@ -197,7 +216,7 @@ const Bookings = () => {
           </div>
         </div>
       ) : (
-        <div className="text-center text-gray-500">No Booking Till Now</div>
+        <div className="text-center text-gray-500">No Booking Till Now </div>
       )}
     </div>
   );

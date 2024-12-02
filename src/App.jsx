@@ -125,7 +125,7 @@ function App() {
         <Route path="/appointments/location" element={<NewPatient />} />
         <Route path="/profile" element={<AuthRoute element={ProfilePage} />} />
         <Route
-          path="/prescription-maker"
+          path="/prescription-maker/:pid"
           element={<AuthRoute element={PrescriptionMakerPage} />}
         />
 

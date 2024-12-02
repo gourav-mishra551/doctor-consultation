@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { CiChat1 } from "react-icons/ci";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { IoIosTimer } from "react-icons/io";
 import {
   MdOutlineBookOnline,
   MdOutlineVideoCall,
   MdSpatialAudioOff,
 } from "react-icons/md";
 import { BsFillPersonLinesFill } from "react-icons/bs";
+import { IoCloudOffline } from "react-icons/io5";
 
 const UserBookings = ({ setUserBooking, userBooking }) => {
   const [openSection, setOpenSection] = useState(null);
@@ -33,20 +33,27 @@ const UserBookings = ({ setUserBooking, userBooking }) => {
       ...options,
     });
   };
+  function formatTime(time) {
+    const [hours, minutes] = time.split(":").map(Number); // Split and convert to numbers
+    const period = hours >= 12 ? "PM" : "AM"; // Determine AM or PM
+    const formattedHours = hours % 12 || 12; // Convert 24-hour to 12-hour format (handle 0 and 12)
+    return `${formattedHours}:${String(minutes).padStart(2, "0")} ${period}`; // Pad minutes with 0 if needed
+  }
 
- 
+
 
   return (
     <div>
       <div className="sm:max-w-5xl w-full mx-auto sm:my-8 space-y-4">
-        {userBooking?.data?.length > 0 ? (
-          userBooking?.data?.map((consultation, index) => (
-            <div key={index} className="bg-white shadow-lg rounded-lg">
-              <div className="top-detail-section">
+      <div className="top-detail-section">
                 <p className="text-gray-500 font-light">
                   Your Previous Bookings
                 </p>
               </div>
+        {userBooking?.data?.length > 0 ? (
+          userBooking?.data?.map((consultation, index) => (
+            <div key={index} className="bg-white shadow-lg rounded-lg">
+              
               <div
                 className="flex sm:mt-5 justify-between items-center p-4 cursor-pointer bg-[#1495AB] text-white rounded-t-lg"
                 onClick={() => toggleSection(index)}
@@ -112,20 +119,23 @@ const UserBookings = ({ setUserBooking, userBooking }) => {
                   </div>
 
                   {/* Short Description */}
-                  <div className="flex flex-col md:col-span-2">
-                    <span className="text-sm text-gray-500">
-                      Patient Problem
-                    </span>
-                    <p className="font-medium text-gray-800 text-sm">
-                      {consultation.short_description}
-                    </p>
-                  </div>
+                  {consultation.short_description && (
+                    <div className="flex flex-col md:col-span-2">
+                      <span className="text-sm text-gray-500">
+                        Patient Problem
+                      </span>
+                      <p className="font-medium text-gray-800 text-sm">
+
+                      </p>
+                    </div>
+                  )}
+
 
                   {/* Start Time */}
                   <div className="flex flex-col">
                     <span className="text-sm text-gray-500">Start Time</span>
                     <span className="text-lg font-semibold text-gray-800">
-                      {consultation?.specificSlotData?.startTime}
+                       {formatTime(consultation?.specificSlotData?.startTime)}
                     </span>
                   </div>
 
@@ -133,34 +143,8 @@ const UserBookings = ({ setUserBooking, userBooking }) => {
                   <div className="flex flex-col">
                     <span className="text-sm text-gray-500">End Time</span>
                     <span className="text-lg font-semibold text-gray-800">
-                      {consultation?.specificSlotData?.endTime}
+                      {formatTime(consultation?.specificSlotData?.endTime)}
                     </span>
-                  </div>
-
-                  {/* Updated At */}
-                  <div className="flex flex-col">
-                    <span className="text-sm text-gray-500">Last Updated</span>
-                    <span className="text-sm font-semibold text-gray-800">
-                      <div className="flex sm:w-[30%] w-full rounded-xl border justify-center items-center p-1 gap-2">
-                        <span>{convertToIST(consultation?.updatedAt)}</span>
-                        <IoIosTimer />
-                      </div>
-                    </span>
-                  </div>
-
-                  {/* User ID */}
-                  <div className="flex flex-col">
-                    <span className="text-sm text-gray-500">Booking ID</span>
-                    <span className="text-sm font-semibold text-gray-800">
-                      {consultation?._id}
-                    </span>
-                  </div>
-
-                  {/* make prescription */}
-                  <div className="flex flex-col sm:w-[150px] w-full ">
-                    <button className="bg-[#944120] hover:bg-[#6e341d] transition-all duration-500 ease-in-out p-2 text-white rounded-md">
-                      Make prescription
-                    </button>
                   </div>
                 </div>
               )}

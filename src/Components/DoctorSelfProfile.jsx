@@ -49,7 +49,15 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
     <div>
       {/* {doctorProfileData.data.map((dr) => ( */}
       <>
-        <div className="top-bar">
+        <div className="flex sm:justify-end ">
+          <button
+            className="bg-[#00768A] px-2 py-1 text-white rounded-md"
+            onClick={() => navigate("/edit-profile")}
+          >
+            Edit profile
+          </button>
+        </div>
+        <div className="top-bar mt-5">
           {/* top-bar is here */}
           <div className="sm:flex mb-2 justify-between sm:gap-5">
             <div className="email flex items-center gap-1">
