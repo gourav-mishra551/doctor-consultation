@@ -52,16 +52,22 @@ const Navbar = () => {
     CenterOfExcellence: (
       <div className="grid grid-cols-2 gap-4 mt-5">
         {Categoriesdata.map((ele, index) => (
-          <Link to={`/categories-details/${ele._id}`} onClick={()=>setIsOpen(false)}>
-          <div key={index} className="flex flex-col gap-3 items-start cursor-pointer">
-            <img
-              src={ele.image}
-              alt="image"
-              className="h-[35px] w-[35px] -mt-1"
-            />
-            <p>{ele.specialtyName}</p>
-            <p>See all Doctors</p>
-          </div>
+          <Link
+            to={`/categories-details/${ele._id}`}
+            onClick={() => setIsOpen(false)}
+          >
+            <div
+              key={index}
+              className="flex flex-col gap-3 items-start cursor-pointer"
+            >
+              <img
+                src={ele.image}
+                alt="image"
+                className="h-[35px] w-[35px] -mt-1"
+              />
+              <p>{ele.specialtyName}</p>
+              <p>See all Doctors</p>
+            </div>
           </Link>
         ))}
       </div>
@@ -115,9 +121,7 @@ const Navbar = () => {
     }
   };
 
-  const handleCategoryClick = (Categoriesdata) => {
-    
-  };
+  const handleCategoryClick = (Categoriesdata) => {};
   handleCategoryClick();
 
   const handleMouseEnter = (item, event) => {
@@ -154,8 +158,6 @@ const Navbar = () => {
   };
   const containerRef = useRef(null);
   const megaMenuRef = useRef(null);
-
-
 
   // Handle click outside
   const handleClickOutside = (event) => {
@@ -262,8 +264,6 @@ const Navbar = () => {
     return () => clearTimeout(timeoutId);
   }, [query, currency]);
 
- 
-
   const handleProductClick = (slug) => {
     navigate(`/product/${slug}`);
   };
@@ -288,7 +288,6 @@ const Navbar = () => {
         "https://api.assetorix.com/ah/api/v1/dc/user/Category"
       );
       setCategorydata(res.data.data);
-      
     } catch (error) {}
   };
 
@@ -375,12 +374,15 @@ const Navbar = () => {
                 >
                   {isLogin ? (
                     <div className="flex flex-col justify-between">
-
-                      <div className="shadow-sm rounded-lg " onClick={()=>navigate("/profile")}>
+                      <div
+                        className="shadow-sm rounded-lg "
+                        onClick={() => navigate("/profile")}
+                      >
                         <p className="text-semibold text-gray-400 text-[16px] capitalize leading-4 py-1 text-center ">
-                          Welcome <br /> <span className=" font-bold text-[#00768A] opacity-85">
-                          {localStorage.getItem("user")}
-                             </span>
+                          Welcome <br />{" "}
+                          <span className=" font-bold text-[#00768A] opacity-85">
+                            {localStorage.getItem("user")}
+                          </span>
                         </p>
                       </div>
                       <div className="py-3">
@@ -389,13 +391,12 @@ const Navbar = () => {
                             Profile
                           </h4>
                         </Link>
-                      
+
                         <Link to="/support-center">
                           <h4 className="sm:text-[16px] text-[14px] my-1">
                             Report a problem
                           </h4>
                         </Link>
-                       
                       </div>
                       <div className="float-end ">
                         <button
@@ -414,13 +415,12 @@ const Navbar = () => {
                       >
                         Login
                       </h4>
-                    
+
                       <Link to="/support-center">
                         <h4 className="sm:text-[16px] text-[14px] my-1">
                           Report a problem
                         </h4>
                       </Link>
-                      
                     </div>
                   )}
                 </div>
@@ -472,8 +472,6 @@ const Navbar = () => {
               </div>
 
               <div className="px-2 pt-2 space-y-1">
-          
-
                 <Link
                   to="/about"
                   className="block px-3 py-2 rounded-md font-bold uppercase text-sm"
@@ -489,7 +487,7 @@ const Navbar = () => {
                         className="font-bold py-2 rounded-md text-sm  cursor-pointer flex "
                         onClick={() => toggleSubMenu(menu)}
                       >
-                       { menu.replace(/([A-Z])/g, " $1").toUpperCase()}
+                        {menu.replace(/([A-Z])/g, " $1").toUpperCase()}
 
                         {/* Format the menu name */}
                         {openSubMenus[menu] ? (
@@ -505,19 +503,18 @@ const Navbar = () => {
                       {openSubMenus[menu] && (
                         <ul className="pl-4 space-y-1">
                           {/* Check if submenuData[menu] is an array */}
-                          {Array.isArray(submenuData[menu])
-                            ? submenuData[menu].map((subItem, index) => (
-                                <li
-                                  key={index}
-                                  className="block px-3 py-2 rounded-md text-sm hover:bg-blue-100 border-red-700"
-                                >
-                                  <span className="p-2 mt-2">{subItem}</span>
-                                  <hr />
-                                </li>
-                              ))
-                            : submenuData[
-                                menu
-                              ] // Render the component (like CenterOfExcellence) for non-array data
+                          {
+                            Array.isArray(submenuData[menu])
+                              ? submenuData[menu].map((subItem, index) => (
+                                  <li
+                                    key={index}
+                                    className="block px-3 py-2 rounded-md text-sm hover:bg-blue-100 border-red-700"
+                                  >
+                                    <span className="p-2 mt-2">{subItem}</span>
+                                    <hr />
+                                  </li>
+                                ))
+                              : submenuData[menu] // Render the component (like CenterOfExcellence) for non-array data
                           }
                         </ul>
                       )}
@@ -527,14 +524,14 @@ const Navbar = () => {
 
                 <Link
                   to="/all-doctors"
-                  onClick={()=>setIsOpen(false)}
+                  onClick={() => setIsOpen(false)}
                   className="block px-3 py-2 rounded-md font-bold uppercase text-sm"
                 >
                   Doctors
                 </Link>
                 <Link
                   to="/contact-us"
-                  onClick={()=>setIsOpen(false)}
+                  onClick={() => setIsOpen(false)}
                   className="block px-3 py-2 rounded-md font-bold uppercase text-sm "
                 >
                   Contact

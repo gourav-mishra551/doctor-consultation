@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios"; // Ensure axios is imported
 import { CiChat1 } from "react-icons/ci";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import {
@@ -9,8 +10,31 @@ import {
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import { IoCloudOffline } from "react-icons/io5";
 
-const UserBookings = ({ setUserBooking, userBooking }) => {
+const UserBookings = () => {
+  const [userBooking, setUserBooking] = useState([]);
   const [openSection, setOpenSection] = useState(null);
+
+  // Mock tokens and IDs (Replace these with your actual logic)
+  const token = localStorage.getItem("token");
+  const id = localStorage.getItem("id");
+
+  const userBookings = async () => {
+    try {
+      const response = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/dc/user/history`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      setUserBooking(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const toggleSection = (index) => {
     setOpenSection(openSection === index ? null : index);
   };
@@ -26,34 +50,35 @@ const UserBookings = ({ setUserBooking, userBooking }) => {
   };
 
   const convertToIST = (utcDate) => {
-    if (!utcDate) return "--"; // Return fallback if date is invalid or missing
+    if (!utcDate) return "--";
     const date = new Date(utcDate);
     return date.toLocaleString("en-IN", {
       timeZone: "Asia/Kolkata",
       ...options,
     });
   };
-  function formatTime(time) {
-    const [hours, minutes] = time.split(":").map(Number); // Split and convert to numbers
-    const period = hours >= 12 ? "PM" : "AM"; // Determine AM or PM
-    const formattedHours = hours % 12 || 12; // Convert 24-hour to 12-hour format (handle 0 and 12)
-    return `${formattedHours}:${String(minutes).padStart(2, "0")} ${period}`; // Pad minutes with 0 if needed
-  }
 
+  const formatTime = (time) => {
+    if (!time) return "--";
+    const [hours, minutes] = time.split(":").map(Number);
+    const period = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12;
+    return `${formattedHours}:${String(minutes).padStart(2, "0")} ${period}`;
+  };
 
+  useEffect(() => {
+    userBookings();
+  }, []);
 
   return (
     <div>
       <div className="sm:max-w-5xl w-full mx-auto sm:my-8 space-y-4">
-      <div className="top-detail-section">
-                <p className="text-gray-500 font-light">
-                  Your Previous Bookings
-                </p>
-              </div>
+        <div className="top-detail-section">
+          <p className="text-gray-500 font-light">Your Previous Bookings</p>
+        </div>
         {userBooking?.data?.length > 0 ? (
           userBooking?.data?.map((consultation, index) => (
             <div key={index} className="bg-white shadow-lg rounded-lg">
-              
               <div
                 className="flex sm:mt-5 justify-between items-center p-4 cursor-pointer bg-[#1495AB] text-white rounded-t-lg"
                 onClick={() => toggleSection(index)}
@@ -125,17 +150,16 @@ const UserBookings = ({ setUserBooking, userBooking }) => {
                         Patient Problem
                       </span>
                       <p className="font-medium text-gray-800 text-sm">
-
+                        {consultation.short_description}
                       </p>
                     </div>
                   )}
-
 
                   {/* Start Time */}
                   <div className="flex flex-col">
                     <span className="text-sm text-gray-500">Start Time</span>
                     <span className="text-lg font-semibold text-gray-800">
-                       {formatTime(consultation?.specificSlotData?.startTime)}
+                      {formatTime(consultation?.specificSlotData?.startTime)}
                     </span>
                   </div>
 
