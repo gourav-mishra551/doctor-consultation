@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { CiChat1 } from "react-icons/ci";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
@@ -8,12 +9,17 @@ import {
   MdOutlineVideoCall,
   MdSpatialAudioOff,
 } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const Bookings = ({ history }) => {
   const [openSection, setOpenSection] = useState(null);
   const toggleSection = (index) => {
     setOpenSection(openSection === index ? null : index);
   };
+  const [doctorBookingsData, setDoctorBookingsData] = useState([]);
+
+  const token = localStorage.getItem("token");
+  const id = localStorage.getItem("id");
 
   const options = {
     year: "numeric",
@@ -35,11 +41,35 @@ const Bookings = ({ history }) => {
   };
 
   function formatTime(time) {
-    const [hours, minutes] = time.split(":").map(Number); // Split and convert to numbers
+    const [hours, minutes] = time?.split(":").map(Number); // Split and convert to numbers
     const period = hours >= 12 ? "PM" : "AM"; // Determine AM or PM
     const formattedHours = hours % 12 || 12; // Convert 24-hour to 12-hour format (handle 0 and 12)
     return `${formattedHours}:${String(minutes).padStart(2, "0")} ${period}`; // Pad minutes with 0 if needed
   }
+
+  const doctorBookings = async () => {
+    try {
+      const response = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/dc/doctor/history`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      setDoctorBookingsData(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    doctorBookings();
+  }, []);
+
+  console.log(history);
 
   return (
     <div>
@@ -71,19 +101,19 @@ const Bookings = ({ history }) => {
                       </span>
                       <span className="text-sm text-gray-800 font-bold">
                         {consultation?.bookingDetails?.consultation_formats ===
-                          "videoCall" ? (
+                        "videoCall" ? (
                           <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-1">
                             <p className="text-xm">Video Call</p>
                             <MdOutlineVideoCall className="text-xl" />
                           </div>
                         ) : consultation?.bookingDetails
-                          ?.consultation_formats === "chat" ? (
+                            ?.consultation_formats === "chat" ? (
                           <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-2">
                             <p>Chat</p>
                             <CiChat1 />
                           </div>
                         ) : consultation?.bookingDetails
-                          ?.consultation_formats === "phoneCall" ? (
+                            ?.consultation_formats === "phoneCall" ? (
                           <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-2">
                             <p>Audio Call</p>
                             <MdSpatialAudioOff />
@@ -97,7 +127,7 @@ const Bookings = ({ history }) => {
                       <span className="text-sm text-gray-500">Select Mode</span>
                       <span className="text-lg font-semibold text-gray-800">
                         {consultation?.bookingDetails?.selectMode ===
-                          "online" ? (
+                        "online" ? (
                           <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-1">
                             <p className="text-sm">Online</p>
                             <MdOutlineBookOnline className="text-xl" />
@@ -123,23 +153,26 @@ const Bookings = ({ history }) => {
                     </div>
 
                     {/* Start Time */}
-                    <div className="flex flex-col">
+                    {/* <div className="flex flex-col">
                       <span className="text-sm text-gray-500">Start Time</span>
                       <span className="text-lg font-semibold text-gray-800">
-                        {formatTime(consultation?.bookingDetails?.specificSlotData
-                          ?.startTime)}
+                        {formatTime(
+                          consultation?.bookingDetails?.specificSlotData
+                            ?.startTime
+                        )}
                       </span>
-                    </div>
+                    </div> */}
 
                     {/* End Time */}
-                    <div className="flex flex-col">
+                    {/* <div className="flex flex-col">
                       <span className="text-sm text-gray-500">End Time</span>
                       <span className="text-lg font-semibold text-gray-800">
-                        {formatTime(consultation?.bookingDetails?.specificSlotData
-                          ?.endTime)
-                        }
+                        {formatTime(
+                          consultation?.bookingDetails?.specificSlotData
+                            ?.endTime
+                        )}
                       </span>
-                    </div>
+                    </div> */}
 
                     {/* Updated At */}
                     <div className="flex flex-col">
@@ -168,7 +201,9 @@ const Bookings = ({ history }) => {
 
                     {/* Make Prescription */}
                     <div className="flex flex-col sm:w-[150px] w-full">
-                      <Link to={`/prescription-maker/${consultation?.bookingDetails?._id}`}>
+                      <Link
+                        to={`/prescription-maker/${consultation?.bookingDetails?._id}`}
+                      >
                         <button className="bg-[#944120] hover:bg-[#6e341d] transition-all duration-500 ease-in-out p-2 text-white rounded-md">
                           Make Prescription
                         </button>
