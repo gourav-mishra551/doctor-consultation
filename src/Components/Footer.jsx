@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import "./footer.css";
 import { FaFacebook } from "react-icons/fa6";
 import { FaSquareXTwitter } from "react-icons/fa6";
@@ -13,93 +14,192 @@ import { CiUser } from "react-icons/ci";
 import { MdOutlineEmail } from "react-icons/md";
 import { VscSave } from "react-icons/vsc";
 import { CiPhone } from "react-icons/ci";
+import toast from "react-hot-toast";
+import { FaTelegramPlane } from "react-icons/fa";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        "https://api.assetorix.com/ah/api/v1/contact",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (response.ok) {
+        toast.success("Your request has been submitted successfully!");
+        setFormData({
+          name: "",
+          email: "",
+          mobile: "",
+          message: "",
+        });
+      } else {
+        toast.error(
+          "There was an error submitting your request. Please try again."
+        );
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("An error occurred. Please try again later.");
+    }
+  };
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    try {
+      const response = await fetch("https://api.assetorix.com/ah/api/v1/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        toast.success("Thank you for subscribing!");
+        setEmail(""); // Clear the input field
+      } else {
+        const errorData = await response.json();
+        toast.error(`Error: ${errorData.message}`);
+      }
+    } catch (error) {
+      toast.error("Subscription failed. Please try again.");
+    }
+  };
+
   return (
     <div>
       <footer className="footer-section">
-      <div className="appointment-form bg-[#1c8e81] sm:h-[350px] h-auto mt-20 pb-10">
+        <div className="appointment-form bg-[#1c8e81] sm:h-auto mt-20 pb-10">
           <div className="flex sm:flex-row flex-col sm:max-w-6xl w-full mx-auto">
+            {/* Left Section */}
             <div className="left sm:w-[50%] w-full p-10 flex flex-col gap-5">
               <div className="flex gap-2 mt-10">
                 <TbActivityHeartbeat className="mt-1 text-2xl text-white" />
-                <p className="text-xl text-white">Get an appointment</p>
+                <p className="text-xl text-white">Get an Appointment</p>
               </div>
               <p className="font-bold text-4xl text-white">
                 The Wide Network of Best Healthcare
               </p>
               <p className="text-white">
                 Our team of highly trained professionals uses the latest healing
-                technologies to restore you to pain-free health quickly and
-                easily.{" "}
+                technologies to restore you to pain-free health quickly and easily.
               </p>
             </div>
 
-            <div className="right sm:p-10 p-5">
-              <div className="flex sm:flex-row flex-col sm:gap-5">
-                <div className="">
-                  <CiUser className="relative top-[40px] left-2" />
-                  <input
-                    type="text"
-                    name="full_Name"
-                    placeholder="Name"
-                    className="block w-full px-10 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600  dark:text-[#1c8e81] dark:border-[#1c8e81] focus:border-blue-400 dark:focus:border-blue-400 focus:ring-[#1c8e81] focus:outline-none focus:ring focus:ring-opacity-40"
-                  />
-                </div>
-
-                <div>
-                  <MdOutlineEmail className="relative top-[40px] left-2" />
-                  <input
-                    type="text"
-                    name="full_Name"
-                    placeholder="Email"
-                    className="block w-full px-10 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600  dark:text-[#1c8e81] dark:border-[#1c8e81] focus:border-blue-400 dark:focus:border-blue-400 focus:ring-[#1c8e81] focus:outline-none focus:ring focus:ring-opacity-40"
-                  />
-                </div>
-              </div>
-
-              <div className="flex sm:flex-row flex-col sm:gap-5">
-                <div>
-                  <CiPhone className="relative top-[40px] left-2" />
-                  <input
-                    type="text"
-                    name="full_Name"
-                    placeholder="Phone"
-                    className="block w-full px-10 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600  dark:text-[#1c8e81] dark:border-[#1c8e81] focus:border-blue-400 dark:focus:border-blue-400 focus:ring-[#1c8e81] focus:outline-none focus:ring focus:ring-opacity-40"
-                  />
-                </div>
-
-                <div>
-                  <VscSave className="relative top-[40px] left-2" />
-                  <input
-                    type="text"
-                    name="full_Name"
-                    placeholder="Subject"
-                    className="block w-full px-10 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600  dark:text-[#1c8e81] dark:border-[#1c8e81] focus:border-blue-400 dark:focus:border-blue-400 focus:ring-[#1c8e81] focus:outline-none focus:ring focus:ring-opacity-40"
-                  />
-                </div>
-              </div>
-
-              <div className="mt-7 flex sm:flex-row flex-col gap-5">
-                <div className="book-btn h-[50px] w-[220px] text-sm text-white cursor-pointer font-bold rounded-xl flex justify-center items-center hover:bg-[#206e65] shadow-md shadow-slate-200 transition-all ease-in-out duration-300 delay-150">
-                  <button className="">BOOK AN APPOINTMENT</button>
-                </div>
-                <p className="font-bold mt-2 text-white">(OR)</p>
-
-                <div className="flex gap-2">
-                  <div className="h-[40px] w-[40px] rounded-2xl border border-white flex justify-center items-center">
-                    <NavLink to="tel:+9999099538">
-                      <CiPhone className="text-3xl text-white" />
-                    </NavLink>
+            {/* Right Section */}
+            <div className="right sm:w-[50%] w-full sm:p-10 p-5">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {/* Name and Email */}
+                <div className="flex sm:flex-row flex-col sm:gap-5 gap-4">
+                  <div className="relative">
+                    <CiUser className="absolute top-3 left-3 text-gray-400" />
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="Name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="block w-full px-10 py-3 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-[#1c8e81] focus:ring-opacity-40 focus:outline-none"
+                      required
+                    />
                   </div>
-                  <p className="mt-1 font-bold text-xl text-white">
-                    {" "}
-                    <NavLink to="tel:+9999099538">
-                      <span className="text-white hover:text-gray-400">9999099538</span>
-                    </NavLink>
-                  </p>
+                  <div className="relative">
+                    <MdOutlineEmail className="absolute top-3 left-3 text-gray-400" />
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="block w-full px-10 py-3 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-[#1c8e81] focus:ring-opacity-40 focus:outline-none"
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
+
+                {/* Phone and Subject */}
+                <div className="flex sm:flex-row flex-col sm:gap-5 gap-4">
+                  <div className="relative">
+                    <CiPhone className="absolute top-3 left-3 text-gray-400" />
+                    <input
+                      type="number"
+                      name="mobile"
+                      placeholder="Phone"
+                      value={formData.mobile}
+                      onChange={handleChange}
+                      className="block w-full px-10 py-3 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-[#1c8e81] focus:ring-opacity-40 focus:outline-none"
+                      required
+                    />
+                  </div>
+                  <div className="relative">
+                    <VscSave className="absolute top-3 left-3 text-gray-400" />
+                    <input
+                      type="text"
+                      name="message"
+                      placeholder="Subject"
+                      value={formData.message}
+                      onChange={handleChange}
+                      className="block w-full px-10 py-3 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-[#1c8e81] focus:ring-opacity-40 focus:outline-none"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+                  <button
+                    type="submit"
+                    className="h-[50px] w-[220px] text-sm text-white font-bold bg-[#206e65] rounded-xl flex justify-center items-center shadow-md shadow-slate-200 transition-all ease-in-out duration-300"
+                  >
+                    BOOK AN APPOINTMENT
+                  </button>
+                  <p className="font-bold text-white">(OR)</p>
+                  <div className="flex gap-2 items-center">
+                    <div className="h-[40px] w-[40px] rounded-2xl border border-white flex justify-center items-center">
+                      <a href="tel:+9999099538">
+                        <CiPhone className="text-3xl text-white" />
+                      </a>
+                    </div>
+                    <p className="font-bold text-xl text-white">
+                      <a
+                        href="tel:+9999099538"
+                        className="hover:text-gray-400 transition-colors"
+                      >
+                        9999099538
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -229,10 +329,23 @@ const Footer = () => {
                     </p>
                   </div>
                   <div className="subscribe-form">
-                    <form action="#">
-                      <input type="text" placeholder="Email Address" />
-                      <button>
-                        <i className="fab fa-telegram-plane"></i>
+                    <form
+                      onSubmit={handleSubscribe}
+                      className="flex items-center gap-2   rounded-md"
+                    >
+                      <input
+                        type="email"
+                        placeholder="Email Address"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="flex-grow px-4  text-black bg-gray-200 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-opacity-50 "
+                        required
+                      />
+                      <button
+                        type="submit"
+                        className=" text-white bg-[#206e65]  hover:bg-[#1c8e81] transition-all duration-300"
+                      >
+                        <FaTelegramPlane className="text-xl" />
                       </button>
                     </form>
                   </div>
