@@ -26,86 +26,19 @@ const PDFGenerator = () => {
     Name: {
       display: "flex",
       flexDirection: "row",
-      gap: "5px",
-    },
-    header: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: 20,
-    },
-    doctorSection: {
-      flexDirection: "row",
-      alignItems: "center",
-    },
-    medicineTable: {
-      width: "100%",
-      marginVertical: 10,
-      borderWidth: 1,
-      borderColor: "#ccc",
-      borderRadius: 4,
-      overflow: "hidden",
-    },
-
-    tableRow: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      borderBottomWidth: 1,
-      borderColor: "#ccc",
-      paddingVertical: 5,
-      paddingHorizontal: 10,
-    },
-   
-    tableCell: {
-      paddingHorizontal: 5,
-      textAlign: "center",
-      borderRightWidth: 1,
-      padding: 5,
-      fontSize: 12,
-      flex: 1,
-      textAlign: "left",
-    },
-   
-    medicineName: {
-      flex: 2, // 20% width
-      borderRightWidth: 1,
-    },
-    frequency: {
-      flex: 2, // 20% width
-      borderRightWidth: 1,
-    },
-    duration: {
-      flex: 2, // 20% width
-      borderRightWidth: 1,
-    },
-    instructions: {
-      flex: 4, // 40% width
-      textAlign: "left", // Align text for better readability
-    },
-    heading: {
-      fontSize: "12px",
-    },
-
-    data: {
-      color: "#616A76",
-    },
-    Name: {
-      display: "flex",
-      flexDirection: "row",
       gap: "10px",
     },
     Gender: {
       display: "flex",
       flexDirection: "row",
       gap: "5px",
+      marginRight: "75px",
     },
     DOB: {
       display: "flex",
       flexDirection: "row",
       textAlign: "left",
-      marginRight: "20px",
-      gap: "7px",
+      marginRight: "100px",
     },
     Date: {
       display: "flex",
@@ -127,10 +60,67 @@ const PDFGenerator = () => {
       flexDirection: "row",
       gap: "15px",
     },
-
-    logo: { width: 70, height: 70, marginRight: 10 },
-    doctorName: { fontSize: 20, fontWeight: "bold", color: "#0074D9" },
-    qualification: { fontSize: 12, color: "#7F8C8D" },
+    header: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 20,
+    },
+    doctorSection: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    medicineTable: {
+      marginTop: 10,
+      border: "1px solid #000",
+      borderWidth: 1,
+      borderColor: "#ccc",
+      borderRadius: 4,
+      overflow: "hidden",
+    },
+    tableCell: {
+      paddingHorizontal: 5,
+      textAlign: "left",
+      borderRightWidth: 1,
+      padding: 5,
+      fontSize: 8,
+      flex: 1,
+      borderColor: "#000",
+    },
+    medicineName: {
+      flex: 2,
+    },
+    frequency: {
+      flex: 2,
+    },
+    duration: {
+      flex: 2,
+    },
+    instructions: {
+      flex: 4,
+      textAlign: "left",
+    },
+    heading: {
+      fontSize: "8px",
+    },
+    data: {
+      color: "#616A76",
+    },
+    logo: {
+      width: 70,
+      height: 70,
+      marginRight: 10,
+    },
+    doctorName: {
+      fontSize: 20,
+      fontWeight: "bold",
+      color: "#0074D9",
+    },
+    qualification: {
+      fontSize: 8,
+      color: "#7F8C8D",
+    },
     section: {
       padding: 15,
       borderWidth: 1,
@@ -152,11 +142,15 @@ const PDFGenerator = () => {
       flexDirection: "row",
       justifyContent: "space-center",
       marginBottom: 10,
-
       alignItems: "center",
       width: "80%",
     },
-    label: { fontSize: 14, fontWeight: 900, width: "auto", paddingRight: 5 },
+    label: {
+      fontSize: 10,
+      fontWeight: 900,
+      width: "auto",
+      paddingRight: 5,
+    },
     labelKg: {
       fontSize: 14,
       fontWeight: 900,
@@ -170,62 +164,57 @@ const PDFGenerator = () => {
       width: "55%",
     },
     text: {
-      fontSize: 14,
+      fontSize: 10,
       width: "30%",
-
       paddingRight: "20px",
     },
     notesSection: {
       marginBottom: 20,
       fontSize: 12,
     },
-    medicineTable: {
-      marginTop: 10,
-      border: "1px solid #000",
-    },
     tableRow: {
-      display: "flex",
       flexDirection: "row",
-      borderBottom: "1px solid #000",
+      borderBottomWidth: 1,
+      borderColor: "#000",
     },
     tableHeader: {
       fontWeight: "bold",
-      backgroundColor: "#E4F8F6",
       backgroundColor: "#f5f5f5",
-      fontWeight: "bold",
-      borderBottomWidth: 2, // Stronger line for header
-      borderColor: "#ccc",
+      borderBottomWidth: 1,
+      display: "flex",
     },
     signatureSection: {
       marginTop: 30,
       display: "flex",
       flexDirection: "column",
     },
-    signatureImage: { width: 100, height: 50, objectFit: "contain" },
+    signatureImage: {
+      width: 100,
+      height: 50,
+      objectFit: "contain",
+    },
     footer: {
       textAlign: "left",
       fontSize: 10,
       color: "#7F8C8D",
     },
-
     horizontalLine: {
       height: 2,
-      backgroundColor: "#0074D9", // Blue color
+      backgroundColor: "#0074D9",
       marginVertical: 10,
-      borderRadius: 1, // Smooth edges
+      borderRadius: 1,
       marginTop: "5px",
     },
-
     watermark: {
       position: "absolute",
       top: "50%",
       left: "50%",
       transform: "translate(-50%, -50%)",
-      fontSize: 100, // Increase font size for better visibility
-      color: "#E0E0E0", // Slightly darker gray for better contrast
-      opacity: 0.2, // Ensure transparency doesn't obscure content
+      fontSize: 100,
+      color: "#E0E0E0",
+      opacity: 0.2,
       textAlign: "center",
-      zIndex: -10, // Keep it behind all other elements
+      zIndex: -10,
     },
     Addr: {
       width: "100%",
@@ -233,7 +222,7 @@ const PDFGenerator = () => {
     WKG: {
       display: "flex",
       flexDirection: "row",
-      alignItems: "center", // Align text vertically
+      alignItems: "center",
     },
     KG: {
       display: "flex",
@@ -242,14 +231,18 @@ const PDFGenerator = () => {
       textAlign: "left",
       width: "100%",
       gap: "0px",
-      marginLeft: "40px",
+      marginLeft: "20px",
     },
     BP: {
       width: "50%",
       display: "flex",
       flexDirection: "row",
     },
+    lastCell: {
+      borderRightWidth: 0,
+    },
   });
+  
 
   const handleSignatureUpload = (e) => {
     const file = e.target.files[0];
@@ -320,20 +313,25 @@ const PDFGenerator = () => {
 
           <View style={styles.labelRow}>
             <View style={styles.WKG}>
-              <Text style={styles.labelHeight}>Height (in cms):</Text>
+              <Text style={[styles.labelHeight,styles.label]}>Height (in cms):</Text>
               <Text style={[styles.text, styles.data]}>175</Text>
             </View>
 
             <View style={styles.KG}>
-              <Text style={styles.labelKg}>Weight (in Kg):</Text>
+              <Text style={[styles.labelKg,styles.label]}>Weight (in Kg):</Text>
               <Text style={[styles.text, styles.data]}>65</Text>
             </View>
           </View>
 
           <View style={styles.labelRow}>
             <View style={styles.BP}>
-              <Text style={styles.labelHeight}>Blood Presure (B.P):</Text>
+              <Text style={[styles.labelHeight,styles.label]}>Blood Presure (B.P):</Text>
               <Text style={[styles.text, styles.data]}>175</Text>
+            </View>
+
+            <View style={styles.BP}>
+              <Text style={[styles.labelHeight,styles.label]}>Temperature:</Text>
+              <Text style={[styles.text, styles.data]}>35</Text>
             </View>
           </View>
         </View>
@@ -345,12 +343,12 @@ const PDFGenerator = () => {
             <Text
               style={[styles.tableCell, styles.medicineName, styles.heading]}
             >
-              Problems
+             Complaint
             </Text>
             <Text style={[styles.tableCell, styles.frequency, styles.heading]}>
-              Observations
+            Diagnose
             </Text>
-            <Text style={[styles.tableCell, styles.duration, styles.heading]}>
+            <Text style={[styles.tableCell, styles.duration, styles.heading,styles.lastCell]}>
               Advice
             </Text>
           </View>
@@ -361,7 +359,7 @@ const PDFGenerator = () => {
             <Text style={[styles.tableCell, styles.frequency, styles.data]}>
               Blood pressure slightly elevated.
             </Text>
-            <Text style={[styles.tableCell, styles.duration, styles.data]}>
+            <Text style={[styles.tableCell, styles.duration, styles.data,styles.lastCell]}>
               Blood pressure slightly elevated.
             </Text>
           </View>
@@ -373,7 +371,7 @@ const PDFGenerator = () => {
             <Text style={[styles.tableCell, styles.frequency, styles.data]}>
               Blood pressure slightly elevated.
             </Text>
-            <Text style={[styles.tableCell, styles.duration, styles.data]}>
+            <Text style={[styles.tableCell, styles.duration, styles.data,styles.lastCell]}>
               Blood pressure slightly elevated.
             </Text>
           </View>
@@ -383,12 +381,18 @@ const PDFGenerator = () => {
         <View style={styles.medicineTable}>
           <View style={[styles.tableRow, styles.tableHeader]}>
             <Text style={[styles.tableCell, styles.medicineName]}>
-              Medicine Name
+              Medicine
             </Text>
             <Text style={[styles.tableCell, styles.frequency]}>Frequency</Text>
             <Text style={[styles.tableCell, styles.duration]}>Duration</Text>
             <Text style={[styles.tableCell, styles.instructions]}>
               Instructions
+            </Text>
+            <Text style={[styles.tableCell, styles.instructions]}>
+              When
+            </Text>
+            <Text style={[styles.tableCell, styles.instructions,styles.lastCell]}>
+              Dose
             </Text>
           </View>
           <View style={styles.tableRow}>
@@ -403,16 +407,15 @@ const PDFGenerator = () => {
             </Text>
             <Text style={[styles.tableCell, styles.instructions, styles.data]}>
               Pain relief To create a table-like UI for Problems, Observations,
-              and Notes in your prescription PDF, structure the layout as rows
-              and columns. Use a container for the table with distinct styles
-              for rows, headers, and cells. The header row contains column
-              titles like Category and Details. Each subsequent row represents
-              one section (e.g., Problems, Observations, Notes) with their
-              respective descriptions. Use flexDirection: "row" for alignment
-              and add borders for a structured appearance. Ensure header styles
-              are bold with a background color for distinction. This approach
-              organizes data cleanly, improving readability and giving a
-              professional touch to the document.
+              
+            </Text>
+
+            <Text style={[styles.tableCell, styles.instructions, styles.data]}>
+              morning
+            </Text>
+
+            <Text style={[styles.tableCell, styles.instructions, styles.data,styles.lastCell]}>
+            1-0-1
             </Text>
           </View>
 
@@ -429,6 +432,14 @@ const PDFGenerator = () => {
             <Text style={[styles.tableCell, styles.instructions, styles.data]}>
               sajdfadhsdfuidh
             </Text>
+
+            <Text style={[styles.tableCell, styles.instructions, styles.data]}>
+              morning
+            </Text>
+
+            <Text style={[styles.tableCell, styles.instructions, styles.data,styles.lastCell]}>
+            1-0-1
+            </Text>
           </View>
         </View>
 
@@ -440,10 +451,10 @@ const PDFGenerator = () => {
         </View> */}
 
         {/* Signature Section */}
-        <View style={styles.signatureSection}>
+        {/* <View style={styles.signatureSection}>
           {signature && <Image style={styles.signatureImage} src={signature} />}
           <Text>Signature:</Text>
-        </View>
+        </View> */}
 
         {/* Footer */}
       </Page>

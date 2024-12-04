@@ -4,8 +4,7 @@ import { FaEdit } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Footer from "../Footer";
-
+import TimePicker from "../TimePicker/TimePicker";
 const CreateSlotsByDr = () => {
   const [data, setData] = useState({
     selectDate: Date.now(),
@@ -21,10 +20,8 @@ const CreateSlotsByDr = () => {
   const [ErrorShow, setErrorShow] = useState(false);
   const [PriceData, setPriceData] = useState("");
   const [editingSlot, setEditingSlot] = useState(null); // { type: 'offline' or 'online', index: number }
-
-  //slotDuration
-
-  const updatedPrice = Number(PriceData);
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const closeModal = () => setIsModalOpen(false);
   const generateSlots = () => {
     const {
       availableTimeFrom,
@@ -32,7 +29,6 @@ const CreateSlotsByDr = () => {
       selectSlotDuration,
       visitingMode,
     } = data;
-
     if (
       !availableTimeFrom ||
       !availableTimeTo ||
@@ -40,14 +36,11 @@ const CreateSlotsByDr = () => {
       !visitingMode
     )
       return;
-
     const startTime = new Date(`1970-01-01T${availableTimeFrom}:00`);
     const endTime = new Date(`1970-01-01T${availableTimeTo}:00`);
     const durationInMinutes = parseInt(selectSlotDuration, 10);
-
     const newOfflineSlots = [];
     const newOnlineSlots = [];
-
     for (
       let time = startTime;
       time < endTime;
@@ -60,16 +53,13 @@ const CreateSlotsByDr = () => {
           .slice(0, 5), // Format to HH:mm
         doctorCharge: 0, // Default charge, can be updated by the user
       };
-
       if (visitingMode === "offline" || visitingMode === "both") {
         newOfflineSlots.push(slot);
       }
-
       if (visitingMode === "online" || visitingMode === "both") {
         newOnlineSlots.push(slot);
       }
     }
-
     setData((prev) => ({
       ...prev,
       offlineSlots: newOfflineSlots,
@@ -80,7 +70,6 @@ const CreateSlotsByDr = () => {
   // Handle changes for individual fields and slots
   const handleChange = (e, slotIndex, isOffline) => {
     const { name, value } = e.target;
-
     // Case: Updating doctorCharge (convert value to number)
     if (name === "doctorCharge") {
       const updatedSlots = (
@@ -111,37 +100,9 @@ const CreateSlotsByDr = () => {
       }));
     }
   };
-
-  // Handle bulk update of doctorCharge for all slots
-  const handleBulkPriceUpdate = (e) => {
-    const { value } = e.target;
-    const updatedPrice = Number(value);
-
-    const updatedOfflineSlots = data.offlineSlots.map((slot) => ({
-      ...slot,
-      doctorCharge: updatedPrice,
-    }));
-
-    const updatedOnlineSlots = data.onlineSlots.map((slot) => ({
-      ...slot,
-      doctorCharge: updatedPrice,
-    }));
-
-    setData((prev) => ({
-      ...prev,
-      offlineSlots: updatedOfflineSlots,
-      onlineSlots: updatedOnlineSlots,
-    }));
-  };
-
   // Handle form submission and console log form data
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // setData((prev) => ({
-    //   ...prev,
-    //   selectSlotDuration: prev.selectSlotDuration, // Don't split the value, use as is
-    // }));
-
     const token = localStorage.getItem("token");
     const id = localStorage.getItem("id");
     try {
@@ -172,32 +133,23 @@ const CreateSlotsByDr = () => {
       });
     }
   };
-
   // Submit function
   function Submit() {
     const updatedPrice = Number(PriceData); // Convert PriceData to a number
-
     const updatedOfflineSlots = data.offlineSlots.map((slot) => ({
       ...slot,
       doctorCharge: updatedPrice,
     }));
-
     const updatedOnlineSlots = data.onlineSlots.map((slot) => ({
       ...slot,
       doctorCharge: updatedPrice,
     }));
-
     setData((prevData) => ({
       ...prevData,
       offlineSlots: updatedOfflineSlots,
       onlineSlots: updatedOnlineSlots,
     }));
   }
-
-  // Rest of your component code...
-
-  //Edit Function
-
   const handleEditSlot = (type, index) => {
     const slot =
       type === "offline" ? data.offlineSlots[index] : data.onlineSlots[index];
@@ -267,6 +219,25 @@ const CreateSlotsByDr = () => {
     FetchGetProfile();
   }, []);
 
+  const TimeInput = ({ value, onChange }) => {
+    const handleTimeChange = (e) => {
+      const input = e.target.value;
+      if (/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(input)) {
+        onChange(input); // Only update if the input matches HH:mm format
+      }
+    };
+
+    return (
+      <input
+        type="text"
+        value={value}
+        onChange={handleTimeChange}
+        placeholder="HH:mm"
+        className="border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
+      />
+    );
+  };
+
   return (
     <div className="relative sm:max-w-[1200px] w-[100%] shadow-md mx-auto flex flex-col lg:flex-row  mb-20 mt-10">
       {/* Form Section */}
@@ -276,16 +247,33 @@ const CreateSlotsByDr = () => {
         </h2>
         {(data.visitingMode === "offline" || data.visitingMode === "both") &&
           (GetDrProfile.hospitalName === "" ||
-          GetDrProfile.clinicHospitalAddress?.permanentAddress === "" ||
-          GetDrProfile.clinicHospitalAddress?.city === "" ? (
-            <p className=" text-red-600  p-4 rounded-lg  max-w-3xl mx-auto mt-4">
-              You haven't added your hospital/clinic details Please add it first
-            </p>
-          ) : null)}
-
-        {/* {
-            GetDrProfile.hospitalName=="" || GetDrProfile.clinicHospitalAddress?.permanentAddress=="" || GetDrProfile.clinicHospitalAddress?.city=="" ? <p className="text-center text-red-600 bg-red-100 p-4 rounded-lg shadow-md max-w-3xl mx-auto mt-4">Please First Fill Address</p>:null
-           } */}
+            GetDrProfile.clinicHospitalAddress?.permanentAddress === "" ||
+            GetDrProfile.clinicHospitalAddress?.city === "") && (
+            isModalOpen && (
+              <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+                <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg mx-auto">
+                  <div className="text-center">
+                    <img
+                      src="https://via.placeholder.com/150" // Replace with your image URL
+                      alt="warning"
+                      className="mx-auto mb-4"
+                    />
+                    <p className="text-red-600 text-lg">
+                      You haven't added your hospital/clinic details. Please add it first.
+                    </p>
+                    <div className="mt-4">
+                      <button
+                        onClick={closeModal}
+                        className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          )}
         <form onSubmit={handleSubmit}>
           {/* Visiting Mode */}
           <div className="mb-6">
@@ -321,38 +309,29 @@ const CreateSlotsByDr = () => {
               className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
             />
           </div>
-
           {/* Time Fields */}
           <div className="mb-6 flex gap-4">
             <div className="w-1/2">
-              <label className="block text-gray-600 font-semibold mb-2">
-                From
-              </label>
-              <input
-                type="time"
-                required
-                onChange={handleChange}
-                name="availableTimeFrom"
+             
+              <TimePicker
+                label="From"
                 value={data.availableTimeFrom}
-                className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
+                onChange={(value) =>
+                  setData((prev) => ({ ...prev, availableTimeFrom: value }))
+                }
               />
             </div>
             <div className="w-1/2">
-              <label className="block text-gray-600 font-semibold mb-2">
-                To
-              </label>
-              <input
-                step="1"
-                type="time"
-                required
-                onChange={handleChange}
-                name="availableTimeTo"
+             
+              <TimePicker
+                label="To"
                 value={data.availableTimeTo}
-                className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
+                onChange={(value) =>
+                  setData((prev) => ({ ...prev, availableTimeTo: value }))
+                }
               />
             </div>
           </div>
-
           {/* Slot Duration and Price */}
           <div className="mb-6 flex flex-col sm:flex-row gap-4">
             <div className="w-full">
@@ -369,7 +348,6 @@ const CreateSlotsByDr = () => {
                 className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
               />
             </div>
-
             {/* Bulk Price */}
             {(data.offlineSlots.length > 0 || data.onlineSlots.length > 0) && (
               <div className="w-full">
@@ -396,7 +374,6 @@ const CreateSlotsByDr = () => {
               </div>
             )}
           </div>
-
           {/* Generate Slots Button */}
           <button
             onClick={generateSlots}
@@ -405,7 +382,6 @@ const CreateSlotsByDr = () => {
           >
             Generate Slots
           </button>
-
           {/* Slots Display */}
           <div className="mt-6">
             {/* Offline Slots */}
@@ -418,7 +394,7 @@ const CreateSlotsByDr = () => {
                     className="flex justify-between items-center mb-2"
                   >
                     {editingSlot?.type === "offline" &&
-                    editingSlot.index === index ? (
+                      editingSlot.index === index ? (
                       <>
                         <input
                           type="time"
@@ -475,7 +451,6 @@ const CreateSlotsByDr = () => {
                 ))}
               </div>
             )}
-
             {/* Online Slots */}
             {data.onlineSlots.length > 0 && data.visitingMode !== "offline" && (
               <div>
@@ -486,7 +461,7 @@ const CreateSlotsByDr = () => {
                     className="flex justify-between items-center mb-2"
                   >
                     {editingSlot?.type === "online" &&
-                    editingSlot.index === index ? (
+                      editingSlot.index === index ? (
                       <>
                         <input
                           type="time"

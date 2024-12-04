@@ -6,17 +6,18 @@ function MegaMenu() {
   const [submenuPosition, setSubmenuPosition] = useState({ top: 0, left: 0 });
   const containerRef = useRef(null);
   const [category, setCategory] = useState([]);
+  const [isCategoryFetched, setIsCategoryFetched] = useState(false);
 
 
-
-  useEffect(() => {
-    FetchCategory();
-  }, []);
+  // useEffect(() => {
+  //   FetchCategory();
+  // }, []);
 
   const FetchCategory = async () => {
     try {
       const res = await axios("https://api.assetorix.com/ah/api/v1/dc/user/Category?limit=100");
       setCategory(res.data.data);
+      setIsCategoryFetched(true)
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -94,6 +95,11 @@ function MegaMenu() {
       top: menuItemRect.bottom - containerRect.top + 72,
       left: menuItemRect.left - containerRect.left + 60,
     });
+
+    if (item === "CenterOfExcellence" && !isCategoryFetched) {
+      FetchCategory();
+
+    }
   };
 
   const handleMouseLeave = () => {

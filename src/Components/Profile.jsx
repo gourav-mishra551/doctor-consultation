@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { usePopper } from "react-popper";
+
 import {
   FaHome,
   FaUser,
@@ -9,7 +9,7 @@ import {
   FaChevronUp,
   FaQuestion,
 } from "react-icons/fa";
-import { FaUserDoctor } from "react-icons/fa6";
+import { FaCheckToSlot, FaUserDoctor } from "react-icons/fa6";
 import { TbBrandBooking } from "react-icons/tb";
 import Bookings from "./Bookings";
 import SelfProfile from "./SelfProfile";
@@ -28,35 +28,43 @@ import UserBookings from "./UserBookings/UserBookings";
 import EditUserDetails from "./EditUserDetails/EditUserDetails";
 import CreateSlotsByDr from "./CreateSlotsByDr/CreateSlotsByDr";
 import AllSlots from "./AllSlots/AllSlots";
-
 const Profile = () => {
   const [selectedMenu, setSelectedMenu] = useState(null);
+  const [history, setHistory] = useState([]);
   const [userProfileData, setUserProfileData] = useState([]);
   const [doctorProfileData, setDoctorProfileData] = useState([]);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
   const [isDoctorProfileOpen, setIsDoctorProfileOpen] = useState(false);
   const [familyPopUp, setFamilyPopUp] = useState(false);
+  const [familyData, setFamilyData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isFamilyOpen, setIsFamilyOpen] = useState(false);
+  const [userBooking, setUserBooking] = useState([]);
   const [activeSection, setActiveSection] = useState("selfuserprofile");
   const location = useLocation();
-  const [isNewUser, setIsNewUser] = useState(false);
-  const [tutorialStep, setTutorialStep] = useState(0);
-  const [referenceElement, setReferenceElement] = useState(null);
-  const [popperElement, setPopperElement] = useState(null);
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: "right",
-    modifiers: [
-      {
-        name: "offset",
-        options: { offset: [20, 10] },
-      },
-    ],
-  });
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
+
+  const bookings = async () => {
+    try {
+      const response = await axios.get(
+        "https://api.assetorix.com/ah/api/v1/dc/doctor/history",
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      setHistory(response.data);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    bookings();
+  }, []);
 
   useEffect(() => {
     // Extract query parameter from the URL
@@ -97,22 +105,40 @@ const Profile = () => {
     } catch (error) {}
   };
 
-  // const docotrData = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       "https://api.assetorix.com/ah/api/v1/dc/doctor",
-  //       {
-  //         headers: {
-  //           authorization: `Bearer ${token}`,
-  //           id: id,
-  //         },
-  //       }
-  //     );
-  //     setDoctorProfileData(response.data);
-  //   } catch (error) {}
-  // };
+  const userBookings = async () => {
+    try {
+      const response = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/dc/user/history`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      setUserBooking(response.data);
+    } catch (error) {}
+  };
+
+  const docotrData = async () => {
+    try {
+      const response = await axios.get(
+        "https://api.assetorix.com/ah/api/v1/dc/doctor",
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      setDoctorProfileData(response.data);
+    } catch (error) {}
+  };
 
   useEffect(() => {
+    docotrData();
+    getFamilyEdit();
+    userBookings();
     userData();
   }, []);
 
@@ -127,152 +153,37 @@ const Profile = () => {
   const toggleDoctorProfile = () => setIsDoctorProfileOpen((prev) => !prev);
 
   const toggleFamily = () => setIsFamilyOpen((prev) => !prev);
+
+  const getFamilyEdit = async () => {
+    try {
+      const response = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/user/family`,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Important for file uploads
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      setFamilyData(response.data);
+    } catch (error) {}
+  };
+
   if (loading) {
     return <div className="loader"></div>; // Loader is displayed
   }
 
-  const sidebarItems = [
-    {
-      title: "My Profile",
-      icon: <FaUser className="mr-2" />,
-      menuKey: "profile",
-      description: "Manage your personal profile and settings.",
-      items: [
-        { label: "View Users", sectionKey: "selfuserprofile" },
-        { label: "Edit User", sectionKey: "edituserprofile" },
-      ],
-    },
-    {
-      title: "My Doctor Profile",
-      icon: <FaUserDoctor className="mr-2" />,
-      menuKey: "settings",
-      description: "View and manage your doctor profile and appointments.",
-      items: [
-        { label: "View Profile", sectionKey: "doctorselfprofile" },
-        { label: "Appointments", sectionKey: "bookings" },
-        { label: "View Slots", sectionKey: "view-slots" },
-      ],
-    },
-    {
-      title: "Family Members",
-      icon: <FaUser className="mr-2" />,
-      menuKey: "family",
-      description: "Manage your family members and their profiles.",
-      items: [
-        { label: "View Members", sectionKey: "familyProfile" },
-        { label: "Add Family", sectionKey: "addFamily" },
-      ],
-    },
-    {
-      title: "My Bookings", // Non-dropdown item
-      icon: <TbBrandBooking className="mr-2" />,
-      description: "View and manage your current bookings.",
-      isStandalone: true,
-    },
-  ];
-
-  useEffect(() => {
-    const isReturningUser = localStorage.getItem("hasSeenTutorial");
-    if (!isReturningUser) {
-      setIsNewUser(true);
-    }
-  }, []);
-
-  const handleNext = () => {
-    // Skip hidden steps (e.g., 'My Doctor Profile' for non-doctor users)
-    let nextStep = tutorialStep + 1;
-    while (
-      nextStep < filteredSidebarItems.length &&
-      filteredSidebarItems[nextStep].menuKey === "settings"
-    ) {
-      nextStep++;
-    }
-
-    if (nextStep < filteredSidebarItems.length) {
-      setTutorialStep(nextStep);
-    } else {
-      setIsNewUser(false);
-      localStorage.setItem("hasSeenTutorial", true);
-    }
-  };
-
-  const handleSkip = () => {
-    setIsNewUser(false);
-    localStorage.setItem("hasSeenTutorial", true);
-  };
-
-  const renderDropdownMenu = ({
-    title,
-    icon,
-    description,
-    items,
-    menuKey,
-    selectedMenu,
-    toggleMenu,
-    handleSectionChange,
-  }) => (
-    <li className="mb-2">
-      <div
-        className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
-        onClick={() => toggleMenu(menuKey)}
-        ref={
-          tutorialStep ===
-          sidebarItems.findIndex((item) => item.menuKey === menuKey)
-            ? setReferenceElement
-            : null
-        }
-      >
-        <div className="flex items-center">
-          {icon}
-          {title}
-        </div>
-        {selectedMenu === menuKey ? <FaChevronUp /> : <FaChevronDown />}
-      </div>
-      {selectedMenu === menuKey && (
-        <ul className="ml-6 mt-2 space-y-1 text-gray-300">
-          {items.map((item, index) => (
-            <li key={index}>
-              <p
-                onClick={() => handleSectionChange(item.sectionKey)}
-                className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
-              >
-                {item.label}
-              </p>
-            </li>
-          ))}
-        </ul>
-      )}
-    </li>
-  );
-
-  // Skip 'My Doctor Profile' if role is not doctor
-  const filteredSidebarItems = sidebarItems.filter(
-    (item) =>
-      item.menuKey !== "settings" || userProfileData?.data?.role === "doctor"
-  );
-
   return (
     <div>
-      <div className="bg-gray-300 bg-opacity-50 w-full  mt-5"></div>
+      <div className="bg-gray-300 bg-opacity-50 w-full h-[1px] mt-5"></div>
       <div className="sm:flex gap-10 p-10">
         {/* desktop section */}
         <div className="left h-[600px] w-[20%] sm:flex hidden flex-col mt-5 shadow-xl sticky top-[100px]">
           <nav className="flex-1 p-2">
             <ul>
-              <li
-                className={`mb-2 ${
-                  tutorialStep ===
-                  sidebarItems.findIndex((item) => item.title === "Home")
-                    ? "bg-[#00768A] text-white"
-                    : ""
-                }`}
-                ref={
-                  tutorialStep ===
-                  sidebarItems.findIndex((item) => item.title === "Home")
-                    ? setReferenceElement
-                    : null
-                }
-              >
+              {/* Home Section */}
+              <li className="mb-2">
                 <a
                   href="/"
                   className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
@@ -280,71 +191,148 @@ const Profile = () => {
                   <FaHome className="mr-2" /> Home
                 </a>
               </li>
-              {filteredSidebarItems.map((item, index) => {
-                return (
-                  <React.Fragment key={index}>
-                    <li
-                      ref={tutorialStep === index ? setReferenceElement : null}
-                      className={`mb-2 ${
-                        tutorialStep === index ||
-                        selectedMenu === sidebarItems[index].menuKey
-                          ? "bg-[#00768A] text-white"
-                          : ""
-                      }`}
-                    >
-                      {item.isStandalone ? (
-                        <div
-                          className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black cursor-pointer"
-                          onClick={() => handleSectionChange("user-bookings")}
-                        >
-                          {item.icon}
-                          {item.title}
-                        </div>
-                      ) : (
-                        renderDropdownMenu({
-                          ...item,
-                          selectedMenu,
-                          toggleMenu,
-                          handleSectionChange,
-                        })
-                      )}
+
+              {/* user bookings */}
+              {(userProfileData?.data?.role === "customer" ||
+                userProfileData?.data?.role === "doctor") && (
+                <li className="mb-2">
+                  <a
+                    onClick={() => handleSectionChange("user-bookings")}
+                    href="#"
+                    className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
+                  >
+                    <TbBrandBooking className="mr-2" />
+                    My Bookings
+                  </a>
+                </li>
+              )}
+
+             
+              <li className="mb-2">
+                <div
+                  className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
+                  onClick={() => toggleMenu("profile")}
+                >
+                  <div className="flex items-center">
+                    <FaUser className="mr-2" /> My Profile
+                  </div>
+                  {selectedMenu === "profile" ? (
+                    <FaChevronUp />
+                  ) : (
+                    <FaChevronDown />
+                  )}
+                </div>
+                {selectedMenu === "profile" && (
+                  <ul className="ml-6 mt-2 space-y-1 text-gray-300">
+                    <li>
+                      <p
+                        onClick={() => handleSectionChange("selfuserprofile")}
+                        className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
+                      >
+                        View Users
+                      </p>
                     </li>
-                  </React.Fragment>
-                );
-              })}
+                    <li>
+                      <p
+                        onClick={() => handleSectionChange("edituserprofile")}
+                        className="block cursor-pointer p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
+                      >
+                        Edit User
+                      </p>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Settings Section with Subsections */}
+              {userProfileData?.data?.role === "doctor" && (
+                <li className="mb-2">
+                  <div
+                    className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
+                    onClick={() => toggleMenu("settings")}
+                  >
+                    <div className="flex items-center">
+                      <FaUserDoctor className="mr-2" />
+                      My Doctor Profile
+                    </div>
+                    {selectedMenu === "settings" ? (
+                      <FaChevronUp />
+                    ) : (
+                      <FaChevronDown />
+                    )}
+                  </div>
+
+                  {selectedMenu === "settings" && (
+                    <ul className="ml-6 mt-2 space-y-1 text-gray-300">
+                      <li>
+                        <p
+                          onClick={() =>
+                            handleSectionChange("doctorselfprofile")
+                          }
+                          className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
+                        >
+                          View Profile
+                        </p>
+                      </li>
+                      <li className="mb-2">
+                        <a
+                          onClick={() => handleSectionChange("bookings")}
+                          className="flex cursor-pointer items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
+                        >
+                          Appointments
+                        </a>
+                      </li>
+                      <li>
+                        <p
+                          onClick={() => handleSectionChange("view-slots")}
+                          className="block cursor-pointer p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
+                        >
+                          View Slots
+                        </p>
+                      </li>
+                    </ul>
+                  )}
+                </li>
+              )}
+
+              {/* family members */}
+              <li className="mb-2">
+                <div
+                  className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
+                  onClick={() => toggleMenu("family")}
+                >
+                  <div className="flex items-center">
+                    <FaUser className="mr-2" /> Family Members
+                  </div>
+                  {selectedMenu === "family" ? (
+                    <FaChevronUp />
+                  ) : (
+                    <FaChevronDown />
+                  )}
+                </div>
+                {selectedMenu === "family" && (
+                  <ul className="ml-6 mt-2 space-y-1 text-gray-300">
+                    <li>
+                      <p
+                        onClick={() => handleSectionChange("familyProfile")}
+                        className="block font-normal p-1 hover:bg-[#00768A] rounded-md hover:text-white text-gray-500 cursor-pointer"
+                      >
+                        View Members
+                      </p>
+                    </li>
+                    <li>
+                      <Link
+                        onClick={() => setFamilyPopUp(true)}
+                        className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-gray-500"
+                      >
+                        Add Family
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
             </ul>
           </nav>
-
-          {/* Tooltip for tutorial */}
-          {isNewUser && tutorialStep < filteredSidebarItems.length && (
-            <div
-              ref={setPopperElement}
-              style={styles.popper}
-              {...attributes.popper}
-              className="p-4 bg-white shadow-lg border rounded-md"
-            >
-              {/* Ensure the popper description is only shown for the current tutorial step */}
-              {filteredSidebarItems[tutorialStep]?.description && (
-                <p className="text-sm text-gray-700">
-                  {filteredSidebarItems[tutorialStep].description}
-                </p>
-              )}
-              <div className="flex justify-end space-x-2 mt-3">
-                <button
-                  className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md"
-                  onClick={handleSkip}
-                >
-                  Skip
-                </button>
-                <button
-                  className="bg-[#00768A] text-white px-3 py-1 rounded-md"
-                  onClick={handleNext}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* for mobile section */}
@@ -583,15 +571,25 @@ const Profile = () => {
         </div>
 
         <div className="right sm:w-[80%] w-[100%] mt-5">
-          {activeSection === "bookings" && <Bookings />}
+          {activeSection === "bookings" && <Bookings history={history} />}
           {activeSection === "selfuserprofile" && (
             <SelfProfile userprofiledata={userProfileData} />
           )}
           {activeSection === "doctorselfprofile" && userProfileData.data && (
-            <DoctorSelfProfile />
+            <DoctorSelfProfile doctorProfileData={doctorProfileData} />
           )}
-          {activeSection === "familyProfile" && <ViewFamilyMembers />}
-          {activeSection === "user-bookings" && <UserBookings />}
+          {activeSection === "familyProfile" && (
+            <ViewFamilyMembers
+              familyData={familyData}
+              getFamilyEdit={getFamilyEdit}
+            />
+          )}
+          {activeSection === "user-bookings" && (
+            <UserBookings
+              userBooking={userBooking}
+              setUserBooking={setUserBooking}
+            />
+          )}
           {activeSection === "edituserprofile" && <EditUserDetails />}
           {activeSection === "create-slots" && <CreateSlotsByDr />}
           {activeSection === "view-slots" && (
@@ -622,6 +620,7 @@ const Profile = () => {
               <div className="bg-gray-500 h-[1px] w-full bg-opacity-30 mt-5"></div>
               {/* Close button to hide the popup */}
               <AddFamilyMembers
+                getFamilyEdit={getFamilyEdit}
                 handleSectionChange={handleSectionChange}
                 activeSection={activeSection}
                 familyPopUp={familyPopUp}
