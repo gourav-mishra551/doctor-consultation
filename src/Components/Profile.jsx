@@ -206,59 +206,6 @@ const Profile = () => {
                   </a>
                 </li>
               )}
-
-              {/*Doctor Bookings Section */}
-              {/* {userProfileData?.data?.role === "doctor" && (
-                <li className="mb-2">
-                  <a
-                    onClick={() => handleSectionChange("bookings")}
-                    href="#"
-                    className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
-                  >
-                    <TbBrandBooking className="mr-2" /> Appointments
-                  </a>
-                </li>
-              )} */}
-
-              {/* slots creation */}
-              {/* {userProfileData?.data?.role === "doctor" && (
-                <li className="mb-2">
-                  <div
-                    className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
-                    onClick={() => toggleMenu("create-slots")}
-                  >
-                    <div className="flex items-center">
-                      <FaCheckToSlot className="mr-2" /> Slots
-                    </div>
-                    {selectedMenu === "create-slots" ? (
-                      <FaChevronUp />
-                    ) : (
-                      <FaChevronDown />
-                    )}
-                  </div>
-                  {selectedMenu === "create-slots" && (
-                    <ul className="ml-6 mt-2 space-y-1 text-gray-300">
-                      <li>
-                        <p
-                          onClick={() => handleSectionChange("create-slots")}
-                          className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
-                        >
-                          Create Slots
-                        </p>
-                      </li>
-                      <li>
-                        <p
-                          onClick={() => handleSectionChange("view-slots")}
-                          className="block cursor-pointer p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
-                        >
-                          View Slots
-                        </p>
-                      </li>
-                    </ul>
-                  )}
-                </li>
-              )} */}
-
               {/* Profile Section with Subsections */}
               <li className="mb-2">
                 <div
