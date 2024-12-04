@@ -1,13 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaPhoneAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const DoctorSelfProfile = ({ doctorProfileData }) => {
+const DoctorSelfProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFAQOpen, setIsFAQOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState(null); // To track which box is open
+  const [doctorProfileData, setDoctorProfileData] = useState([]);
+
+  const token = localStorage.getItem("token");
+  const id = localStorage.getItem("id");
+
+  const docotrData = async () => {
+    try {
+      const response = await axios.get(
+        "https://api.assetorix.com/ah/api/v1/dc/doctor",
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      setDoctorProfileData(response.data);
+      console.log(response.data);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    docotrData();
+  }, []);
 
   const toggleBox = (index) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -104,7 +129,7 @@ const DoctorSelfProfile = ({ doctorProfileData }) => {
               <div className="h-[2px] bg-gray-300 w-[100%] bg-opacity-40 mt-8"></div>
 
               {/* experience section added */}
-              {doctorProfileData.data.years_of_experience.length > 0 ? (
+              {doctorProfileData?.data?.years_of_experience.length > 0 ? (
                 <div className="experience mt-10 border border-gray-300 rounded-lg p-4 shadow-sm">
                   {doctorProfileData.data.years_of_experience.map(
                     (experience, index) => (

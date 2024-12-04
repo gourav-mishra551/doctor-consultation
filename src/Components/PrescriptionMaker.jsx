@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import PdfGeneratorPrescription from "./PdfGeneratorPrescription/PdfGeneratorPrescription";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 const PrescriptionMaker = () => {
@@ -18,6 +18,7 @@ const PrescriptionMaker = () => {
     duration: "",
     instruction: "",
     dose: "",
+    when: "",
   });
   const [medicineData, setMedicineData] = useState([]);
   const [formData, setFormData] = useState([
@@ -29,14 +30,23 @@ const PrescriptionMaker = () => {
     duration: "",
     dose: "",
     instruction: "",
+    when: "",
+  });
+  const [bpData, setBpData] = useState({
+    bp: "",
+    height: "",
+    weight: "",
+    temperature: "",
   });
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(""); // Error state
   const [frequencySuggestions, setFrequencySuggestions] = useState([]);
+  const [pdfData, setPdfData] = useState([]);
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
+  const { pid } = useParams();
 
   const navigate = useNavigate();
   const searchBoxRef = useRef(null);
@@ -73,7 +83,8 @@ const PrescriptionMaker = () => {
       medication.frequency &&
       medication.duration &&
       medication.instruction &&
-      medication.dose
+      medication.dose &&
+      medication.when
     ) {
       setMedicineData([...medicineData, medication]);
       setMedication({
@@ -82,6 +93,7 @@ const PrescriptionMaker = () => {
         duration: "",
         instruction: "",
         dose: "",
+        when: "",
       });
     } else {
       alert("Please fill all medication fields.");
@@ -97,11 +109,12 @@ const PrescriptionMaker = () => {
     console.log({
       formData,
       medicineData,
+      bpData,
     });
 
     // Navigate to /pdf and pass data through state
     navigate("/pdf-genrate", {
-      state: { formData, medicineData },
+      state: { formData, medicineData, pdfData, bpData },
     });
   };
 
@@ -170,30 +183,6 @@ const PrescriptionMaker = () => {
     }
   };
 
-  // const fetchMedicines = async (query) => {
-  //   try {
-  //     if (!query.trim()) {
-  //       setSearchResults([]); // Clear results if the query is empty
-  //       return;
-  //     }
-  //     setLoading(true);
-  //     setError(null);
-
-  //     const response = await axios.get(`/api/medicines?search=${query}`);
-  //     console.log("API response:", response.data); // Log response to check the structure
-
-  //     // Set search results from the 'data' key
-  //     setSearchResults(response.data.data); // Accessing the 'data' property
-  //   } catch (err) {
-  //     console.error("Error fetching data:", err);
-  //     setError("Failed to fetch medicines.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  console.log("searchResults", searchResults);
-
   useEffect(() => {
     if (searchTerm.trim()) {
       fetchMedicines(searchTerm); // Fetch results when the searchTerm changes
@@ -241,109 +230,274 @@ const PrescriptionMaker = () => {
     };
   }, []);
 
+  const BookingsDetailsById = async () => {
+    try {
+      const response = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/dc/doctor/history/${pid}`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      console.log(response.data.data);
+      setPdfData(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    BookingsDetailsById();
+  }, []);
+
+  const handleBpChange = (e) => {
+    const { name, value } = e.target;
+    setBpData({
+      ...bpData,
+      [name]: value,
+    });
+  };
+
   return (
     <div className="bg-gray-100 p-5 sm:flex gap-5">
       {/* Left section */}
       <div className="patient-details sm:w-1/4 p-5 space-y-3 sm:shadow-xl bg-white rounded-lg">
-        <p className="font-light text-2xl text-gray-800">Patient Details</p>
-        <div className="space-y-1">
-          <div className="flex">
-            <p className="text-gray-800">Name:&nbsp;</p>
-            <p className="text-gray-500">Abir Kazi</p>
-          </div>
-          <div className="flex">
-            <p className="text-gray-800">Email:&nbsp;</p>
-            <p className="text-gray-500">abirkazi@gmail.com</p>
-          </div>
-          <div className="flex">
-            <p className="text-gray-800">Address:&nbsp;</p>
-            <p className="text-gray-500">F11 Green Park Ex</p>
-          </div>
-        </div>
+        {pdfData?.data?.patientDetails ? (
+          <>
+            <p className="font-light text-2xl text-gray-800">Patient Details</p>
+            <div className="space-y-1">
+              <div className="flex">
+                <p className="text-gray-800">Name:&nbsp;</p>
+                <p className="text-gray-500">
+                  {pdfData.data.patientDetails.name}
+                </p>
+              </div>
+              <div className="flex">
+                <p className="text-gray-800">Date of Birth:&nbsp;</p>
+                <p className="text-gray-500">
+                  {pdfData.data.patientDetails.dateOfBirth}
+                </p>
+              </div>
+              <div className="flex">
+                <p className="text-gray-800">Gender:&nbsp;</p>
+                <p className="text-gray-500">
+                  {pdfData.data.patientDetails.gender}
+                </p>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <p className="font-light text-2xl text-gray-800">Patient Details</p>
+            <div className="space-y-1">
+              <div className="flex">
+                <p className="text-gray-800">Name:&nbsp;</p>
+                <p className="text-gray-500">
+                  {pdfData?.data?.userPatientData?.name}
+                </p>
+              </div>
+              <div className="flex">
+                <p className="text-gray-800">Date of Birth:&nbsp;</p>
+                <p className="text-gray-500">
+                  {pdfData?.data?.userPatientData?.dateOfBirth}
+                </p>
+              </div>
+              <div className="flex">
+                <p className="text-gray-800">Gender:&nbsp;</p>
+                <p className="text-gray-500">
+                  {pdfData?.data?.userPatientData?.gender}
+                </p>
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="bg-gray-300 opacity-40 h-[1px]"></div>
-
+        <p className="font-light text-2xl text-gray-800">Doctor Details</p>
         <div className="space-y-1">
           <div className="flex">
-            <p className="text-gray-800">Clinic Details:&nbsp;</p>
-            <p className="text-gray-500">Valley Clinic</p>
-          </div>
-          <div className="flex">
             <p className="text-gray-800">Doctor Name:&nbsp;</p>
-            <p className="text-gray-500">Ejajul Ansari</p>
+            <p className="text-gray-500">{pdfData?.data?.userId?.name}</p>
           </div>
           <div className="flex">
-            <p className="text-gray-800">Description:&nbsp;</p>
-            <p className="text-gray-500">No record found</p>
+            <p className="text-gray-800">Gender:&nbsp;</p>
+            <p className="text-gray-500">{pdfData?.data?.userId?.gender}</p>
           </div>
+          {pdfData?.data?.doctorId?.hospitalName && (
+            <>
+              <div className="flex">
+                <p className="text-gray-800">Hospital Name&nbsp;</p>
+                <p className="text-gray-500">
+                  {pdfData?.data?.doctorId?.hospitalName}
+                </p>
+              </div>
+              <div className="flex">
+                <p className="text-gray-500">
+                  {pdfData?.data?.doctorId?.clinic_hospital_address
+                    ?.PinCode && (
+                    <>
+                      <p className="text-gray-800">Hospital Address&nbsp;</p>
+                      <p>
+                        {
+                          pdfData?.data?.doctorId?.clinic_hospital_address
+                            ?.PinCode
+                        }
+                      </p>
+                      <p>
+                        {
+                          pdfData?.data?.doctorId?.clinic_hospital_address
+                            ?.permanentAddress
+                        }
+                      </p>
+                      <p>
+                        {pdfData?.data?.doctorId?.clinic_hospital_address?.city}
+                      </p>
+                      <p>
+                        {
+                          pdfData?.data?.doctorId?.clinic_hospital_address
+                            ?.state
+                        }
+                      </p>
+                    </>
+                  )}
+                </p>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
       {/* Right section */}
       <div className="prescription-detail sm:w-3/4 space-y-5 sm:mt-0 mt-5">
         <form onSubmit={handleSubmit}>
-          {/* Problems, Observations, Notes */}
-          {formData.map((data, index) => (
-            <div
-              key={index}
-              className="relative flex gap-5 bg-white p-5 rounded-lg shadow-md mt-5"
-            >
-              {/* Delete Button */}
-              {formData.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => handleDeleteFormData(index)}
-                  className="absolute top-3 right-3 text-red-500 hover:text-red-600"
-                  title="Delete Section"
-                >
-                  <MdDelete size={20} />
-                </button>
-              )}
-
-              <div className="w-1/3">
-                <p className="text-gray-800 font-semibold">Problems</p>
-                <textarea
-                  name={`problems-${index}`}
-                  value={data.problems}
-                  onChange={(e) =>
-                    handleFormDataChange(index, "problems", e.target.value)
+          <div className="flex">
+            <div className="w-1/3 px-2">
+              <p className="text-gray-800 font-semibold">Height (cm)</p>
+              <input
+                name="height"
+                value={bpData.height}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    handleBpChange(e);
                   }
-                  className="w-full border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none min-h-[100px]"
-                />
-              </div>
-              <div className="w-1/3">
-                <p className="text-gray-800 font-semibold">Observation</p>
-                <textarea
-                  name={`observations-${index}`}
-                  value={data.observations}
-                  onChange={(e) =>
-                    handleFormDataChange(index, "observations", e.target.value)
-                  }
-                  className="w-full border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none min-h-[100px]"
-                />
-              </div>
-              <div className="w-1/3">
-                <p className="text-gray-800 font-semibold">Notes</p>
-                <textarea
-                  name={`notes-${index}`}
-                  value={data.notes}
-                  onChange={(e) =>
-                    handleFormDataChange(index, "notes", e.target.value)
-                  }
-                  className="w-full border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none min-h-[100px]"
-                />
-              </div>
+                }}
+                className="1/4 border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none"
+              />
             </div>
-          ))}
+            <div className="w-1/3 px-2">
+              <p className="text-gray-800 font-semibold">Weight (kg)</p>
+              <input
+                name="weight"
+                value={bpData.weight}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    handleBpChange(e);
+                  }
+                }}
+                className="1/4 border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none"
+              />
+            </div>
+            <div className="w-1/3 px-2">
+              <p className="text-gray-800 font-semibold">BP</p>
+              <input
+                name="bp"
+                value={bpData.bp}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    handleBpChange(e);
+                  }
+                }}
+                className="1/4 border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none"
+              />
+            </div>
+            <div className="w-1/3 px-2">
+              <p className="text-gray-800 font-semibold">Temperature (deg C)</p>
+              <input
+                name="temperature"
+                value={bpData.temperature}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    handleBpChange(e);
+                  }
+                }}
+                className="1/4 border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none"
+              />
+            </div>
+          </div>
 
-          <div className="text-right mt-4">
-            <button
-              type="button"
-              onClick={handleAddMore}
-              className="px-4 py-2 flex gap-1 items-center text-white rounded-md bg-[#00768A]"
-            >
-              Add More <FaPlus />
-            </button>
+          {/* Problems, Observations, Notes */}
+          <div className="bg-white p-5 mt-5">
+            <div className="text-right mt-4 flex justify-end">
+              <button
+                type="button"
+                onClick={handleAddMore}
+                className="px-4 py-2 flex gap-1 items-center text-white rounded-md bg-[#00768A]"
+              >
+                Add More <FaPlus />
+              </button>
+            </div>
+            {formData.map((data, index) => (
+              <div
+                key={index}
+                className="relative flex gap-5 bg-white p-5 rounded-lg shadow-md mt-5"
+              >
+                {/* Delete Button */}
+                {formData.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteFormData(index)}
+                    className="absolute top-3 right-3 text-red-500 hover:text-red-600"
+                    title="Delete Section"
+                  >
+                    <MdDelete size={20} />
+                  </button>
+                )}
+
+                <div className="w-1/3">
+                  <p className="text-gray-800 font-semibold">Complaint</p>
+                  <textarea
+                    name={`problems-${index}`}
+                    value={data.problems}
+                    onChange={(e) =>
+                      handleFormDataChange(index, "problems", e.target.value)
+                    }
+                    className="w-full border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none min-h-[100px]"
+                  />
+                </div>
+                <div className="w-1/3">
+                  <p className="text-gray-800 font-semibold">Diagnose</p>
+                  <textarea
+                    name={`observations-${index}`}
+                    value={data.observations}
+                    onChange={(e) =>
+                      handleFormDataChange(
+                        index,
+                        "observations",
+                        e.target.value
+                      )
+                    }
+                    className="w-full border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none min-h-[100px]"
+                  />
+                </div>
+                <div className="w-1/3">
+                  <p className="text-gray-800 font-semibold">Advice</p>
+                  <textarea
+                    name={`notes-${index}`}
+                    value={data.notes}
+                    onChange={(e) =>
+                      handleFormDataChange(index, "notes", e.target.value)
+                    }
+                    className="w-full border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none min-h-[100px]"
+                  />
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* Medication Section */}
@@ -447,6 +601,13 @@ const PrescriptionMaker = () => {
                 name="dose"
                 placeholder="Frequency"
                 value={medication.dose}
+                onChange={handleMedicationChange}
+                className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none resize-none"
+              />
+              <textarea
+                name="when"
+                placeholder="When"
+                value={medication.when}
                 onChange={handleMedicationChange}
                 className="border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none resize-none"
               />
