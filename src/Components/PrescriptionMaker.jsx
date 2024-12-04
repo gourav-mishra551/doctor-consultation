@@ -4,6 +4,7 @@ import { MdDelete } from "react-icons/md";
 import PdfGeneratorPrescription from "./PdfGeneratorPrescription/PdfGeneratorPrescription";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const PrescriptionMaker = () => {
   const [showPdfGenerator, setShowPdfGenerator] = useState(false);
@@ -107,7 +108,7 @@ const PrescriptionMaker = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Combine all data into one object
+    // Combine all data into one payload object
     const payload = {
       formData,
       medicineData,
@@ -116,7 +117,7 @@ const PrescriptionMaker = () => {
     };
 
     try {
-      // Make an API call
+      // Make the API call
       const response = await axios.post(
         `https://api.assetorix.com/ah/api/v1/dc/doctor/prescription/${pid}`,
         payload,
@@ -128,17 +129,33 @@ const PrescriptionMaker = () => {
         }
       );
 
-      // Log the API response
-      // console.log("API Response:", response.data);
-      console.log(payload);
+      // Check if response is successful
+      if (response?.status === 200) {
+        console.log("API Response:", response.data);
+        toast.success("Prescription generated successfully...");
 
-      // Navigate to /pdf-genrate and pass data through state
-      navigate("/pdf-genrate", {
-        state: { formData, medicineData, pdfData, bpData },
-      });
+        // Navigate to /pdf-genrate with state
+        navigate(`/booking-details/${pid}`, {
+          state: { formData, medicineData, pdfData, bpData },
+        });
+      } else {
+        console.error("Unexpected API response:", response);
+        toast.error("Failed to submit data. Please try again.");
+      }
     } catch (error) {
-      console.error("Error while calling the API:", error.message);
-      alert("Failed to submit data. Please try again.");
+      console.error("Error while calling the API:", error);
+
+      // Handle API or network errors
+      if (error.response) {
+        console.error("API Error Response:", error.response.data);
+        toast.error(error.response.data.message || "Failed to submit data.");
+      } else if (error.request) {
+        console.error("No response received from API:", error.request);
+        toast.error("No response from server. Please try again later.");
+      } else {
+        console.error("Error during request setup:", error.message);
+        toast.error("Unexpected error occurred. Please try again.");
+      }
     }
   };
 
@@ -537,7 +554,7 @@ const PrescriptionMaker = () => {
                 onClick={handleAddMedication}
                 className="px-4 py-2 flex gap-1 items-center text-white rounded-md bg-[#00768A]"
               >
-                Add Medication <FaPlus />
+                Add Medication
               </button>
             </div>
 

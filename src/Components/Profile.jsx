@@ -94,7 +94,7 @@ const Profile = () => {
         }
       );
       setUserProfileData(response.data);
-    } catch (error) { }
+    } catch (error) {}
   };
 
   // const docotrData = async () => {
@@ -171,7 +171,6 @@ const Profile = () => {
     },
   ];
 
-
   useEffect(() => {
     const isReturningUser = localStorage.getItem("hasSeenTutorial");
     if (!isReturningUser) {
@@ -182,7 +181,10 @@ const Profile = () => {
   const handleNext = () => {
     // Skip hidden steps (e.g., 'My Doctor Profile' for non-doctor users)
     let nextStep = tutorialStep + 1;
-    while (nextStep < filteredSidebarItems.length && filteredSidebarItems[nextStep].menuKey === "settings") {
+    while (
+      nextStep < filteredSidebarItems.length &&
+      filteredSidebarItems[nextStep].menuKey === "settings"
+    ) {
       nextStep++;
     }
 
@@ -214,7 +216,8 @@ const Profile = () => {
         className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
         onClick={() => toggleMenu(menuKey)}
         ref={
-          tutorialStep === sidebarItems.findIndex((item) => item.menuKey === menuKey)
+          tutorialStep ===
+          sidebarItems.findIndex((item) => item.menuKey === menuKey)
             ? setReferenceElement
             : null
         }
@@ -243,8 +246,9 @@ const Profile = () => {
   );
 
   // Skip 'My Doctor Profile' if role is not doctor
-  const filteredSidebarItems = sidebarItems.filter(item =>
-    item.menuKey !== "settings" || userProfileData?.data?.role === "doctor"
+  const filteredSidebarItems = sidebarItems.filter(
+    (item) =>
+      item.menuKey !== "settings" || userProfileData?.data?.role === "doctor"
   );
 
   return (
@@ -256,9 +260,18 @@ const Profile = () => {
           <nav className="flex-1 p-2">
             <ul>
               <li
-                className={`mb-2 ${tutorialStep === sidebarItems.findIndex((item) => item.title === "Home") ? "bg-[#00768A] text-white" : ""
-                  }`}
-                ref={tutorialStep === sidebarItems.findIndex((item) => item.title === "Home") ? setReferenceElement : null}
+                className={`mb-2 ${
+                  tutorialStep ===
+                  sidebarItems.findIndex((item) => item.title === "Home")
+                    ? "bg-[#00768A] text-white"
+                    : ""
+                }`}
+                ref={
+                  tutorialStep ===
+                  sidebarItems.findIndex((item) => item.title === "Home")
+                    ? setReferenceElement
+                    : null
+                }
               >
                 <a
                   href="/"
@@ -272,7 +285,12 @@ const Profile = () => {
                   <React.Fragment key={index}>
                     <li
                       ref={tutorialStep === index ? setReferenceElement : null}
-                      className={`mb-2 ${tutorialStep === index || selectedMenu === sidebarItems[index].menuKey ? "bg-[#00768A] text-white" : ""}`}
+                      className={`mb-2 ${
+                        tutorialStep === index ||
+                        selectedMenu === sidebarItems[index].menuKey
+                          ? "bg-[#00768A] text-white"
+                          : ""
+                      }`}
                     >
                       {item.isStandalone ? (
                         <div
@@ -307,7 +325,9 @@ const Profile = () => {
             >
               {/* Ensure the popper description is only shown for the current tutorial step */}
               {filteredSidebarItems[tutorialStep]?.description && (
-                <p className="text-sm text-gray-700">{filteredSidebarItems[tutorialStep].description}</p>
+                <p className="text-sm text-gray-700">
+                  {filteredSidebarItems[tutorialStep].description}
+                </p>
               )}
               <div className="flex justify-end space-x-2 mt-3">
                 <button
@@ -325,9 +345,7 @@ const Profile = () => {
               </div>
             </div>
           )}
-
         </div>
-
 
         {/* for mobile section */}
         <div className="sm:hidden">
@@ -355,10 +373,11 @@ const Profile = () => {
 
           {/* Profile Bar (Visible only on mobile) */}
           <div
-            className={`shadow-xl bg-gray-100 fixed bottom-0 left-0 w-full transition-transform duration-300 md:hidden z-50 ${isProfileOpen
-              ? "transform translate-y-0"
-              : "transform translate-y-full"
-              }`}
+            className={`shadow-xl bg-gray-100 fixed bottom-0 left-0 w-full transition-transform duration-300 md:hidden z-50 ${
+              isProfileOpen
+                ? "transform translate-y-0"
+                : "transform translate-y-full"
+            }`}
             style={{
               height: "80%",
             }}
