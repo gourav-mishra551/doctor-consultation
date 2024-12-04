@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { usePopper } from "react-popper";
-
 import {
   FaHome,
   FaUser,
@@ -128,7 +127,6 @@ const Profile = () => {
   const toggleDoctorProfile = () => setIsDoctorProfileOpen((prev) => !prev);
 
   const toggleFamily = () => setIsFamilyOpen((prev) => !prev);
-
   if (loading) {
     return <div className="loader"></div>; // Loader is displayed
   }
