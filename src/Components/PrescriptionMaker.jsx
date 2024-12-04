@@ -104,18 +104,42 @@ const PrescriptionMaker = () => {
     setMedicineData(medicineData.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({
+
+    // Combine all data into one object
+    const payload = {
       formData,
       medicineData,
+      pdfData,
       bpData,
-    });
+    };
 
-    // Navigate to /pdf and pass data through state
-    navigate("/pdf-genrate", {
-      state: { formData, medicineData, pdfData, bpData },
-    });
+    try {
+      // Make an API call
+      const response = await axios.post(
+        `https://api.assetorix.com/ah/api/v1/dc/doctor/prescription/${pid}`,
+        payload,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+
+      // Log the API response
+      // console.log("API Response:", response.data);
+      console.log(payload);
+
+      // Navigate to /pdf-genrate and pass data through state
+      navigate("/pdf-genrate", {
+        state: { formData, medicineData, pdfData, bpData },
+      });
+    } catch (error) {
+      console.error("Error while calling the API:", error.message);
+      alert("Failed to submit data. Please try again.");
+    }
   };
 
   const popupRef = useRef(null);
@@ -370,13 +394,14 @@ const PrescriptionMaker = () => {
       </div>
 
       {/* Right section */}
-      <div className="prescription-detail sm:w-3/4 space-y-5 sm:mt-0 mt-5">
+      <div className="prescription-detail sm:w-full space-y-5 sm:mt-0 mt-5">
         <form onSubmit={handleSubmit}>
           <div className="flex">
-            <div className="w-1/3 px-2">
+            <div className="sm:w-1/3 w-full px-2">
               <p className="text-gray-800 font-semibold">Height (cm)</p>
               <input
                 name="height"
+                placeholder="height"
                 value={bpData.height}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -387,10 +412,11 @@ const PrescriptionMaker = () => {
                 className="1/4 border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none"
               />
             </div>
-            <div className="w-1/3 px-2">
+            <div className="sm:w-1/3 w-full px-2">
               <p className="text-gray-800 font-semibold">Weight (kg)</p>
               <input
                 name="weight"
+                placeholder="weight"
                 value={bpData.weight}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -401,11 +427,12 @@ const PrescriptionMaker = () => {
                 className="1/4 border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none"
               />
             </div>
-            <div className="w-1/3 px-2">
+            <div className="sm:w-1/3 w-full px-2">
               <p className="text-gray-800 font-semibold">BP</p>
               <input
                 name="bp"
                 value={bpData.bp}
+                placeholder="bp"
                 onChange={(e) => {
                   const value = e.target.value;
                   if (/^\d*$/.test(value)) {
@@ -415,10 +442,11 @@ const PrescriptionMaker = () => {
                 className="1/4 border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none"
               />
             </div>
-            <div className="w-1/3 px-2">
+            <div className="sm:w-1/3 w-full px-2">
               <p className="text-gray-800 font-semibold">Temperature (deg C)</p>
               <input
                 name="temperature"
+                placeholder="temperature"
                 value={bpData.temperature}
                 onChange={(e) => {
                   const value = e.target.value;
