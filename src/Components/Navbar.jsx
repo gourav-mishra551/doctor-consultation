@@ -95,13 +95,13 @@ const Navbar = () => {
     ],
   };
 
-  const FetchCategories = async () => {
-    try {
-      const result = await axios.get(
-        `https://api.assetorix.com/ah/api/v1/dc/user/Category?limit=${totalCount}`
-      );
-    } catch (error) {}
-  };
+  // const FetchCategories = async () => {
+  //   try {
+  //     const result = await axios.get(
+  //       `https://api.assetorix.com/ah/api/v1/dc/user/Category?limit=${totalCount}`
+  //     );
+  //   } catch (error) {}
+  // };
   const toggleSubMenu = (menuKey) => {
     setOpenSubMenus((prevState) => ({
       ...prevState,
@@ -572,7 +572,7 @@ const Navbar = () => {
         >
           {isMegaMenuVisible && (
             <div className=" top-full left-0 mt-2 bg-white text-black shadow-lg">
-              <MegaMenu />
+            <MegaMenu />  
             </div>
           )}
         </div>
