@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { usePopper } from "react-popper";
+
 import {
   FaHome,
   FaUser,
@@ -40,6 +42,19 @@ const Profile = () => {
   const [isFamilyOpen, setIsFamilyOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("selfuserprofile");
   const location = useLocation();
+  const [isNewUser, setIsNewUser] = useState(false);
+  const [tutorialStep, setTutorialStep] = useState(0);
+  const [referenceElement, setReferenceElement] = useState(null);
+  const [popperElement, setPopperElement] = useState(null);
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement: "right",
+    modifiers: [
+      {
+        name: "offset",
+        options: { offset: [20, 10] },
+      },
+    ],
+  });
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -80,7 +95,7 @@ const Profile = () => {
         }
       );
       setUserProfileData(response.data);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // const docotrData = async () => {
@@ -118,16 +133,135 @@ const Profile = () => {
     return <div className="loader"></div>; // Loader is displayed
   }
 
+  const sidebarItems = [
+    {
+      title: "My Profile",
+      icon: <FaUser className="mr-2" />,
+      menuKey: "profile",
+      description: "Manage your personal profile and settings.",
+      items: [
+        { label: "View Users", sectionKey: "selfuserprofile" },
+        { label: "Edit User", sectionKey: "edituserprofile" },
+      ],
+    },
+    {
+      title: "My Doctor Profile",
+      icon: <FaUserDoctor className="mr-2" />,
+      menuKey: "settings",
+      description: "View and manage your doctor profile and appointments.",
+      items: [
+        { label: "View Profile", sectionKey: "doctorselfprofile" },
+        { label: "Appointments", sectionKey: "bookings" },
+        { label: "View Slots", sectionKey: "view-slots" },
+      ],
+    },
+    {
+      title: "Family Members",
+      icon: <FaUser className="mr-2" />,
+      menuKey: "family",
+      description: "Manage your family members and their profiles.",
+      items: [
+        { label: "View Members", sectionKey: "familyProfile" },
+        { label: "Add Family", sectionKey: "addFamily" },
+      ],
+    },
+    {
+      title: "My Bookings", // Non-dropdown item
+      icon: <TbBrandBooking className="mr-2" />,
+      description: "View and manage your current bookings.",
+      isStandalone: true,
+    },
+  ];
+
+
+  useEffect(() => {
+    const isReturningUser = localStorage.getItem("hasSeenTutorial");
+    if (!isReturningUser) {
+      setIsNewUser(true);
+    }
+  }, []);
+
+  const handleNext = () => {
+    // Skip hidden steps (e.g., 'My Doctor Profile' for non-doctor users)
+    let nextStep = tutorialStep + 1;
+    while (nextStep < filteredSidebarItems.length && filteredSidebarItems[nextStep].menuKey === "settings") {
+      nextStep++;
+    }
+
+    if (nextStep < filteredSidebarItems.length) {
+      setTutorialStep(nextStep);
+    } else {
+      setIsNewUser(false);
+      localStorage.setItem("hasSeenTutorial", true);
+    }
+  };
+
+  const handleSkip = () => {
+    setIsNewUser(false);
+    localStorage.setItem("hasSeenTutorial", true);
+  };
+
+  const renderDropdownMenu = ({
+    title,
+    icon,
+    description,
+    items,
+    menuKey,
+    selectedMenu,
+    toggleMenu,
+    handleSectionChange,
+  }) => (
+    <li className="mb-2">
+      <div
+        className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
+        onClick={() => toggleMenu(menuKey)}
+        ref={
+          tutorialStep === sidebarItems.findIndex((item) => item.menuKey === menuKey)
+            ? setReferenceElement
+            : null
+        }
+      >
+        <div className="flex items-center">
+          {icon}
+          {title}
+        </div>
+        {selectedMenu === menuKey ? <FaChevronUp /> : <FaChevronDown />}
+      </div>
+      {selectedMenu === menuKey && (
+        <ul className="ml-6 mt-2 space-y-1 text-gray-300">
+          {items.map((item, index) => (
+            <li key={index}>
+              <p
+                onClick={() => handleSectionChange(item.sectionKey)}
+                className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
+              >
+                {item.label}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+
+  // Skip 'My Doctor Profile' if role is not doctor
+  const filteredSidebarItems = sidebarItems.filter(item =>
+    item.menuKey !== "settings" || userProfileData?.data?.role === "doctor"
+  );
+
   return (
     <div>
-      <div className="bg-gray-300 bg-opacity-50 w-full h-[1px] mt-5"></div>
+      <div className="bg-gray-300 bg-opacity-50 w-full  mt-5"></div>
       <div className="sm:flex gap-10 p-10">
         {/* desktop section */}
         <div className="left h-[600px] w-[20%] sm:flex hidden flex-col mt-5 shadow-xl sticky top-[100px]">
           <nav className="flex-1 p-2">
             <ul>
-              {/* Home Section */}
-              <li className="mb-2">
+              <li
+                className={`mb-2 ${tutorialStep === sidebarItems.findIndex((item) => item.title === "Home") ? "bg-[#00768A] text-white" : ""
+                  }`}
+                ref={tutorialStep === sidebarItems.findIndex((item) => item.title === "Home") ? setReferenceElement : null}
+              >
                 <a
                   href="/"
                   className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
@@ -135,201 +269,67 @@ const Profile = () => {
                   <FaHome className="mr-2" /> Home
                 </a>
               </li>
-
-              {/* user bookings */}
-              {(userProfileData?.data?.role === "customer" ||
-                userProfileData?.data?.role === "doctor") && (
-                <li className="mb-2">
-                  <a
-                    onClick={() => handleSectionChange("user-bookings")}
-                    href="#"
-                    className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
-                  >
-                    <TbBrandBooking className="mr-2" />
-                    My Bookings
-                  </a>
-                </li>
-              )}
-
-              {/*Doctor Bookings Section */}
-              {/* {userProfileData?.data?.role === "doctor" && (
-                <li className="mb-2">
-                  <a
-                    onClick={() => handleSectionChange("bookings")}
-                    href="#"
-                    className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
-                  >
-                    <TbBrandBooking className="mr-2" /> Appointments
-                  </a>
-                </li>
-              )} */}
-
-              {/* slots creation */}
-              {/* {userProfileData?.data?.role === "doctor" && (
-                <li className="mb-2">
-                  <div
-                    className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
-                    onClick={() => toggleMenu("create-slots")}
-                  >
-                    <div className="flex items-center">
-                      <FaCheckToSlot className="mr-2" /> Slots
-                    </div>
-                    {selectedMenu === "create-slots" ? (
-                      <FaChevronUp />
-                    ) : (
-                      <FaChevronDown />
-                    )}
-                  </div>
-                  {selectedMenu === "create-slots" && (
-                    <ul className="ml-6 mt-2 space-y-1 text-gray-300">
-                      <li>
-                        <p
-                          onClick={() => handleSectionChange("create-slots")}
-                          className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
+              {filteredSidebarItems.map((item, index) => {
+                return (
+                  <React.Fragment key={index}>
+                    <li
+                      ref={tutorialStep === index ? setReferenceElement : null}
+                      className={`mb-2 ${tutorialStep === index || selectedMenu === sidebarItems[index].menuKey ? "bg-[#00768A] text-white" : ""}`}
+                    >
+                      {item.isStandalone ? (
+                        <div
+                          className="flex items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black cursor-pointer"
+                          onClick={() => handleSectionChange("user-bookings")}
                         >
-                          Create Slots
-                        </p>
-                      </li>
-                      <li>
-                        <p
-                          onClick={() => handleSectionChange("view-slots")}
-                          className="block cursor-pointer p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
-                        >
-                          View Slots
-                        </p>
-                      </li>
-                    </ul>
-                  )}
-                </li>
-              )} */}
-
-              {/* Profile Section with Subsections */}
-              <li className="mb-2">
-                <div
-                  className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
-                  onClick={() => toggleMenu("profile")}
-                >
-                  <div className="flex items-center">
-                    <FaUser className="mr-2" /> My Profile
-                  </div>
-                  {selectedMenu === "profile" ? (
-                    <FaChevronUp />
-                  ) : (
-                    <FaChevronDown />
-                  )}
-                </div>
-                {selectedMenu === "profile" && (
-                  <ul className="ml-6 mt-2 space-y-1 text-gray-300">
-                    <li>
-                      <p
-                        onClick={() => handleSectionChange("selfuserprofile")}
-                        className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
-                      >
-                        View Users
-                      </p>
+                          {item.icon}
+                          {item.title}
+                        </div>
+                      ) : (
+                        renderDropdownMenu({
+                          ...item,
+                          selectedMenu,
+                          toggleMenu,
+                          handleSectionChange,
+                        })
+                      )}
                     </li>
-                    <li>
-                      <p
-                        onClick={() => handleSectionChange("edituserprofile")}
-                        className="block cursor-pointer p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
-                      >
-                        Edit User
-                      </p>
-                    </li>
-                  </ul>
-                )}
-              </li>
-
-              {/* Settings Section with Subsections */}
-              {userProfileData?.data?.role === "doctor" && (
-                <li className="mb-2">
-                  <div
-                    className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
-                    onClick={() => toggleMenu("settings")}
-                  >
-                    <div className="flex items-center">
-                      <FaUserDoctor className="mr-2" />
-                      My Doctor Profile
-                    </div>
-                    {selectedMenu === "settings" ? (
-                      <FaChevronUp />
-                    ) : (
-                      <FaChevronDown />
-                    )}
-                  </div>
-
-                  {selectedMenu === "settings" && (
-                    <ul className="ml-6 mt-2 space-y-1 text-gray-300">
-                      <li>
-                        <p
-                          onClick={() =>
-                            handleSectionChange("doctorselfprofile")
-                          }
-                          className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
-                        >
-                          View Profile
-                        </p>
-                      </li>
-                      <li className="mb-2">
-                        <a
-                          onClick={() => handleSectionChange("bookings")}
-                          className="flex cursor-pointer items-center p-2 rounded-md hover:bg-[#00768A] hover:text-white text-black"
-                        >
-                          Appointments
-                        </a>
-                      </li>
-                      <li>
-                        <p
-                          onClick={() => handleSectionChange("view-slots")}
-                          className="block cursor-pointer p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
-                        >
-                          View Slots
-                        </p>
-                      </li>
-                    </ul>
-                  )}
-                </li>
-              )}
-
-              {/* family members */}
-              <li className="mb-2">
-                <div
-                  className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
-                  onClick={() => toggleMenu("family")}
-                >
-                  <div className="flex items-center">
-                    <FaUser className="mr-2" /> Family Members
-                  </div>
-                  {selectedMenu === "family" ? (
-                    <FaChevronUp />
-                  ) : (
-                    <FaChevronDown />
-                  )}
-                </div>
-                {selectedMenu === "family" && (
-                  <ul className="ml-6 mt-2 space-y-1 text-gray-300">
-                    <li>
-                      <p
-                        onClick={() => handleSectionChange("familyProfile")}
-                        className="block font-normal p-1 hover:bg-[#00768A] rounded-md hover:text-white text-gray-500 cursor-pointer"
-                      >
-                        View Members
-                      </p>
-                    </li>
-                    <li>
-                      <Link
-                        onClick={() => setFamilyPopUp(true)}
-                        className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-gray-500"
-                      >
-                        Add Family
-                      </Link>
-                    </li>
-                  </ul>
-                )}
-              </li>
+                  </React.Fragment>
+                );
+              })}
             </ul>
           </nav>
+
+          {/* Tooltip for tutorial */}
+          {isNewUser && tutorialStep < filteredSidebarItems.length && (
+            <div
+              ref={setPopperElement}
+              style={styles.popper}
+              {...attributes.popper}
+              className="p-4 bg-white shadow-lg border rounded-md"
+            >
+              {/* Ensure the popper description is only shown for the current tutorial step */}
+              {filteredSidebarItems[tutorialStep]?.description && (
+                <p className="text-sm text-gray-700">{filteredSidebarItems[tutorialStep].description}</p>
+              )}
+              <div className="flex justify-end space-x-2 mt-3">
+                <button
+                  className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md"
+                  onClick={handleSkip}
+                >
+                  Skip
+                </button>
+                <button
+                  className="bg-[#00768A] text-white px-3 py-1 rounded-md"
+                  onClick={handleNext}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+
         </div>
+
 
         {/* for mobile section */}
         <div className="sm:hidden">
@@ -357,11 +357,10 @@ const Profile = () => {
 
           {/* Profile Bar (Visible only on mobile) */}
           <div
-            className={`shadow-xl bg-gray-100 fixed bottom-0 left-0 w-full transition-transform duration-300 md:hidden z-50 ${
-              isProfileOpen
-                ? "transform translate-y-0"
-                : "transform translate-y-full"
-            }`}
+            className={`shadow-xl bg-gray-100 fixed bottom-0 left-0 w-full transition-transform duration-300 md:hidden z-50 ${isProfileOpen
+              ? "transform translate-y-0"
+              : "transform translate-y-full"
+              }`}
             style={{
               height: "80%",
             }}

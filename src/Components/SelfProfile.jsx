@@ -26,13 +26,6 @@ const SelfProfile = ({ userprofiledata }) => {
         {/* userprofiledata.data Details Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Authentication Method */}
-          {/* <div className="flex flex-col">
-            <span className="text-sm text-gray-500">Authentication Method</span>
-            <span className="text-lg font-semibold text-gray-800 uppercase">
-              {userprofiledata?.data?.authMethod}
-            </span>
-          </div> */}
-
           {/* Date of Birth */}
           <div className="flex flex-col">
             <span className="text-sm text-gray-500">Date of Birth</span>
@@ -56,15 +49,6 @@ const SelfProfile = ({ userprofiledata }) => {
               {userprofiledata?.data?.gender || "N/A"}
             </span>
           </div>
-
-          {/* Google ID */}
-          {/* <div className="flex flex-col">
-            <span className="text-sm text-gray-500">Google ID</span>
-            <span className="text-lg font-semibold text-gray-800">
-              {userprofiledata?.data?.googleId || "N/A"}
-            </span>
-          </div> */}
-
           {/* Mobile */}
           <div className="flex flex-col">
             <span className="text-sm text-gray-500">Mobile</span>
@@ -72,6 +56,17 @@ const SelfProfile = ({ userprofiledata }) => {
               {userprofiledata?.data?.mobile || "N/A"}
             </span>
           </div>
+          {
+            userprofiledata?.doctorStatusDetail && (
+              <div className="flex flex-col">
+                <span className="text-sm text-gray-500">Your status to become a doctor at Ametheus  health </span>
+                <span className="text-lg font-semibold text-gray-800">
+                  {userprofiledata?.doctorStatusDetail || "N/A"}
+                </span>
+              </div>
+            )
+          }
+
         </div>
       </div>
     </div>

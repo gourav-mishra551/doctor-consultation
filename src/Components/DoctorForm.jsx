@@ -11,7 +11,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 const DoctorForm = () => {
   const [formValues, setFormValues] = useState({
     specialitycategories: [],
-    verification: "",
     aboutDoctor: "",
     councilName: "",
     RegistrationNumber: "",
@@ -51,7 +50,6 @@ const DoctorForm = () => {
     formValues.language.length === 0 ||
     !formValues.RegistrationNumber ||
     !formValues.councilName;
-  !formValues.verification;
 
   const selectRef = useRef(null);
   const yearsOfExperience = formValues?.years_of_experience || [];
@@ -554,7 +552,7 @@ const DoctorForm = () => {
         RegistrationNumber,
         language,
         years_of_experience,
-        verification,
+       
         qualifications,
       } = formValues;
 
@@ -567,7 +565,7 @@ const DoctorForm = () => {
         language,
         years_of_experience,
         qualifications,
-        verification,
+      
       };
 
       try {
@@ -894,23 +892,6 @@ const DoctorForm = () => {
                     onChange={handleChange}
                     required
                   ></textarea>
-                </div>
-
-                <div className="gap-5">
-                  <label htmlFor="CouncilName" className="text-[#00768A]">
-                    Enter your Adhar Number: (for verification Purpose Only){" "}
-                    <span style={{ color: "red" }}>*</span>
-                  </label>
-                  <input
-                    type="number"
-                    className="border border-gray-300 w-full max-w-full h-12 p-3 rounded-md focus:outline-none focus:border-[#00768A] flex items-center justify-between cursor-pointer"
-                    placeholder="Enter Your Adhar number"
-                    max="12"
-                    name="verification"
-                    value={formValues.verification}
-                    onChange={handleChange}
-                    required
-                  />
                 </div>
               </div>
 
