@@ -21,10 +21,12 @@ const CreateSlotsByDr = () => {
   const [ErrorShow, setErrorShow] = useState(false);
   const [PriceData, setPriceData] = useState("");
   const [editingSlot, setEditingSlot] = useState(null); // { type: 'offline' or 'online', index: number }
+  const [isModalOpen, setIsModalOpen] = useState(true);
+
+  const closeModal = () => setIsModalOpen(false);
 
   //slotDuration
 
-  const updatedPrice = Number(PriceData);
   const generateSlots = () => {
     const {
       availableTimeFrom,
@@ -276,12 +278,34 @@ const CreateSlotsByDr = () => {
         </h2>
         {(data.visitingMode === "offline" || data.visitingMode === "both") &&
           (GetDrProfile.hospitalName === "" ||
-          GetDrProfile.clinicHospitalAddress?.permanentAddress === "" ||
-          GetDrProfile.clinicHospitalAddress?.city === "" ? (
-            <p className=" text-red-600  p-4 rounded-lg  max-w-3xl mx-auto mt-4">
-              You haven't added your hospital/clinic details Please add it first
-            </p>
-          ) : null)}
+            GetDrProfile.clinicHospitalAddress?.permanentAddress === "" ||
+            GetDrProfile.clinicHospitalAddress?.city === "") && (
+            isModalOpen && (
+              <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+                <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg mx-auto">
+                  <div className="text-center">
+                    <img
+                      src="https://via.placeholder.com/150" // Replace with your image URL
+                      alt="warning"
+                      className="mx-auto mb-4"
+                    />
+                    <p className="text-red-600 text-lg">
+                      You haven't added your hospital/clinic details. Please add it first.
+                    </p>
+                    <div className="mt-4">
+                      <button
+                        onClick={closeModal}
+                        className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          )}
+
 
         {/* {
             GetDrProfile.hospitalName=="" || GetDrProfile.clinicHospitalAddress?.permanentAddress=="" || GetDrProfile.clinicHospitalAddress?.city=="" ? <p className="text-center text-red-600 bg-red-100 p-4 rounded-lg shadow-md max-w-3xl mx-auto mt-4">Please First Fill Address</p>:null
@@ -418,7 +442,7 @@ const CreateSlotsByDr = () => {
                     className="flex justify-between items-center mb-2"
                   >
                     {editingSlot?.type === "offline" &&
-                    editingSlot.index === index ? (
+                      editingSlot.index === index ? (
                       <>
                         <input
                           type="time"
@@ -486,7 +510,7 @@ const CreateSlotsByDr = () => {
                     className="flex justify-between items-center mb-2"
                   >
                     {editingSlot?.type === "online" &&
-                    editingSlot.index === index ? (
+                      editingSlot.index === index ? (
                       <>
                         <input
                           type="time"
