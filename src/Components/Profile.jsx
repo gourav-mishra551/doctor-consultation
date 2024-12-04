@@ -301,7 +301,7 @@ const Profile = () => {
 
   // Skip 'My Doctor Profile' if role is not doctor
   const filteredSidebarItems = sidebarItems.filter(item =>
-    item.menuKey !== "settings" || userProfileData?.data?.role === "doctor"
+    userProfileData?.data?.role === "doctor"
   );
 
   return (
