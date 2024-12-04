@@ -1,12 +1,11 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaImage } from "react-icons/fa6";
 
 const AddFamilyMembers = ({
   setFamilyPopUp,
   setActiveSection,
-  getFamilyEdit,
   addFamilyPopup,
   familyPopUp,
   setAddFamilyPopup,
@@ -24,7 +23,7 @@ const AddFamilyMembers = ({
   });
   const [check, setCheck] = useState(familyPopUp);
 
-
+  console.log(setFamilyPopUp);
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -61,25 +60,46 @@ const AddFamilyMembers = ({
     });
   };
 
+  const getFamilyEdit = async () => {
+    try {
+      const response = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/user/family`,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Important for file uploads
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      setFamilyData(response.data);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getFamilyEdit();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Create FormData to append file data
-    const formDataToSend = new FormData();
-    formDataToSend.append("name", formData.name);
-    formDataToSend.append("gender", formData.gender);
-    formDataToSend.append("relation", formData.relation);
-    formDataToSend.append("dateOfBirth", formData.dateOfBirth);
-
-    if (formData.avatar) {
-      formDataToSend.append("avatar", formData.avatar); // Appending the avatar file
-    }
-
-    if (formData.isOther) {
-      formDataToSend.append("otherRelation", formData.otherRelation); // If "Other" is selected, append other relation
-    }
+    setSaveLoader(true); // Show loader during the process
 
     try {
+      // Create FormData to append file data
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", formData.name);
+      formDataToSend.append("gender", formData.gender);
+      formDataToSend.append("relation", formData.relation);
+      formDataToSend.append("dateOfBirth", formData.dateOfBirth);
+
+      if (formData.avatar) {
+        formDataToSend.append("avatar", formData.avatar); // Appending the avatar file
+      }
+
+      if (formData.isOther) {
+        formDataToSend.append("otherRelation", formData.otherRelation); // If "Other" is selected, append other relation
+      }
+
       const response = await axios.post(
         `https://api.assetorix.com/ah/api/v1/user/family`,
         formDataToSend,
@@ -91,31 +111,27 @@ const AddFamilyMembers = ({
           },
         }
       );
-     
 
       // Success actions
-      setSaveLoader(false);
+      toast.success("Family member added successfully!");
       setFamilyPopUp(false);
       setAddFamilyPopup(false);
-      toast.success("Family member added successfully!");
-    } catch (error) {
-      console.error("Error submitting data:", error);
+      setActiveSection("familyProfile");
 
+      // Refresh family data
+      getFamilyEdit();
+    } catch (error) {
       // Enhanced error handling
       const errorMessage =
-        error?.response?.data?.msg ||
-        error?.message ||
-        "An unexpected error occurred.";
+        error.response?.data?.message ||
+        "An unexpected error occurred while adding a family member.";
       toast.error(errorMessage);
+      console.error("Error submitting family data:", error);
     } finally {
-      // Ensure this runs after the request, whether success or failure
-      getFamilyEdit();
-      setActiveSection("familyProfile");
-      setSaveLoader(false); // Stop the loader after the process completes
+      // Ensure the loader stops after the process completes
+      setSaveLoader(false);
     }
   };
-
- 
 
   return (
     <div className="sm:max-w-xl mx-auto mt-5 py-1 px-5 rounded-xl bg-gray-100">

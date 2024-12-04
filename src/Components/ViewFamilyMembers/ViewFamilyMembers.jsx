@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaUserEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -7,17 +7,16 @@ import EditFamilyMemebrs from "../EditFamilyMemebrs";
 import { RxCross2 } from "react-icons/rx";
 import AddFamilyMembers from "../AddFamilyMembers";
 
-const ViewFamilyMembers = ({ familyData, getFamilyEdit }) => {
+const ViewFamilyMembers = () => {
   const [deleteAlert, setDeleteAlert] = useState(false);
   const [deleteId, setDeleteId] = useState("");
   const [editFamilyPopUp, setEditFamilyPopUp] = useState(false);
   const [addFamilyPopup, setAddFamilyPopup] = useState(false);
+  const [familyData, setFamilyData] = useState([]);
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("Id");
   const user = localStorage.getItem("user");
-
-
 
   const deleteFamily = async () => {
     try {
@@ -33,7 +32,6 @@ const ViewFamilyMembers = ({ familyData, getFamilyEdit }) => {
       );
       toast.success("Deleted Successfully...");
     } catch (error) {
-     
     } finally {
       getFamilyEdit();
     }
@@ -45,7 +43,25 @@ const ViewFamilyMembers = ({ familyData, getFamilyEdit }) => {
     return new Intl.DateTimeFormat("en-US", options).format(date);
   }
 
+  const getFamilyEdit = async () => {
+    try {
+      const response = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/user/family`,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Important for file uploads
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      setFamilyData(response.data);
+    } catch (error) {}
+  };
 
+  useEffect(() => {
+    getFamilyEdit();
+  }, []);
 
   return (
     <>

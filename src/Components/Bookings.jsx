@@ -11,12 +11,13 @@ import {
 } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-const Bookings = ({ history }) => {
+const Bookings = () => {
   const [openSection, setOpenSection] = useState(null);
   const toggleSection = (index) => {
     setOpenSection(openSection === index ? null : index);
   };
   const [doctorBookingsData, setDoctorBookingsData] = useState([]);
+  const [history, setHistory] = useState([]);
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -47,10 +48,10 @@ const Bookings = ({ history }) => {
     return `${formattedHours}:${String(minutes).padStart(2, "0")} ${period}`; // Pad minutes with 0 if needed
   }
 
-  const doctorBookings = async () => {
+  const bookings = async () => {
     try {
       const response = await axios.get(
-        `https://api.assetorix.com/ah/api/v1/dc/doctor/history`,
+        "https://api.assetorix.com/ah/api/v1/dc/doctor/history",
         {
           headers: {
             authorization: `Bearer ${token}`,
@@ -58,16 +59,17 @@ const Bookings = ({ history }) => {
           },
         }
       );
-      setDoctorBookingsData(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
+      setHistory(response.data);
+    } catch (error) {}
   };
 
   useEffect(() => {
-    doctorBookings();
+    bookings();
   }, []);
+
+  // useEffect(() => {
+  //   doctorBookings();
+  // }, []);
 
   console.log(history);
 

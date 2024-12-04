@@ -13,13 +13,13 @@ import Icon from "../../../src/Assests/fav-icon.png";
 
 const PdfGeneratorPrescription = () => {
   const { state } = useLocation();
-  const { formData, medicineData } = state || {};
+  const { formData, medicineData, pdfData, bpData } = state || {};
 
   // Log the data to see if it's available
   //   useEffect(() => {
   //     console.log("State updated:", formData, medicineData);
   //   }, [state]);
-  console.log("State updated:", formData, medicineData);
+  console.log("State updated:", formData, medicineData, pdfData, bpData);
 
   // Early exit if no data is available
   if (!formData || !formData[0]) {
