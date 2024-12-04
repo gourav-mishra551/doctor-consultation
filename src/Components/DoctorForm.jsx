@@ -552,7 +552,7 @@ const DoctorForm = () => {
         RegistrationNumber,
         language,
         years_of_experience,
-       
+
         qualifications,
       } = formValues;
 
@@ -565,7 +565,6 @@ const DoctorForm = () => {
         language,
         years_of_experience,
         qualifications,
-      
       };
 
       try {
