@@ -9,7 +9,7 @@ Currently, two official plugins are available:
 
 
 
-//for /doctor-onboarding-form this route 
+//for /doctor-onboarding-form this route dfgdf
 Hospitals Details
     {step === 2 && (
             <div className="bg-white p-10 rounded-xl shadow-lg">
