@@ -16,6 +16,7 @@ const CreateSlotsByDr = () => {
     availableTimeTo: "",
     doctorId: "",
   });
+console.log("from",data.availableTimeFrom)  
   const [GetDrProfile, SetDrProfile] = useState({});
   const [ErrorShow, setErrorShow] = useState(false);
   const [PriceData, setPriceData] = useState("");

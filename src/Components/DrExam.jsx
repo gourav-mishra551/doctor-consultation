@@ -4,11 +4,10 @@ import { FaEdit } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
-import TopHeader from "./TopHeader";
 import Footer from "./Footer";
 const DrExam = () => {
   const [data, setData] = useState({
-    selectDate: Date.now(),
+    selectDate: new Date().toISOString().split("T")[0],
     selectSlotDuration: [""],
     visitingMode: "",
     offlineSlots: [],
@@ -17,15 +16,17 @@ const DrExam = () => {
     availableTimeTo: "",
     doctorId: "",
   });
+
+  console.log("from",data.availableTimeFrom);
+  
   const [GetDrProfile, SetDrProfile] = useState({});
   const [ErrorShow, setErrorShow] = useState(false);
   const [Error, setError] = useState("");
   const [PriceData, setPriceData] = useState("");
   const [editingSlot, setEditingSlot] = useState(null); // { type: 'offline' or 'online', index: number }
   const [Loading, setLoading] = useState(false);
-  //slotDuration
 
-  const updatedPrice = Number(PriceData);
+  // const updatedPrice = Number(PriceData);
   const generateSlots = () => {
     const {
       availableTimeFrom,
@@ -138,9 +139,11 @@ const DrExam = () => {
   // Handle form submission and console log form data
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
     const token = localStorage.getItem("token");
     const id = localStorage.getItem("id");
+    console.log("function called");
+    setLoading(true);
 
     try {
       const res = await axios.post(
@@ -163,25 +166,14 @@ const DrExam = () => {
         }
       );
       toast.success(res.data.msg);
-      
+      setLoading(false);
       toast.success("Added successfully...");
-     
     } catch (res) {
-     
-
       toast.error(res.response.data.msg);
     } finally {
       setLoading(false);
     }
   };
-
-  if (Loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="loader"></div>
-      </div>
-    );
-  }
 
   // Submit function
   function Submit() {
@@ -278,314 +270,323 @@ const DrExam = () => {
     FetchGetProfile();
   }, []);
 
-  return (
-    <div className="bg-[#E1EAEF]">
-      <div className="relative sm:max-w-[1200px] w-[100%] shadow-md shadow-[#00768A]  mx-auto flex flex-col lg:flex-row  mb-20 mt-10">
-        {/* Image Section */}
-        <div className="lg:w-1/2  h-min w-full  sticky top-0 hidden lg:block">
-          <img
-            className="w-[100%] h-[80%] mx-auto object-cover  shadow-lg"
-            src="./doctor-gloves.jpg"
-            alt="Doctor with gloves"
-          />
-        </div>
+  if (Loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="loader"></div>
+      </div>
+    );
+  } else {
+    return (
+      <div className="bg-[#E1EAEF]">
+        <div className="relative sm:max-w-[1200px] w-[100%] shadow-md shadow-[#00768A]  mx-auto flex flex-col lg:flex-row  mb-20 mt-10">
+          {/* Image Section */}
+          <div className="lg:w-1/2  h-min w-full  sticky top-0 hidden lg:block">
+            <img
+              className="w-[100%] h-[80%] mx-auto object-cover  shadow-lg"
+              src="./doctor-gloves.jpg"
+              alt="Doctor with gloves"
+            />
+          </div>
 
-        {/* Form Section */}
-        <div className="lg:w-1/2 w-full mx-auto p-5 border  shadow-lg bg-white ">
-          <h2 className="text-3xl font-bold text-center mb-8 text-gray-700">
-            Appointment Creation
-          </h2>
-          {(data.visitingMode === "offline" || data.visitingMode === "both") &&
-            (GetDrProfile.hospitalName === "" ||
-            GetDrProfile.clinicHospitalAddress?.permanentAddress === "" ||
-            GetDrProfile.clinicHospitalAddress?.city === "" ? (
-              <p className=" text-red-600  p-4 rounded-lg  max-w-3xl mx-auto mt-4">
-                You haven't added your hospital/clinic details Please add it
-                first
-              </p>
-            ) : null)}
+          {/* Form Section */}
+          <div className="lg:w-1/2 w-full mx-auto p-5 border  shadow-lg bg-white ">
+            <h2 className="text-3xl font-bold text-center mb-8 text-gray-700">
+              Appointment Creation
+            </h2>
+            {(data.visitingMode === "offline" ||
+              data.visitingMode === "both") &&
+              (GetDrProfile.hospitalName === "" ||
+              GetDrProfile.clinicHospitalAddress?.permanentAddress === "" ||
+              GetDrProfile.clinicHospitalAddress?.city === "" ? (
+                <p className=" text-red-600  p-4 rounded-lg  max-w-3xl mx-auto mt-4">
+                  You haven't added your hospital/clinic details Please add it
+                  first
+                </p>
+              ) : null)}
 
-          {/* {
-            GetDrProfile.hospitalName=="" || GetDrProfile.clinicHospitalAddress?.permanentAddress=="" || GetDrProfile.clinicHospitalAddress?.city=="" ? <p className="text-center text-red-600 bg-red-100 p-4 rounded-lg shadow-md max-w-3xl mx-auto mt-4">Please First Fill Address</p>:null
-           } */}
-          <form onSubmit={handleSubmit}>
-            {/* Visiting Mode */}
-            <div className="mb-6">
-              <label className="block text-gray-600 font-semibold mb-2">
-                Select Visiting Mode
-              </label>
-              <select
-                onChange={handleChange}
-                name="visitingMode"
-                required
-                value={data.visitingMode}
-                className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
-              >
-                <option value="">Select Visiting Mode</option>
-                <option value="offline">Offline</option>
-                <option value="online">Online</option>
-                <option value="both">Both</option>
-              </select>
-            </div>
-
-            {/* Date Field */}
-            <div className="mb-6">
-              <label className="block text-gray-600 font-semibold mb-2">
-                Date
-              </label>
-              <input
-                type="date"
-                onChange={handleChange}
-                required
-                name="selectDate"
-                value={data.selectDate}
-                min={new Date().toISOString().split("T")[0]}
-                className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
-              />
-            </div>
-
-            {/* Time Fields */}
-            <div className="mb-6 flex gap-4">
-              <div className="w-1/2">
+            {/* {
+              GetDrProfile.hospitalName=="" || GetDrProfile.clinicHospitalAddress?.permanentAddress=="" || GetDrProfile.clinicHospitalAddress?.city=="" ? <p className="text-center text-red-600 bg-red-100 p-4 rounded-lg shadow-md max-w-3xl mx-auto mt-4">Please First Fill Address</p>:null
+             } */}
+            <form onSubmit={handleSubmit}>
+              {/* Visiting Mode */}
+              <div className="mb-6">
                 <label className="block text-gray-600 font-semibold mb-2">
-                  From
+                  Select Visiting Mode
                 </label>
-                <input
-                  type="time"
-                  required
+                <select
                   onChange={handleChange}
-                  name="availableTimeFrom"
-                  value={data.availableTimeFrom}
+                  name="visitingMode"
+                  required
+                  value={data.visitingMode}
                   className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
-                />
+                >
+                  <option value="">Select Visiting Mode</option>
+                  <option value="offline">Offline</option>
+                  <option value="online">Online</option>
+                  <option value="both">Both</option>
+                </select>
               </div>
-              <div className="w-1/2">
-                <label className="block text-gray-600 font-semibold mb-2">
-                  To
-                </label>
-                <input
-                  type="time"
-                  required
-                  onChange={handleChange}
-                  name="availableTimeTo"
-                  value={data.availableTimeTo}
-                  className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
-                />
-              </div>
-            </div>
 
-            {/* Slot Duration and Price */}
-            <div className="mb-6 flex flex-col sm:flex-row gap-4">
-              <div className="w-full">
+              {/* Date Field */}
+              <div className="mb-6">
                 <label className="block text-gray-600 font-semibold mb-2">
-                  Select Slot Duration (minutes)
+                  Date
                 </label>
                 <input
-                  type="number"
-                  required
+                  type="date"
                   onChange={handleChange}
-                  name="selectSlotDuration"
-                  value={data.selectSlotDuration}
+                  required
+                  name="selectDate"
+                  value={data.selectDate}
+                  min={new Date().toISOString().split("T")[0]}
                   className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
                 />
               </div>
 
-              {/* Bulk Price */}
-              {(data.offlineSlots.length > 0 ||
-                data.onlineSlots.length > 0) && (
+              {/* Time Fields */}
+              <div className="mb-6 flex gap-4">
+                <div className="w-1/2">
+                  <label className="block text-gray-600 font-semibold mb-2">
+                    From
+                  </label>
+                  <input
+                    type="time"
+                    required
+                    onChange={handleChange}
+                    name="availableTimeFrom"
+                    value={data.availableTimeFrom}
+                    className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
+                  />
+                </div>
+                <div className="w-1/2">
+                  <label className="block text-gray-600 font-semibold mb-2">
+                    To
+                  </label>
+                  <input
+                    type="time"
+                    required
+                    onChange={handleChange}
+                    name="availableTimeTo"
+                    value={data.availableTimeTo}
+                    className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
+                  />
+                </div>
+              </div>
+
+              {/* Slot Duration and Price */}
+              <div className="mb-6 flex flex-col sm:flex-row gap-4">
                 <div className="w-full">
                   <label className="block text-gray-600 font-semibold mb-2">
-                    Bulk Set Price
+                    Select Slot Duration (minutes)
                   </label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      required
-                      onChange={(e) => setPriceData(e.target.value)}
-                      value={PriceData}
-                      placeholder="Set price"
-                      className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
-                    />
-                    <button
-                      onClick={Submit}
-                      type="button"
-                      className="bg-[#4BAAB3] text-white font-semibold py-2 px-4 rounded-md hover:bg-[#3A8C8E] transition duration-300"
-                    >
-                      Apply
-                    </button>
-                  </div>
+                  <input
+                    type="number"
+                    required
+                    onChange={handleChange}
+                    name="selectSlotDuration"
+                    value={data.selectSlotDuration}
+                    className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
+                  />
                 </div>
-              )}
-            </div>
 
-            {/* Generate Slots Button */}
-            <button
-              onClick={generateSlots}
-              type="button"
-              className="w-full bg-[#49A6AF] text-white py-3 rounded-md shadow-md transition-all hover:bg-[#3A8C8E]"
-            >
-              Generate Slots
-            </button>
-
-            {/* Slots Display */}
-            <div className="mt-6">
-              {/* Offline Slots */}
-              {data.offlineSlots.length > 0 &&
-                data.visitingMode !== "online" && (
-                  <div>
-                    <h2 className="font-bold text-gray-700 mb-4">
-                      Offline Slots
-                    </h2>
-                    {data.offlineSlots.map((slot, index) => (
-                      <div
-                        key={index}
-                        className="flex justify-between items-center mb-2"
+                {/* Bulk Price */}
+                {(data.offlineSlots.length > 0 ||
+                  data.onlineSlots.length > 0) && (
+                  <div className="w-full">
+                    <label className="block text-gray-600 font-semibold mb-2">
+                      Bulk Set Price
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        required
+                        onChange={(e) => setPriceData(e.target.value)}
+                        value={PriceData}
+                        placeholder="Set price"
+                        className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
+                      />
+                      <button
+                        onClick={Submit}
+                        type="button"
+                        className="bg-[#4BAAB3] text-white font-semibold py-2 px-4 rounded-md hover:bg-[#3A8C8E] transition duration-300"
                       >
-                        {editingSlot?.type === "offline" &&
-                        editingSlot.index === index ? (
-                          <>
-                            <input
-                              type="time"
-                              value={data.editingStartTime}
-                              onChange={(e) =>
-                                setData((prev) => ({
-                                  ...prev,
-                                  editingStartTime: e.target.value,
-                                }))
-                              }
-                              className="border p-2 rounded-md"
-                            />
-                            <input
-                              type="time"
-                              value={data.editingEndTime}
-                              onChange={(e) =>
-                                setData((prev) => ({
-                                  ...prev,
-                                  editingEndTime: e.target.value,
-                                }))
-                              }
-                              className="border p-2 rounded-md"
-                            />
-                            <input
-                              type="number"
-                              value={PriceData}
-                              onChange={(e) => setPriceData(e.target.value)}
-                              className="border p-2 rounded-md"
-                            />
-                            <button
-                              onClick={handleSaveSlot}
-                              className="ml-2 bg-green-500 text-white p-2 rounded-md"
-                            >
-                              Save
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <div className="text-gray-600">{`${slot.startTime} - ${slot.endTime}`}</div>
-                            <div className="text-gray-600">
-                              Price: {slot.doctorCharge}
-                            </div>
-                            <FaEdit
-                              onClick={() => handleEditSlot("offline", index)}
-                              className="text-blue-500 cursor-pointer"
-                            />
-                            <MdDelete
-                              onClick={() => handleOfflineDeleteSlot(index)}
-                              className="text-red-500 cursor-pointer"
-                            />
-                          </>
-                        )}
-                      </div>
-                    ))}
+                        Apply
+                      </button>
+                    </div>
                   </div>
                 )}
+              </div>
 
-              {/* Online Slots */}
-              {data.onlineSlots.length > 0 &&
-                data.visitingMode !== "offline" && (
-                  <div>
-                    <h2 className="font-bold text-gray-700 mb-4">
-                      Online Slots
-                    </h2>
-                    {data.onlineSlots.map((slot, index) => (
-                      <div
-                        key={index}
-                        className="flex justify-between items-center mb-2"
-                      >
-                        {editingSlot?.type === "online" &&
-                        editingSlot.index === index ? (
-                          <>
-                            <input
-                              type="time"
-                              value={data.editingStartTime}
-                              onChange={(e) =>
-                                setData((prev) => ({
-                                  ...prev,
-                                  editingStartTime: e.target.value,
-                                }))
-                              }
-                              className="border p-2 rounded-md"
-                            />
-                            <input
-                              type="time"
-                              value={data.editingEndTime}
-                              onChange={(e) =>
-                                setData((prev) => ({
-                                  ...prev,
-                                  editingEndTime: e.target.value,
-                                }))
-                              }
-                              className="border p-2 rounded-md"
-                            />
-                            <input
-                              type="number"
-                              value={PriceData}
-                              onChange={(e) => setPriceData(e.target.value)}
-                              className="border p-2 rounded-md"
-                            />
-                            <button
-                              onClick={handleSaveSlot}
-                              className="ml-2 bg-green-500 text-white p-2 rounded-md"
-                            >
-                              Save
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <div className="text-gray-600">{`${slot.startTime} - ${slot.endTime}`}</div>
-                            <div className="text-gray-600">
-                              Price: {slot.doctorCharge}
-                            </div>
-                            <FaEdit
-                              onClick={() => handleEditSlot("online", index)}
-                              className="text-blue-500 cursor-pointer"
-                            />
-                            <MdDelete
-                              onClick={() => handleOnlineDeleteSlot(index)}
-                              className="text-red-500 cursor-pointer"
-                            />
-                          </>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-            </div>
-            {data.offlineSlots.length > 0 || data.onlineSlots.length > 0 ? (
+              {/* Generate Slots Button */}
               <button
-                type="submit"
-                className="w-full bg-[#00768A] font-semibold shadow-md text-white py-2 px-4 rounded-md mt-5"
+                onClick={generateSlots}
+                type="button"
+                className="w-full bg-[#49A6AF] text-white py-3 rounded-md shadow-md transition-all hover:bg-[#3A8C8E]"
               >
-                Submit
+                Generate Slots
               </button>
-            ) : null}
-          </form>
-        </div>
-      </div>
 
-      <Footer />
-    </div>
-  );
+              {/* Slots Display */}
+              <div className="mt-6">
+                {/* Offline Slots */}
+                {data.offlineSlots.length > 0 &&
+                  data.visitingMode !== "online" && (
+                    <div>
+                      <h2 className="font-bold text-gray-700 mb-4">
+                        Offline Slots
+                      </h2>
+                      {data.offlineSlots.map((slot, index) => (
+                        <div
+                          key={index}
+                          className="flex justify-between items-center mb-2"
+                        >
+                          {editingSlot?.type === "offline" &&
+                          editingSlot.index === index ? (
+                            <>
+                              <input
+                                type="time"
+                                value={data.editingStartTime}
+                                onChange={(e) =>
+                                  setData((prev) => ({
+                                    ...prev,
+                                    editingStartTime: e.target.value,
+                                  }))
+                                }
+                                className="border p-2 rounded-md"
+                              />
+                              <input
+                                type="time"
+                                value={data.editingEndTime}
+                                onChange={(e) =>
+                                  setData((prev) => ({
+                                    ...prev,
+                                    editingEndTime: e.target.value,
+                                  }))
+                                }
+                                className="border p-2 rounded-md"
+                              />
+                              <input
+                                type="number"
+                                value={PriceData}
+                                onChange={(e) => setPriceData(e.target.value)}
+                                className="border p-2 rounded-md"
+                              />
+                              <button
+                                onClick={handleSaveSlot}
+                                className="ml-2 bg-green-500 text-white p-2 rounded-md"
+                              >
+                                Save
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <div className="text-gray-600">{`${slot.startTime} - ${slot.endTime}`}</div>
+                              <div className="text-gray-600">
+                                Price: {slot.doctorCharge}
+                              </div>
+                              <FaEdit
+                                onClick={() => handleEditSlot("offline", index)}
+                                className="text-blue-500 cursor-pointer"
+                              />
+                              <MdDelete
+                                onClick={() => handleOfflineDeleteSlot(index)}
+                                className="text-red-500 cursor-pointer"
+                              />
+                            </>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                {/* Online Slots */}
+                {data.onlineSlots.length > 0 &&
+                  data.visitingMode !== "offline" && (
+                    <div>
+                      <h2 className="font-bold text-gray-700 mb-4">
+                        Online Slots
+                      </h2>
+                      {data.onlineSlots.map((slot, index) => (
+                        <div
+                          key={index}
+                          className="flex justify-between items-center mb-2"
+                        >
+                          {editingSlot?.type === "online" &&
+                          editingSlot.index === index ? (
+                            <>
+                              <input
+                                type="time"
+                                value={data.editingStartTime}
+                                onChange={(e) =>
+                                  setData((prev) => ({
+                                    ...prev,
+                                    editingStartTime: e.target.value,
+                                  }))
+                                }
+                                className="border p-2 rounded-md"
+                              />
+                              <input
+                                type="time"
+                                value={data.editingEndTime}
+                                onChange={(e) =>
+                                  setData((prev) => ({
+                                    ...prev,
+                                    editingEndTime: e.target.value,
+                                  }))
+                                }
+                                className="border p-2 rounded-md"
+                              />
+                              <input
+                                type="number"
+                                value={PriceData}
+                                onChange={(e) => setPriceData(e.target.value)}
+                                className="border p-2 rounded-md"
+                              />
+                              <button
+                                onClick={handleSaveSlot}
+                                className="ml-2 bg-green-500 text-white p-2 rounded-md"
+                              >
+                                Save
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <div className="text-gray-600">{`${slot.startTime} - ${slot.endTime}`}</div>
+                              <div className="text-gray-600">
+                                Price: {slot.doctorCharge}
+                              </div>
+                              <FaEdit
+                                onClick={() => handleEditSlot("online", index)}
+                                className="text-blue-500 cursor-pointer"
+                              />
+                              <MdDelete
+                                onClick={() => handleOnlineDeleteSlot(index)}
+                                className="text-red-500 cursor-pointer"
+                              />
+                            </>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+              </div>
+              {data.offlineSlots.length > 0 || data.onlineSlots.length > 0 ? (
+                <button
+                  type="submit"
+                  className="w-full bg-[#00768A] font-semibold shadow-md text-white py-2 px-4 rounded-md mt-5"
+                >
+                  Submit
+                </button>
+              ) : null}
+            </form>
+          </div>
+        </div>
+
+        <Footer />
+      </div>
+    );
+  }
 };
 
 export default DrExam;
