@@ -151,16 +151,11 @@ function App() {
           path="/consult-with-new-doctor"
           element={<ConsultwithNewDoctor />}
         />
-
         <Route
-          path="/video-call"
-          element={<AuthRoute element={VideoCallApp} />}
-        />
-        <Route
-          path="/meeting"
+          path="/video-call/meeting-link-generation"
           element={<AuthRoute element={CreateMeetingPage} />}
         />
-        <Route path="/join" element={<AuthRoute element={JoinMeetingPage} />} />
+        <Route path="/video-call/join" element={<AuthRoute element={JoinMeetingPage} />} />
         <Route path="/slots-creation" element={<CreateSlotsByDr />} />
         <Route path="/pdf-genrate" element={<PdfGeneratorPrescription />} />
         <Route path="/prescription" element={<PDFGenerator />} />

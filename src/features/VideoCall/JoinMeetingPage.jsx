@@ -44,7 +44,6 @@ const JoinMeetingPage = () => {
       try {
         const response = await axios.get(`${tokenEndpoint}${userId}`);
         const token = response.data.token;
-
         const videoUser = {
           id: userId,
           name: localStorage.getItem("user") || "Anonymous",
@@ -94,7 +93,7 @@ const JoinMeetingPage = () => {
   if (!videoClient || !call || !chatClient || !channel) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-100 text-lg text-red-600 font-semibold">
-        Unable to join the meeting. Please check the meeting link.
+        Unable to join the meeting. Please check the meeting link. ddfda
       </div>
     );
   }
