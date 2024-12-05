@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
 import TimePicker from "../TimePicker/TimePicker";
+import { useNavigate } from "react-router-dom";
+import AllSlots from "../AllSlots/AllSlots";
 const CreateSlotsByDr = () => {
   const [data, setData] = useState({
     selectDate: Date.now(),
@@ -16,6 +18,7 @@ const CreateSlotsByDr = () => {
     availableTimeTo: "",
     doctorId: "",
   });
+  const navigate=useNavigate()
   const [GetDrProfile, SetDrProfile] = useState({});
   const [ErrorShow, setErrorShow] = useState(false);
   const [PriceData, setPriceData] = useState("");
@@ -125,12 +128,12 @@ const CreateSlotsByDr = () => {
           },
         }
       );
-      toast.success("Slot successfully generated...");
-    } catch (error) {
+      console.log(res.data.msg)
+      toast.success(res.data.msg)
+     navigate("/profile?section=view-slots")
+    } catch (res) {
       setErrorShow(true);
-      toast.error(error.message, {
-        position: "top-right",
-      });
+      toast.error(res.response.data.msg);
     }
   };
   // Submit function
@@ -305,7 +308,9 @@ const CreateSlotsByDr = () => {
               required
               name="selectDate"
               value={data.selectDate}
+              max={new Date(new Date().setDate(new Date().getDate() + 15)).toISOString().split("T")[0]}
               min={new Date().toISOString().split("T")[0]} // Set minimum date to today
+             
               className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
             />
           </div>
@@ -359,6 +364,7 @@ const CreateSlotsByDr = () => {
                     type="number"
                     required
                     onChange={(e) => setPriceData(e.target.value)}
+                    autoFocus="On"
                     value={PriceData}
                     placeholder="Set price"
                     className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
