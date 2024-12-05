@@ -86,6 +86,7 @@ const EditProfile = () => {
       );
 
       const doctorData = response.data.data;
+      console.log(doctorData);
 
       setDataToEdit({
         FAQ: doctorData.FAQ || [{ title: "", value: "" }],
@@ -826,7 +827,7 @@ const EditProfile = () => {
                 </div>
 
                 {/* Services Offered */}
-                <div className="flex flex-col gap-1">
+                {/* <div className="flex flex-col gap-1">
                   <label className="px-2 font-bold">Services</label>
                   <div className="flex flex-col gap-2">
                     {dataToEdit?.services_offered?.map((service, index) => (
@@ -860,7 +861,7 @@ const EditProfile = () => {
                       Add Service
                     </button>
                   </div>
-                </div>
+                </div> */}
               </div>
             )}
             {activesection === "qualification-details" && (
@@ -1353,7 +1354,7 @@ const EditProfile = () => {
                                 onChange={(e) =>
                                   handleExperienceChange(index, "startDate", {
                                     ...experience.startDate,
-                                    month: e.target.value,
+                                    month: e.target.value, // Sends the name of the month
                                   })
                                 }
                                 className="border border-gray-400 p-2 rounded-xl focus:border-[#4358f6]"
@@ -1374,11 +1375,8 @@ const EditProfile = () => {
                                   "October",
                                   "November",
                                   "December",
-                                ].map((month, index) => (
-                                  <option
-                                    key={index}
-                                    value={String(index + 1).padStart(2, "0")}
-                                  >
+                                ].map((month) => (
+                                  <option key={month} value={month}>
                                     {month}
                                   </option>
                                 ))}

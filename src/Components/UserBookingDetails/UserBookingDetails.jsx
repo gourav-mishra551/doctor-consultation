@@ -1,4 +1,6 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   Document,
   Page,
@@ -10,20 +12,40 @@ import {
 } from "@react-pdf/renderer";
 import { useLocation } from "react-router-dom";
 import Icon from "../../../src/Assests/fav-icon.png";
+import companyLogo from "../../../src/Assests/fav-icon.png";
 
-const PdfGeneratorPrescription = () => {
+const UserBookingDetails = () => {
+  const [bookingDetailsData, setBookingDetailsData] = useState([]);
+  const { ubid } = useParams();
   const { state } = useLocation();
   const { formData, medicineData, pdfData, bpData } = state || {};
-  console.log("formData", formData);
-  console.log("medicineData", medicineData);
-  console.log("pdfdata", pdfData?.data);
-  console.log("bpData", bpData);
 
-  // Early exit if no data is available
-  if (!formData || !formData[0]) {
-    return <Text>No form data available.</Text>;
-  }
+  const token = localStorage.getItem("token");
+  const id = localStorage.getItem("id");
 
+  const userBookingDetails = async () => {
+    try {
+      const response = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/dc/user/history/${ubid}`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+      setBookingDetailsData(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    userBookingDetails();
+  }, []);
+
+  //   pdf generation code and its style sheet starts here
   // Create styles
   const styles = StyleSheet.create({
     main: {
@@ -120,6 +142,7 @@ const PdfGeneratorPrescription = () => {
       color: "#616A76",
     },
     logo: { width: 70, height: 70, marginRight: 10 },
+    companyImage: { width: 200, height: 200, marginRight: 10 },
     doctorName: { fontSize: 20, fontWeight: "bold", color: "#0074D9" },
     qualification: { fontSize: 8, color: "#7F8C8D" },
     section: {
@@ -249,15 +272,23 @@ const PdfGeneratorPrescription = () => {
     <Document>
       <Page style={styles.page}>
         {/* Header Section */}
-        <View style={styles.header}>
-          <View style={styles.doctorSection}>
-            <Image style={styles.logo} src={Icon} />
+        <View style={styles?.header}>
+          <View style={styles?.doctorSection}>
+            <Image style={styles?.logo} src={Icon} />
             <View>
               <Text style={styles.doctorName}>
-                Dr. {pdfData.data.userId.name}
+                Dr. {bookingDetailsData?.data?.doctorId?.doctorUserDetails.name}
               </Text>
-              <Text style={styles.qualification}>
-                MBBS, MD - General Physician
+
+              {bookingDetailsData?.data?.doctorId?.qualifications?.map(
+                (qualification) => (
+                  <Text style={styles?.qualification}>
+                    {qualification?.degree}
+                  </Text>
+                )
+              )}
+              <Text style={styles?.qualification}>
+                Reg No- {bookingDetailsData?.data?.doctorId?.RegistrationNumber}
               </Text>
             </View>
           </View>
@@ -265,20 +296,20 @@ const PdfGeneratorPrescription = () => {
         </View>
 
         {/* Patient Details Section */}
-        {pdfData?.data?.patientDetails ? (
-          <View style={styles.section}>
-            <View style={styles.labelRow}>
-              <View style={styles.Name}>
-                <Text style={styles.label}>Patient:</Text>
+        {bookingDetailsData?.data?.patientDetails ? (
+          <View style={styles?.section}>
+            <View style={styles?.labelRow}>
+              <View style={styles?.Name}>
+                <Text style={styles?.label}>Patient:</Text>
                 <Text style={[styles.text, styles.data]}>
-                  {pdfData?.data?.patientDetails?.name}
+                  {bookingDetailsData?.data?.patientDetails?.name}
                 </Text>
               </View>
 
               <View style={styles.Gender}>
                 <Text style={styles.label}>Gender:</Text>
                 <Text style={[styles.text, styles.data]}>
-                  {pdfData?.data?.patientDetails?.gender}
+                  {bookingDetailsData?.data?.patientDetails?.gender}
                 </Text>
               </View>
             </View>
@@ -287,23 +318,33 @@ const PdfGeneratorPrescription = () => {
                 <Text style={styles.label}>DOB:</Text>
                 <Text style={[styles.text, styles.data]}>
                   {" "}
-                  {pdfData?.data?.patientDetails?.dateOfBirth}
+                  {bookingDetailsData?.data?.patientDetails?.dateOfBirth}
                 </Text>
               </View>
-              {pdfData?.data?.doctorId?.clinic_hospital_address &&
-                pdfData.data.doctorId.clinic_hospital_address
+              {bookingDetailsData?.data?.doctorId?.clinic_hospital_address &&
+                bookingDetailsData.data.doctorId.clinic_hospital_address
                   .permanentAddress &&
-                pdfData.data.doctorId.clinic_hospital_address.PinCode &&
-                pdfData.data.doctorId.clinic_hospital_address.state && (
+                bookingDetailsData.data.doctorId.clinic_hospital_address
+                  .PinCode &&
+                bookingDetailsData.data.doctorId.clinic_hospital_address
+                  .state && (
                   <View style={[styles.Address, styles.labelAddress]}>
                     <Text style={styles.label}>Address:</Text>
                     <Text style={[styles.text, styles.Addr, styles.data]}>
                       {
-                        pdfData.data.doctorId.clinic_hospital_address
+                        bookingDetailsData.data.doctorId.clinic_hospital_address
                           .permanentAddress
                       }
-                      , {pdfData.data.doctorId.clinic_hospital_address.PinCode},{" "}
-                      {pdfData.data.doctorId.clinic_hospital_address.state}
+                      ,{" "}
+                      {
+                        bookingDetailsData.data.doctorId.clinic_hospital_address
+                          .PinCode
+                      }
+                      ,{" "}
+                      {
+                        bookingDetailsData.data.doctorId.clinic_hospital_address
+                          .state
+                      }
                     </Text>
                   </View>
                 )}
@@ -317,14 +358,18 @@ const PdfGeneratorPrescription = () => {
                 <Text style={[styles.labelHeight, styles.label]}>
                   Height (in cms):
                 </Text>
-                <Text style={[styles.text, styles.data]}>{bpData?.height}</Text>
+                <Text style={[styles.text, styles.data]}>
+                  {bookingDetailsData?.data?.prescription?.bpData?.height}
+                </Text>
               </View>
 
               <View style={styles.KG}>
                 <Text style={[styles.labelKg, styles.label]}>
                   Weight (in Kg):
                 </Text>
-                <Text style={[styles.text, styles.data]}>{bpData?.weight}</Text>
+                <Text style={[styles.text, styles.data]}>
+                  {bookingDetailsData?.data?.prescription?.bpData?.weight}
+                </Text>
               </View>
             </View>
 
@@ -333,7 +378,10 @@ const PdfGeneratorPrescription = () => {
                 <Text style={[styles.labelHeight, styles.label]}>
                   Blood Presure (B.P):
                 </Text>
-                <Text style={[styles.text, styles.data]}> {bpData?.bp}</Text>
+                <Text style={[styles.text, styles.data]}>
+                  {" "}
+                  {bookingDetailsData?.data?.prescription?.bpData?.bp}
+                </Text>
               </View>
 
               <View style={styles.BP}>
@@ -341,7 +389,7 @@ const PdfGeneratorPrescription = () => {
                   Temperature:
                 </Text>
                 <Text style={[styles.text, styles.data]}>
-                  {bpData?.temperature}
+                  {bookingDetailsData?.data?.prescription?.bpData?.temperature}
                 </Text>
               </View>
             </View>
@@ -425,26 +473,32 @@ const PdfGeneratorPrescription = () => {
             <Text style={[styles.tableCell, styles.frequency]}>Diagnose</Text>
             <Text style={[styles.tableCell, styles.duration]}>Advice</Text>
           </View>
-          {formData.map((form, index) => (
-            <React.Fragment key={index}>
-              {/* Table Header */}
+          {bookingDetailsData?.data?.prescription?.formData?.map(
+            (form, index) => (
+              <React.Fragment key={index}>
+                {/* Table Header */}
 
-              {/* Table Row */}
-              <View style={styles.tableRow}>
-                <Text
-                  style={[styles.tableCell, styles.medicineName, styles.data]}
-                >
-                  {form.problems || "N/A"}
-                </Text>
-                <Text style={[styles.tableCell, styles.frequency, styles.data]}>
-                  {form.observations || "N/A"}
-                </Text>
-                <Text style={[styles.tableCell, styles.duration, styles.data]}>
-                  {form.notes || "N/A"}
-                </Text>
-              </View>
-            </React.Fragment>
-          ))}
+                {/* Table Row */}
+                <View style={styles.tableRow}>
+                  <Text
+                    style={[styles.tableCell, styles.medicineName, styles.data]}
+                  >
+                    {form.problems || "N/A"}
+                  </Text>
+                  <Text
+                    style={[styles.tableCell, styles.frequency, styles.data]}
+                  >
+                    {form.observations || "N/A"}
+                  </Text>
+                  <Text
+                    style={[styles.tableCell, styles.duration, styles.data]}
+                  >
+                    {form.notes || "N/A"}
+                  </Text>
+                </View>
+              </React.Fragment>
+            )
+          )}
         </View>
 
         {/* Medicines Section */}
@@ -466,38 +520,42 @@ const PdfGeneratorPrescription = () => {
               Instructions
             </Text>
           </View>
-          {medicineData.map((medicine) => (
-            <View style={styles.tableRow}>
-              <Text
-                style={[styles.tableCell, styles.medicineName, styles.data]}
-              >
-                {medicine.medicineName}
-              </Text>
-              <Text style={[styles.tableCell, styles.frequency, styles.data]}>
-                {medicine.frequency}
-              </Text>
-              <Text style={[styles.tableCell, styles.duration, styles.data]}>
-                {medicine.duration}
-              </Text>
+          {bookingDetailsData?.data?.prescription?.medicineData.map(
+            (medicine) => (
+              <View style={styles.tableRow}>
+                <Text
+                  style={[styles.tableCell, styles.medicineName, styles.data]}
+                >
+                  {medicine.medicineName}
+                </Text>
+                <Text style={[styles.tableCell, styles.frequency, styles.data]}>
+                  {medicine.frequency}
+                </Text>
+                <Text style={[styles.tableCell, styles.duration, styles.data]}>
+                  {medicine.duration}
+                </Text>
 
-              <Text
-                style={[styles.tableCell, styles.instructions, styles.data]}
-              >
-                {medicine.when}
-              </Text>
-              <Text
-                style={[styles.tableCell, styles.instructions, styles.data]}
-              >
-                {medicine.dose}
-              </Text>
-              <Text
-                style={[styles.tableCell, styles.instructions, styles.data]}
-              >
-                {medicine.instruction}
-              </Text>
-            </View>
-          ))}
+                <Text
+                  style={[styles.tableCell, styles.instructions, styles.data]}
+                >
+                  {medicine.when}
+                </Text>
+                <Text
+                  style={[styles.tableCell, styles.instructions, styles.data]}
+                >
+                  {medicine.dose}
+                </Text>
+                <Text
+                  style={[styles.tableCell, styles.instructions, styles.data]}
+                >
+                  {medicine.instruction}
+                </Text>
+              </View>
+            )
+          )}
         </View>
+
+        <Image style={styles.logo} src={companyLogo} />
 
         {/* RX Section */}
         <View style={{ marginTop: 20 }}>
@@ -520,15 +578,81 @@ const PdfGeneratorPrescription = () => {
     </Document>
   );
 
+  //   pdf generation code and its style sheet ends here
+
   return (
-    <PDFDownloadLink
-      document={<PrescriptionPDF />}
-      fileName={`Prescription.pdf`}
-      className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-    >
-      {({ loading }) => (loading ? "Loading document..." : "Download PDF")}
-    </PDFDownloadLink>
+    <>
+      <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-lg">
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          Doctor Details
+        </h2>
+        <div className="grid grid-cols-2 gap-4 bg-gray-100 p-5">
+          <div className="flex gap-3">
+            <span className="font-medium text-gray-600">Name:</span>
+            <span className="text-gray-800">
+              {bookingDetailsData?.data?.patientDetails.name}
+            </span>
+          </div>
+          <div className="flex gap-3">
+            <span className="font-medium text-gray-600">
+              Reason of Appointment:
+            </span>
+            <span className="text-gray-800">
+              {bookingDetailsData?.data?.patientDetails.reasonForAppointment}
+            </span>
+          </div>
+          <div className="flex gap-3">
+            <span className="font-medium text-gray-600">Gender:</span>
+            <span className="text-gray-800">
+              {bookingDetailsData?.data?.patientDetails.gender}
+            </span>
+          </div>
+          <div className="flex gap-3">
+            <span className="font-medium text-gray-600">Date of Birth:</span>
+            <span className="text-gray-800">
+              {bookingDetailsData?.data?.patientDetails.dateOfBirth}
+            </span>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4 bg-gray-100 p-5">
+          <div className="flex gap-3">
+            <span className="font-medium text-gray-600">Start time:</span>
+            <span className="text-gray-800">
+              {bookingDetailsData?.data?.specificSlotData.startTime}
+            </span>
+          </div>
+          <div className="flex gap-3">
+            <span className="font-medium text-gray-600">End time:</span>
+            <span className="text-gray-800">
+              {bookingDetailsData?.data?.specificSlotData.endTime}
+            </span>
+          </div>
+          <div className="flex gap-3">
+            <span className="font-medium text-gray-600">Doctor Charge:</span>
+            <span className="text-gray-800">
+              {bookingDetailsData?.data?.specificSlotData.doctorCharge}
+            </span>
+          </div>
+        </div>
+
+        {/* Download prescription button */}
+        <PDFDownloadLink
+          document={<PrescriptionPDF />}
+          fileName={`Prescription.pdf`}
+          className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          {({ loading }) =>
+            loading ? "Loading Prescription..." : "Download Prescription"
+          }
+        </PDFDownloadLink>
+        {/* <div className="bg-[#00768A] flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
+          <button className="text-white px-2 py-1">
+            Download Prescription
+          </button>
+        </div> */}
+      </div>
+    </>
   );
 };
 
-export default PdfGeneratorPrescription;
+export default UserBookingDetails;

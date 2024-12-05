@@ -9,6 +9,7 @@ import {
 } from "react-icons/md";
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import { IoCloudOffline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const UserBookings = () => {
   const [userBooking, setUserBooking] = useState([]);
@@ -17,6 +18,8 @@ const UserBookings = () => {
   // Mock tokens and IDs (Replace these with your actual logic)
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
+
+  const navigate = useNavigate();
 
   const userBookings = async () => {
     try {
@@ -30,6 +33,7 @@ const UserBookings = () => {
         }
       );
       setUserBooking(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -90,61 +94,75 @@ const UserBookings = () => {
               </div>
 
               {openSection === index && (
-                <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4 space-y-2 sm:space-y-0">
-                  {/* Consultation Formats */}
-                  <div className="flex flex-col">
-                    <span className="text-sm text-gray-500">
-                      Consultation Formats
-                    </span>
-                    <span className="text-sm text-gray-800 font-bold">
-                      {consultation?.consultation_formats === "videoCall" ? (
-                        <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-1">
-                          <p className="text-xm">Video Call</p>
-                          <MdOutlineVideoCall className="text-xl" />
-                        </div>
-                      ) : consultation?.consultation_formats === "chat" ? (
-                        <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-2">
-                          <p>Chat </p>
-                          <CiChat1 />
-                        </div>
-                      ) : consultation?.consultation_formats === "phoneCall" ? (
-                        <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-2">
-                          <p>Audio Call</p>
-                          <MdSpatialAudioOff />
-                        </div>
-                      ) : (
-                        <div></div>
-                      )}
-                    </span>
-                  </div>
+                <div className="p-6 flex flex-col">
+                  <div className="flex justify-between items-center">
+                    {/* Consultation Formats */}
+                    <div className="">
+                      <span className="text-sm text-gray-500">
+                        Consultation Formats
+                      </span>
+                      <span className="text-sm text-gray-800 font-bold">
+                        {consultation?.consultation_formats === "videoCall" ? (
+                          <div className="flex gap-2 border sm:w-[100%] w-full rounded-xl justify-center items-center p-1">
+                            <p className="text-xm">Video Call</p>
+                            <MdOutlineVideoCall className="text-xl" />
+                          </div>
+                        ) : consultation?.consultation_formats === "chat" ? (
+                          <div className="flex gap-2 border sm:w-[100%] w-full rounded-xl justify-center items-center p-2">
+                            <p>Chat </p>
+                            <CiChat1 />
+                          </div>
+                        ) : consultation?.consultation_formats ===
+                          "phoneCall" ? (
+                          <div className="flex gap-2 border sm:w-[100%] w-full rounded-xl justify-center items-center p-2">
+                            <p>Audio Call</p>
+                            <MdSpatialAudioOff />
+                          </div>
+                        ) : (
+                          <div></div>
+                        )}
+                      </span>
+                    </div>
 
-                  {/* Select Mode */}
-                  <div className="flex flex-col">
-                    <span className="text-sm text-gray-500">Select Mode</span>
-                    <span className="text-lg font-semibold text-gray-800">
-                      <div className="flex">
-                        {consultation?.selectMode === "online" ? (
-                          <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-1">
-                            <p className="text-sm">Online</p>
-                            <MdOutlineBookOnline className="text-xl" />
-                          </div>
-                        ) : consultation?.selectMode === "offline" ? (
-                          <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-1">
-                            <p className="text-sm">Offline</p>
-                            <IoCloudOffline className="text-xl" />
-                          </div>
-                        ) : consultation?.selectMode === "both" ? (
-                          <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-1">
-                            <p className="text-sm">Both</p>
-                            <BsFillPersonLinesFill className="text-xl" />
-                          </div>
-                        ) : null}
-                      </div>
-                    </span>
+                    {/* Select Mode */}
+                    <div className="flex flex-col">
+                      <span className="text-sm text-gray-500">Select Mode</span>
+                      <span className="text-lg font-semibold text-gray-800">
+                        <div className="flex">
+                          {consultation?.selectMode === "online" ? (
+                            <div className="flex gap-2 border sm:w-[100%] w-full rounded-xl justify-center items-center p-1">
+                              <p className="text-sm">Online</p>
+                              <MdOutlineBookOnline className="text-xl" />
+                            </div>
+                          ) : consultation?.selectMode === "offline" ? (
+                            <div className="flex gap-2 border sm:w-[100%] w-full rounded-xl justify-center items-center p-1">
+                              <p className="text-sm">Offline</p>
+                              <IoCloudOffline className="text-xl" />
+                            </div>
+                          ) : consultation?.selectMode === "both" ? (
+                            <div className="flex gap-2 border sm:w-[100%] w-full rounded-xl justify-center items-center p-1">
+                              <p className="text-sm">Both</p>
+                              <BsFillPersonLinesFill className="text-xl" />
+                            </div>
+                          ) : null}
+                        </div>
+                      </span>
+                    </div>
+
+                    {/* button */}
+                    <div className="bg-[#25a53b] text-white px-2 py-1 rounded-md">
+                      <button
+                        onClick={() =>
+                          navigate(`/user-booking-details/${consultation?._id}`)
+                        }
+                      >
+                        View Details
+                      </button>
+                    </div>
                   </div>
 
                   {/* Short Description */}
-                  {consultation.short_description && (
+                  {/* {consultation.short_description && (
                     <div className="flex flex-col md:col-span-2">
                       <span className="text-sm text-gray-500">
                         Patient Problem
@@ -153,23 +171,23 @@ const UserBookings = () => {
                         {consultation.short_description}
                       </p>
                     </div>
-                  )}
+                  )} */}
 
                   {/* Start Time */}
-                  <div className="flex flex-col">
+                  {/* <div className="flex flex-col">
                     <span className="text-sm text-gray-500">Start Time</span>
                     <span className="text-lg font-semibold text-gray-800">
                       {formatTime(consultation?.specificSlotData?.startTime)}
                     </span>
-                  </div>
+                  </div> */}
 
                   {/* End Time */}
-                  <div className="flex flex-col">
+                  {/* <div className="flex flex-col">
                     <span className="text-sm text-gray-500">End Time</span>
                     <span className="text-lg font-semibold text-gray-800">
                       {formatTime(consultation?.specificSlotData?.endTime)}
                     </span>
-                  </div>
+                  </div> */}
                 </div>
               )}
             </div>

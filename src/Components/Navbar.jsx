@@ -21,7 +21,9 @@ const Navbar = () => {
   const [results, setResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [noResults, setNoResults] = useState(false);
-  const [currency, setCurrency] = useState(localStorage.getItem("currency") || "INR");
+  const [currency, setCurrency] = useState(
+    localStorage.getItem("currency") || "INR"
+  );
   const [dropdown, setDropdown] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
@@ -150,7 +152,7 @@ const Navbar = () => {
       ...prevState,
       [item]: false,
     }));
-  }; 
+  };
 
   const toggleMegaMenu = () => {
     setIsMegaMenuOpen(!isMegaMenuOpen);
@@ -568,7 +570,7 @@ const Navbar = () => {
         >
           {isMegaMenuVisible && (
             <div className=" top-full left-0 mt-2 bg-white text-black shadow-lg">
-            <MegaMenu />  
+              <MegaMenu />
             </div>
           )}
         </div>
