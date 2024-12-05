@@ -601,7 +601,7 @@ const DoctorForm = () => {
   ];
   //Language
 
-  const language = ["Hindi", "Arabic", "Chinese", "Russian", "French"];
+  const language = ["Hindi", "Arabic", "Chinese", "Russian", "French","English"];
 
   const handleRemoveSpecialty = (id) => {
     setFormValues({

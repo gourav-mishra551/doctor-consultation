@@ -115,7 +115,6 @@ const AllSlots = ({ setActiveSection, handleSectionChange }) => {
     }
   };
 
-  console.log(setActiveSection);
 
   return (
     <>

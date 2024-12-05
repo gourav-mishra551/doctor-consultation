@@ -46,25 +46,7 @@ const Profile = () => {
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
 
-  const bookings = async () => {
-    try {
-      const response = await axios.get(
-        "https://api.assetorix.com/ah/api/v1/dc/doctor/history",
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-            id: id,
-          },
-        }
-      );
-      setHistory(response.data);
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    bookings();
-  }, []);
-
+  
   useEffect(() => {
     // Extract query parameter from the URL
     const params = new URLSearchParams(location.search);
@@ -104,40 +86,7 @@ const Profile = () => {
     } catch (error) {}
   };
 
-  const userBookings = async () => {
-    try {
-      const response = await axios.get(
-        `https://api.assetorix.com/ah/api/v1/dc/user/history`,
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-            id: id,
-          },
-        }
-      );
-      setUserBooking(response.data);
-    } catch (error) {}
-  };
-
-  const docotrData = async () => {
-    try {
-      const response = await axios.get(
-        "https://api.assetorix.com/ah/api/v1/dc/doctor",
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-            id: id,
-          },
-        }
-      );
-      setDoctorProfileData(response.data);
-    } catch (error) {}
-  };
-
   useEffect(() => {
-    docotrData();
-    getFamilyEdit();
-    userBookings();
     userData();
   }, []);
 
@@ -153,21 +102,7 @@ const Profile = () => {
 
   const toggleFamily = () => setIsFamilyOpen((prev) => !prev);
 
-  const getFamilyEdit = async () => {
-    try {
-      const response = await axios.get(
-        `https://api.assetorix.com/ah/api/v1/user/family`,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data", // Important for file uploads
-            authorization: `Bearer ${token}`,
-            id: id,
-          },
-        }
-      );
-      setFamilyData(response.data);
-    } catch (error) {}
-  };
+ 
 
   if (loading) {
     return <div className="loader"></div>; // Loader is displayed
@@ -569,6 +504,7 @@ const Profile = () => {
         </div>
 
         <div className="right sm:w-[80%] w-[100%] mt-5">
+          {/* booking data for doctor */}
           {activeSection === "bookings" && <Bookings history={history} />}
           {activeSection === "selfuserprofile" && (
             <SelfProfile userprofiledata={userProfileData} />
@@ -579,7 +515,6 @@ const Profile = () => {
           {activeSection === "familyProfile" && (
             <ViewFamilyMembers
               familyData={familyData}
-              getFamilyEdit={getFamilyEdit}
             />
           )}
           {activeSection === "user-bookings" && (
@@ -589,7 +524,7 @@ const Profile = () => {
             />
           )}
           {activeSection === "edituserprofile" && <EditUserDetails />}
-          {activeSection === "create-slots" && <CreateSlotsByDr />}
+          {activeSection === "create-slots" && <CreateSlotsByDr  />}
           {activeSection === "view-slots" && (
             <AllSlots
               activeSection={activeSection}
@@ -618,7 +553,6 @@ const Profile = () => {
               <div className="bg-gray-500 h-[1px] w-full bg-opacity-30 mt-5"></div>
               {/* Close button to hide the popup */}
               <AddFamilyMembers
-                getFamilyEdit={getFamilyEdit}
                 handleSectionChange={handleSectionChange}
                 activeSection={activeSection}
                 familyPopUp={familyPopUp}
