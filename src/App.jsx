@@ -59,6 +59,7 @@ import JoinMeetingPage from "./features/VideoCall/JoinMeetingPage";
 import Otp from "./Pages/Otp/Otp";
 import PdfGeneratorPrescription from "./Components/PdfGeneratorPrescription/PdfGeneratorPrescription";
 import PDFGenerator from "./Components/presception/Prescription";
+import BookingDetails from "./Components/BookingDetails/BookingDetails";
 
 function App() {
   const location = useLocation();
@@ -162,7 +163,8 @@ function App() {
         <Route path="/join" element={<AuthRoute element={JoinMeetingPage} />} />
         <Route path="/slots-creation" element={<CreateSlotsByDr />} />
         <Route path="/pdf-genrate" element={<PdfGeneratorPrescription />} />
-        <Route path="/prescription" element={<PDFGenerator/>}/>
+        <Route path="/prescription" element={<PDFGenerator />} />
+        <Route path="/booking-details/:bid" element={<BookingDetails />} />
       </Routes>
     </div>
   );

@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-
 import {
   FaHome,
   FaUser,
@@ -142,7 +141,6 @@ const Profile = () => {
                 </li>
               )}
 
-             
               <li className="mb-2">
                 <div
                   className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"

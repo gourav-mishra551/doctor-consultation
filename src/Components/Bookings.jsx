@@ -9,7 +9,7 @@ import {
   MdOutlineVideoCall,
   MdSpatialAudioOff,
 } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Bookings = () => {
   const [openSection, setOpenSection] = useState(null);
@@ -18,6 +18,7 @@ const Bookings = () => {
   };
   const [doctorBookingsData, setDoctorBookingsData] = useState([]);
   const [history, setHistory] = useState([]);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -60,16 +61,13 @@ const Bookings = () => {
         }
       );
       setHistory(response.data);
+      console.log(response.data);
     } catch (error) {}
   };
 
   useEffect(() => {
     bookings();
   }, []);
-
-  // useEffect(() => {
-  //   doctorBookings();
-  // }, []);
 
   console.log(history);
 
@@ -95,64 +93,81 @@ const Bookings = () => {
                 </div>
 
                 {openSection === index && (
-                  <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4 space-y-2 sm:space-y-0">
-                    {/* Consultation Formats */}
-                    <div className="flex flex-col">
-                      <span className="text-sm text-gray-500">
-                        Consultation Formats
-                      </span>
-                      <span className="text-sm text-gray-800 font-bold">
-                        {consultation?.bookingDetails?.consultation_formats ===
-                        "videoCall" ? (
-                          <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-1">
-                            <p className="text-xm">Video Call</p>
-                            <MdOutlineVideoCall className="text-xl" />
-                          </div>
-                        ) : consultation?.bookingDetails
-                            ?.consultation_formats === "chat" ? (
-                          <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-2">
-                            <p>Chat</p>
-                            <CiChat1 />
-                          </div>
-                        ) : consultation?.bookingDetails
-                            ?.consultation_formats === "phoneCall" ? (
-                          <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-2">
-                            <p>Audio Call</p>
-                            <MdSpatialAudioOff />
-                          </div>
-                        ) : null}
-                      </span>
-                    </div>
+                  <div className="p-6 flex flex-col">
+                    <div className="flex justify-between items-center">
+                      {/* Consultation Formats */}
+                      <div className="flex flex-col">
+                        <span className="text-sm text-gray-500">
+                          Consultation Formats
+                        </span>
+                        <span className="text-sm text-gray-800 font-bold">
+                          {consultation?.bookingDetails
+                            ?.consultation_formats === "videoCall" ? (
+                            <div className="flex gap-2 border sm:w-[100%] w-full rounded-xl justify-center items-center p-1">
+                              <p className="text-xm">Video Call</p>
+                              <MdOutlineVideoCall className="text-xl" />
+                            </div>
+                          ) : consultation?.bookingDetails
+                              ?.consultation_formats === "chat" ? (
+                            <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-2">
+                              <p>Chat</p>
+                              <CiChat1 />
+                            </div>
+                          ) : consultation?.bookingDetails
+                              ?.consultation_formats === "phoneCall" ? (
+                            <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-2">
+                              <p>Audio Call</p>
+                              <MdSpatialAudioOff />
+                            </div>
+                          ) : null}
+                        </span>
+                      </div>
 
-                    {/* Select Mode */}
-                    <div className="flex flex-col">
-                      <span className="text-sm text-gray-500">Select Mode</span>
-                      <span className="text-lg font-semibold text-gray-800">
-                        {consultation?.bookingDetails?.selectMode ===
-                        "online" ? (
-                          <div className="flex gap-2 border sm:w-[30%] w-full rounded-xl justify-center items-center p-1">
-                            <p className="text-sm">Online</p>
-                            <MdOutlineBookOnline className="text-xl" />
-                          </div>
-                        ) : consultation?.bookingDetails?.selectMode ===
-                          "offline" ? (
-                          <div>
-                            <p>{consultation?.bookingDetails?.selectMode}</p>
-                            <IoCloudOffline />
-                          </div>
-                        ) : null}
-                      </span>
+                      {/* Select Mode */}
+                      <div className="flex flex-col">
+                        <span className="text-sm text-gray-500">
+                          Select Mode
+                        </span>
+                        <span className="text-lg font-semibold text-gray-800">
+                          {consultation?.bookingDetails?.selectMode ===
+                          "online" ? (
+                            <div className="flex gap-2 border sm:w-[100%] w-full rounded-xl justify-center items-center p-1">
+                              <p className="text-sm">Online</p>
+                              <MdOutlineBookOnline className="text-xl" />
+                            </div>
+                          ) : consultation?.bookingDetails?.selectMode ===
+                            "offline" ? (
+                            <div>
+                              <p>{consultation?.bookingDetails?.selectMode}</p>
+                              <IoCloudOffline />
+                            </div>
+                          ) : null}
+                        </span>
+                      </div>
+
+                      {/* button */}
+                      <div className="bg-[#25a53b] text-white px-2 py-1 rounded-md">
+                        <button
+                          onClick={() =>
+                            navigate(
+                              `/booking-details/${consultation?.bookingDetails?._id}`
+                            )
+                          }
+                        >
+                          View Details
+                        </button>
+                      </div>
                     </div>
 
                     {/* Short Description */}
-                    <div className="flex flex-col md:col-span-2">
+                    {/* <div className="flex flex-col md:col-span-2">
                       <span className="text-sm text-gray-500">
                         Patient Problem
                       </span>
                       <p className="font-medium text-gray-800 text-sm">
                         {consultation?.bookingDetails?.short_description}
                       </p>
-                    </div>
+                    </div> */}
 
                     {/* Start Time */}
                     {/* <div className="flex flex-col">
@@ -163,7 +178,7 @@ const Bookings = () => {
                             ?.startTime
                         )}
                       </span>
-                    </div> */}
+                    </div>  */}
 
                     {/* End Time */}
                     {/* <div className="flex flex-col">
@@ -174,10 +189,10 @@ const Bookings = () => {
                             ?.endTime
                         )}
                       </span>
-                    </div> */}
+                    </div>
 
                     {/* Updated At */}
-                    <div className="flex flex-col">
+                    {/* <div className="flex flex-col">
                       <span className="text-sm text-gray-500">
                         Last Updated
                       </span>
@@ -191,18 +206,18 @@ const Bookings = () => {
                           <IoIosTimer />
                         </div>
                       </span>
-                    </div>
+                    </div> */}
 
                     {/* User ID */}
-                    <div className="flex flex-col">
+                    {/* <div className="flex flex-col">
                       <span className="text-sm text-gray-500">Booking ID</span>
                       <span className="text-sm font-semibold text-gray-800">
                         {consultation?.bookingDetails?._id}
                       </span>
-                    </div>
+                    </div> */}
 
                     {/* Make Prescription */}
-                    <div className="flex flex-col sm:w-[150px] w-full">
+                    {/* <div className="flex flex-col sm:w-[150px] w-full">
                       <Link
                         to={`/prescription-maker/${consultation?.bookingDetails?._id}`}
                       >
@@ -210,7 +225,7 @@ const Bookings = () => {
                           Make Prescription
                         </button>
                       </Link>
-                    </div>
+                    </div> */}
                   </div>
                 )}
               </div>
