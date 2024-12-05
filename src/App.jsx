@@ -135,11 +135,6 @@ function App() {
           path="/edit-profile"
           element={<AuthRoute element={EditProfilePage} />}
         />
-
-        {/* <Route
-            path="/view-family-members"
-            element={<ViewFamilyMembersPage />}
-          /> */}
         <Route path="/appointment/inside-india" element={<InsideIndia />} />
         <Route path="/out-side-india" element={<OutSideIndia />} />
         <Route path="/returning-patient-page" element={<ReturningPatient />} />

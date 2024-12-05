@@ -47,7 +47,7 @@ const JoinMeetingPage = () => {
         const videoUser = {
           id: userId,
           name: localStorage.getItem("user") || "Anonymous",
-          image: `https://getstream.io/random_svg/?id=gourav&name=${user}`,
+          image: `https://getstream.io/random_svg/?id=random&name=${user}`,
         };
         const videoClient = StreamVideoClient.getOrCreateInstance({
           apiKey,

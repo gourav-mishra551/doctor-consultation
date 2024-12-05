@@ -1,7 +1,4 @@
-import React, { useState } from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import React, { useState, useEffect } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -12,6 +9,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [filter, setFilter] = useState("both");
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const [loader, setLoader] = useState(false)
   const [patientDetails, setPatientDetails] = useState({
     name: "",
     gender: "",
@@ -19,7 +17,37 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
     reasonForAppointment: "",
   });
 
+  const token = localStorage.getItem("token");
+  const idUser = localStorage.getItem("id");
+  const userData = async () => {
+    setLoader(true)
+    try {
+      const res = await axios.get(`https://api.assetorix.com/ah/api/v1/user`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: idUser,
+          },
+        }
+      )
+      setPatientDetails((prevState) => ({
+        ...prevState,
+        name: res.data.data.name,
+        gender: res.data.data.gender,
+        dateOfBirth: res.data.data.dateOfBirth,
+      }));
+    } catch (error) {
+      console.error("Error fetching user data:", error)
+    } finally {
+      setLoader(false)
+    }
+  }
+
   const sliderRef = useState(null);
+
+  useEffect(() => {
+    userData()
+  }, []);
 
   const scrollLeft = () => {
     if (sliderRef.current) {
@@ -120,11 +148,10 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
   const renderSlot = (slot) => (
     <div
       key={slot._id}
-      className={`p-4 relative border rounded-lg transition-transform ${
-        slot.isBooked
+      className={`p-4 relative border rounded-lg transition-transform ${slot.isBooked
           ? "bg-red-100 text-gray-700 cursor-not-allowed"
           : "bg-green-100 hover:scale-105"
-      }`}
+        }`}
     >
       <FaCheckCircle
         className={
@@ -144,22 +171,25 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       <button
         disabled={slot.isBooked}
         onClick={() => setSelectedSlot(slot)}
-        className={`mt-4 w-full px-4 py-2 rounded-lg font-medium transition ${
-          slot.isBooked
+        className={`mt-4 w-full px-4 py-2 rounded-lg font-medium transition ${slot.isBooked
             ? "bg-gray-400 text-white"
             : selectedSlot?._id === slot?._id
-            ? "bg-green-700 text-white font-semibold shadow-xl"
-            : "bg-[#00768A] text-white "
-        }`}
+              ? "bg-green-700 text-white font-semibold shadow-xl"
+              : "bg-[#00768A] text-white "
+          }`}
       >
         {slot.isBooked
           ? "Slot is booked"
           : selectedSlot?._id === slot?._id
-          ? "Selected"
-          : "Book"}
+            ? "Selected"
+            : "Book"}
       </button>
     </div>
   );
+
+  if (loader) {
+    return <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500">Loading...</div>
+  }
 
   return (
     <div className="flex flex-col lg:flex-row md:flex-col  border-2 sm:flex-row justify-center gap-8 sm:mx-auto p-4 sm:max-w-7xl">
@@ -175,11 +205,10 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
             <button
               key={type}
               type="button"
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
-                filter === type
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${filter === type
                   ? "bg-[#00768A] text-white shadow-md"
                   : "bg-gray-200 hover:bg-blue-100"
-              }`}
+                }`}
               onClick={() => setFilter(type)}
             >
               {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -204,11 +233,10 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               {doctorAvailability.map((availability, index) => (
                 <div
                   key={index}
-                  className={`w-24 sm:mx-auto text-center p-4 rounded-lg cursor-pointer ${
-                    selectedDate?.selectDate === availability?.selectDate
+                  className={`w-24 sm:mx-auto text-center p-4 rounded-lg cursor-pointer ${selectedDate?.selectDate === availability?.selectDate
                       ? "bg-[#00768A] text-white scale-105 shadow-lg"
                       : "bg-gray-200 hover:bg-blue-100 hover:scale-105"
-                  }`}
+                    }`}
                   onClick={() => setSelectedDate(availability)}
                 >
                   <p className={`text-sm font-medium`}>
@@ -251,7 +279,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
               (availability) =>
                 getFilteredSlots(availability).length > 0 &&
                 new Date(availability?.selectDate).toDateString() ===
-                  new Date(selectedDate?.selectDate).toDateString()
+                new Date(selectedDate?.selectDate).toDateString()
             )
             .map((availability) => (
               <div
