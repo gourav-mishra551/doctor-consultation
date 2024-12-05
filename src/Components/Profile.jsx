@@ -46,7 +46,6 @@ const Profile = () => {
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
 
-  
   useEffect(() => {
     // Extract query parameter from the URL
     const params = new URLSearchParams(location.search);
@@ -102,8 +101,6 @@ const Profile = () => {
 
   const toggleFamily = () => setIsFamilyOpen((prev) => !prev);
 
- 
-
   if (loading) {
     return <div className="loader"></div>; // Loader is displayed
   }
@@ -128,7 +125,8 @@ const Profile = () => {
 
               {/* user bookings */}
               {(userProfileData?.data?.role === "customer" ||
-                userProfileData?.data?.role === "doctor") && (
+                userProfileData?.data?.role === "doctor" ||
+                userProfileData?.data?.role === "admin") && (
                 <li className="mb-2">
                   <a
                     onClick={() => handleSectionChange("user-bookings")}
@@ -513,9 +511,7 @@ const Profile = () => {
             <DoctorSelfProfile doctorProfileData={doctorProfileData} />
           )}
           {activeSection === "familyProfile" && (
-            <ViewFamilyMembers
-              familyData={familyData}
-            />
+            <ViewFamilyMembers familyData={familyData} />
           )}
           {activeSection === "user-bookings" && (
             <UserBookings
@@ -524,7 +520,7 @@ const Profile = () => {
             />
           )}
           {activeSection === "edituserprofile" && <EditUserDetails />}
-          {activeSection === "create-slots" && <CreateSlotsByDr  />}
+          {activeSection === "create-slots" && <CreateSlotsByDr />}
           {activeSection === "view-slots" && (
             <AllSlots
               activeSection={activeSection}
