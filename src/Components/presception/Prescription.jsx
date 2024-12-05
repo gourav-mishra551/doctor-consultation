@@ -71,14 +71,14 @@ const PDFGenerator = () => {
       flexDirection: "row",
       alignItems: "center",
     },
-    medicineTable: {
-      marginTop: 10,
-      border: "1px solid #000",
-      borderWidth: 1,
-      borderColor: "#ccc",
-      borderRadius: 4,
-      overflow: "hidden",
-    },
+    // medicineTable: {
+    //   marginTop: 10,
+    //   border: "1px solid #000",
+    //   borderWidth: 1,
+    //   borderColor: "#ccc",
+    //   borderRadius: 4,
+    //   overflow: "hidden",
+    // },
     tableCell: {
       paddingHorizontal: 5,
       textAlign: "left",

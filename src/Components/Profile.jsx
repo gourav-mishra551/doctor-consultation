@@ -591,7 +591,7 @@ const Profile = () => {
             />
           )}
           {activeSection === "edituserprofile" && <EditUserDetails />}
-          {activeSection === "create-slots" && <CreateSlotsByDr />}
+          {activeSection === "create-slots" && <CreateSlotsByDr  />}
           {activeSection === "view-slots" && (
             <AllSlots
               activeSection={activeSection}

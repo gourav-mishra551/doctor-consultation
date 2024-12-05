@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
 import TopHeader from "./TopHeader";
 import Footer from "./Footer";
+import TimePicker from "./TimePicker/TimePicker";
 const DrExam = () => {
   const [data, setData] = useState({
     selectDate: Date.now(),
@@ -138,7 +139,7 @@ const DrExam = () => {
   // Handle form submission and console log form data
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+   
     const token = localStorage.getItem("token");
     const id = localStorage.getItem("id");
 
@@ -164,24 +165,22 @@ const DrExam = () => {
       );
       toast.success(res.data.msg);
       
-      toast.success("Added successfully...");
+      
      
     } catch (res) {
      
 
       toast.error(res.response.data.msg);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
-  if (Loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="loader"></div>
-      </div>
-    );
-  }
+  // if (Loading) {
+  //   return (
+  //     <div className="flex justify-center items-center min-h-screen">
+  //       <div className="loader"></div>
+  //     </div>
+  //   );
+  // }
 
   // Submit function
   function Submit() {
@@ -345,7 +344,7 @@ const DrExam = () => {
             </div>
 
             {/* Time Fields */}
-            <div className="mb-6 flex gap-4">
+            {/* <div className="mb-6 flex gap-4">
               <div className="w-1/2">
                 <label className="block text-gray-600 font-semibold mb-2">
                   From
@@ -372,7 +371,33 @@ const DrExam = () => {
                   className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
                 />
               </div>
+            </div> */}
+
+             {/* Time Fields */}
+          <div className="mb-6 flex gap-4">
+            <div className="w-1/2">
+             
+              <TimePicker
+                label="From"
+                value={data.availableTimeFrom}
+                 className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
+                onChange={(value) =>
+                  setData((prev) => ({ ...prev, availableTimeFrom: value }))
+                }
+              />
             </div>
+            <div className="w-1/2">
+             
+              <TimePicker
+                label="To"
+                value={data.availableTimeTo}
+                 className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
+                onChange={(value) =>
+                  setData((prev) => ({ ...prev, availableTimeTo: value }))
+                }
+              />
+            </div>
+          </div>
 
             {/* Slot Duration and Price */}
             <div className="mb-6 flex flex-col sm:flex-row gap-4">

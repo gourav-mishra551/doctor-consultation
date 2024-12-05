@@ -53,6 +53,7 @@ const Navbar = () => {
           <Link
             to={`/categories-details/${ele._id}`}
             onClick={() => setIsOpen(false)}
+            key={index}
           >
             <div
               key={index}
