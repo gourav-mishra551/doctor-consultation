@@ -601,7 +601,14 @@ const DoctorForm = () => {
   ];
   //Language
 
-  const language = ["Hindi", "Arabic", "Chinese", "Russian", "French","English"];
+  const language = [
+    "Hindi",
+    "Arabic",
+    "Chinese",
+    "Russian",
+    "French",
+    "English",
+  ];
 
   const handleRemoveSpecialty = (id) => {
     setFormValues({
@@ -922,7 +929,7 @@ const DoctorForm = () => {
 
               {/* Qualifications Section */}
               <h3 className="text-xl font-semibold text-[#00768A] mb-4">
-                Qualifications
+                Academics
               </h3>
 
               <div className="border border-dashed border-gray-400 p-4 rounded-md">
@@ -1021,16 +1028,6 @@ const DoctorForm = () => {
                         <label className="block text-sm font-medium text-[#00768A]">
                           Start Month: <span style={{ color: "red" }}>*</span>
                         </label>
-                        {/* <input
-                          type="number"
-                          name="startMonth"
-                          placeholder="MM"
-                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
-                          value={qual.startDate?.month || ""}
-                          onChange={(e) =>
-                            handleDateChange(e, index, "startDate", "month")
-                          }
-                        /> */}
                         <select
                           value={qual.startDate?.month || ""}
                           onChange={(e) =>
@@ -1041,18 +1038,18 @@ const DoctorForm = () => {
                           className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                         >
                           <option value="">Select Month</option>
-                          <option value="1">January</option>
-                          <option value="2">February</option>
-                          <option value="3">March</option>
-                          <option value="4">April</option>
-                          <option value="5">May</option>
-                          <option value="6">June</option>
-                          <option value="7">July</option>
-                          <option value="8">August</option>
-                          <option value="9">September</option>
-                          <option value="10">October</option>
-                          <option value="11">November</option>
-                          <option value="12">December</option>
+                          <option value="Jan">January</option>
+                          <option value="Feb">February</option>
+                          <option value="Mar">March</option>
+                          <option value="Apr">April</option>
+                          <option value="May">May</option>
+                          <option value="Jun">June</option>
+                          <option value="Jul">July</option>
+                          <option value="Aug">August</option>
+                          <option value="Sep">September</option>
+                          <option value="Oct">October</option>
+                          <option value="Nov">November</option>
+                          <option value="Dec">December</option>
                         </select>
                       </div>
 
@@ -1060,16 +1057,6 @@ const DoctorForm = () => {
                         <label className="block text-sm font-medium text-[#00768A]">
                           Start Year: <span style={{ color: "red" }}>*</span>
                         </label>
-                        {/* <input
-                          type="number"
-                          name="startYear"
-                          placeholder="YYYY"
-                          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
-                          value={qual.startDate?.year}
-                          onChange={(e) =>
-                            handleDateChange(e, index, "startDate", "year")
-                          }
-                        /> */}
 
                         <select
                           name="startYear"
@@ -1115,18 +1102,18 @@ const DoctorForm = () => {
                           id=""
                         >
                           <option value="">Select Month</option>
-                          <option value="1">January</option>
-                          <option value="2">February</option>
-                          <option value="3">March</option>
-                          <option value="4">April</option>
-                          <option value="5">May</option>
-                          <option value="6">June</option>
-                          <option value="7">July</option>
-                          <option value="8">August</option>
-                          <option value="9">September</option>
-                          <option value="10">October</option>
-                          <option value="11">November</option>
-                          <option value="12">December</option>
+                          <option value="Jan">January</option>
+                          <option value="Feb">February</option>
+                          <option value="Mar">March</option>
+                          <option value="Apr">April</option>
+                          <option value="May">May</option>
+                          <option value="Jun">June</option>
+                          <option value="Jul">July</option>
+                          <option value="Aug">August</option>
+                          <option value="Sep">September</option>
+                          <option value="Oct">October</option>
+                          <option value="Nov">November</option>
+                          <option value="Dec">December</option>
                         </select>
                       </div>
                       <div>
@@ -1203,7 +1190,7 @@ const DoctorForm = () => {
                       <button
                         type="button"
                         onClick={() => HandleSkillOfQualification(index)}
-                        className=" px-4 py-2 mt-8 bg-[#00607A] text-white rounded-md hover:bg-[#306978] transition duration-300 focus:outline-none"
+                        className=" px-4 py-2 mt-4 bg-[#00607A] text-white rounded-md hover:bg-[#306978] transition duration-300 focus:outline-none"
                       >
                         Add
                       </button>

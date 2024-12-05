@@ -290,10 +290,10 @@ const CreateSlotsByDr = () => {
               value={data.visitingMode}
               className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
             >
-              <option value="">Select Visiting Mode</option>
+              {/* <option value="">Select Visiting Mode</option>
               <option value="offline">Offline</option>
+              <option value="both">Both</option> */}
               <option value="online">Online</option>
-              <option value="both">Both</option>
             </select>
           </div>
 
