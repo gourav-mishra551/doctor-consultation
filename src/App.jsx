@@ -136,11 +136,6 @@ function App() {
           path="/edit-profile"
           element={<AuthRoute element={EditProfilePage} />}
         />
-
-        {/* <Route
-            path="/view-family-members"
-            element={<ViewFamilyMembersPage />}
-          /> */}
         <Route path="/appointment/inside-india" element={<InsideIndia />} />
         <Route path="/out-side-india" element={<OutSideIndia />} />
         <Route path="/returning-patient-page" element={<ReturningPatient />} />
@@ -152,16 +147,11 @@ function App() {
           path="/consult-with-new-doctor"
           element={<ConsultwithNewDoctor />}
         />
-
         <Route
-          path="/video-call"
-          element={<AuthRoute element={VideoCallApp} />}
-        />
-        <Route
-          path="/meeting"
+          path="/video-call/meeting-link-generation"
           element={<AuthRoute element={CreateMeetingPage} />}
         />
-        <Route path="/join" element={<AuthRoute element={JoinMeetingPage} />} />
+        <Route path="/video-call/join" element={<AuthRoute element={JoinMeetingPage} />} />
         <Route path="/slots-creation" element={<CreateSlotsByDr />} />
         <Route path="/pdf-genrate" element={<PdfGeneratorPrescription />} />
         <Route path="/prescription" element={<PDFGenerator />} />

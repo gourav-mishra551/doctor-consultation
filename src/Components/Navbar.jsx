@@ -369,7 +369,7 @@ const Navbar = () => {
                 <FiUser />
                 <div
                   ref={dropdownRef}
-                  className={`absolute bg-white rounded-xl shadow-lg p-4 z-50 flex -left-[6rem] flex-col w-[20vw] h-max ${
+                  className={`absolute bg-white rounded-xl shadow-lg p-4 z-50 flex -left-[10rem] top-[50px] flex-col w-[20vw]   h-max ${
                     dropdown ? "block" : "hidden"
                   }`}
                 >
