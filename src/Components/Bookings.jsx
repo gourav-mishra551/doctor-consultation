@@ -61,13 +61,13 @@ const Bookings = () => {
         }
       );
       setHistory(response.data);
+      console.log(response.data);
     } catch (error) {}
   };
 
   useEffect(() => {
     bookings();
   }, []);
-
 
   console.log(history);
 
@@ -150,7 +150,7 @@ const Bookings = () => {
                         <button
                           onClick={() =>
                             navigate(
-                              `/booking-details/${consultation.bookingDetails._id}`
+                              `/booking-details/${consultation?.bookingDetails?._id}`
                             )
                           }
                         >
