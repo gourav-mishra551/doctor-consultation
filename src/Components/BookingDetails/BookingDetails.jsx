@@ -56,7 +56,7 @@ const BookingDetails = () => {
           Patient Details
         </h2>
         {bookingDetailsData?.data?.patientDetails && (
-          <div className="grid grid-cols-2 gap-4 bg-gray-100 p-5">
+          <div className="grid sm:grid-cols-2 gap-4 bg-gray-100 p-5">
             <div className="flex gap-3">
               <span className="font-medium text-gray-600">Name:</span>
               <span className="text-gray-800">
@@ -88,7 +88,7 @@ const BookingDetails = () => {
         <div className="bg-gray-300 bg-opacity-80 h-[1px] max-w-4xl mx-auto"></div>
         {/* available time for bookings */}
         {bookingDetailsData?.data?.specificSlotData && (
-          <div className="grid grid-cols-2 gap-4 bg-gray-100 p-5">
+          <div className="grid sm:grid-cols-2 gap-4 bg-gray-100 p-5">
             <div className="flex gap-3">
               <span className="font-medium text-gray-600">Start time:</span>
               <span className="text-gray-800">
@@ -110,6 +110,7 @@ const BookingDetails = () => {
           </div>
         )}
         {/* Make Prescription */}
+        {/* {bookingDetailsData?.data} */}
         <div className="flex flex-col w-full sm:mt-5">
           <Link to={`/prescription-maker/${bid}`}>
             <button className="bg-[#944120] hover:bg-[#6e341d] transition-all duration-500 ease-in-out p-2 text-white rounded-md">
@@ -117,20 +118,6 @@ const BookingDetails = () => {
             </button>
           </Link>
         </div>
-        {/* Start Time */}
-        {/* <div className="flex flex-col">
-          <span className="text-sm text-gray-500">Start Time</span>
-          <span className="text-lg font-semibold text-gray-800">
-            {formatTime(bookingDetailsData?.data?.specificSlotData?.startTime)}
-          </span>
-        </div> */}
-        {/* End Time */}{" "}
-        {/* <div className="flex flex-col">
-          <span className="text-sm text-gray-500">End Time</span>
-          <span className="text-lg font-semibold text-gray-800">
-            {formatTime(bookingDetailsData?.data?.specificSlotData?.endTime)}
-          </span>
-        </div> */}
       </div>
     </div>
   );
