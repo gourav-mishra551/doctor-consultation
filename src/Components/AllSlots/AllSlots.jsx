@@ -115,26 +115,25 @@ const AllSlots = ({ setActiveSection, handleSectionChange }) => {
     }
   };
 
-
   return (
     <>
       {slotsData?.doctorAvailabilities?.length > 0 ? (
         <>
-          <div className="indictors flex justify-center items-center gap-5">
+          <div className="indictors flex justify-center items-center sm:gap-5 gap-3">
             <div className="red flex items-center gap-1">
-              <div className="h-[15px] w-[15px] bg-blue-800"></div>
-              <p>Online slots</p>
+              <div className="sm:h-[15px] sm:w-[15px] h-[8px] w-[8px] bg-blue-800"></div>
+              <p className="sm:text-[18px] text-[13px]">Online slots</p>
             </div>
             <div className="green flex items-center gap-1">
-              <div className="h-[15px] w-[15px] bg-red-800"></div>
-              <p>Booked slots</p>
+              <div className="sm:h-[15px] sm:w-[15px] h-[8px] w-[8px] bg-red-800"></div>
+              <p className="sm:text-[18px] text-[13px]">Booked slots</p>
             </div>
             <div className="blue flex items-center gap-1">
-              <div className="h-[15px] w-[15px] bg-green-800"></div>
-              <p>Offline slots</p>
+              <div className="sm:h-[15px] sm:w-[15px] h-[8px] w-[8px] bg-green-800"></div>
+              <p className="sm:text-[18px] text-[13px]">Offline slots</p>
             </div>
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end sm:mt-0 mt-5 sm:mb-0 mb-4">
             <button
               onClick={() => {
                 handleSectionChange("create-slots"), console.log("Clicked");

@@ -110,6 +110,7 @@ const Profile = () => {
       <div className="bg-gray-300 bg-opacity-50 w-full h-[1px] mt-5"></div>
       <div className="sm:flex gap-10 p-10">
         {/* desktop section */}
+
         <div className="left h-[600px] w-[20%] sm:flex hidden flex-col mt-5 shadow-xl sticky top-[100px]">
           <nav className="flex-1 p-2">
             <ul>
@@ -251,14 +252,14 @@ const Profile = () => {
                         View Members
                       </p>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link
                         onClick={() => setFamilyPopUp(true)}
                         className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-gray-500"
                       >
                         Add Family
                       </Link>
-                    </li>
+                    </li> */}
                   </ul>
                 )}
               </li>
@@ -438,7 +439,7 @@ const Profile = () => {
                   </div>
                   {isUserProfileOpen && (
                     <div className="flex flex-col space-y-2 mt-2">
-                      <button
+                      {/* <button
                         type="button"
                         onClick={() => {
                           handleSectionChange("create-slots");
@@ -447,7 +448,7 @@ const Profile = () => {
                         className="text-white bg-gray-500 w-full py-2 rounded-lg"
                       >
                         Create Slots
-                      </button>
+                      </button> */}
                       <button
                         type="button"
                         onClick={() => {
@@ -485,7 +486,7 @@ const Profile = () => {
                     >
                       View Members
                     </button>
-                    <button
+                    {/* <button
                       onClick={() => {
                         setFamilyPopUp(true);
                         setIsProfileOpen(false);
@@ -493,7 +494,7 @@ const Profile = () => {
                       className="text-white bg-gray-500 w-full py-2 rounded-lg"
                     >
                       Add Family
-                    </button>
+                    </button> */}
                   </div>
                 )}
               </div>
@@ -511,7 +512,10 @@ const Profile = () => {
             <DoctorSelfProfile doctorProfileData={doctorProfileData} />
           )}
           {activeSection === "familyProfile" && (
-            <ViewFamilyMembers familyData={familyData} />
+            <ViewFamilyMembers
+              setActiveSection={setActiveSection}
+              familyData={familyData}
+            />
           )}
           {activeSection === "user-bookings" && (
             <UserBookings
