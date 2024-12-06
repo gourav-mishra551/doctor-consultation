@@ -333,14 +333,14 @@ const Profile = () => {
 
               <div
                 onClick={() => {
+                  handleSectionChange("user-bookings");
                   setIsProfileOpen(false);
-                  handleSectionChange("bookings");
                 }}
                 className="flex justify-center items-center gap-2 border w-[100%] p-2 bg-[#00768A] rounded-xl text-white"
               >
                 <FaQuestion />
                 <button type="button" className="text-xl">
-                  Bookings
+                  My Bookings
                 </button>
               </div>
 
@@ -383,6 +383,49 @@ const Profile = () => {
                 </div>
               )}
 
+              {userProfileData?.data?.role === "customer" ||
+                userProfileData?.data?.role === "admin" ||
+                (userProfileData?.data?.role === "doctor" && (
+                  <div>
+                    <div
+                      onClick={toggleUserProfile}
+                      className="flex justify-center items-center gap-2 border w-full p-2 bg-[#00768A] rounded-xl text-white cursor-pointer"
+                    >
+                      <IoPerson />
+                      <button
+                        type="button"
+                        className="text-xl focus:outline-none"
+                      >
+                        My Profile
+                      </button>
+                    </div>
+                    {isUserProfileOpen && (
+                      <div className="flex flex-col space-y-2 mt-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleSectionChange("selfuserprofile");
+                            setIsProfileOpen(false);
+                          }}
+                          className="text-white bg-gray-500 w-full py-2 rounded-lg"
+                        >
+                          View User
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleSectionChange("edituserprofile");
+                            setIsProfileOpen(false);
+                          }}
+                          className="text-white bg-gray-500 w-full py-2 rounded-lg"
+                        >
+                          Edit User
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+
               {/* Doctor Profile Section */}
               {userProfileData?.data?.role === "doctor" && (
                 <div>
@@ -395,7 +438,7 @@ const Profile = () => {
                       type="button"
                       className="text-xl focus:outline-none"
                     >
-                      Doctor Profile
+                      My Doctor Profile
                     </button>
                   </div>
                   {isDoctorProfileOpen && (
@@ -411,50 +454,21 @@ const Profile = () => {
                         View Profile
                       </button>
                       <button
-                        onClick={() => navigate("/edit-profile")}
-                        type="button"
-                        className="text-white bg-gray-500 w-full py-2 rounded-lg"
-                      >
-                        Edit Profile
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* slots */}
-              {userProfileData?.data?.role === "doctor" && (
-                <div>
-                  <div
-                    onClick={toggleUserProfile}
-                    className="flex justify-center items-center gap-2 border w-full p-2 bg-[#00768A] rounded-xl text-white cursor-pointer"
-                  >
-                    <IoPerson />
-                    <button
-                      type="button"
-                      className="text-xl focus:outline-none"
-                    >
-                      Slots
-                    </button>
-                  </div>
-                  {isUserProfileOpen && (
-                    <div className="flex flex-col space-y-2 mt-2">
-                      {/* <button
-                        type="button"
                         onClick={() => {
-                          handleSectionChange("create-slots");
+                          handleSectionChange("bookings");
                           setIsProfileOpen(false);
                         }}
+                        type="button"
                         className="text-white bg-gray-500 w-full py-2 rounded-lg"
                       >
-                        Create Slots
-                      </button> */}
+                        Appointments
+                      </button>
                       <button
-                        type="button"
                         onClick={() => {
                           handleSectionChange("view-slots");
                           setIsProfileOpen(false);
                         }}
+                        type="button"
                         className="text-white bg-gray-500 w-full py-2 rounded-lg"
                       >
                         View Slots

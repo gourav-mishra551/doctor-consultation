@@ -95,7 +95,7 @@ const DoctorSelfProfile = () => {
               <div className="email flex items-center gap-1">
                 <FaPhoneAlt className="text-[#00768A] text-sm" />
                 <p className="text-sm font-light">
-                  Contact us:{doctorProfileData?.data?.userData?.mobile}
+                  +91 {doctorProfileData?.data?.userData?.mobile}
                 </p>
               </div>
             )}
@@ -212,7 +212,7 @@ const DoctorSelfProfile = () => {
                             </div>
                           </div>
                           <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
-                              
+
                           <div className="flex justify-between mt-3">
                             <p className="text-gray-800 text-sm">Start Date</p>
                             <p className="text-gray-500 text-sm">
