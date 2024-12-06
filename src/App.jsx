@@ -60,6 +60,7 @@ import Otp from "./Pages/Otp/Otp";
 import PdfGeneratorPrescription from "./Components/PdfGeneratorPrescription/PdfGeneratorPrescription";
 import PDFGenerator from "./Components/presception/Prescription";
 import BookingDetails from "./Components/BookingDetails/BookingDetails";
+import UserBookingDetails from "./Components/UserBookingDetails/UserBookingDetails";
 
 function App() {
   const location = useLocation();
@@ -155,6 +156,10 @@ function App() {
         <Route path="/pdf-genrate" element={<PdfGeneratorPrescription />} />
         <Route path="/prescription" element={<PDFGenerator />} />
         <Route path="/booking-details/:bid" element={<BookingDetails />} />
+        <Route
+          path="/user-booking-details/:ubid"
+          element={<UserBookingDetails />}
+        />
       </Routes>
     </div>
   );

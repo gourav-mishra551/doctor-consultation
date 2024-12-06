@@ -51,9 +51,14 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
                 </div>
 
                 {/* Experience */}
-                <p className="font-semibold text-gray-600 mt-2 text-lg md:text-start sm:text-center">
-                  {IndiProfile.totalExperience}+ years experience
-                </p>
+                {
+                  IndiProfile.totalExperience===null? null :(
+                    <p className="font-semibold text-gray-600 mt-2 text-lg md:text-start sm:text-center">
+                    {IndiProfile.totalExperience}+ years experience
+                  </p>
+                  )
+                }
+               
                 <div className="flex flex-wrap gap-5">
                   {/* Qualifications */}
                   <div className="flex justify-center  gap-2 mt-4 ">
@@ -81,17 +86,23 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
                   </div>
 
                   {/* Location */}
-                  <div className="flex  gap-2 mt-4 items-start">
-                    <MdOutlineAddLocation
-                      className="text-[#00768A]"
-                      size={20}
-                    />
-                    <div>
-                      <p className="font-semibold text-gray-600">
-                        {IndiProfile.hospitalName},{" "}
-                      </p>
+
+                  {
+                    IndiProfile.hospitalName== null ? null:(
+                      <div className="flex  gap-2 mt-4 items-start">
+                      <MdOutlineAddLocation
+                        className="text-[#00768A]"
+                        size={20}
+                      />
+                      <div>
+                        <p className="font-semibold text-gray-600">
+                          {IndiProfile.hospitalName},{" "}
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                    )
+                  }
+                 
                 </div>
               </div>
 

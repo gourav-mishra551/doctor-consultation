@@ -9,7 +9,7 @@ import {
   PDFDownloadLink,
 } from "@react-pdf/renderer";
 import Icon from "../../../src/Assests/fav-icon.png"; // Importing the icon image
-
+import AmethusLogo from "../../../src/Assests/ametheus-helath-logo.jpg"
 const PDFGenerator = () => {
   const [signature, setSignature] = useState(null);
 
@@ -254,7 +254,7 @@ const PDFGenerator = () => {
   const PrescriptionPDF = () => (
     <Document style={styles.main}>
       <Page style={styles.page}>
-        <Image style={styles.watermark} src={Icon} />
+
 
         {/* Header Section */}
         <View style={styles.header}>
@@ -443,6 +443,8 @@ const PDFGenerator = () => {
           </View>
         </View>
 
+
+        <Image  src={AmethusLogo} />
         {/* RX Section */}
         {/* <View style={{ marginTop: 20 }}>
           <Text style={{ fontSize: 40, color: "#0074D9", fontWeight: "bold" }}>
