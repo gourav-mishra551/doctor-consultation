@@ -32,6 +32,7 @@ const CreateSlotsByDr = () => {
       selectSlotDuration,
       visitingMode,
     } = data;
+
     if (
       !availableTimeFrom ||
       !availableTimeTo ||
@@ -39,11 +40,14 @@ const CreateSlotsByDr = () => {
       !visitingMode
     )
       return;
+
     const startTime = new Date(`1970-01-01T${availableTimeFrom}:00`);
     const endTime = new Date(`1970-01-01T${availableTimeTo}:00`);
     const durationInMinutes = parseInt(selectSlotDuration, 10);
+
     const newOfflineSlots = [];
     const newOnlineSlots = [];
+
     for (
       let time = startTime;
       time < endTime;
@@ -56,19 +60,23 @@ const CreateSlotsByDr = () => {
           .slice(0, 5), // Format to HH:mm
         doctorCharge: 0, // Default charge, can be updated by the user
       };
+
       if (visitingMode === "offline" || visitingMode === "both") {
         newOfflineSlots.push(slot);
       }
+
       if (visitingMode === "online" || visitingMode === "both") {
         newOnlineSlots.push(slot);
       }
     }
+
     setData((prev) => ({
       ...prev,
       offlineSlots: newOfflineSlots,
       onlineSlots: newOnlineSlots,
     }));
   };
+
 
   // Handle changes for individual fields and slots
   const handleChange = (e, slotIndex, isOffline) => {
@@ -105,6 +113,7 @@ const CreateSlotsByDr = () => {
   };
   // Handle form submission and console log form data
   const handleSubmit = async (e) => {
+    console.log("on")
     e.preventDefault();
     const token = localStorage.getItem("token");
     const id = localStorage.getItem("id");
@@ -128,8 +137,9 @@ const CreateSlotsByDr = () => {
           },
         }
       );
-      console.log(res.data.msg)
+      
       toast.success(res.data.msg)
+      
      navigate("/profile?section=view-slots")
     } catch (res) {
       setErrorShow(true);
@@ -290,8 +300,8 @@ const CreateSlotsByDr = () => {
               value={data.visitingMode}
               className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4BAAB3]-500 transition duration-300"
             >
-              {/* <option value="">Select Visiting Mode</option>
-              <option value="offline">Offline</option>
+              <option value="">Select Visiting Mode</option>
+              {/* <option value="offline">Offline</option>
               <option value="both">Both</option> */}
               <option value="online">Online</option>
             </select>
