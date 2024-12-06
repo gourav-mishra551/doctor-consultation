@@ -3,6 +3,9 @@ import OurServices from "./OurServices";
 import { Link } from "react-router-dom";
 
 const Headers = () => {
+ const role= localStorage.getItem("role")
+ console.log(role);
+ 
   return (
     <>
       <div className="relative mb-32">
@@ -33,11 +36,16 @@ const Headers = () => {
                       Find a doctor
                     </button>
                   </Link>
-                  <Link className="sm:ml-10" to="/doctor-onboarding-form">
-                    <button className="px-8 py-3 mt-5 text-white bg-teal-600 hover:bg-teal-700 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-lg md:text-lg text-xs">
-                      Join as doctor
-                    </button>
-                  </Link>
+                  {
+                    role=="doctor" || role== "admin" ? null: (
+                      <Link className="sm:ml-10" to="/doctor-onboarding-form">
+                      <button className="px-8 py-3 mt-5 text-white bg-teal-600 hover:bg-teal-700 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-lg md:text-lg text-xs">
+                        Join as doctor
+                      </button>
+                    </Link>
+                    )
+                  }
+                  
                 </div>
               </div>
             </div>

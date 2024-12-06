@@ -37,6 +37,7 @@ const Navbar = () => {
   const [openSubMenus, setOpenSubMenus] = useState({});
   const [isMegaMenuVisible, setIsMegaMenuVisible] = useState(false);
   const [Categoriesdata, setCategorydata] = useState([]);
+  
   const submenuData = {
     PatientCare: [
       "Find A doctor",
@@ -369,12 +370,12 @@ const Navbar = () => {
                 <FiUser />
                 <div
                   ref={dropdownRef}
-                  className={`absolute bg-white rounded-xl shadow-lg p-4 z-50 flex -left-[10rem] top-[50px] flex-col w-[20vw]   h-max ${
+                  className={`absolute bg-white rounded-xl shadow-lg p-4 z-50  flex -left-[10rem] top-[50px] flex-col w-[20vw]   h-max ${
                     dropdown ? "block" : "hidden"
                   }`}
                 >
                   {isLogin ? (
-                    <div className="flex flex-col justify-between">
+                    <div className="flex flex-col justify-betwee">
                       <div
                         className="shadow-sm rounded-lg "
                         onClick={() => navigate("/profile")}
