@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-
 import {
   FaHome,
   FaUser,
@@ -47,7 +46,6 @@ const Profile = () => {
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
 
-  
   useEffect(() => {
     // Extract query parameter from the URL
     const params = new URLSearchParams(location.search);
@@ -103,8 +101,6 @@ const Profile = () => {
 
   const toggleFamily = () => setIsFamilyOpen((prev) => !prev);
 
- 
-
   if (loading) {
     return <div className="loader"></div>; // Loader is displayed
   }
@@ -114,6 +110,7 @@ const Profile = () => {
       <div className="bg-gray-300 bg-opacity-50 w-full h-[1px] mt-5"></div>
       <div className="sm:flex gap-10 p-10">
         {/* desktop section */}
+
         <div className="left h-[600px] w-[20%] sm:flex hidden flex-col mt-5 shadow-xl sticky top-[100px]">
           <nav className="flex-1 p-2">
             <ul>
@@ -129,7 +126,8 @@ const Profile = () => {
 
               {/* user bookings */}
               {(userProfileData?.data?.role === "customer" ||
-                userProfileData?.data?.role === "doctor") && (
+                userProfileData?.data?.role === "doctor" ||
+                userProfileData?.data?.role === "admin") && (
                 <li className="mb-2">
                   <a
                     onClick={() => handleSectionChange("user-bookings")}
@@ -142,7 +140,6 @@ const Profile = () => {
                 </li>
               )}
 
-             
               <li className="mb-2">
                 <div
                   className="flex items-center justify-between p-2 rounded-md hover:bg-[#00768A] hover:text-white cursor-pointer"
@@ -255,14 +252,14 @@ const Profile = () => {
                         View Members
                       </p>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link
                         onClick={() => setFamilyPopUp(true)}
                         className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-gray-500"
                       >
                         Add Family
                       </Link>
-                    </li>
+                    </li> */}
                   </ul>
                 )}
               </li>
@@ -442,7 +439,7 @@ const Profile = () => {
                   </div>
                   {isUserProfileOpen && (
                     <div className="flex flex-col space-y-2 mt-2">
-                      <button
+                      {/* <button
                         type="button"
                         onClick={() => {
                           handleSectionChange("create-slots");
@@ -451,7 +448,7 @@ const Profile = () => {
                         className="text-white bg-gray-500 w-full py-2 rounded-lg"
                       >
                         Create Slots
-                      </button>
+                      </button> */}
                       <button
                         type="button"
                         onClick={() => {
@@ -489,7 +486,7 @@ const Profile = () => {
                     >
                       View Members
                     </button>
-                    <button
+                    {/* <button
                       onClick={() => {
                         setFamilyPopUp(true);
                         setIsProfileOpen(false);
@@ -497,7 +494,7 @@ const Profile = () => {
                       className="text-white bg-gray-500 w-full py-2 rounded-lg"
                     >
                       Add Family
-                    </button>
+                    </button> */}
                   </div>
                 )}
               </div>
@@ -516,6 +513,7 @@ const Profile = () => {
           )}
           {activeSection === "familyProfile" && (
             <ViewFamilyMembers
+              setActiveSection={setActiveSection}
               familyData={familyData}
             />
           )}
@@ -526,7 +524,7 @@ const Profile = () => {
             />
           )}
           {activeSection === "edituserprofile" && <EditUserDetails />}
-          {activeSection === "create-slots" && <CreateSlotsByDr  />}
+          {activeSection === "create-slots" && <CreateSlotsByDr />}
           {activeSection === "view-slots" && (
             <AllSlots
               activeSection={activeSection}

@@ -24,6 +24,7 @@ const Footer = () => {
     email: "",
     mobile: "",
     message: "",
+    contactType:"Consultation",
   });
 
   const handleChange = (e) => {

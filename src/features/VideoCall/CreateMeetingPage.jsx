@@ -15,7 +15,7 @@ const CreateMeetingPage = () => {
     try {
       const response = await axios.get(`${apiEndpoint}${userId}`);
       const meetingId = response.data.meetingId;
-      setMeetingLink(`https://doctor-consultation.vercel.app/join?call_id=${meetingId}&call_type=default`);
+      setMeetingLink(`https://doctor-consultation.vercel.app/video-call/join?call_id=${meetingId}&call_type=default`);
     } catch (error) {
       console.error('Error creating meeting:', error);
     } finally {

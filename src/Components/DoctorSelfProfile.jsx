@@ -212,7 +212,7 @@ const DoctorSelfProfile = () => {
                             </div>
                           </div>
                           <div className="h-[2px] bg-gray-300 w-full bg-opacity-40 mt-3"></div>
-
+                              
                           <div className="flex justify-between mt-3">
                             <p className="text-gray-800 text-sm">Start Date</p>
                             <p className="text-gray-500 text-sm">

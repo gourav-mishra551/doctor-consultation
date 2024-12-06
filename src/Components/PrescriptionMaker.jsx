@@ -4,6 +4,7 @@ import { MdDelete } from "react-icons/md";
 import PdfGeneratorPrescription from "./PdfGeneratorPrescription/PdfGeneratorPrescription";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const PrescriptionMaker = () => {
   const [showPdfGenerator, setShowPdfGenerator] = useState(false);
@@ -104,18 +105,58 @@ const PrescriptionMaker = () => {
     setMedicineData(medicineData.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({
+
+    // Combine all data into one payload object
+    const payload = {
       formData,
       medicineData,
+      pdfData,
       bpData,
-    });
+    };
 
-    // Navigate to /pdf and pass data through state
-    navigate("/pdf-genrate", {
-      state: { formData, medicineData, pdfData, bpData },
-    });
+    try {
+      // Make the API call
+      const response = await axios.post(
+        `https://api.assetorix.com/ah/api/v1/dc/doctor/prescription/${pid}`,
+        payload,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            id: id,
+          },
+        }
+      );
+
+      // Check if response is successful
+      if (response?.status === 200) {
+        console.log("API Response:", response.data);
+        toast.success("Prescription generated successfully...");
+
+        // Navigate to /pdf-genrate with state
+        navigate(`/booking-details/${pid}`, {
+          state: { formData, medicineData, pdfData, bpData },
+        });
+      } else {
+        console.error("Unexpected API response:", response);
+        toast.error("Failed to submit data. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error while calling the API:", error);
+
+      // Handle API or network errors
+      if (error.response) {
+        console.error("API Error Response:", error.response.data);
+        toast.error(error.response.data.message || "Failed to submit data.");
+      } else if (error.request) {
+        console.error("No response received from API:", error.request);
+        toast.error("No response from server. Please try again later.");
+      } else {
+        console.error("Error during request setup:", error.message);
+        toast.error("Unexpected error occurred. Please try again.");
+      }
+    }
   };
 
   const popupRef = useRef(null);
@@ -370,13 +411,14 @@ const PrescriptionMaker = () => {
       </div>
 
       {/* Right section */}
-      <div className="prescription-detail sm:w-3/4 space-y-5 sm:mt-0 mt-5">
+      <div className="prescription-detail sm:w-full space-y-5 sm:mt-0 mt-5">
         <form onSubmit={handleSubmit}>
           <div className="flex">
-            <div className="w-1/3 px-2">
+            <div className="sm:w-1/3 w-full px-2">
               <p className="text-gray-800 font-semibold">Height (cm)</p>
               <input
                 name="height"
+                placeholder="height"
                 value={bpData.height}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -387,10 +429,11 @@ const PrescriptionMaker = () => {
                 className="1/4 border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none"
               />
             </div>
-            <div className="w-1/3 px-2">
+            <div className="sm:w-1/3 w-full px-2">
               <p className="text-gray-800 font-semibold">Weight (kg)</p>
               <input
                 name="weight"
+                placeholder="weight"
                 value={bpData.weight}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -401,11 +444,12 @@ const PrescriptionMaker = () => {
                 className="1/4 border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none"
               />
             </div>
-            <div className="w-1/3 px-2">
+            <div className="sm:w-1/3 w-full px-2">
               <p className="text-gray-800 font-semibold">BP</p>
               <input
                 name="bp"
                 value={bpData.bp}
+                placeholder="bp"
                 onChange={(e) => {
                   const value = e.target.value;
                   if (/^\d*$/.test(value)) {
@@ -415,10 +459,11 @@ const PrescriptionMaker = () => {
                 className="1/4 border px-3 py-2 rounded-md focus:border-[#1495AB] focus:outline-none"
               />
             </div>
-            <div className="w-1/3 px-2">
+            <div className="sm:w-1/3 w-full px-2">
               <p className="text-gray-800 font-semibold">Temperature (deg C)</p>
               <input
                 name="temperature"
+                placeholder="temperature"
                 value={bpData.temperature}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -509,7 +554,7 @@ const PrescriptionMaker = () => {
                 onClick={handleAddMedication}
                 className="px-4 py-2 flex gap-1 items-center text-white rounded-md bg-[#00768A]"
               >
-                Add Medication <FaPlus />
+                Add Medication
               </button>
             </div>
 

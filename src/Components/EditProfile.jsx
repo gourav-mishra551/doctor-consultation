@@ -863,6 +863,7 @@ const EditProfile = () => {
                 </div>
               </div>
             )}
+
             {activesection === "qualification-details" && (
               <div className="space-y-4">
                 {dataToEdit?.qualifications?.map(
@@ -969,7 +970,7 @@ const EditProfile = () => {
                                       "startDate",
                                       {
                                         ...qualification.startDate,
-                                        month: e.target.value,
+                                        month: e.target.value, // Send the name of the month (e.g., "January")
                                       }
                                     )
                                   }
@@ -991,11 +992,8 @@ const EditProfile = () => {
                                     "October",
                                     "November",
                                     "December",
-                                  ].map((month, index) => (
-                                    <option
-                                      key={index}
-                                      value={String(index + 1).padStart(2, "0")}
-                                    >
+                                  ].map((month) => (
+                                    <option key={month} value={month}>
                                       {month}
                                     </option>
                                   ))}
@@ -1044,7 +1042,7 @@ const EditProfile = () => {
                                       "endDate",
                                       {
                                         ...qualification.endDate,
-                                        month: e.target.value,
+                                        month: e.target.value, // Send the name of the month (e.g., "January")
                                       }
                                     )
                                   }
@@ -1066,11 +1064,8 @@ const EditProfile = () => {
                                     "October",
                                     "November",
                                     "December",
-                                  ].map((month, index) => (
-                                    <option
-                                      key={index}
-                                      value={String(index + 1).padStart(2, "0")}
-                                    >
+                                  ].map((month) => (
+                                    <option key={month} value={month}>
                                       {month}
                                     </option>
                                   ))}
@@ -1276,6 +1271,7 @@ const EditProfile = () => {
                 </button>
               </div>
             )}
+
             {activesection === "Experience" && (
               <div className="space-y-4">
                 {/* Map through existing experiences */}
@@ -1343,7 +1339,7 @@ const EditProfile = () => {
 
                         {/* Start Date and End Date */}
                         <div className="flex gap-4">
-                          {/* Start Date */}
+                          {/* Start Date for experience */}
                           <div className="flex flex-col gap-1 w-full">
                             <label className="px-2 font-bold">Start Date</label>
                             <div className="flex gap-2">
@@ -1353,7 +1349,7 @@ const EditProfile = () => {
                                 onChange={(e) =>
                                   handleExperienceChange(index, "startDate", {
                                     ...experience.startDate,
-                                    month: e.target.value,
+                                    month: e.target.value, // Send the name of the month, not the index
                                   })
                                 }
                                 className="border border-gray-400 p-2 rounded-xl focus:border-[#4358f6]"
@@ -1374,11 +1370,8 @@ const EditProfile = () => {
                                   "October",
                                   "November",
                                   "December",
-                                ].map((month, index) => (
-                                  <option
-                                    key={index}
-                                    value={String(index + 1).padStart(2, "0")}
-                                  >
+                                ].map((month) => (
+                                  <option key={month} value={month}>
                                     {month}
                                   </option>
                                 ))}
@@ -1410,7 +1403,7 @@ const EditProfile = () => {
                             </div>
                           </div>
 
-                          {/* End Date */}
+                          {/* End Date for experience */}
                           <div className="flex flex-col gap-1 w-full">
                             <label className="px-2 font-bold">End Date</label>
                             <div className="flex gap-2">
@@ -1420,7 +1413,7 @@ const EditProfile = () => {
                                 onChange={(e) =>
                                   handleExperienceChange(index, "endDate", {
                                     ...experience.endDate,
-                                    month: e.target.value,
+                                    month: e.target.value, // Send the name of the month (e.g., "January")
                                   })
                                 }
                                 className="border border-gray-400 p-2 rounded-xl focus:border-[#4358f6]"
@@ -1441,11 +1434,8 @@ const EditProfile = () => {
                                   "October",
                                   "November",
                                   "December",
-                                ].map((month, index) => (
-                                  <option
-                                    key={index}
-                                    value={String(index + 1).padStart(2, "0")}
-                                  >
+                                ].map((month) => (
+                                  <option key={month} value={month}>
                                     {month}
                                   </option>
                                 ))}

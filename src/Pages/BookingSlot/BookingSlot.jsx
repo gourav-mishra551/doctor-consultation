@@ -20,7 +20,6 @@ function BookingSlot() {
   const { id } = useParams();
   const [step, setStep] = useState(1);
   const [Loading,setLoading]=useState(false)
-
   const handleNextStep = () => {
     setStep(step + 1);
   };
@@ -34,6 +33,7 @@ function BookingSlot() {
 
   useEffect(() => {
     DrProfileFetch();
+
   }, []);
 
   const DrProfileFetch = async () => {
@@ -49,6 +49,8 @@ function BookingSlot() {
       setLoading(false)
     }
   };
+  
+
 
 
   if (!DrProfile) {
