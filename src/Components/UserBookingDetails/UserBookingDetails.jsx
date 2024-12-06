@@ -12,7 +12,7 @@ import {
 } from "@react-pdf/renderer";
 import { useLocation } from "react-router-dom";
 import Icon from "../../../src/Assests/fav-icon.png";
-import companyLogo from "../../../src/Assests/fav-icon.png";
+import companyLogo from "../../../src/Assests/ametheus-helath-logo.jpg";
 
 const UserBookingDetails = () => {
   const [bookingDetailsData, setBookingDetailsData] = useState([]);
@@ -40,6 +40,59 @@ const UserBookingDetails = () => {
       console.log(error);
     }
   };
+
+  const convertTo12HourFormat = (time) => {
+    if (!time) return ""; // Return an empty string if no time is provided
+    const [hours, minutes] = time.split(":").map(Number);
+
+    // Determine AM or PM
+    const period = hours >= 12 ? "PM" : "AM";
+
+    // Convert hours to 12-hour format, handling 0 hours for 12 AM and 12 hours for 12 PM
+    const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+
+    return `${formattedHours}:${minutes.toString().padStart(2, "0")} ${period}`;
+  };
+
+  const options = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  };
+
+  const convertToIST = (utcDate) => {
+    if (!utcDate) return "--";
+    const date = new Date(utcDate);
+    return date.toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      ...options,
+    });
+  };
+
+  function formatDateWithTodayOrTomorrow(dateString) {
+    if (!dateString) return "N/A";
+
+    const inputDate = new Date(dateString);
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    const isToday = inputDate.toDateString() === today.toDateString();
+    const isTomorrow = inputDate.toDateString() === tomorrow.toDateString();
+
+    if (isToday) return "Today";
+    if (isTomorrow) return "Tomorrow";
+
+    return inputDate.toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  }
 
   useEffect(() => {
     userBookingDetails();
@@ -142,7 +195,7 @@ const UserBookingDetails = () => {
       color: "#616A76",
     },
     logo: { width: 70, height: 70, marginRight: 10 },
-    companyImage: { width: 200, height: 200, marginRight: 10 },
+    companyImage: { width: 200, marginRight: 10 },
     doctorName: { fontSize: 20, fontWeight: "bold", color: "#0074D9" },
     qualification: { fontSize: 8, color: "#7F8C8D" },
     section: {
@@ -555,8 +608,6 @@ const UserBookingDetails = () => {
           )}
         </View>
 
-        <Image style={styles.logo} src={companyLogo} />
-
         {/* RX Section */}
         <View style={{ marginTop: 20 }}>
           <Text style={{ fontSize: 40, color: "#0074D9", fontWeight: "bold" }}>
@@ -574,11 +625,11 @@ const UserBookingDetails = () => {
         <Text style={styles.footer}>
           Clinic Name | 24 Dummy Street Area | +12-345 678 9012
         </Text>
+
+        <Image style={styles.companyImage} src={companyLogo} />
       </Page>
     </Document>
   );
-
-  //   pdf generation code and its style sheet ends here
 
   return (
     <>
@@ -614,42 +665,55 @@ const UserBookingDetails = () => {
             </span>
           </div>
         </div>
+        <div className="max-w-4xl mx-auto h-[1px] bg-gray-300 bg-opacity-80"></div>
         <div className="grid grid-cols-2 gap-4 bg-gray-100 p-5">
           <div className="flex gap-3">
             <span className="font-medium text-gray-600">Start time:</span>
             <span className="text-gray-800">
-              {bookingDetailsData?.data?.specificSlotData.startTime}
+              {convertTo12HourFormat(
+                bookingDetailsData?.data?.specificSlotData.startTime
+              )}
             </span>
           </div>
           <div className="flex gap-3">
             <span className="font-medium text-gray-600">End time:</span>
             <span className="text-gray-800">
-              {bookingDetailsData?.data?.specificSlotData.endTime}
+              {convertTo12HourFormat(
+                bookingDetailsData?.data?.specificSlotData.endTime
+              )}
             </span>
           </div>
           <div className="flex gap-3">
             <span className="font-medium text-gray-600">Doctor Charge:</span>
             <span className="text-gray-800">
-              {bookingDetailsData?.data?.specificSlotData.doctorCharge}
+              ₹ {bookingDetailsData?.data?.specificSlotData.doctorCharge}
+            </span>
+          </div>
+          <div className="flex gap-3">
+            <span className="font-medium text-gray-600">Created At:</span>
+            <span className="text-gray-800">
+              {convertToIST(bookingDetailsData?.data?.createdAt)}
             </span>
           </div>
         </div>
 
         {/* Download prescription button */}
-        <PDFDownloadLink
-          document={<PrescriptionPDF />}
-          fileName={`Prescription.pdf`}
-          className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
-          {({ loading }) =>
-            loading ? "Loading Prescription..." : "Download Prescription"
-          }
-        </PDFDownloadLink>
-        {/* <div className="bg-[#00768A] flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
-          <button className="text-white px-2 py-1">
-            Download Prescription
-          </button>
-        </div> */}
+        <div className="flex gap-5">
+          <PDFDownloadLink
+            document={<PrescriptionPDF />}
+            fileName={`Prescription.pdf`}
+            className="bg-blue-500 text-white mt-5 py-2 px-4 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-in-out  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            {({ loading }) =>
+              loading ? "Loading Prescription..." : "Download Prescription"
+            }
+          </PDFDownloadLink>
+          <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
+            <button className="text-white px-2 py-1">
+              Upload to Health Records
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
