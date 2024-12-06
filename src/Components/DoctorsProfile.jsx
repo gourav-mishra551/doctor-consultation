@@ -269,7 +269,7 @@ const DoctorsProfile = () => {
                       <select
                         className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
                         onChange={(e) =>
-                          handleFilterChange("categoryId", e.target.value)
+                          handleFilterChange("categoryID", e.target.value)
                         }
                       >
                         <option value="">All</option>
@@ -397,7 +397,7 @@ const DoctorsProfile = () => {
                               <select
                                 className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
                                 onChange={(e) =>
-                                  handleFilterChange("categoryId", e.target.value)
+                                  handleFilterChange("categoryID", e.target.value)
                                 }
                               >
                                 <option value="">All</option>
