@@ -580,7 +580,7 @@ const DoctorForm = () => {
         );
         console.log("something", res.data.msg);
         toast.success(res.data.msg);
-        navigate("/");
+        navigate("/profile");
       } catch (res) {
         toast.error(res?.response?.data?.msg);
       }
@@ -1038,18 +1038,18 @@ const DoctorForm = () => {
                           className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none  focus:border-[#00768A]"
                         >
                           <option value="">Select Month</option>
-                          <option value="Jan">January</option>
-                          <option value="Feb">February</option>
-                          <option value="Mar">March</option>
-                          <option value="Apr">April</option>
+                          <option value="January">January</option>
+                          <option value="February">February</option>
+                          <option value="March">March</option>
+                          <option value="April">April</option>
                           <option value="May">May</option>
-                          <option value="Jun">June</option>
-                          <option value="Jul">July</option>
-                          <option value="Aug">August</option>
-                          <option value="Sep">September</option>
-                          <option value="Oct">October</option>
-                          <option value="Nov">November</option>
-                          <option value="Dec">December</option>
+                          <option value="June">June</option>
+                          <option value="July">July</option>
+                          <option value="August">August</option>
+                          <option value="September">September</option>
+                          <option value="October">October</option>
+                          <option value="November">November</option>
+                          <option value="December">December</option>
                         </select>
                       </div>
 
@@ -1102,18 +1102,18 @@ const DoctorForm = () => {
                           id=""
                         >
                           <option value="">Select Month</option>
-                          <option value="Jan">January</option>
-                          <option value="Feb">February</option>
-                          <option value="Mar">March</option>
-                          <option value="Apr">April</option>
+                          <option value="January">January</option>
+                          <option value="February">February</option>
+                          <option value="March">March</option>
+                          <option value="April">April</option>
                           <option value="May">May</option>
-                          <option value="Jun">June</option>
-                          <option value="Jul">July</option>
-                          <option value="Aug">August</option>
-                          <option value="Sep">September</option>
-                          <option value="Oct">October</option>
-                          <option value="Nov">November</option>
-                          <option value="Dec">December</option>
+                          <option value="June">June</option>
+                          <option value="July">July</option>
+                          <option value="August">August</option>
+                          <option value="September">September</option>
+                          <option value="October">October</option>
+                          <option value="November">November</option>
+                          <option value="December">December</option>
                         </select>
                       </div>
                       <div>
@@ -1369,18 +1369,18 @@ const DoctorForm = () => {
                           }
                         >
                           <option value="">Select Month</option>
-                          <option value="1">January</option>
-                          <option value="2">February</option>
-                          <option value="3">March</option>
-                          <option value="4">April</option>
-                          <option value="5">May</option>
-                          <option value="6">June</option>
-                          <option value="7">July</option>
-                          <option value="8">August</option>
-                          <option value="9">September</option>
-                          <option value="10">October</option>
-                          <option value="11">November</option>
-                          <option value="12">December</option>
+                          <option value="January">January</option>
+                          <option value="February">February</option>
+                          <option value="March">March</option>
+                          <option value="April">April</option>
+                          <option value="May">May</option>
+                          <option value="June">June</option>
+                          <option value="July">July</option>
+                          <option value="August">August</option>
+                          <option value="September">September</option>
+                          <option value="October">October</option>
+                          <option value="November">November</option>
+                          <option value="December">December</option>
                         </select>
                       </div>
                       <div>
@@ -1481,18 +1481,18 @@ const DoctorForm = () => {
                             name="endMonth"
                           >
                             <option value="">Select Month</option>
-                            <option value="1">January</option>
-                            <option value="2">February</option>
-                            <option value="3">March</option>
-                            <option value="4">April</option>
-                            <option value="5">May</option>
-                            <option value="6">June</option>
-                            <option value="7">July</option>
-                            <option value="8">August</option>
-                            <option value="9">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
+                          <option value="January">January</option>
+                          <option value="February">February</option>
+                          <option value="March">March</option>
+                          <option value="April">April</option>
+                          <option value="May">May</option>
+                          <option value="June">June</option>
+                          <option value="July">July</option>
+                          <option value="August">August</option>
+                          <option value="September">September</option>
+                          <option value="October">October</option>
+                          <option value="November">November</option>
+                          <option value="December">December</option>
                           </select>
                         </div>
                         <div>

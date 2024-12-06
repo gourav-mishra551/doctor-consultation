@@ -48,13 +48,16 @@ const Login = () => {
         ? "https://api.assetorix.com/ah/api/v1/user/login"
         : "https://api.assetorix.com/ah/api/v1/user/register";
       const response = await axios.post(endpoint, formData);
+      console.log(response)
       if (response.status === 200) {
         toast.success(response.data?.msg);
         localStorage.setItem("token", response.data.x_auth_token);
         localStorage.setItem("user", response.data.x_user);
         localStorage.setItem("Id", response.data.x_userid);
+        localStorage.setItem("role",response.data.x_role)
         if (isLogin) {
           navigate("/");
+
         } else {
           navigate("/otp");
         }
