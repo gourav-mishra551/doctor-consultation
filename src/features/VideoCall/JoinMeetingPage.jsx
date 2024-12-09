@@ -162,26 +162,26 @@ const UILayout = () => {
     </div>
   );
 
-  const renderLeftState = () => (
-    <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-b from-gray-100 to-gray-300 text-center">
-      <div className="p-6 bg-white rounded-lg shadow-lg animate-fade-in">
-        <div className="text-xl font-bold text-red-600 mb-4">
-          🚫 You have left the call.
-        </div>
-        <p className="text-gray-700 mb-6">
-          It looks like you've left the meeting. You can return to your profile or join another session.
-        </p>
-        <button
-          className="px-6 py-2 bg-blue-600 text-white font-medium text-sm rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring focus:ring-blue-400 focus:ring-opacity-50"
-          onClick={() => {
-            navigate("/profile")
-          }}
-        >
-          Go to Your Profile
-        </button>
-      </div>
-    </div>
-  );
+  // const renderLeftState = () => (
+  //   <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-b from-gray-100 to-gray-300 text-center">
+  //     <div className="p-6 bg-white rounded-lg shadow-lg animate-fade-in">
+  //       <div className="text-xl font-bold text-red-600 mb-4">
+  //         🚫 You have left the call.
+  //       </div>
+  //       <p className="text-gray-700 mb-6">
+  //         It looks like you've left the meeting. You can return to your profile or join another session.
+  //       </p>
+  //       <button
+  //         className="px-6 py-2 bg-blue-600 text-white font-medium text-sm rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring focus:ring-blue-400 focus:ring-opacity-50"
+  //         onClick={() => {
+  //           navigate("/profile")
+  //         }}
+  //       >
+  //         Go to Your Profile
+  //       </button>
+  //     </div>
+  //   </div>
+  // );
   
   switch (callingState) {
     case CallingState.UNKNOWN:
@@ -204,7 +204,7 @@ const UILayout = () => {
       );
 
     case CallingState.LEFT:
-      return renderLeftState();
+      return navigate("/profile?section=user-bookings#");
 
     default:
       return (
