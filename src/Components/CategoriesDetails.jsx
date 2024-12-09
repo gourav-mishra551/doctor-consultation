@@ -83,7 +83,7 @@ function CategoriesDetails() {
   
   useEffect(() => {
     FetchCategory(id);
-    FetchDoctorsData(id, localStorage.getItem("currency")); // Ensure currency is passed here
+    FetchDoctorsData(id, localStorage.getItem("currency")|| "INR"); // Ensure currency is passed here
     window.scroll(0, 0);
   }, [id]);
   

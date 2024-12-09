@@ -15,7 +15,7 @@ const DoctorsProfile = () => {
     rating: "",
     visitingMode: "",
   });
-  const currency=localStorage.getItem("currency")
+  // const currency=localStorage.getItem("currency")
 
 
 
