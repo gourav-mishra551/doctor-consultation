@@ -811,6 +811,20 @@ const UserBookingDetails = () => {
               {uploadPdfLoader ? "Uploading..." : "Upload to Health Records"}
             </button>
           </div>
+<<<<<<< HEAD
+=======
+          {
+            bookingDetailsData?.data?.roomId && (
+              <a href={`https://doctor-consultation.vercel.app/video-call/join?call_id=${bookingDetailsData?.data?.roomId}&call_type=default`} target="_blank">
+                <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
+                  <button className="text-white px-2 py-1">
+                    Join Meeting
+                  </button>
+                </div>
+              </a>
+            )
+          }
+>>>>>>> 953402c69fa339efebc542be223b792fc505bde8
         </div>
       </div>
     </>

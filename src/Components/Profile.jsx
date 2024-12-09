@@ -164,14 +164,14 @@ const Profile = () => {
                         View Users
                       </p>
                     </li>
-                    <li>
+                    {/* <li>
                       <p
                         onClick={() => handleSectionChange("edituserprofile")}
                         className="block cursor-pointer p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
                       >
                         Edit User
                       </p>
-                    </li>
+                    </li> */}
                     <li>
                       <p
                         onClick={() => handleSectionChange("user-bookings")}
@@ -528,7 +528,10 @@ const Profile = () => {
           {/* booking data for doctor */}
           {activeSection === "bookings" && <Bookings history={history} />}
           {activeSection === "selfuserprofile" && (
-            <SelfProfile userprofiledata={userProfileData} />
+            <SelfProfile
+              userprofiledata={userProfileData}
+              handleSectionChange={handleSectionChange}
+            />
           )}
           {activeSection === "doctorselfprofile" && userProfileData.data && (
             <DoctorSelfProfile doctorProfileData={doctorProfileData} />

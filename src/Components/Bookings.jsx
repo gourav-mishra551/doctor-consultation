@@ -19,6 +19,7 @@ const Bookings = () => {
   const [doctorBookingsData, setDoctorBookingsData] = useState([]);
   const [history, setHistory] = useState([]);
   const navigate = useNavigate();
+  const [isLoading, setisLoading] = useState(false);
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -50,6 +51,7 @@ const Bookings = () => {
   }
 
   const bookings = async () => {
+    setisLoading(true);
     try {
       const response = await axios.get(
         "https://api.assetorix.com/ah/api/v1/dc/doctor/history",
@@ -61,6 +63,7 @@ const Bookings = () => {
         }
       );
       setHistory(response.data);
+      setisLoading(false);
       console.log(response.data);
     } catch (error) {}
   };
@@ -71,6 +74,13 @@ const Bookings = () => {
 
   console.log(history);
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center sm:mt-10">
+        <div className="loader"></div>
+      </div>
+    );
+  }
   return (
     <div>
       {history?.data?.length > 0 ? (
