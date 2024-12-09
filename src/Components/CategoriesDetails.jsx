@@ -16,7 +16,7 @@ function CategoriesDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const [filters, setFilters] = useState({
-    categoryID: "",
+    categoryID: "" || id,
     name: "",
     gender: "",
     rating: "",
@@ -28,6 +28,7 @@ function CategoriesDetails() {
   };
 
   const applyFilters = async () => {
+    setIsLoading(true)
     try {
       const query = Object.entries(filters)
         .filter(([_, value]) => value)
@@ -41,6 +42,7 @@ function CategoriesDetails() {
       console.error("Error fetching filtered data", error);
     }
     setShowFilter(false);
+    setIsLoading(false);
   };
 
   // useEffect(() => {
