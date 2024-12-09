@@ -22,7 +22,7 @@ function CategoriesDetails() {
     rating: "",
     visitingMode: "",
   });
-
+  
   const handleFilterChange = (filterType, value) => {
     setFilters((prevFilters) => ({ ...prevFilters, [filterType]: value }));
   };
@@ -43,11 +43,11 @@ function CategoriesDetails() {
     setShowFilter(false);
   };
 
-  useEffect(() => {
-    FetchCategory(id);
-    FetchDoctersData(id);
-    window.scroll(0,0)
-  }, [id]);
+  // useEffect(() => {
+  //   FetchCategory(id);
+  //   FetchDoctorsData(id);
+  //   window.scroll(0,0)
+  // }, [id]);
 
 
   const FetchCategory = async (id) => {
@@ -67,18 +67,40 @@ function CategoriesDetails() {
     }
   };
 
-  const FetchDoctersData = async (id) => {
+  const FetchDoctorsData = async (id, currency) => {
     try {
-      setLoading
+      setLoading(true); // Set loading state to true
       const res = await axios.get(
-        `https://api.assetorix.com/ah/api/v1/dc/user/doctors?categoryID=${id}`
+        `https://api.assetorix.com/ah/api/v1/dc/user/doctors?categoryID=${id}&currency=${currency}`
       );
-      setDoctersData(res.data.data);
+      setDoctersData(res.data.data); // Ensure the correct spelling (Doctors instead of Docters)
     } catch (error) {
       console.error("Error fetching data", error);
+    } finally {
+      setLoading(false); // Set loading state to false once the request is complete
     }
   };
-
+  
+  useEffect(() => {
+    FetchCategory(id);
+    FetchDoctorsData(id, localStorage.getItem("currency")); // Ensure currency is passed here
+    window.scroll(0, 0);
+  }, [id]);
+  
+  useEffect(() => {
+    const handleCurrencyChange = () => {
+      const currency = localStorage.getItem("currency"); // Get the updated currency
+      FetchDoctorsData(id, currency); // Pass currency to FetchDoctorsData
+    };
+  
+    window.addEventListener('currencyChange', handleCurrencyChange);
+  
+    return () => {
+      window.removeEventListener('currencyChange', handleCurrencyChange);
+    };
+  }, [id]);
+  
+  
   const stripHtmlTags = (str) => {
     const doc = new DOMParser().parseFromString(str, "text/html");
     return doc.body.textContent || "";
