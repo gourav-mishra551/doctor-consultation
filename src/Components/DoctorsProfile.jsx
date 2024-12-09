@@ -15,7 +15,7 @@ const DoctorsProfile = () => {
     rating: "",
     visitingMode: "",
   });
-  const currency=localStorage.getItem("currency")
+  // const currency=localStorage.getItem("currency")
 
 
 
@@ -49,7 +49,7 @@ const DoctorsProfile = () => {
   const FetchDrProfile = async () => {
     setIsLoading(true);
   
-    const currency = localStorage.getItem("currency"); // Fetch the currency from localStorage
+    const currency = localStorage.getItem("currency") || "INR"; // Fetch the currency from localStorage
     const endpoint = `https://api.assetorix.com/ah/api/v1/dc/user/doctors?currency=${currency}`; // Add currency as a query parameter
   
     try {

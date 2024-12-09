@@ -118,7 +118,7 @@ const DrIndividualProfile = () => {
           </div>
 
           {/* Specialties */}
-          <p className="text-lg sm:text-xl font-semibold text-white mb-2">
+          <p className="text-lg  flex justify-start sm:text-xl font-semibold text-white mb-2">
             Specialties In:
             <span className="font-medium ml-2 inline-block">
               {IndiProfile.specialitycategories &&
@@ -139,7 +139,7 @@ const DrIndividualProfile = () => {
 
           {/* Hospital Name */}
           {IndiProfile?.hospitalName?.length > 0 ? (
-            <p className="text-lg sm:text-xl font-semibold text-white flex items-center gap-2 my-2">
+            <p className="text-lg sm:text-xl  font-semibold text-white flex items-center gap-2 my-2">
               Doctor at:
               <RiHospitalLine className="text-[#00768A] text-2xl sm:text-3xl" />
               <span className="font-semibold capitalize text-gray-300">
