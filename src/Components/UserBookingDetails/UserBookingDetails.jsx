@@ -16,6 +16,8 @@ import Icon from "../../../src/Assests/fav-icon.png";
 import companyLogo from "../../../src/Assests/ametheus-helath-logo.jpg";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import user from "../../../src/Assests/user-bookings.svg";
+import svg from "../../Assests/bookings.png";
 
 const UserBookingDetails = () => {
   const [bookingDetailsData, setBookingDetailsData] = useState([]);
@@ -719,7 +721,7 @@ const UserBookingDetails = () => {
             </span>
           </div>
         </div>
-        <div className="max-w-4xl mx-auto h-[1px] bg-gray-300 bg-opacity-80"></div>
+        <div className="max-w-5xlmx-auto h-[1px] bg-gray-300 bg-opacity-80"></div>
         <div className="grid grid-cols-2 gap-4 bg-gray-100 p-5">
           <div className="flex gap-3">
             <span className="font-medium text-gray-600">Start time:</span>
@@ -744,12 +746,46 @@ const UserBookingDetails = () => {
             </span>
           </div>
           <div className="flex gap-3">
-            <span className="font-medium text-gray-600">Consultation Date:</span>
+            <span className="font-medium text-gray-600">
+              Consultation Date:
+            </span>
             <span className="text-gray-800">
-              {convertToIST(bookingDetailsData?.data?.availibileTimeSlotsData.selectDate)}
+              {convertToIST(
+                bookingDetailsData?.data?.availibileTimeSlotsData.selectDate
+              )}
             </span>
           </div>
         </div>
+        {/* Join meeting button */}
+        {bookingDetailsData?.data?.roomId ? (
+          <div className="mt-1 max-w-5xl mx-auto flex flex-col items-center justify-center p-6 bg-gray-100 rounded-lg shadow-lg">
+            <img
+              src={svg}
+              className="w-[100px] sm:w-[300px] rounded-md shadow-md border border-gray-200"
+              alt="User"
+            />
+            <div className="bg-[#00768A] hover:bg-[#005f70] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[250px] rounded-md mt-5 shadow-md">
+              <Link
+                to={`https://doctor-consultation.vercel.app/video-call/join?call_id=${bookingDetailsData?.data?.roomId}&call_type=default`}
+              >
+                <button className="text-white font-medium px-4 py-2 transition-transform transform hover:scale-105">
+                  Join Meeting
+                </button>
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div className="mt-5 max-w-4xl mx-auto flex flex-col items-center justify-center p-6 bg-gray-100 rounded-lg shadow-lg">
+            <img
+              src={svg}
+              className="w-[100px] sm:w-[300px] rounded-md shadow-md border border-gray-200"
+              alt="User"
+            />
+            <p className="text-gray-600 text-lg font-medium mt-4">
+              Your metting Link will be shown on your consultation date
+            </p>
+          </div>
+        )}
 
         {/* Download prescription button */}
         <div className="flex gap-5">
@@ -775,14 +811,6 @@ const UserBookingDetails = () => {
               {uploadPdfLoader ? "Uploading..." : "Upload to Health Records"}
             </button>
           </div>
-          <Link to = {`https://doctor-consultation.vercel.app/video-call/join?call_id=${bookingDetailsData?.data?.roomId}&call_type=default`}>
-            <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
-              <button className="text-white px-2 py-1">
-                Join Meeting
-              </button>
-            </div>
-          </Link>
-
         </div>
       </div>
     </>

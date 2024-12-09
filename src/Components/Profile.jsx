@@ -125,7 +125,7 @@ const Profile = () => {
               </li>
 
               {/* user bookings */}
-              {(userProfileData?.data?.role === "customer" ||
+              {/* {(userProfileData?.data?.role === "customer" ||
                 userProfileData?.data?.role === "doctor" ||
                 userProfileData?.data?.role === "admin") && (
                 <li className="mb-2">
@@ -138,7 +138,7 @@ const Profile = () => {
                     My Bookings
                   </a>
                 </li>
-              )}
+              )} */}
 
               <li className="mb-2">
                 <div
@@ -170,6 +170,14 @@ const Profile = () => {
                         className="block cursor-pointer p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
                       >
                         Edit User
+                      </p>
+                    </li>
+                    <li>
+                      <p
+                        onClick={() => handleSectionChange("user-bookings")}
+                        className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
+                      >
+                        My Bookings
                       </p>
                     </li>
                   </ul>
