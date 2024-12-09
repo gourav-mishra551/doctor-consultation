@@ -24,6 +24,8 @@ const Navbar = () => {
   const [currency, setCurrency] = useState(
     localStorage.getItem("currency") || "INR"
   );
+
+  
   const [dropdown, setDropdown] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
