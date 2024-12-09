@@ -7,6 +7,7 @@ import EditFamilyMemebrs from "../EditFamilyMemebrs";
 import { RxCross2 } from "react-icons/rx";
 
 const ViewFamilyMembers = ({ setActiveSection }) => {
+  const [isLoading, setisLoading] = useState(false);
   const [deleteAlert, setDeleteAlert] = useState(false);
   const [deleteId, setDeleteId] = useState("");
   const [editFamilyPopUp, setEditFamilyPopUp] = useState(false);
@@ -54,6 +55,7 @@ const ViewFamilyMembers = ({ setActiveSection }) => {
   }
 
   const getFamilyEdit = async () => {
+    setisLoading(true);
     try {
       const response = await axios.get(
         `https://api.assetorix.com/ah/api/v1/user/family`,
@@ -66,6 +68,7 @@ const ViewFamilyMembers = ({ setActiveSection }) => {
         }
       );
       setFamilyData(response.data);
+      setisLoading(false);
       console.log(response.data);
     } catch (error) {}
   };
@@ -154,6 +157,14 @@ const ViewFamilyMembers = ({ setActiveSection }) => {
     }));
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader"></div>
+      </div>
+    );
+  }
+
   return (
     <>
       {user && id ? (
@@ -175,25 +186,33 @@ const ViewFamilyMembers = ({ setActiveSection }) => {
                 >
                   <div className="sm:w-[10%] w-[20%] flex justify-center items-center">
                     <img
-                      src={family?.avatar || ""}
+                      src={
+                        family?.avatar || "https://pixy.org/src/31/315160.png"
+                      }
                       className="sm:h-[100px] sm:w-[100px] rounded-full h-[60px] w-[60px]"
                     />
                   </div>
 
                   <div className="sm:w-[90%] w-[80%] space-y-1">
-                    <div className="flex justify-end gap-1">
-                      <FaUserEdit
-                        onClick={() => {
-                          setEditFamilyPopUp(true), setDeleteId(family._id);
-                        }}
-                      />
-                      <MdDelete
-                        onClick={() => {
-                          setDeleteAlert(true);
-                          setDeleteId(family._id);
-                        }}
-                        className="text-red-500 cursor-pointer"
-                      />
+                    <div className="flex justify-end sm:gap-3">
+                      <div className="bg-blue-500 flex justify-center items-center h-[30px] w-[30px] rounded-full">
+                        <FaUserEdit
+                          className="text-white cursor-pointer"
+                          onClick={() => {
+                            setEditFamilyPopUp(true), setDeleteId(family._id);
+                          }}
+                        />
+                      </div>
+
+                      <div className="bg-red-500 flex justify-center items-center h-[30px] w-[30px] rounded-full">
+                        <MdDelete
+                          onClick={() => {
+                            setDeleteAlert(true);
+                            setDeleteId(family._id);
+                          }}
+                          className="text-white cursor-pointer"
+                        />
+                      </div>
                     </div>
                     <div className="flex justify-between mt-3">
                       <p className="font-bold text-[#00768A] sm:text-xl">

@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { CiBookmarkCheck } from "react-icons/ci";
 import { FaEdit } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
+import noSlotsImage from "../../Assests/images.png";
 
 const AllSlots = ({ setActiveSection, handleSectionChange }) => {
   const [slotsData, setSlotsData] = useState([]);
@@ -262,10 +263,17 @@ const AllSlots = ({ setActiveSection, handleSectionChange }) => {
         </>
       ) : (
         <div className="flex flex-col gap-3 justify-center items-center">
+          <div className="flex flex-col items-center justify-center text-center text-gray-500 mt-4  rounded-lg p-4 shadow-lg bg-gray-100">
+            <img
+              src={noSlotsImage}
+              alt="noSlotsImage"
+              className="sm:w-[200px] object-contain mb-2"
+            />
+          </div>
           <p className="text-center text-gray-500">No Slots Available</p>
           <button
             onClick={() => handleSectionChange("create-slots")}
-            className="bg-[#00768A] text-white py-1 px-2 rounded-xl"
+            className="bg-[#00768A] text-white py-1 px-5 rounded-md mt-5"
           >
             Create Slots
           </button>

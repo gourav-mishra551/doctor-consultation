@@ -10,11 +10,12 @@ const DoctorSelfProfile = () => {
   const [isFAQOpen, setIsFAQOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState(null); // To track which box is open
   const [doctorProfileData, setDoctorProfileData] = useState([]);
-
+  const [isLoading, setisLoading] = useState(false);
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
 
   const docotrData = async () => {
+    setisLoading(true);
     try {
       const response = await axios.get(
         "https://api.assetorix.com/ah/api/v1/dc/doctor",
@@ -27,6 +28,7 @@ const DoctorSelfProfile = () => {
       );
       setDoctorProfileData(response.data);
       console.log(response.data);
+      setisLoading(false);
     } catch (error) {}
   };
 
@@ -69,6 +71,14 @@ const DoctorSelfProfile = () => {
       ...options,
     });
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center sm:mt-10">
+        <div className="loader"></div>
+      </div>
+    );
+  }
 
   return (
     <div>

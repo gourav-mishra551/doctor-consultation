@@ -19,6 +19,7 @@ const Bookings = () => {
   const [doctorBookingsData, setDoctorBookingsData] = useState([]);
   const [history, setHistory] = useState([]);
   const navigate = useNavigate();
+  const [isLoading, setisLoading] = useState(false);
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -50,6 +51,7 @@ const Bookings = () => {
   }
 
   const bookings = async () => {
+    setisLoading(true);
     try {
       const response = await axios.get(
         "https://api.assetorix.com/ah/api/v1/dc/doctor/history",
@@ -61,6 +63,7 @@ const Bookings = () => {
         }
       );
       setHistory(response.data);
+      setisLoading(false);
       console.log(response.data);
     } catch (error) {}
   };
@@ -71,13 +74,20 @@ const Bookings = () => {
 
   console.log(history);
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center sm:mt-10">
+        <div className="loader"></div>
+      </div>
+    );
+  }
   return (
     <div>
       {history?.data?.length > 0 ? (
         <div>
           <div className="sm:max-w-5xl w-full mx-auto sm:my-8 space-y-4">
             <div className="top-detail-section">
-              <p className="text-gray-500 font-light">Your Previous Bookings</p>
+              <p className="text-gray-500 font-light">Your Appointments</p>
             </div>
             {history?.data?.map((consultation, index) => (
               <div key={index} className="bg-white shadow-lg rounded-lg">
@@ -87,7 +97,10 @@ const Bookings = () => {
                 >
                   <h3 className="sm:text-sm text-[12px] font-bold text-white">
                     Consultation Date:{" "}
-                    {convertToIST(consultation?.bookingDetails?.createdAt)}
+                    {convertToIST(
+                      consultation?.bookingDetails?.availibileTimeSlotsData
+                        ?.selectDate
+                    )}
                   </h3>
                   {openSection === index ? <FaChevronUp /> : <FaChevronDown />}
                 </div>
@@ -96,7 +109,7 @@ const Bookings = () => {
                   <div className="p-6 flex flex-col">
                     <div className="grid sm:grid-cols-3 grid-cols-2 gap-5 sm:gap-0 justify-between items-center">
                       {/* Consultation Formats */}
-                      <div className="flex flex-col">
+                      <div className="flex flex-col sm:w-[50%]">
                         <span className="text-sm text-gray-500">
                           Consultation Formats
                         </span>
@@ -124,7 +137,7 @@ const Bookings = () => {
                       </div>
 
                       {/* Select Mode */}
-                      <div className="flex flex-col">
+                      <div className="flex flex-col sm:w-[50%]">
                         <span className="text-sm text-gray-500">
                           Select Mode
                         </span>
@@ -146,7 +159,7 @@ const Bookings = () => {
                       </div>
 
                       {/* button */}
-                      <div className="bg-[#25a53b] text-white px-2 py-1 rounded-md">
+                      <div className="bg-[#25a53b] text-white px-2 py-1 rounded-md sm:w-[50%] flex justify-center">
                         <button
                           onClick={() =>
                             navigate(
