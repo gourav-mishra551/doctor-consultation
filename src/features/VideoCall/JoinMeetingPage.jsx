@@ -11,7 +11,6 @@ import {
   StreamVideoClient,
   useCallStateHooks,
 } from "@stream-io/video-react-sdk";
-import { PiPhoneDisconnectFill } from "react-icons/pi";
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import { StreamChat } from "stream-chat";
 import {
@@ -24,6 +23,7 @@ import {
 import "stream-chat-react/dist/css/v2/index.css";
 import axios from "axios";
 import { RxCross1 } from "react-icons/rx";
+import { Navigate } from "react-router-dom";
 
 const JoinMeetingPage = () => {
   const [call, setCall] = useState(null);
@@ -39,27 +39,7 @@ const JoinMeetingPage = () => {
   const userId = localStorage.getItem("Id") || "default-user";
   const user = localStorage.getItem("user");
   const apiKey = "x84krkabkgdr"; // Replace with your API key
-  const tokenEndpoint = "https://api.assetorix.com/ah/api/v1/create-meeting/";// Replace with your actual token API
-
-  const navigate = useNavigate(); // Initialize navigate hook
-
-  // Disconnect Function
-  const disconnect = async () => {
-    try {
-      if (call) {
-        await call.leave();
-      }
-      if (chatClient) {
-        chatClient.disconnectUser();
-      }
-      if (videoClient) {
-        videoClient.disconnect();
-      }
-      navigate("/"); // Redirect to a page (e.g., "/goodbye")
-    } catch (error) {
-      console.error("Error disconnecting:", error);
-    }
-  };
+  const tokenEndpoint = "https://api.assetorix.com/ah/api/v1/create-meeting/"; // Replace with your actual token API
 
   useEffect(() => {
     const initialize = async () => {
@@ -125,7 +105,7 @@ const JoinMeetingPage = () => {
       <div className="flex-grow flex">
         <StreamVideo client={videoClient} className="w-full lg:w-2/3">
           <StreamCall call={call}>
-            <UILayout onDisconnect={disconnect} />
+            <UILayout />
           </StreamCall>
         </StreamVideo>
         {/* Chat Section for larger screens */}
@@ -171,34 +151,69 @@ const ChatSection = ({ chatClient, channel }) => (
   </Chat>
 );
 
-const UILayout = ({ onDisconnect }) => {
+const UILayout = () => {
+  const navigate = useNavigate()
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
 
-  if (callingState !== CallingState.JOINED) {
-    return (
-      <div className="flex items-center justify-center w-full h-full bg-gray-200">
-        Connecting...
-      </div>
-    );
-  }
-
-  return (
-    <StreamTheme>
-      <div className="flex-grow relative">
-        <SpeakerLayout participantsBarPosition="bottom" />
-        <CallControls className="absolute bottom-4 left-0 right-0">
-          <button
-            onClick={onDisconnect}
-            className="p-2 bg-red-600 text-white rounded-lg ml-2"
-          >
-            <PiPhoneDisconnectFill />
-          </button>
-        </CallControls>
-
-      </div>
-    </StreamTheme>
+  const renderConnectingState = () => (
+    <div className="flex items-center justify-center w-full h-full bg-gray-200 text-lg font-semibold">
+      Connecting...
+    </div>
   );
+
+  const renderLeftState = () => (
+    <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-b from-gray-100 to-gray-300 text-center">
+      <div className="p-6 bg-white rounded-lg shadow-lg animate-fade-in">
+        <div className="text-xl font-bold text-red-600 mb-4">
+          🚫 You have left the call.
+        </div>
+        <p className="text-gray-700 mb-6">
+          It looks like you've left the meeting. You can return to your profile or join another session.
+        </p>
+        <button
+          className="px-6 py-2 bg-blue-600 text-white font-medium text-sm rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring focus:ring-blue-400 focus:ring-opacity-50"
+          onClick={() => {
+            navigate("/profile")
+          }}
+        >
+          Go to Your Profile
+        </button>
+      </div>
+    </div>
+  );
+  
+  switch (callingState) {
+    case CallingState.UNKNOWN:
+    case CallingState.IDLE:
+    case CallingState.RINGING:
+    case CallingState.JOINING:
+    case CallingState.RECONNECTING:
+    case CallingState.RECONNECTING_FAILED:
+    case CallingState.OFFLINE:
+      return renderConnectingState();
+
+    case CallingState.JOINED:
+      return (
+        <StreamTheme>
+          <div className="flex-grow relative">
+            <SpeakerLayout participantsBarPosition="bottom" />
+            <CallControls className="absolute bottom-4 left-0 right-0" />
+          </div>
+        </StreamTheme>
+      );
+
+    case CallingState.LEFT:
+      return renderLeftState();
+
+    default:
+      return (
+        <div className="flex items-center justify-center w-full h-full bg-gray-200 text-lg text-red-600 font-semibold">
+          Unknown state. Please refresh the page.
+        </div>
+      );
+  }
 };
+
 
 export default JoinMeetingPage;
