@@ -750,7 +750,7 @@ const UserBookingDetails = () => {
               bookingDetailsData?.data?.prescription?.bpData.temperature ||
               bookingDetailsData?.data?.prescription?.formData?.length > 0 ||
               bookingDetailsData?.data?.prescription?.medicineData?.length >
-                0) && (
+              0) && (
               <PDFDownloadLink
                 document={<PrescriptionPDF />}
                 fileName="Prescription.pdf"
@@ -771,14 +771,17 @@ const UserBookingDetails = () => {
               Upload to Health Records
             </button>
           </div>
-          <Link to = {`https://doctor-consultation.vercel.app/video-call/join?call_id=${bookingDetailsData?.data?.roomId}&call_type=default`}>
-            <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
-              <button className="text-white px-2 py-1">
-                Join Meeting
-              </button>
-            </div>
-          </Link>
-
+          {
+            bookingDetailsData?.data?.roomId && (
+              <Link to={`https://doctor-consultation.vercel.app/video-call/join?call_id=${bookingDetailsData?.data?.roomId}&call_type=default`}>
+                <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
+                  <button className="text-white px-2 py-1">
+                    Join Meeting
+                  </button>
+                </div>
+              </Link>
+            )
+          }
         </div>
       </div>
     </>
