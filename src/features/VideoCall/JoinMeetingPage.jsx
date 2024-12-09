@@ -55,7 +55,7 @@ const JoinMeetingPage = () => {
       if (videoClient) {
         videoClient.disconnect();
       }
-      navigate("/goodbye"); // Redirect to a page (e.g., "/goodbye")
+      navigate("/"); // Redirect to a page (e.g., "/goodbye")
     } catch (error) {
       console.error("Error disconnecting:", error);
     }
@@ -125,7 +125,7 @@ const JoinMeetingPage = () => {
       <div className="flex-grow flex">
         <StreamVideo client={videoClient} className="w-full lg:w-2/3">
           <StreamCall call={call}>
-            <UILayout />
+            <UILayout onDisconnect={disconnect} />
           </StreamCall>
         </StreamVideo>
         {/* Chat Section for larger screens */}
@@ -171,7 +171,7 @@ const ChatSection = ({ chatClient, channel }) => (
   </Chat>
 );
 
-const UILayout = () => {
+const UILayout = ({ onDisconnect }) => {
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
 
@@ -192,7 +192,7 @@ const UILayout = () => {
             onClick={onDisconnect}
             className="p-2 bg-red-600 text-white rounded-lg ml-2"
           >
-           <PiPhoneDisconnectFill />
+            <PiPhoneDisconnectFill />
           </button>
         </CallControls>
 
