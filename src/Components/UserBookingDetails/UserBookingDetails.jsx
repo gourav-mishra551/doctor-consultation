@@ -14,6 +14,7 @@ import {
 import { useLocation } from "react-router-dom";
 import Icon from "../../../src/Assests/fav-icon.png";
 import companyLogo from "../../../src/Assests/ametheus-helath-logo.jpg";
+import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 const UserBookingDetails = () => {
@@ -64,10 +65,6 @@ const UserBookingDetails = () => {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true,
   };
 
   const convertToIST = (utcDate) => {
@@ -747,13 +744,9 @@ const UserBookingDetails = () => {
             </span>
           </div>
           <div className="flex gap-3">
-            <span className="font-medium text-gray-600">
-              Appointment Scheduled At:
-            </span>
+            <span className="font-medium text-gray-600">Consultation Date:</span>
             <span className="text-gray-800">
-              {convertToIST(
-                bookingDetailsData?.data?.availibileTimeSlotsData?.selectDate
-              )}
+              {convertToIST(bookingDetailsData?.data?.availibileTimeSlotsData.selectDate)}
             </span>
           </div>
         </div>
@@ -782,6 +775,14 @@ const UserBookingDetails = () => {
               {uploadPdfLoader ? "Uploading..." : "Upload to Health Records"}
             </button>
           </div>
+          <Link to = {`https://doctor-consultation.vercel.app/video-call/join?call_id=${bookingDetailsData?.data?.roomId}&call_type=default`}>
+            <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
+              <button className="text-white px-2 py-1">
+                Join Meeting
+              </button>
+            </div>
+          </Link>
+
         </div>
       </div>
     </>
