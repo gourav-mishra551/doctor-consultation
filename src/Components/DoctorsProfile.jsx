@@ -35,6 +35,7 @@ const DoctorsProfile = () => {
   };
   useEffect(() => {
     fetchCategories();
+    FetchDrProfile();
   }, []);
 
   useEffect(()=>{
