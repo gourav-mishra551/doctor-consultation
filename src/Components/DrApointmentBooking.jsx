@@ -3,7 +3,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-
+import Images from '../../src/Assests/images.png'
 function DrAppointmentBooking({ IndiProfile, onNext }) {
   const { doctorAvailability } = IndiProfile;
   const [selectedDate, setSelectedDate] = useState(null);
@@ -218,7 +218,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
 
         {/* Date Slider */}
         {doctorAvailability.length > 1 ? (
-          <div className="relative">
+          <div className="relative ">
             <button
               onClick={scrollLeft}
               className="absolute flex justify-center items-center z-40 h-10 w-10 focus:outline-none top-1/2 -left-4 transform -translate-y-1/2 bg-transparent border-2 border-gray-300 text-black rounded-full shadow-lg hover:bg-gray-100 transition-all"
@@ -267,9 +267,11 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
             </button>
           </div>
         ) : (
-          <div className="text-center text-gray-500 mt-4">
-            No availability to display
-          </div>
+          <div className="flex flex-col items-center justify-center text-center text-gray-500 mt-4  rounded-lg p-4 shadow-lg bg-gray-100">
+          <img src={Images} alt="No Data Found" className="w-32 h-32 object-contain mb-2" />
+          <p className="text-lg font-semibold">No Data Found</p>
+        </div>
+        
         )}
 
         {/* Slots Section */}
