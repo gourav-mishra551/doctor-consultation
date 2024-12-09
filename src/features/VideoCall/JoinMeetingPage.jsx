@@ -37,7 +37,7 @@ const JoinMeetingPage = () => {
   const userId = localStorage.getItem("Id") || "default-user";
   const user = localStorage.getItem("user");
   const apiKey = "x84krkabkgdr"; // Replace with your API key
-  const tokenEndpoint = "https://api.assetorix.com/ah/api/v1/create-meeting/";  hhjjh// Replace with your actual token API
+  const tokenEndpoint = "https://api.assetorix.com/ah/api/v1/create-meeting/";// Replace with your actual token API
 
   useEffect(() => {
     const initialize = async () => {
