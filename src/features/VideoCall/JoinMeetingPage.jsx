@@ -11,6 +11,7 @@ import {
   StreamVideoClient,
   useCallStateHooks,
 } from "@stream-io/video-react-sdk";
+import { PiPhoneDisconnectFill } from "react-icons/pi";
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import { StreamChat } from "stream-chat";
 import {
@@ -191,7 +192,7 @@ const UILayout = () => {
             onClick={onDisconnect}
             className="p-2 bg-red-600 text-white rounded-lg ml-2"
           >
-            Disconnect
+           <PiPhoneDisconnectFill />
           </button>
         </CallControls>
 
