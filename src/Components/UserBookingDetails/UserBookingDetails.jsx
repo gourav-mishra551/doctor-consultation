@@ -773,13 +773,13 @@ const UserBookingDetails = () => {
           </div>
           {
             bookingDetailsData?.data?.roomId && (
-              <Link to={`https://doctor-consultation.vercel.app/video-call/join?call_id=${bookingDetailsData?.data?.roomId}&call_type=default`}>
+              <a href={`https://doctor-consultation.vercel.app/video-call/join?call_id=${bookingDetailsData?.data?.roomId}&call_type=default`} target="_blank">
                 <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
                   <button className="text-white px-2 py-1">
                     Join Meeting
                   </button>
                 </div>
-              </Link>
+              </a>
             )
           }
         </div>

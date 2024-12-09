@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Call,
   CallControls,
@@ -38,6 +39,26 @@ const JoinMeetingPage = () => {
   const user = localStorage.getItem("user");
   const apiKey = "x84krkabkgdr"; // Replace with your API key
   const tokenEndpoint = "https://api.assetorix.com/ah/api/v1/create-meeting/";// Replace with your actual token API
+
+  const navigate = useNavigate(); // Initialize navigate hook
+
+  // Disconnect Function
+  const disconnect = async () => {
+    try {
+      if (call) {
+        await call.leave();
+      }
+      if (chatClient) {
+        chatClient.disconnectUser();
+      }
+      if (videoClient) {
+        videoClient.disconnect();
+      }
+      navigate("/goodbye"); // Redirect to a page (e.g., "/goodbye")
+    } catch (error) {
+      console.error("Error disconnecting:", error);
+    }
+  };
 
   useEffect(() => {
     const initialize = async () => {
@@ -165,7 +186,15 @@ const UILayout = () => {
     <StreamTheme>
       <div className="flex-grow relative">
         <SpeakerLayout participantsBarPosition="bottom" />
-        <CallControls className="absolute bottom-4 left-0 right-0" />
+        <CallControls className="absolute bottom-4 left-0 right-0">
+          <button
+            onClick={onDisconnect}
+            className="p-2 bg-red-600 text-white rounded-lg ml-2"
+          >
+            Disconnect
+          </button>
+        </CallControls>
+
       </div>
     </StreamTheme>
   );
