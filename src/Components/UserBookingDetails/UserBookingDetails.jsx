@@ -20,11 +20,14 @@ const UserBookingDetails = () => {
   const [bookingDetailsData, setBookingDetailsData] = useState([]);
   const { ubid } = useParams();
   const { state } = useLocation();
+  const [uploadPdfLoader, setUploadPdfLoader] = useState(false);
   const [pdfBlob, setPdfBlob] = useState(null);
   const { formData, medicineData, pdfData, bpData } = state || {};
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
+
+  console.log(bookingDetailsData?.data?.doctorId?.doctorUserDetails?.name);
 
   const userBookingDetails = async () => {
     try {
@@ -646,17 +649,24 @@ const UserBookingDetails = () => {
       alert("No PDF to upload. Please generate the PDF first.");
       return;
     }
-
+    setUploadPdfLoader(true);
     try {
       const formData = new FormData();
       formData.append("files", pdfBlob, "Prescription.pdf");
-      formData.append("title", "Prescription Title"); // Example title
-      formData.append("typeOfRecord", "Health Record"); // Example type
-      formData.append("doctorName", "Dr. John Doe"); // Example doctor name
-      formData.append("disease", "Hypertension"); // Example disease
-      formData.append("firmName", "HealthCare Clinic"); // Example firm name
+      formData.append(
+        "title",
+        `Prescription by -${bookingDetailsData?.data?.doctorId?.doctorUserDetails?.name}`
+      ); // Example title
+      formData.append("typeOfRecord", "Prescription"); // Example type
+      formData.append(
+        "doctorName",
+        bookingDetailsData?.data?.doctorId?.doctorUserDetails?.name || ""
+      ); // Example doctor name
+      formData.append(
+        "firmName",
+        bookingDetailsData?.data?.doctorId?.hospitalName || "Ametheus Health"
+      ); // Example firm name
       formData.append("recordGeneratedDate", new Date().toISOString()); // Example date
-      formData.append("additionalNotes", "This is a sample note."); // Example notes
 
       const response = await axios.post(
         `https://api.assetorix.com/ah/api/v1/health-record`,
@@ -671,6 +681,7 @@ const UserBookingDetails = () => {
 
       console.log("File and data uploaded successfully:", response.data);
       toast.success("PDF uploaded to Health Records successfully!");
+      setUploadPdfLoader(false);
     } catch (error) {
       console.error("Error uploading PDF:", error);
       toast.error("Failed to upload the PDF.");
@@ -750,32 +761,25 @@ const UserBookingDetails = () => {
         {/* Download prescription button */}
         <div className="flex gap-5">
           {/* Conditional Rendering for Prescription Data */}
-          {bookingDetailsData?.data?.prescription &&
-            (bookingDetailsData?.data?.prescription?.bpData.bp ||
-              bookingDetailsData?.data?.prescription?.bpData.height ||
-              bookingDetailsData?.data?.prescription?.bpData.weight ||
-              bookingDetailsData?.data?.prescription?.bpData.temperature ||
-              bookingDetailsData?.data?.prescription?.formData?.length > 0 ||
-              bookingDetailsData?.data?.prescription?.medicineData?.length >
-                0) && (
-              <PDFDownloadLink
-                document={<PrescriptionPDF />}
-                fileName="Prescription.pdf"
-                className="bg-blue-500 text-white mt-5 py-2 px-4 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              >
-                {({ loading, blob }) => {
-                  if (blob && !pdfBlob) setPdfBlob(blob); // Save blob when it's available
-                  return loading
-                    ? "Loading Prescription..."
-                    : "Download Prescription";
-                }}
-              </PDFDownloadLink>
-            )}
+          {bookingDetailsData?.data?.prescription._id && (
+            <PDFDownloadLink
+              document={<PrescriptionPDF />}
+              fileName="Prescription.pdf"
+              className="bg-blue-500 text-white mt-5 py-2 px-4 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              {({ loading, blob }) => {
+                if (blob && !pdfBlob) setPdfBlob(blob); // Save blob when it's available
+                return loading
+                  ? "Loading Prescription..."
+                  : "Download Prescription";
+              }}
+            </PDFDownloadLink>
+          )}
 
           {/* Upload Button */}
           <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
             <button onClick={handleUploadPdf} className="text-white px-2 py-1">
-              Upload to Health Records
+              {uploadPdfLoader ? "Uploading..." : "Upload to Health Records"}
             </button>
           </div>
         </div>
