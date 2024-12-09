@@ -15,6 +15,8 @@ const DoctorsProfile = () => {
     rating: "",
     visitingMode: "",
   });
+  // const currency=localStorage.getItem("currency")
+
 
 
   // Function to fetch categories (initial fetch or when "View More" is clicked)
@@ -35,19 +37,33 @@ const DoctorsProfile = () => {
     fetchCategories();
     FetchDrProfile();
   }, []);
+
+  useEffect(()=>{
+     window.addEventListener('currencyChange' , FetchDrProfile)
+      return (()=>{
+        window.removeEventListener('currencyChange' , FetchDrProfile)
+      })
+  }, [])
+
+ 
   const FetchDrProfile = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
+  
+    const currency = localStorage.getItem("currency") || "INR"; // Fetch the currency from localStorage
+    const endpoint = `https://api.assetorix.com/ah/api/v1/dc/user/doctors?currency=${currency}`; // Add currency as a query parameter
+  
     try {
-      const res = await axios.get(
-        "https://api.assetorix.com/ah/api/v1/dc/user/doctors"
-      );
-      setDoctorData(res.data.data);
+      const res = await axios.get(endpoint);
+      console.log(res);
       
-    } catch (error) { }
-    finally {
-      setIsLoading(false)
+      setDoctorData(res.data.data);
+    } catch (error) {
+      console.error("Error fetching doctor profile:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+  
 
   const [showFilter, setShowFilter] = useState(false);
   const CheckLowestPrice = (DoctorData) => {
