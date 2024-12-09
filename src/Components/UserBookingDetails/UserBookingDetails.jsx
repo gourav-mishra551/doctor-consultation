@@ -764,14 +764,18 @@ const UserBookingDetails = () => {
               className="w-[100px] sm:w-[300px] rounded-md shadow-md border border-gray-200"
               alt="User"
             />
-            <div className="bg-[#00768A] hover:bg-[#005f70] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[250px] rounded-md mt-5 shadow-md">
-              <Link
-                to={`https://doctor-consultation.vercel.app/video-call/join?call_id=${bookingDetailsData?.data?.roomId}&call_type=default`}
-              >
-                <button className="text-white font-medium px-4 py-2 transition-transform transform hover:scale-105">
-                  Join Meeting
-                </button>
-              </Link>
+            <div className="">
+              {
+                bookingDetailsData?.data?.roomId && (
+                  <a href={`https://doctor-consultation.vercel.app/video-call/join?call_id=${bookingDetailsData?.data?.roomId}&call_type=default`} target="_blank">
+                    <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
+                      <button className="text-white px-2 py-1">
+                        Join Meeting
+                      </button>
+                    </div>
+                  </a>
+                )
+              }
             </div>
           </div>
         ) : (
@@ -790,7 +794,7 @@ const UserBookingDetails = () => {
         {/* Download prescription button */}
         <div className="flex gap-5">
           {/* Conditional Rendering for Prescription Data */}
-          {bookingDetailsData?.data?.prescription._id && (
+          {bookingDetailsData?.data?.prescription?._id && (
             <PDFDownloadLink
               document={<PrescriptionPDF />}
               fileName="Prescription.pdf"
@@ -811,20 +815,7 @@ const UserBookingDetails = () => {
               {uploadPdfLoader ? "Uploading..." : "Upload to Health Records"}
             </button>
           </div>
-<<<<<<< HEAD
-=======
-          {
-            bookingDetailsData?.data?.roomId && (
-              <a href={`https://doctor-consultation.vercel.app/video-call/join?call_id=${bookingDetailsData?.data?.roomId}&call_type=default`} target="_blank">
-                <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
-                  <button className="text-white px-2 py-1">
-                    Join Meeting
-                  </button>
-                </div>
-              </a>
-            )
-          }
->>>>>>> 953402c69fa339efebc542be223b792fc505bde8
+
         </div>
       </div>
     </>
