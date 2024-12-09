@@ -160,34 +160,6 @@ const UserBookings = () => {
                       </button>
                     </div>
                   </div>
-
-                  {/* Short Description */}
-                  {/* {consultation.short_description && (
-                    <div className="flex flex-col md:col-span-2">
-                      <span className="text-sm text-gray-500">
-                        Patient Problem
-                      </span>
-                      <p className="font-medium text-gray-800 text-sm">
-                        {consultation.short_description}
-                      </p>
-                    </div>
-                  )} */}
-
-                  {/* Start Time */}
-                  {/* <div className="flex flex-col">
-                    <span className="text-sm text-gray-500">Start Time</span>
-                    <span className="text-lg font-semibold text-gray-800">
-                      {formatTime(consultation?.specificSlotData?.startTime)}
-                    </span>
-                  </div> */}
-
-                  {/* End Time */}
-                  {/* <div className="flex flex-col">
-                    <span className="text-sm text-gray-500">End Time</span>
-                    <span className="text-lg font-semibold text-gray-800">
-                      {formatTime(consultation?.specificSlotData?.endTime)}
-                    </span>
-                  </div> */}
                 </div>
               )}
             </div>

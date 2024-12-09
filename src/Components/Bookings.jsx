@@ -82,10 +82,10 @@ const Bookings = () => {
             {history?.data?.map((consultation, index) => (
               <div key={index} className="bg-white shadow-lg rounded-lg">
                 <div
-                  className="flex justify-between items-center p-4 cursor-pointer bg-[#1495AB] text-white rounded-t-lg"
+                  className="flex justify-between items-center sm:p-4 py-4 px-4 cursor-pointer bg-[#1495AB] text-white rounded-t-lg"
                   onClick={() => toggleSection(index)}
                 >
-                  <h3 className="text-sm font-bold text-white">
+                  <h3 className="sm:text-sm text-[12px] font-bold text-white">
                     Consultation Date:{" "}
                     {convertToIST(consultation?.bookingDetails?.createdAt)}
                   </h3>
@@ -94,7 +94,7 @@ const Bookings = () => {
 
                 {openSection === index && (
                   <div className="p-6 flex flex-col">
-                    <div className="flex justify-between items-center">
+                    <div className="grid sm:grid-cols-3 grid-cols-2 gap-5 sm:gap-0 justify-between items-center">
                       {/* Consultation Formats */}
                       <div className="flex flex-col">
                         <span className="text-sm text-gray-500">

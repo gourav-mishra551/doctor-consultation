@@ -173,6 +173,7 @@ const EditProfile = () => {
           },
         }
       );
+      console.log(dataToEdit);
       toast.success("Data updated successfully!");
     } catch (error) {}
   };
