@@ -25,7 +25,7 @@ const Navbar = () => {
     localStorage.getItem("currency") || "INR"
   );
 
-  
+
   const [dropdown, setDropdown] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
@@ -39,7 +39,7 @@ const Navbar = () => {
   const [openSubMenus, setOpenSubMenus] = useState({});
   const [isMegaMenuVisible, setIsMegaMenuVisible] = useState(false);
   const [Categoriesdata, setCategorydata] = useState([]);
-  
+
   const submenuData = {
     PatientCare: [
       "Find A doctor",
@@ -62,19 +62,24 @@ const Navbar = () => {
           >
             <div
               key={index}
-              className="flex flex-col gap-3 items-start cursor-pointer"
+              className="flex flex-col items-center cursor-pointer bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-300 h-full min-h-[150px] justify-between"
             >
               <img
-                src={ele.image}
-                alt="image"
-                className="h-[35px] w-[35px] -mt-1"
+                src={ele?.image}
+                alt={ele?.specialtyName}
+                className="h-14 w-14 rounded-full object-cover mb-3"
               />
-              <p>{ele.specialtyName}</p>
-              <p>See all Doctors</p>
+              <p className="text-sm font-semibold text-gray-700 mb-1 text-center">
+                {ele.specialtyName}
+              </p>
+              <p className="text-xs font-medium text-blue-600 hover:underline">
+                See all Doctors
+              </p>
             </div>
           </Link>
         ))}
       </div>
+
     ),
     HealthInformation: [
       "Diseases and Condition",
@@ -105,7 +110,7 @@ const Navbar = () => {
     ],
   };
 
-  
+
   const toggleSubMenu = (menuKey) => {
     setOpenSubMenus((prevState) => ({
       ...prevState,
@@ -119,7 +124,7 @@ const Navbar = () => {
     }
   };
 
-  const handleCategoryClick = (Categoriesdata) => {};
+  const handleCategoryClick = (Categoriesdata) => { };
   handleCategoryClick();
 
   const handleMouseEnter = (item, event) => {
@@ -283,10 +288,10 @@ const Navbar = () => {
   const FetchCategoriesData = async () => {
     try {
       const res = await axios(
-        "https://api.assetorix.com/ah/api/v1/dc/user/Category"
+        "https://api.assetorix.com/ah/api/v1/dc/user/Category?limit=20"
       );
       setCategorydata(res.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const HandleScrolling = () => {
@@ -366,9 +371,8 @@ const Navbar = () => {
                 <FiUser />
                 <div
                   ref={dropdownRef}
-                  className={`absolute bg-white rounded-xl shadow-lg p-4 z-50  flex -left-[10rem] top-[50px] flex-col w-[20vw]   h-max ${
-                    dropdown ? "block" : "hidden"
-                  }`}
+                  className={`absolute bg-white rounded-xl shadow-lg p-4 z-50  flex -left-[10rem] top-[50px] flex-col w-[20vw]   h-max ${dropdown ? "block" : "hidden"
+                    }`}
                 >
                   {isLogin ? (
                     <div className="flex flex-col justify-betwee">
@@ -504,14 +508,14 @@ const Navbar = () => {
                           {
                             Array.isArray(submenuData[menu])
                               ? submenuData[menu].map((subItem, index) => (
-                                  <li
-                                    key={index}
-                                    className="block px-3 py-2 rounded-md text-sm hover:bg-blue-100 border-red-700"
-                                  >
-                                    <span className="p-2 mt-2">{subItem}</span>
-                                    <hr />
-                                  </li>
-                                ))
+                                <li
+                                  key={index}
+                                  className="block px-3 py-2 rounded-md text-sm hover:bg-blue-100 "
+                                >
+                                  <span className="p-2 mt-2">{subItem}</span>
+                                  <hr />
+                                </li>
+                              ))
                               : submenuData[menu] // Render the component (like CenterOfExcellence) for non-array data
                           }
                         </ul>
