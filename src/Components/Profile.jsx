@@ -159,7 +159,7 @@ const Profile = () => {
                     <li>
                       <p
                         onClick={() => handleSectionChange("selfuserprofile")}
-                        className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
+                        className="block p-2 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
                       >
                         View Users
                       </p>
@@ -175,7 +175,7 @@ const Profile = () => {
                     <li>
                       <p
                         onClick={() => handleSectionChange("user-bookings")}
-                        className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
+                        className="block p-2 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
                       >
                         My Bookings
                       </p>
@@ -209,7 +209,7 @@ const Profile = () => {
                           onClick={() =>
                             handleSectionChange("doctorselfprofile")
                           }
-                          className="block p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
+                          className="block p-2 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
                         >
                           View Profile
                         </p>
@@ -225,7 +225,7 @@ const Profile = () => {
                       <li>
                         <p
                           onClick={() => handleSectionChange("view-slots")}
-                          className="block cursor-pointer p-1 hover:bg-[#00768A] rounded-md hover:text-white text-black"
+                          className="block cursor-pointer p-2 hover:bg-[#00768A] rounded-md hover:text-white text-black"
                         >
                           View Slots
                         </p>
@@ -255,7 +255,7 @@ const Profile = () => {
                     <li>
                       <p
                         onClick={() => handleSectionChange("familyProfile")}
-                        className="block font-normal p-1 hover:bg-[#00768A] rounded-md hover:text-white text-gray-500 cursor-pointer"
+                        className="block font-normal p-2 hover:bg-[#00768A] rounded-md hover:text-white text-gray-500 cursor-pointer"
                       >
                         View Members
                       </p>

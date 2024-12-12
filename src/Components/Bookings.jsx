@@ -86,8 +86,19 @@ const Bookings = () => {
       {history?.data?.length > 0 ? (
         <div>
           <div className="sm:max-w-5xl w-full mx-auto sm:my-8 space-y-4">
-            <div className="top-detail-section">
-              <p className="text-gray-500 font-light">Your Appointments</p>
+            <div className="flex justify-between">
+              <div className="top-detail-section">
+                <p className="text-gray-500 font-light">Your Appointments</p>
+              </div>
+
+              <div
+                className="mr-2"
+                onClick={() => navigate("/profile?section=doctorselfprofile")}
+              >
+                <button className="px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400">
+                  Back
+                </button>
+              </div>
             </div>
             {history?.data?.map((consultation, index) => (
               <div key={index} className="bg-white shadow-lg rounded-lg">
