@@ -229,7 +229,7 @@ function DrAppointmentBooking({ IndiProfile, onNext, }) {
         </div>
 
         {/* Date Slider */}
-        {doctorAvailability.length > 1 ? (
+       
           <div className="relative ">
             <button
               onClick={scrollLeft}
@@ -278,13 +278,7 @@ function DrAppointmentBooking({ IndiProfile, onNext, }) {
               <MdKeyboardArrowRight className="text-2xl" />
             </button>
           </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center text-center text-gray-500 mt-4  rounded-lg p-4 shadow-lg bg-gray-100">
-          <img src={Images} alt="No Data Found" className="w-[200px] h-[200px] object-contain mb-2" />
-          <p className="text-lg font-semibold">No Data Found</p>
-        </div>
-        
-        )}
+      
 
         {/* Slots Section */}
         <div className="mt-8 space-y-6">
