@@ -8,14 +8,15 @@ import {
 } from "react-icons/md";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const EditProfile = () => {
-  const [activesection, setActiveSection] = useState("Doctor-Details");
+  const [activesection, setActiveSection] = useState("");
   const [openIndex, setOpenIndex] = useState(null);
   const [openSection, setOpenSection] = useState(null);
   const [faqs, setFaqs] = useState([]);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [dataToEdit, setDataToEdit] = useState({
     FAQ: [
       {
@@ -498,33 +499,44 @@ const EditProfile = () => {
     setIsProfileOpen(false);
   };
 
+  // Set activesection based on query parameter
+  useEffect(() => {
+    const sectionFromQuery = searchParams.get("section") || "Doctor-Details"; // Default to "Doctor-Details"
+    setActiveSection(sectionFromQuery);
+  }, [searchParams]);
+
+  // Function to handle section click
+  const handleSectionClick = (sectionName) => {
+    setActiveSection(sectionName);
+    setSearchParams({ section: sectionName }); // Update the query parameter
+  };
+
   return (
     <>
       <div className="sm:flex">
         <div className="w-[30%] bg-white shadow-sm px-5 py-10 sm:flex sm:flex-col hidden">
-          {/* Personal details part is here */}
+          {/* Doctor Details */}
           <div className="flex gap-3 justify-start items-center ml-5">
             <div
               className={`${
-                activesection == "Doctor-Details"
+                activesection === "Doctor-Details"
                   ? "rounded-full border-blue-500 text-blue-500 h-[40px] w-[40px] flex justify-center items-center border"
                   : "rounded-full bg-[#4358f6] flex justify-center items-center p-2 h-[40px] w-[40px]"
               }`}
             >
               <IoPerson
                 className={`${
-                  activesection == "Doctor-Details"
+                  activesection === "Doctor-Details"
                     ? "text-blue-500 text-[20px]"
                     : "text-white text-[20px]"
                 }`}
               />
             </div>
-
             <div>
               <p
-                onClick={() => setActiveSection("Doctor-Details")}
+                onClick={() => handleSectionClick("Doctor-Details")}
                 className={`${
-                  activesection == "Doctor-Details"
+                  activesection === "Doctor-Details"
                     ? "text-blue-500 font-bold text-xl cursor-pointer"
                     : "text-black font-bold text-xl cursor-pointer"
                 }`}
@@ -535,29 +547,28 @@ const EditProfile = () => {
           </div>
           <div className="bg-gray-300 h-[50px] w-[1px] ml-[40px]"></div>
 
-          {/* FAQ part is here */}
+          {/* FAQ */}
           <div className="flex gap-3 justify-start items-center ml-5">
             <div
               className={`${
-                activesection == "FAQ"
+                activesection === "FAQ"
                   ? "rounded-full border-[#46b8bc] text-blue-500 h-[40px] w-[40px] flex justify-center items-center border"
                   : "rounded-full bg-[#46b8bc] flex justify-center h-[40px] w-[40px] items-center"
               }`}
             >
               <FaQuestion
                 className={`${
-                  activesection == "FAQ"
+                  activesection === "FAQ"
                     ? "text-[#46b8bc] text-[22px]"
                     : "text-white text-[22px]"
                 }`}
               />
             </div>
-
             <div>
               <p
-                onClick={() => setActiveSection("FAQ")}
+                onClick={() => handleSectionClick("FAQ")}
                 className={`${
-                  activesection == "FAQ"
+                  activesection === "FAQ"
                     ? "text-[#46b8bc] font-bold text-xl cursor-pointer"
                     : "text-black font-bold text-xl cursor-pointer"
                 }`}
@@ -568,32 +579,28 @@ const EditProfile = () => {
           </div>
           <div className="bg-gray-300 h-[50px] w-[1px] ml-[40px]"></div>
 
-          {/* user-details part is here */}
+          {/* Qualification Details */}
           <div className="flex gap-3 justify-start items-center ml-5">
             <div
               className={`${
-                activesection == "qualification-details"
+                activesection === "qualification-details"
                   ? "rounded-full border-[#cc926e] text-blue-500 h-[40px] w-[40px] flex justify-center items-center border"
                   : "rounded-full bg-[#cc926e] flex justify-center items-center h-[40px] w-[40px]"
               }`}
             >
               <IoPerson
                 className={`${
-                  activesection == "qualification-details"
+                  activesection === "qualification-details"
                     ? "text-[#cc926e] text-[22px]"
                     : "text-white text-[22px]"
                 }`}
               />
             </div>
-
             <div>
               <p
-                onClick={() => {
-                  setActiveSection("qualification-details");
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
+                onClick={() => handleSectionClick("qualification-details")}
                 className={`${
-                  activesection == "qualification-details"
+                  activesection === "qualification-details"
                     ? "text-[#cc926e] font-bold text-xl cursor-pointer"
                     : "text-black font-bold text-xl cursor-pointer"
                 }`}
@@ -604,32 +611,28 @@ const EditProfile = () => {
           </div>
           <div className="bg-gray-300 h-[50px] w-[1px] ml-[40px]"></div>
 
-          {/* Experience part is here */}
+          {/* Experience */}
           <div className="flex gap-3 justify-start items-center ml-5">
             <div
               className={`${
-                activesection == "Experience"
+                activesection === "Experience"
                   ? "rounded-full border-[#6fcd9e] text-blue-500 h-[40px] w-[40px] flex justify-center items-center border"
                   : "rounded-full bg-[#6fcd9e] flex justify-center items-center h-[40px] w-[40px]"
               }`}
             >
               <MdOutlineTimer
                 className={`${
-                  activesection == "Experience"
+                  activesection === "Experience"
                     ? "text-[#6fcd9e] text-[22px]"
                     : "text-white text-[22px]"
                 }`}
               />
             </div>
-
             <div>
               <p
-                onClick={() => {
-                  setActiveSection("Experience");
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
+                onClick={() => handleSectionClick("Experience")}
                 className={`${
-                  activesection == "Experience"
+                  activesection === "Experience"
                     ? "text-[#6fcd9e] font-bold text-xl cursor-pointer"
                     : "text-black font-bold text-xl cursor-pointer"
                 }`}

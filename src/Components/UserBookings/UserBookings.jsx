@@ -10,10 +10,12 @@ import {
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import { IoCloudOffline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import noSlotsImage from "../../Assests/images.png";
 
 const UserBookings = () => {
   const [userBooking, setUserBooking] = useState([]);
   const [openSection, setOpenSection] = useState(null);
+  const [isLoading, setisLoading] = useState(false);
 
   // Mock tokens and IDs (Replace these with your actual logic)
   const token = localStorage.getItem("token");
@@ -22,6 +24,7 @@ const UserBookings = () => {
   const navigate = useNavigate();
 
   const userBookings = async () => {
+    setisLoading(true);
     try {
       const response = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/user/history`,
@@ -33,6 +36,7 @@ const UserBookings = () => {
         }
       );
       setUserBooking(response.data);
+      setisLoading(false);
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -73,6 +77,14 @@ const UserBookings = () => {
   useEffect(() => {
     userBookings();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center sm:mt-10">
+        <div className="loader"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -165,8 +177,17 @@ const UserBookings = () => {
             </div>
           ))
         ) : (
-          <div className="text-gray-500 text-center">
-            <p>No bookings till now</p>
+          <div className=" text-center">
+            <div className="flex flex-col items-center justify-center text-center mt-4  rounded-lg p-4 shadow-lg">
+              <img
+                src={noSlotsImage}
+                alt="noSlotsImage"
+                className="sm:w-[200px] object-contain mb-2"
+              />
+              <p className="text-center text-gray-500 mt-5">
+                No Bookings till now
+              </p>
+            </div>
           </div>
         )}
       </div>
