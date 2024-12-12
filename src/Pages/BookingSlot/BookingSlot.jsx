@@ -19,7 +19,7 @@ function BookingSlot() {
   const [DrProfile, setDrProfile] = useState(null);
   const { id } = useParams();
   const [step, setStep] = useState(1);
-  const [Loading,setLoading]=useState(false)
+  const [Loading, setLoading] = useState(false)
   const [paymentData, setPaymentData] = useState(null);
 
   const handlePaymentData = (data) => {
@@ -43,7 +43,7 @@ function BookingSlot() {
   }, []);
 
   const DrProfileFetch = async () => {
-   setLoading(true)
+    setLoading(true)
     try {
       const res = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/user/doctors/${id}`
@@ -51,21 +51,21 @@ function BookingSlot() {
       setDrProfile(res.data.data);
     } catch (error) {
       console.error("Error fetching doctor profile data:", error);
-    }finally{
+    } finally {
       setLoading(false)
     }
   };
-  
+
 
 
 
   if (!DrProfile) {
     return (
-      
-        <div className="flex justify-center items-center min-h-screen">
+
+      <div className="flex justify-center items-center min-h-screen">
         <div className="loader"></div>
       </div>
-      
+
     );
   }
 
@@ -175,11 +175,9 @@ function BookingSlot() {
                 title="Address"
                 value={
                   DrProfile?.clinic_hospital_address
-                    ? `${
-                        DrProfile.clinic_hospital_address.permanentAddress || ""
-                      }, ${DrProfile.clinic_hospital_address.state || ""}, ${
-                        DrProfile.clinic_hospital_address.city || ""
-                      }, ${DrProfile.clinic_hospital_address.PinCode || ""}`
+                    ? `${DrProfile.clinic_hospital_address.permanentAddress || ""
+                    }, ${DrProfile.clinic_hospital_address.state || ""}, ${DrProfile.clinic_hospital_address.city || ""
+                    }, ${DrProfile.clinic_hospital_address.PinCode || ""}`
                     : "Not available"
                 }
               />
@@ -191,9 +189,8 @@ function BookingSlot() {
         <div className="relative flex items-center w-full max-w-md justify-between">
           {/* Step 1 */}
           <div
-            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${
-              step >= 1 ? "text-white bg-[#00768A]" : "text-gray-500"
-            } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
+            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${step >= 1 ? "text-white bg-[#00768A]" : "text-gray-500"
+              } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
             onClick={() => handleStepClick(1)}
           >
             <RiNumber1 size={22} />
@@ -212,9 +209,8 @@ function BookingSlot() {
 
           {/* Step 2 */}
           <div
-            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${
-              step >= 2 ? "text-white bg-[#00768A] " : "text-white bg-gray-500"
-            } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
+            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${step >= 2 ? "text-white bg-[#00768A] " : "text-white bg-gray-500"
+              } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
             onClick={() => handleStepClick(2)}
           >
             <RiNumber2 size={22} />
@@ -223,9 +219,8 @@ function BookingSlot() {
 
           {/* Step 3 */}
           <div
-            className={`flex  z-10 flex-col items-center cursor-pointer transition-all duration-300 ${
-              step >= 3 ? "text-white bg-[#00768A]" : "text-white bg-gray-500"
-            } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20 <z-10></z-10>`}
+            className={`flex  z-10 flex-col items-center cursor-pointer transition-all duration-300 ${step >= 3 ? "text-white bg-[#00768A]" : "text-white bg-gray-500"
+              } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20 <z-10></z-10>`}
             onClick={() => handleStepClick(3)}
           >
             <RiNumber3 size={22} />
@@ -241,13 +236,11 @@ function BookingSlot() {
             onNext={handleNextStep}
             onSendPaymentData={handlePaymentData}
           />
-        ) : step === 3 ? (
+        ) : (
           <PrescriptionUpload
             onNext={handleNextStep}
             onPrevious={handlePreviousStep}
           />
-        ) : (
-          <Payment onPrevious={handlePreviousStep}  userData = {paymentData} doctorId = {DrProfile} />
         )}
       </div>
     </div>
