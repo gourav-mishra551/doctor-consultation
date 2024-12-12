@@ -20,6 +20,12 @@ function BookingSlot() {
   const { id } = useParams();
   const [step, setStep] = useState(1);
   const [Loading,setLoading]=useState(false)
+  const [paymentData, setPaymentData] = useState(null);
+
+  const handlePaymentData = (data) => {
+    setPaymentData(data); // Update parent's state with data from child
+    console.log("Received data from child:", data);
+  };
   const handleNextStep = () => {
     setStep(step + 1);
   };
@@ -233,6 +239,7 @@ function BookingSlot() {
           <DrAppointmentBooking
             IndiProfile={DrProfile}
             onNext={handleNextStep}
+            onSendPaymentData={handlePaymentData}
           />
         ) : step === 3 ? (
           <PrescriptionUpload
@@ -240,7 +247,7 @@ function BookingSlot() {
             onPrevious={handlePreviousStep}
           />
         ) : (
-          <Payment onPrevious={handlePreviousStep} />
+          <Payment onPrevious={handlePreviousStep}  userData = {paymentData} doctorId = {DrProfile} />
         )}
       </div>
     </div>
