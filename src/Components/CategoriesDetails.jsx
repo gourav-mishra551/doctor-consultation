@@ -6,6 +6,7 @@ import Faq from "./Faq";
 import DoctorCard from "./DoctorCard/DoctorCard";
 import Footer from "./Footer";
 import { RxCross1 } from "react-icons/rx";
+import { filter } from "lodash";
 
 function CategoriesDetails() {
   const [showFilter, setShowFilter] = useState(false);
@@ -15,54 +16,13 @@ function CategoriesDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const [filters, setFilters] = useState({
-    categoryID: "" || id,
+    categoryID:  id,
     name: "",
     gender: "",
     rating: "",
     visitingMode: "",
   });
-
-  useEffect(() => {
-    // Parse URL parameters
-    const searchParams = new URLSearchParams(window.location.search);
-    const initialFilters = {};
-    for (const [key, value] of searchParams.entries()) {
-      initialFilters[key] = value;
-    }
-
-    // If no filters are present in the URL, set default filters
-    const defaultFilters = {
-      rating: "",
-      visitingMode: "",
-      gender: "",
-      categoryID: "",
-      name: "",
-    };
-
-    // Merge URL filters with defaults
-    const appliedFilters = { ...defaultFilters, ...initialFilters };
-    setFilters(appliedFilters);
-
-    // Automatically apply filters
-    const fetchData = async () => {
-      try {
-        const query = Object.entries(appliedFilters)
-          .filter(([_, value]) => value) // Only include filters with values
-          .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-          .join("&");
-
-        const res = await axios.get(
-          `https://api.assetorix.com/ah/api/v1/dc/user/doctors?${query}`
-        );
-        setDoctersData(res.data.data);
-      } catch (error) {
-        console.error("Error fetching data on page load", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+  
   const handleFilterChange = (filterType, value) => {
     setFilters((prevFilters) => ({ ...prevFilters, [filterType]: value }));
   };
@@ -78,8 +38,9 @@ function CategoriesDetails() {
       window.history.pushState(null, "", `?${query}`);
 
       // Fetch filtered data
+       const currency =  localStorage.getItem("currency") || "INR"
       const res = await axios.get(
-        `https://api.assetorix.com/ah/api/v1/dc/user/doctors?${query}`
+        `https://api.assetorix.com/ah/api/v1/dc/user/doctors?${query}&currency=${currency}`
       );
       setDoctersData(res.data.data);
     } catch (error) {
@@ -88,12 +49,7 @@ function CategoriesDetails() {
     setShowFilter(false);
   };
 
-  // useEffect(() => {
-  //   FetchCategory(id);
-  //   FetchDoctorsData(id);
-  //   window.scroll(0,0)
-  // }, [id]);
-
+ 
   const FetchCategory = async (id) => {
     try {
       setIsLoading(true);

@@ -4,12 +4,19 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import Images from '../../src/Assests/images.png'
-function DrAppointmentBooking({ IndiProfile, onNext }) {
+import Payment from "./Payment/Payment";
+function DrAppointmentBooking({ IndiProfile, onNext, }) {
   const { doctorAvailability } = IndiProfile;
   const [selectedDate, setSelectedDate] = useState(null);
-  const [filter, setFilter] = useState("both");
+  const [filter, setFilter] = useState("online");
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const [loader, setLoader] = useState(false)
+  const [loader, setLoader] = useState(false);
+  const [orderId, setOrderId] = useState("");
+  const [amount, setAmount] = useState("");
+  const [currency, setCurrency] = useState("");
+  const [bookingId, setBookingId] = useState("");
+  const [keyId, setKeyId] = useState("");
+
   const [patientDetails, setPatientDetails] = useState({
     name: "",
     gender: "",
@@ -81,13 +88,13 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        `https://api.assetorix.com/ah/api/v1/dc/user/booking/${IndiProfile._id}`,
+        `https://api.assetorix.com/ah/api/v1/dc/user/booking/${IndiProfile?._id}`,
         {
           selectMode: filter,
           consultation_formats: "videoCall",
           patientDetails: patientDetails,
-          specificSlot: selectedSlot._id,
-          availabletimeSlots: selectedDate._id,
+          specificSlot: selectedSlot?._id,
+          availabletimeSlots: selectedDate?._id,
         },
         {
           headers: {
@@ -95,11 +102,18 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
             id: id,
           },
         }
+
       );
+
 
       if (response.status === 201) {
         toast.success("Slot Data saved Successfully!");
-        onNext();
+        setOrderId(response.data.orderId); // Store order ID for reference
+        setAmount(response.data.amount)
+        setCurrency(response.data.currency)
+        setBookingId(response.data.bookingId)
+        setKeyId(response.data.key_id)
+
       }
     } catch (error) {
       console.error("Error booking slot: ", error);
@@ -110,6 +124,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
       toast.error(errorMessage);
     }
   };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -126,11 +141,6 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
         return availability.onlineSlots || [];
       case "offline":
         return availability.offlineSlots || [];
-      case "both":
-        return [
-          ...(availability.onlineSlots || []),
-          ...(availability.offlineSlots || []),
-        ];
       default:
         return [];
     }
@@ -146,10 +156,11 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
   // Render individual slot
   const renderSlot = (slot) => (
     <div
-      key={slot._id}
-      className={`p-4 relative border rounded-lg transition-transform ${slot.isBooked
-          ? "bg-red-100 text-gray-700 cursor-not-allowed"
-          : "bg-green-100 hover:scale-105"
+
+      key={slot?._id}
+      className={`p-4 relative border rounded-lg transition-transform  ${orderId ? "bg-red-100" : slot.isBooked
+        ? "bg-red-100 text-gray-700 "
+        : "bg-green-100 hover:scale-105"
         }`}
     >
       <FaCheckCircle
@@ -168,20 +179,22 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
         <span className="font-medium">Charge:</span> ₹ {slot.doctorCharge}
       </p>
       <button
-        disabled={slot.isBooked}
+        disabled={slot.isBooked || orderId}
         onClick={() => setSelectedSlot(slot)}
-        className={`mt-4 w-full px-4 py-2 rounded-lg font-medium transition ${slot.isBooked
+        className={`mt-4 w-full px-4 py-2 rounded-lg font-medium transition ${orderId ? "cursor-not-allowed bg-red-500 text-white" :
+          slot.isBooked
             ? "bg-gray-400 text-white"
             : selectedSlot?._id === slot?._id
               ? "bg-green-700 text-white font-semibold shadow-xl"
               : "bg-[#00768A] text-white "
           }`}
       >
-        {slot.isBooked
-          ? "Slot is booked"
-          : selectedSlot?._id === slot?._id
-            ? "Selected"
-            : "Book"}
+        {orderId ? "Already selected one slot" :
+          slot.isBooked
+            ? "Slot is booked"
+            : selectedSlot?._id === slot?._id
+              ? "Selected"
+              : "Book"}
       </button>
     </div>
   );
@@ -200,13 +213,13 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
 
         {/* Slot Filter Buttons */}
         <div className="flex justify-center space-x-4 mb-8">
-          {["online", "offline", "both"].map((type) => (
+          {["online", "offline"].map((type) => (
             <button
               key={type}
               type="button"
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${filter === type
-                  ? "bg-[#00768A] text-white shadow-md"
-                  : "bg-gray-200 hover:bg-blue-100"
+                ? "bg-[#00768A] text-white shadow-md"
+                : "bg-gray-200 hover:bg-blue-100"
                 }`}
               onClick={() => setFilter(type)}
             >
@@ -233,8 +246,8 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
                 <div
                   key={index}
                   className={`w-24 sm:mx-auto text-center p-4 rounded-lg cursor-pointer ${selectedDate?.selectDate === availability?.selectDate
-                      ? "bg-[#00768A] text-white scale-105 shadow-lg"
-                      : "bg-gray-200 hover:bg-blue-100 hover:scale-105"
+                    ? "bg-[#00768A] text-white scale-105 shadow-lg"
+                    : "bg-gray-200 hover:bg-blue-100 hover:scale-105"
                     }`}
                   onClick={() => setSelectedDate(availability)}
                 >
@@ -284,7 +297,7 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
             )
             .map((availability) => (
               <div
-                key={availability._id}
+                key={availability?._id}
                 className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow"
               >
                 <p className="font-bold text-lg text-[#00768A] mb-2">
@@ -299,6 +312,9 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
                 <p className="text-sm font-semibold text-gray-600 bg-blue-100 px-3 py-1 rounded-lg inline-block">
                   Showing {filter} Slots
                 </p>
+                {orderId && <button type="button" onClick={() => window.location.reload()} className="ml-5 text-sm font-semibold text-gray-600 bg-blue-100 px-3 py-1 rounded-lg inline-block">
+                  select another slot
+                </button>}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                   {getFilteredSlots(availability).map(renderSlot)}
                 </div>
@@ -394,13 +410,21 @@ function DrAppointmentBooking({ IndiProfile, onNext }) {
             ></textarea>
           </div>
 
-          <button
-            type="submit"
-            className="mt-6 w-full px-6 py-3 bg-[#00768A] text-white rounded-lg text-lg transition-all duration-300 hover:bg-[#005f6e]"
-          >
-            Confirm Booking
-          </button>
+          {!orderId ? (
+            <button
+              type="submit"
+              className="mt-6 w-full px-6 py-3 bg-[#00768A] text-white rounded-lg text-lg transition-all duration-300 hover:bg-[#005f6e]"
+            >
+              Confirm Booking
+            </button>
+          ) : (
+            <Payment orderId={orderId} amount={amount} currency={currency} bookingId={bookingId} keyId={keyId} />
+          )}
+
+
         </form>
+
+
       )}
     </div>
   );
