@@ -7,7 +7,6 @@ import DoctorCard from "./DoctorCard/DoctorCard";
 import Footer from "./Footer";
 import { RxCross1 } from "react-icons/rx";
 
-
 function CategoriesDetails() {
   const [showFilter, setShowFilter] = useState(false);
   const [result, setResult] = useState({});
@@ -22,18 +21,63 @@ function CategoriesDetails() {
     rating: "",
     visitingMode: "",
   });
-  
+
+  useEffect(() => {
+    // Parse URL parameters
+    const searchParams = new URLSearchParams(window.location.search);
+    const initialFilters = {};
+    for (const [key, value] of searchParams.entries()) {
+      initialFilters[key] = value;
+    }
+
+    // If no filters are present in the URL, set default filters
+    const defaultFilters = {
+      rating: "",
+      visitingMode: "",
+      gender: "",
+      categoryID: "",
+      name: "",
+    };
+
+    // Merge URL filters with defaults
+    const appliedFilters = { ...defaultFilters, ...initialFilters };
+    setFilters(appliedFilters);
+
+    // Automatically apply filters
+    const fetchData = async () => {
+      try {
+        const query = Object.entries(appliedFilters)
+          .filter(([_, value]) => value) // Only include filters with values
+          .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+          .join("&");
+
+        const res = await axios.get(
+          `https://api.assetorix.com/ah/api/v1/dc/user/doctors?${query}`
+        );
+        setDoctersData(res.data.data);
+      } catch (error) {
+        console.error("Error fetching data on page load", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleFilterChange = (filterType, value) => {
     setFilters((prevFilters) => ({ ...prevFilters, [filterType]: value }));
   };
 
   const applyFilters = async () => {
-    setIsLoading(true)
     try {
       const query = Object.entries(filters)
         .filter(([_, value]) => value)
         .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
         .join("&");
+
+      // Update the URL with the filters
+      window.history.pushState(null, "", `?${query}`);
+
+      // Fetch filtered data
       const res = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/user/doctors?${query}`
       );
@@ -42,7 +86,6 @@ function CategoriesDetails() {
       console.error("Error fetching filtered data", error);
     }
     setShowFilter(false);
-    setIsLoading(false);
   };
 
   // useEffect(() => {
@@ -51,17 +94,14 @@ function CategoriesDetails() {
   //   window.scroll(0,0)
   // }, [id]);
 
-
   const FetchCategory = async (id) => {
     try {
       setIsLoading(true);
       const res = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/user/category/${id}`
       );
-      
 
       setResult(res.data);
-    
     } catch (error) {
       console.error("Error fetching category data", error);
     } finally {
@@ -82,27 +122,26 @@ function CategoriesDetails() {
       setLoading(false); // Set loading state to false once the request is complete
     }
   };
-  
+
   useEffect(() => {
     FetchCategory(id);
-    FetchDoctorsData(id, localStorage.getItem("currency")|| "INR"); // Ensure currency is passed here
+    FetchDoctorsData(id, localStorage.getItem("currency") || "INR"); // Ensure currency is passed here
     window.scroll(0, 0);
   }, [id]);
-  
+
   useEffect(() => {
     const handleCurrencyChange = () => {
       const currency = localStorage.getItem("currency"); // Get the updated currency
       FetchDoctorsData(id, currency); // Pass currency to FetchDoctorsData
     };
-  
-    window.addEventListener('currencyChange', handleCurrencyChange);
-  
+
+    window.addEventListener("currencyChange", handleCurrencyChange);
+
     return () => {
-      window.removeEventListener('currencyChange', handleCurrencyChange);
+      window.removeEventListener("currencyChange", handleCurrencyChange);
     };
   }, [id]);
-  
-  
+
   const stripHtmlTags = (str) => {
     const doc = new DOMParser().parseFromString(str, "text/html");
     return doc.body.textContent || "";
@@ -112,9 +151,9 @@ function CategoriesDetails() {
     <div>
       {isLoading ? (
         <div>
-        <div className="flex justify-center items-center min-h-screen">
-        <div className="loader"></div>
-      </div>
+          <div className="flex justify-center items-center min-h-screen">
+            <div className="loader"></div>
+          </div>
         </div>
       ) : (
         <div className="bg-[#CEDDE4]">
@@ -159,7 +198,7 @@ function CategoriesDetails() {
                   onClick={() => setShowFilter(false)}
                   className="absolute top-3 right-3 text-black text-2xl   focus:outline-none"
                 >
-                <RxCross1 />
+                  <RxCross1 />
                 </button>
 
                 {/* Modal Content */}
@@ -172,6 +211,7 @@ function CategoriesDetails() {
                   <div className="relative">
                     <input
                       type="text"
+                      value={filters.name}
                       placeholder="Search doctor..."
                       className="p-3 border border-[#00768A] rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#00768A] bg-[#f5f7fa]"
                       onChange={(e) =>
@@ -187,6 +227,7 @@ function CategoriesDetails() {
                     <div>
                       <p className="font-semibold">Rating</p>
                       <select
+                        value={filters.rating}
                         className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
                         onChange={(e) =>
                           handleFilterChange("rating", e.target.value)
@@ -205,6 +246,7 @@ function CategoriesDetails() {
                     <div>
                       <p className="font-semibold">Visiting Mode</p>
                       <select
+                        value={filters.visitingMode}
                         className="p-2 border border-[#00768A] rounded-lg w-full bg-[#f5f7fa] focus:outline-none"
                         onChange={(e) =>
                           handleFilterChange("visitingMode", e.target.value)
@@ -226,7 +268,7 @@ function CategoriesDetails() {
                             <input
                               type="radio"
                               name="gender"
-                              value={gender.toLowerCase()}
+                              value={filters.gender}
                               onChange={(e) =>
                                 handleFilterChange("gender", e.target.value)
                               }
@@ -248,7 +290,7 @@ function CategoriesDetails() {
                         }
                       >
                         <option value="">All</option>
-                        {result?.categoryList?.map((specialist , index) => (
+                        {result?.categoryList?.map((specialist, index) => (
                           <option key={index} value={specialist?._id}>
                             {specialist?.specialtyName}
                           </option>
@@ -272,7 +314,7 @@ function CategoriesDetails() {
           )}
           <div className="max-w-[1200px] justify-between mx-auto mt-10 flex flex-col-reverse md:flex-row gap-10 bg-[#CEDDE4] p-5">
             {/* Filter Section (Desktop Only) */}
-            <div className="hidden md:flex flex-col gap-5   sm:w-[100%] md:w-[100%] max-w-[350px]  h-max rounded-xl shadow-md bg-white py-6 px-6 sticky top-0  ">
+            <div className="hidden md:flex flex-col gap-5    sm:w-[100%] md:w-[100%] max-w-[350px]  h-max rounded-xl shadow-md bg-white py-6 px-6 sticky top-0  ">
               <p className="font-semibold text-center text-2xl text-[#00768A]">
                 Doctor Profile
               </p>
@@ -355,7 +397,7 @@ function CategoriesDetails() {
                     }
                   >
                     <option value="">All</option>
-                    {result?.categoryList?.map((specialist , index) => (
+                    {result?.categoryList?.map((specialist, index) => (
                       <option key={index} value={specialist?._id}>
                         {specialist.specialtyName}
                       </option>
@@ -379,29 +421,15 @@ function CategoriesDetails() {
           </div>
 
           {/* Long Description */}
-          <div
-            style={{
-              marginTop: "30px",
-              height: "auto",
-              backgroundColor: "rgb(249,250,251)",
-              padding: "60px",
-            }}
-          >
-            <p
-              style={{
-                textAlign: "center",
-                width: "80%",
-                alignItems: "center",
-                margin: "auto",
-                justifyContent: "center",
-              }}
-            >
-              {stripHtmlTags(result?.data.longDescription)}
-            </p>
+          <div className="mt-8 bg-gray-50 p-16">
+            <div
+              className="text-justify w-4/5 mx-auto font-serif text-gray-800"
+              dangerouslySetInnerHTML={{ __html: result?.data.longDescription }}
+            ></div>
           </div>
 
           {/* FAQ */}
-          <Faq result={result?.data}   />
+          <Faq result={result?.data} />
           <Footer />
         </div>
       )}

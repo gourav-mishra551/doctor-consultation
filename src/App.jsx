@@ -61,6 +61,10 @@ import PdfGeneratorPrescription from "./Components/PdfGeneratorPrescription/PdfG
 import PDFGenerator from "./Components/presception/Prescription";
 import BookingDetails from "./Components/BookingDetails/BookingDetails";
 import UserBookingDetails from "./Components/UserBookingDetails/UserBookingDetails";
+import AlphaPrescription from "./Components/AlphaPrescription/AlphaPrescription";
+import PackingList from "./Components/AlphaPrescription/PackingList";
+import AlphaComercial from "./Components/AlphaPrescription/AlphaComercial";
+import CommercialInvoice from "./Components/AlphaPrescription/commercialInvoice";
 
 function App() {
   const location = useLocation();
@@ -160,6 +164,10 @@ function App() {
           path="/user-booking-details/:ubid"
           element={<UserBookingDetails />}
         />
+        <Route path="/alpha-prescription" element={<AlphaPrescription/>}/>
+        <Route path="/alpha-packing-list" element={<PackingList/>}/>
+        <Route path="/alpha-commercial-invoice" element={<AlphaComercial/>}/>
+        <Route path="/commercial-invoice-goods" element={<CommercialInvoice/>}/>
       </Routes>
     </div>
   );
