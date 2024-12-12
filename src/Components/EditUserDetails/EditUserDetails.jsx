@@ -67,6 +67,7 @@ const EditUserDetails = () => {
         .patch(
           `https://api.assetorix.com/ah/api/v1/user/avatar`,
           avatarFormData,
+         
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -92,7 +93,7 @@ const EditUserDetails = () => {
       const response = await axios.patch(
         `https://api.assetorix.com/ah/api/v1/user`,
         formData,
-        {
+              {
           headers: {
             authorization: `Bearer ${token}`,
             id: id,
@@ -100,6 +101,7 @@ const EditUserDetails = () => {
         }
       );
       toast.success("Updated successfully...");
+      localStorage.setItem("user",formData.name)
     } catch (error) {
     } finally {
       setUpdateLoader(false);
