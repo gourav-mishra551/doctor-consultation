@@ -67,53 +67,33 @@ function CategoriesDetails() {
     setFilters((prevFilters) => ({ ...prevFilters, [filterType]: value }));
   };
 
+  const applyFilters = async () => {
+    try {
+      const query = Object.entries(filters)
+        .filter(([_, value]) => value)
+        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+        .join("&");
 
-  const applyFilters = () => {
-    // Parse URL parameters
-    const searchParams = new URLSearchParams(window.location.search);
-    const initialFilters = {};
-    for (const [key, value] of searchParams.entries()) {
-      initialFilters[key] = value;
+      // Update the URL with the filters
+      window.history.pushState(null, "", `?${query}`);
+
+      // Fetch filtered data
+      const res = await axios.get(
+        `https://api.assetorix.com/ah/api/v1/dc/user/doctors?${query}`
+      );
+      setDoctersData(res.data.data);
+    } catch (error) {
+      console.error("Error fetching filtered data", error);
     }
-  
-    // Set default filters
-    const defaultFilters = {
-      rating: "",
-      visitingMode: "",
-      gender: "",
-      categoryID: "",
-      name: "",
-    };
-  
-    // Merge URL filters with defaults
-    const appliedFilters = { ...defaultFilters, ...initialFilters };
-    setFilters(appliedFilters);
-  
-    // Automatically apply filters
-    const fetchFilteredData = async () => {
-      try {
-        const query = Object.entries(appliedFilters)
-          .filter(([_, value]) => value) // Only include filters with values
-          .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-          .join("&");
-  
-        const res = await axios.get(
-          `https://api.assetorix.com/ah/api/v1/dc/user/doctors?${query}`
-        );
-        setDoctersData(res.data.data);
-      } catch (error) {
-        console.error("Error fetching data with filters", error);
-      }
-    };
-  
-    fetchFilteredData();
+    setShowFilter(false);
   };
 
-  useEffect(() => {
-    FetchCategory(id); // Fetch the category data
-    FetchDoctorsData(id, localStorage.getItem("currency") || "INR"); // Fetch doctors' data
-    window.scroll(0, 0);
-  }, [id]);
+  // useEffect(() => {
+  //   FetchCategory(id);
+  //   FetchDoctorsData(id);
+  //   window.scroll(0,0)
+  // }, [id]);
+
   const FetchCategory = async (id) => {
     try {
       setIsLoading(true);
@@ -135,14 +115,7 @@ function CategoriesDetails() {
       const res = await axios.get(
         `https://api.assetorix.com/ah/api/v1/dc/user/doctors?categoryID=${id}&currency=${currency}`
       );
-  
-      const doctorsData = res.data.data;
-      setDoctersData(doctorsData); // Update the state with fetched doctors' data
-  
-      // If doctors' data is not empty, trigger additional filters
-      if (doctorsData && doctorsData.length > 0) {
-        applyFilters(); // Call the filters function if there are doctors
-      }
+      setDoctersData(res.data.data); // Ensure the correct spelling (Doctors instead of Docters)
     } catch (error) {
       console.error("Error fetching data", error);
     } finally {
