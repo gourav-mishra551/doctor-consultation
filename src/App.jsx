@@ -65,6 +65,9 @@ import AlphaPrescription from "./Components/AlphaPrescription/AlphaPrescription"
 import PackingList from "./Components/AlphaPrescription/PackingList";
 import AlphaComercial from "./Components/AlphaPrescription/AlphaComercial";
 import CommercialInvoice from "./Components/AlphaPrescription/commercialInvoice";
+import Proforma from "./Components/AlphaPrescription/Proforma";
+import SoftCorporate from "./Components/AlphaPrescription/SoftCorporate";
+import CommercialInvoicePharma from "./Components/AlphaPrescription/CommercialInvoicePharma";
 
 function App() {
   const location = useLocation();
@@ -164,10 +167,14 @@ function App() {
           path="/user-booking-details/:ubid"
           element={<UserBookingDetails />}
         />
+        
         <Route path="/alpha-prescription" element={<AlphaPrescription/>}/>
         <Route path="/alpha-packing-list" element={<PackingList/>}/>
         <Route path="/alpha-commercial-invoice" element={<AlphaComercial/>}/>
         <Route path="/commercial-invoice-goods" element={<CommercialInvoice/>}/>
+        <Route path="/aalphaa-proforma-invoice" element={<Proforma/>}/>
+        <Route path="/Soft-corporate" element={<SoftCorporate/>}/>
+        <Route path="/commercial-invoice-pharma" element={<CommercialInvoicePharma/>}/>
       </Routes>
     </div>
   );

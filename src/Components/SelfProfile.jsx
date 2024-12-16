@@ -42,17 +42,11 @@ const SelfProfile = ({ handleSectionChange }) => {
   }
   return (
     <div>
-      <div className="flex justify-end ">
-        <button
-          onClick={() => handleSectionChange("edituserprofile")}
-          className="bg-[#00768A] text-white px-5 py-1 rounded-md"
-        >
-          Edit
-        </button>
-      </div>
+     
       <div className="bg-white shadow-md rounded-lg p-6 max-w-4xl mx-auto my-8">
         {/* Header with Avatar and Name */}
-        <div className="flex items-center space-x-4 border-b pb-4 mb-4">
+        <div className="flex justify-between space-x-4 border-b pb-4 mb-4">
+          <div>
           <img
             src={userProfileData?.data?.avatar || dummyImage}
             alt="userprofiledata.data Avatar"
@@ -66,8 +60,18 @@ const SelfProfile = ({ handleSectionChange }) => {
               UHID: {userProfileData?.data?.uhid}
             </p>
           </div>
+          </div>
+          <div className="flex justify-end h-[30px]  ">
+          <button
+            onClick={() => handleSectionChange("edituserprofile")}
+            className="bg-[#00768A] text-white px-5 py-1 rounded-[5px]"
+          >
+            Edit
+          </button>
+        </div>
         </div>
 
+        
         {/* userprofiledata.data Details Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Authentication Method */}

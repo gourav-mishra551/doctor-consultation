@@ -5,7 +5,8 @@ import { FaImage, FaUserEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import EditFamilyMemebrs from "../EditFamilyMemebrs";
 import { RxCross2 } from "react-icons/rx";
-
+import { useNavigate } from "react-router-dom";
+import noSlotsImage from '../../../src/Assests/images.png'
 const ViewFamilyMembers = ({ setActiveSection }) => {
   const [isLoading, setisLoading] = useState(false);
   const [deleteAlert, setDeleteAlert] = useState(false);
@@ -25,6 +26,7 @@ const ViewFamilyMembers = ({ setActiveSection }) => {
     otherRelation: "",
   });
 
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("Id");
   const user = localStorage.getItem("user");
@@ -169,13 +171,24 @@ const ViewFamilyMembers = ({ setActiveSection }) => {
     <>
       {user && id ? (
         <div className="flex flex-col gap-5">
-          <div className="flex justify-end">
-            <button
-              onClick={() => setAddFamilyPopup(true)}
-              className="bg-[#00768A] text-white px-2 py-1 rounded-md "
+          <div className="flex justify-between">
+            <div
+              className="mr-2"
+              onClick={() => navigate("/profile?section=selfuserprofile")}
             >
-              Add members
-            </button>
+              <button className="px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400">
+                Back
+              </button>
+            </div>
+
+            <div className="flex justify-end">
+              <button
+                onClick={() => setAddFamilyPopup(true)}
+                className="bg-[#00768A] text-white px-2 py-1 rounded-md "
+              >
+                Add members
+              </button>
+            </div>
           </div>
           {familyData?.data?.length > 0 ? (
             <>
@@ -236,7 +249,16 @@ const ViewFamilyMembers = ({ setActiveSection }) => {
               ))}
             </>
           ) : (
-            <div>No Family Members Available </div>
+            <div className="flex flex-col gap-3 justify-center items-center">
+              <div className="flex flex-col items-center justify-center text-center text-gray-500 mt-4  rounded-lg p-4 shadow-lg bg-gray-100">
+                <img
+                  src={noSlotsImage}
+                  alt="noSlotsImage"
+                  className="sm:w-[200px] object-contain mb-2"
+                />
+              </div>
+              <p className="text-center text-gray-500">No Data Available</p>
+            </div>
           )}
 
           {deleteAlert && (
