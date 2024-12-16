@@ -31,7 +31,7 @@ function MegaMenu() {
   const submenuData = {
     PatientCare: [
       "Find A doctor",
-      "Apollo Surgery-Assured Price",
+      "Ametheus Surgery-Assured Price",
       "Clinical Quality and Outcome",
       "Service Excellence",
       "Patient Testimonials",
@@ -70,14 +70,14 @@ function MegaMenu() {
       "Visa",
       "Amethus Insurance",
     ],
-    HospitalsDetails: [
-      "Courses",
-      "Academics",
-      "Clinical Research",
-      "Honors List",
-      "Amethus Torch: Alumni Network",
-      "New Medicine",
-    ],
+    // HospitalsDetails: [
+    //   "Courses",
+    //   "Academics",
+    //   "Clinical Research",
+    //   "Honors List",
+    //   "Amethus Torch: Alumni Network",
+    //   "New Medicine",
+    // ],
     OurServices: [
       "Medicine",
       "General Medicine",

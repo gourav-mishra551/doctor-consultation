@@ -20,6 +20,7 @@ const Bookings = () => {
   const [history, setHistory] = useState([]);
   const navigate = useNavigate();
   const [isLoading, setisLoading] = useState(false);
+  const [status, setStatus] = useState("Accepted");
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -54,7 +55,7 @@ const Bookings = () => {
     setisLoading(true);
     try {
       const response = await axios.get(
-        "https://api.assetorix.com/ah/api/v1/dc/doctor/history",
+        `https://api.assetorix.com/ah/api/v1/dc/doctor/history?status=${status}`,
         {
           headers: {
             authorization: `Bearer ${token}`,
@@ -70,9 +71,7 @@ const Bookings = () => {
 
   useEffect(() => {
     bookings();
-  }, []);
-
-  console.log(history);
+  }, [status]);
 
   if (isLoading) {
     return (
@@ -83,25 +82,42 @@ const Bookings = () => {
   }
   return (
     <div>
-      {history?.data?.length > 0 ? (
-        <div>
-          <div className="sm:max-w-5xl w-full mx-auto sm:my-8 space-y-4">
-            <div className="flex justify-between">
-              <div className="top-detail-section">
-                <p className="text-gray-500 font-light">Your Appointments</p>
-              </div>
-
-              <div
-                className="mr-2"
-                onClick={() => navigate("/profile?section=doctorselfprofile")}
-              >
-                <button className="px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400">
-                  Back
-                </button>
-              </div>
+      <div>
+        <div className="sm:max-w-5xl w-full mx-auto sm:my-8 space-y-4">
+          <div className="flex justify-between">
+            <div className="top-detail-section">
+              <p className="text-gray-500 font-light">Your Appointments</p>
             </div>
-            {history?.data?.map((consultation, index) => (
-              <div key={index} className="bg-white shadow-lg rounded-lg">
+
+            <div className="w-full max-w-xs mx-auto mt-4">
+              <label
+                htmlFor="status"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Select Status
+              </label>
+              <select
+                value={status} // Bind the current state value here
+                onChange={(e) => setStatus(e.target.value)} // Update state on change
+                className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+              >
+                <option value="Accepted">Accepted</option>
+                <option value="Completed">Complete</option>
+              </select>
+            </div>
+
+            <div
+              className="mr-2"
+              onClick={() => navigate("/profile?section=doctorselfprofile")}
+            >
+              <button className="px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400">
+                Back
+              </button>
+            </div>
+          </div>
+          {history?.data?.length > 0 ? (
+            history?.data?.map((consultation, index) => (
+              <div key={index} className="bg-white shadow-lg rounded-lg ">
                 <div
                   className="flex justify-between items-center sm:p-4 py-4 px-4 cursor-pointer bg-[#1495AB] text-white rounded-t-lg"
                   onClick={() => toggleSection(index)}
@@ -169,7 +185,7 @@ const Bookings = () => {
                         </span>
                       </div>
 
-                      {/* button */}
+                      {/* Button */}
                       <div className="bg-[#25a53b] text-white px-2 py-1 rounded-md sm:w-[50%] flex justify-center">
                         <button
                           onClick={() =>
@@ -182,83 +198,15 @@ const Bookings = () => {
                         </button>
                       </div>
                     </div>
-
-                    {/* Short Description */}
-                    {/* <div className="flex flex-col md:col-span-2">
-                      <span className="text-sm text-gray-500">
-                        Patient Problem
-                      </span>
-                      <p className="font-medium text-gray-800 text-sm">
-                        {consultation?.bookingDetails?.short_description}
-                      </p>
-                    </div> */}
-
-                    {/* Start Time */}
-                    {/* <div className="flex flex-col">
-                      <span className="text-sm text-gray-500">Start Time</span>
-                      <span className="text-lg font-semibold text-gray-800">
-                        {formatTime(
-                          consultation?.bookingDetails?.specificSlotData
-                            ?.startTime
-                        )}
-                      </span>
-                    </div>  */}
-
-                    {/* End Time */}
-                    {/* <div className="flex flex-col">
-                      <span className="text-sm text-gray-500">End Time</span>
-                      <span className="text-lg font-semibold text-gray-800">
-                        {formatTime(
-                          consultation?.bookingDetails?.specificSlotData
-                            ?.endTime
-                        )}
-                      </span>
-                    </div>
-
-                    {/* Updated At */}
-                    {/* <div className="flex flex-col">
-                      <span className="text-sm text-gray-500">
-                        Last Updated
-                      </span>
-                      <span className="text-sm font-semibold text-gray-800">
-                        <div className="flex sm:w-[30%] w-full rounded-xl border justify-center items-center p-1 gap-2">
-                          <span>
-                            {convertToIST(
-                              consultation?.bookingDetails?.updatedAt
-                            )}
-                          </span>
-                          <IoIosTimer />
-                        </div>
-                      </span>
-                    </div> */}
-
-                    {/* User ID */}
-                    {/* <div className="flex flex-col">
-                      <span className="text-sm text-gray-500">Booking ID</span>
-                      <span className="text-sm font-semibold text-gray-800">
-                        {consultation?.bookingDetails?._id}
-                      </span>
-                    </div> */}
-
-                    {/* Make Prescription */}
-                    {/* <div className="flex flex-col sm:w-[150px] w-full">
-                      <Link
-                        to={`/prescription-maker/${consultation?.bookingDetails?._id}`}
-                      >
-                        <button className="bg-[#944120] hover:bg-[#6e341d] transition-all duration-500 ease-in-out p-2 text-white rounded-md">
-                          Make Prescription
-                        </button>
-                      </Link>
-                    </div> */}
                   </div>
                 )}
               </div>
-            ))}
-          </div>
+            ))
+          ) : (
+            <div className="text-center text-gray-500">No Booking Till Now</div>
+          )}
         </div>
-      ) : (
-        <div className="text-center text-gray-500">No Booking Till Now </div>
-      )}
+      </div>
     </div>
   );
 };
