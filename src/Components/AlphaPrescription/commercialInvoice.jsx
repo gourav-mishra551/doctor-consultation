@@ -256,7 +256,7 @@ const PDFDocument = () => (
             "12345",
             "5%",
             "5%",
-            "100 kg",
+            "lorem dskjsd sdksd sdlksd sd sdlksd sdlksdd  klsdslk lksdlk sdlksds lkdlk ",
             "55",
             "10",
             "5000",

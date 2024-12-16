@@ -8,8 +8,7 @@ import {
   Image,
   PDFDownloadLink,
 } from "@react-pdf/renderer";
-import Icon from "../../../src/Assests/fav-icon.png"; // Importing the icon image
-import AmethusLogo from "../../../src/Assests/ametheus-helath-logo.jpg"; // Importing the logo image
+
 
 const AlphaPrescription = () => {
   const [signature, setSignature] = useState(null);

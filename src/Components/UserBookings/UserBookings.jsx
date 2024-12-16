@@ -89,8 +89,18 @@ const UserBookings = () => {
   return (
     <div>
       <div className="sm:max-w-5xl w-full mx-auto sm:my-8 space-y-4">
-        <div className="top-detail-section">
-          <p className="text-gray-500 font-light">Your Previous Bookings</p>
+        <div className="flex justify-between">
+          <div className="top-detail-section">
+            <p className="text-gray-500 font-light">Your Previous Bookings</p>
+          </div>
+          <div
+            className="mr-2"
+            onClick={() => navigate("/profile?section=selfuserprofile")}
+          >
+            <button className="px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400">
+              Back
+            </button>
+          </div>
         </div>
         {userBooking?.data?.length > 0 ? (
           userBooking?.data?.map((consultation, index) => (

@@ -5,6 +5,7 @@ import { CiBookmarkCheck } from "react-icons/ci";
 import { FaEdit } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import noSlotsImage from "../../Assests/images.png";
+import { useNavigate } from "react-router-dom";
 
 const AllSlots = ({ setActiveSection, handleSectionChange }) => {
   const [slotsData, setSlotsData] = useState([]);
@@ -19,7 +20,7 @@ const AllSlots = ({ setActiveSection, handleSectionChange }) => {
     doctorCharge: "",
     isBooked: "",
   });
-
+const navigate=useNavigate()
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
 
@@ -134,15 +135,26 @@ const AllSlots = ({ setActiveSection, handleSectionChange }) => {
               <p className="sm:text-[18px] text-[13px]">Offline slots</p>
             </div>
           </div>
-          <div className="flex justify-end sm:mt-0 mt-5 sm:mb-0 mb-4">
-            <button
-              onClick={() => {
-                handleSectionChange("create-slots"), console.log("Clicked");
-              }}
-              className="bg-[#00768A] text-white py-1 px-2 rounded-xl"
+          <div className="flex justify-between">
+            <div
+              className="mr-2"
+              onClick={() => navigate("/profile?section=doctorselfprofile")}
             >
-              Create Slots
-            </button>
+              <button className="px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400">
+                Back
+              </button>
+            </div>
+
+            <div className="flex justify-end sm:mt-0 mt-5 sm:mb-0 mb-4">
+              <button
+                onClick={() => {
+                  handleSectionChange("create-slots"), console.log("Clicked");
+                }}
+                className="bg-[#00768A] text-white py-1 px-2 rounded-[5px]"
+              >
+                Create Slots
+              </button>
+            </div>
           </div>
           <div className="grid sm:grid-cols-2 grid-cols-1 gap-5 sm:p-6 h-auto">
             {slotsData?.doctorAvailabilities?.map((data, index) => (

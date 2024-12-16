@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -23,7 +23,7 @@ function DrAppointmentBooking({ IndiProfile, onNext, }) {
     dateOfBirth: "",
     reasonForAppointment: "",
   });
-
+  const sliderRef = useRef(null);
   const token = localStorage.getItem("token");
   const idUser = localStorage.getItem("id");
   const userData = async () => {
@@ -50,8 +50,7 @@ function DrAppointmentBooking({ IndiProfile, onNext, }) {
     }
   }
 
-  const sliderRef = useState(null);
-
+  
   useEffect(() => {
     userData()
   }, []);

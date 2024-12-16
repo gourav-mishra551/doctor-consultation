@@ -765,17 +765,18 @@ const UserBookingDetails = () => {
               alt="User"
             />
             <div className="">
-              {
-                bookingDetailsData?.data?.roomId && (
-                  <a href={`https://doctor-consultation.vercel.app/video-call/join?call_id=${bookingDetailsData?.data?.roomId}&call_type=default`} target="_blank">
-                    <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
-                      <button className="text-white px-2 py-1">
-                        Join Meeting
-                      </button>
-                    </div>
-                  </a>
-                )
-              }
+              {bookingDetailsData?.data?.roomId && (
+                <a
+                  href={`https://doctor-consultation.vercel.app/video-call/join?call_id=${bookingDetailsData?.data?.roomId}&call_type=default`}
+                  target="_blank"
+                >
+                  <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
+                    <button className="text-white px-2 py-1">
+                      Join Meeting
+                    </button>
+                  </div>
+                </a>
+              )}
             </div>
           </div>
         ) : (
@@ -809,13 +810,17 @@ const UserBookingDetails = () => {
             </PDFDownloadLink>
           )}
 
-          {/* Upload Button */}
-          <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
-            <button onClick={handleUploadPdf} className="text-white px-2 py-1">
-              {uploadPdfLoader ? "Uploading..." : "Upload to Health Records"}
-            </button>
-          </div>
-
+          {bookingDetailsData?.data?.prescription?._id && (
+            // Upload Button
+            <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
+              <button
+                onClick={handleUploadPdf}
+                className="text-white px-2 py-1"
+              >
+                {uploadPdfLoader ? "Uploading..." : "Upload to Health Records"}
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
