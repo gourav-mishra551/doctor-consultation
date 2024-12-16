@@ -4,7 +4,7 @@ import axios from "axios";
 import PrescriptionUploadData from "../PrescriptionUploadData/PrescriptionUploadData";
 import { RxCross1 } from "react-icons/rx";
 
-const PrescriptionUpload = ({ onPrevious }) => {
+const PrescriptionUpload = ({ onPrevious , doctorBookingId }) => {
     const [healthData, setHealthData] = useState(null); // State to store the API data
     const [error, setError] = useState(null); // State to store errors
     const [upload, setUpload] = useState(false); // State for upload toggle
@@ -30,8 +30,8 @@ const PrescriptionUpload = ({ onPrevious }) => {
     const submitSelectedFiles = async () => {
         try {
             await axios.post(
-                "https://api.assetorix.com/ah/api/v1/dc/user/booking",
-                { fileIds: selectedFiles },
+                `https://api.assetorix.com/ah/api/v1/dc/user/booking/${doctorBookingId}/sharerecords`,
+                { healthRecords: selectedFiles },
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -79,7 +79,7 @@ const PrescriptionUpload = ({ onPrevious }) => {
             </div>
 
             <h1 className="text-center text-lg font-semibold uppercase mb-6">
-                Share Your Health Record with Doctor
+                Select and  Share Your Health Record with Doctor
             </h1>
             <div className="flex flex-wrap justify-between">
                 {healthData?.data?.length > 0 ? (
