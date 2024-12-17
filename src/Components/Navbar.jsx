@@ -17,20 +17,17 @@ import { AiOutlineLogout } from "react-icons/ai";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
-  const [query, setQuery] = useState("");
   const [currency, setCurrency] = useState(
     localStorage.getItem("currency") || "INR"
   );
-
-
   const [dropdown, setDropdown] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
-  const searchResultsRef = useRef(null);
   const menuRef = useRef(null);
   const [openSubMenus, setOpenSubMenus] = useState({});
   const [isMegaMenuVisible, setIsMegaMenuVisible] = useState(false);
   const [Categoriesdata, setCategorydata] = useState([]);
+  const [loading, setLoading] = useState(false)
 
   const submenuData = {
     PatientCare: [
@@ -168,61 +165,6 @@ const Navbar = () => {
     }
   };
 
-  useEffect(() => {
-    if (
-      localStorage.getItem("Id") &&
-      localStorage.getItem("token") &&
-      localStorage.getItem("user")
-    ) {
-      setIsLogin(true);
-    } else {
-      setIsLogin(false);
-    }
-
-    const fetchData = async () => {
-      if (query.length > 2) {
-        let queries = encodeURIComponent(query);
-        try {
-          const response = await axios.get(
-            `https://api.assetorix.com/ah/api/v1/product/search/?currency=${currency}&search=${queries}`
-          );
-          const data = response.data.data; // Adjust based on the actual response structure
-
-          if (data.length > 0) {
-            setResults(data);
-            setShowResults(true);
-            setNoResults(false);
-            if (searchResultsRef.current) {
-              gsap.fromTo(
-                searchResultsRef.current,
-                { opacity: 0, y: -20 },
-                { opacity: 1, y: 0, duration: 0.5 }
-              );
-            }
-          } else {
-            setResults([]);
-            setShowResults(false);
-            setNoResults(true);
-            setTimeout(() => setNoResults(false), 4000); // Hide no results message after 4 seconds
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      } else {
-        setResults([]);
-        setShowResults(false);
-      }
-    };
-
-    const timeoutId = setTimeout(() => {
-      fetchData();
-    }, 500); // Debounce input to avoid too many API calls
-
-    return () => clearTimeout(timeoutId);
-  }, [query, currency]);
-
-
-
   const handleCurrencyChange = (e) => {
     const newCurrency = e.target.value;
     setCurrency(newCurrency);
@@ -246,11 +188,16 @@ const Navbar = () => {
 
   const FetchCategoriesData = async () => {
     try {
+      setLoading(true)
       const res = await axios(
         "https://api.assetorix.com/ah/api/v1/dc/user/Category?limit=20"
       );
       setCategorydata(res.data.data);
-    } catch (error) { }
+    } catch (error) { 
+      console.error("Error fetching categories data: ", error);
+    }finally{
+      setLoading(false);
+    }
   };
 
   const HandleScrolling = () => {
@@ -530,7 +477,7 @@ const Navbar = () => {
         >
           {isMegaMenuVisible && (
             <div className=" top-full left-0 mt-2 bg-white text-black shadow-lg">
-              <MegaMenu />
+              <MegaMenu  Categoriesdata = {Categoriesdata} loading = {loading} />
             </div>
           )}
         </div>

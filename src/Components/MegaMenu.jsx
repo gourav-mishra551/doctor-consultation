@@ -1,32 +1,10 @@
 import axios from "axios";
 import React, { useState, useRef, useEffect } from "react";
 
-function MegaMenu() {
+function MegaMenu({Categoriesdata , loading}) {
   const [hoveredItem, setHoveredItem] = useState(null);
   const [submenuPosition, setSubmenuPosition] = useState({ top: 0, left: 0 });
   const containerRef = useRef(null);
-  const [category, setCategory] = useState([]);
-  const [isCategoryFetched, setIsCategoryFetched] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  // useEffect(() => {
-  //   FetchCategory();
-  // }, []);
-
-  const FetchCategory = async () => {
-    try {
-      setLoading(true);
-      const res = await axios(
-        "https://api.assetorix.com/ah/api/v1/dc/user/Category?limit=100"
-      );
-      setCategory(res.data.data);
-      setIsCategoryFetched(true);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const submenuData = {
     PatientCare: [
@@ -70,14 +48,6 @@ function MegaMenu() {
       "Visa",
       "Amethus Insurance",
     ],
-    // HospitalsDetails: [
-    //   "Courses",
-    //   "Academics",
-    //   "Clinical Research",
-    //   "Honors List",
-    //   "Amethus Torch: Alumni Network",
-    //   "New Medicine",
-    // ],
     OurServices: [
       "Medicine",
       "General Medicine",
@@ -103,10 +73,6 @@ function MegaMenu() {
       top: menuItemRect.bottom - containerRect.top + 72,
       left: menuItemRect.left - containerRect.left + 60,
     });
-
-    if (item === "CenterOfExcellence" && !isCategoryFetched) {
-      FetchCategory();
-    }
   };
 
   const handleMouseLeave = () => {
@@ -114,7 +80,7 @@ function MegaMenu() {
   };
 
   
-  const skeletonCount = category.length > 0 ? category.length : 8
+  const skeletonCount = Categoriesdata.length > 0 ? Categoriesdata.length : 8
   
   return (
     <div className="bg-[#00768A]">
@@ -175,7 +141,7 @@ function MegaMenu() {
                     </div>
                   ))
                 : // Render actual data when loading is complete
-                  category.map((subItem, index) => (
+                Categoriesdata.map((subItem, index) => (
                     <a href={`/categories-details/${subItem._id}`} key={index}>
                       <div className="flex items-start gap-3 cursor-pointer">
                         <img
