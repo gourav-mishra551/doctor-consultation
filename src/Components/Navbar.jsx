@@ -18,9 +18,6 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
-  const [showResults, setShowResults] = useState(false);
-  const [noResults, setNoResults] = useState(false);
   const [currency, setCurrency] = useState(
     localStorage.getItem("currency") || "INR"
   );
@@ -30,12 +27,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const searchResultsRef = useRef(null);
-  const cartRef = useRef(null);
-  const [MegaMenubtn, setMegaMenubtn] = useState(false);
-  const [hoveredItem, setHoveredItem] = useState(null);
-  const [submenuPosition, setSubmenuPosition] = useState({ top: 0, left: 0 });
   const menuRef = useRef(null);
-  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [openSubMenus, setOpenSubMenus] = useState({});
   const [isMegaMenuVisible, setIsMegaMenuVisible] = useState(false);
   const [Categoriesdata, setCategorydata] = useState([]);
@@ -127,41 +119,6 @@ const Navbar = () => {
   const handleCategoryClick = (Categoriesdata) => { };
   handleCategoryClick();
 
-  const handleMouseEnter = (item, event) => {
-    if (!event) return;
-
-    setHoveredItem(item);
-
-    // Check if submenuData for the item exists
-    if (!submenuData[item]) return;
-
-    const menuItemRect = event.target.getBoundingClientRect();
-    setSubmenuPosition({
-      top: menuItemRect.bottom + window.scrollY,
-      left: menuItemRect.left + window.scrollX,
-    });
-
-    setOpenSubMenus((prevState) => ({
-      ...prevState,
-      [item]: true,
-    }));
-  };
-
-  const handleMouseLeave = (item) => {
-    setHoveredItem(null); // Reset the hovered item
-    // Close the submenu when mouse leaves the item
-    setOpenSubMenus((prevState) => ({
-      ...prevState,
-      [item]: false,
-    }));
-  };
-
-  const toggleMegaMenu = () => {
-    setIsMegaMenuOpen(!isMegaMenuOpen);
-  };
-  const containerRef = useRef(null);
-  const megaMenuRef = useRef(null);
-
   // Handle click outside
   const handleClickOutside = (event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -169,10 +126,7 @@ const Navbar = () => {
     }
   };
 
-  const setBothRefs = (node) => {
-    containerRef.current = node;
-    megaMenuRef.current = node;
-  };
+ 
   useEffect(() => {
     // Add event listener to detect clicks outside the menu
     document.addEventListener("mousedown", handleClickOutside);
@@ -267,18 +221,23 @@ const Navbar = () => {
     return () => clearTimeout(timeoutId);
   }, [query, currency]);
 
-  const handleProductClick = (slug) => {
-    navigate(`/product/${slug}`);
-  };
+
 
   const handleCurrencyChange = (e) => {
     const newCurrency = e.target.value;
     setCurrency(newCurrency);
     localStorage.setItem("currency", newCurrency);
-
+  
     // Dispatch a custom event to notify other parts of the application
     const event = new Event("currencyChange");
     window.dispatchEvent(event);
+  
+    // Update the currency in the URL without reloading the page
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set("currency", newCurrency);
+  
+    // Push or replace the state in the URL
+    window.history.replaceState(null, "", currentUrl.toString());
   };
 
   useEffect(() => {
