@@ -91,9 +91,10 @@ function DrAppointmentBooking({ IndiProfile }) {
     try {
       const id = localStorage.getItem("Id");
       const token = localStorage.getItem("token");
+      const currency = localStorage.getItem("currency");
 
       const response = await axios.post(
-        `https://api.assetorix.com/ah/api/v1/dc/user/booking/${IndiProfile?._id}`,
+        `https://api.assetorix.com/ah/api/v1/dc/user/booking/${IndiProfile?._id}?currency=${currency}`,
         {
           selectMode: filter,
           consultation_formats: "videoCall",
