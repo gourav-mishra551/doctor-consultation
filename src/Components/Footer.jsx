@@ -343,6 +343,7 @@ const Footer = () => {
                       <input
                         type="email"
                         placeholder="Email Address"
+                        autoComplete="off"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="flex-grow px-4  text-black bg-gray-200 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-opacity-50 "
