@@ -17,28 +17,17 @@ import { AiOutlineLogout } from "react-icons/ai";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
-  const [showResults, setShowResults] = useState(false);
-  const [noResults, setNoResults] = useState(false);
   const [currency, setCurrency] = useState(
     localStorage.getItem("currency") || "INR"
   );
-
-
   const [dropdown, setDropdown] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
-  const searchResultsRef = useRef(null);
-  const cartRef = useRef(null);
-  const [MegaMenubtn, setMegaMenubtn] = useState(false);
-  const [hoveredItem, setHoveredItem] = useState(null);
-  const [submenuPosition, setSubmenuPosition] = useState({ top: 0, left: 0 });
   const menuRef = useRef(null);
-  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [openSubMenus, setOpenSubMenus] = useState({});
   const [isMegaMenuVisible, setIsMegaMenuVisible] = useState(false);
   const [Categoriesdata, setCategorydata] = useState([]);
+  const [loading, setLoading] = useState(false)
 
   const submenuData = {
     PatientCare: [
@@ -127,41 +116,6 @@ const Navbar = () => {
   const handleCategoryClick = (Categoriesdata) => { };
   handleCategoryClick();
 
-  const handleMouseEnter = (item, event) => {
-    if (!event) return;
-
-    setHoveredItem(item);
-
-    // Check if submenuData for the item exists
-    if (!submenuData[item]) return;
-
-    const menuItemRect = event.target.getBoundingClientRect();
-    setSubmenuPosition({
-      top: menuItemRect.bottom + window.scrollY,
-      left: menuItemRect.left + window.scrollX,
-    });
-
-    setOpenSubMenus((prevState) => ({
-      ...prevState,
-      [item]: true,
-    }));
-  };
-
-  const handleMouseLeave = (item) => {
-    setHoveredItem(null); // Reset the hovered item
-    // Close the submenu when mouse leaves the item
-    setOpenSubMenus((prevState) => ({
-      ...prevState,
-      [item]: false,
-    }));
-  };
-
-  const toggleMegaMenu = () => {
-    setIsMegaMenuOpen(!isMegaMenuOpen);
-  };
-  const containerRef = useRef(null);
-  const megaMenuRef = useRef(null);
-
   // Handle click outside
   const handleClickOutside = (event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -169,10 +123,7 @@ const Navbar = () => {
     }
   };
 
-  const setBothRefs = (node) => {
-    containerRef.current = node;
-    megaMenuRef.current = node;
-  };
+ 
   useEffect(() => {
     // Add event listener to detect clicks outside the menu
     document.addEventListener("mousedown", handleClickOutside);
@@ -214,71 +165,21 @@ const Navbar = () => {
     }
   };
 
-  useEffect(() => {
-    if (
-      localStorage.getItem("Id") &&
-      localStorage.getItem("token") &&
-      localStorage.getItem("user")
-    ) {
-      setIsLogin(true);
-    } else {
-      setIsLogin(false);
-    }
-
-    const fetchData = async () => {
-      if (query.length > 2) {
-        let queries = encodeURIComponent(query);
-        try {
-          const response = await axios.get(
-            `https://api.assetorix.com/ah/api/v1/product/search/?currency=${currency}&search=${queries}`
-          );
-          const data = response.data.data; // Adjust based on the actual response structure
-
-          if (data.length > 0) {
-            setResults(data);
-            setShowResults(true);
-            setNoResults(false);
-            if (searchResultsRef.current) {
-              gsap.fromTo(
-                searchResultsRef.current,
-                { opacity: 0, y: -20 },
-                { opacity: 1, y: 0, duration: 0.5 }
-              );
-            }
-          } else {
-            setResults([]);
-            setShowResults(false);
-            setNoResults(true);
-            setTimeout(() => setNoResults(false), 4000); // Hide no results message after 4 seconds
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      } else {
-        setResults([]);
-        setShowResults(false);
-      }
-    };
-
-    const timeoutId = setTimeout(() => {
-      fetchData();
-    }, 500); // Debounce input to avoid too many API calls
-
-    return () => clearTimeout(timeoutId);
-  }, [query, currency]);
-
-  const handleProductClick = (slug) => {
-    navigate(`/product/${slug}`);
-  };
-
   const handleCurrencyChange = (e) => {
     const newCurrency = e.target.value;
     setCurrency(newCurrency);
     localStorage.setItem("currency", newCurrency);
-
+  
     // Dispatch a custom event to notify other parts of the application
     const event = new Event("currencyChange");
     window.dispatchEvent(event);
+  
+    // Update the currency in the URL without reloading the page
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set("currency", newCurrency);
+  
+    // Push or replace the state in the URL
+    window.history.replaceState(null, "", currentUrl.toString());
   };
 
   useEffect(() => {
@@ -287,11 +188,16 @@ const Navbar = () => {
 
   const FetchCategoriesData = async () => {
     try {
+      setLoading(true)
       const res = await axios(
         "https://api.assetorix.com/ah/api/v1/dc/user/Category?limit=20"
       );
       setCategorydata(res.data.data);
-    } catch (error) { }
+    } catch (error) { 
+      console.error("Error fetching categories data: ", error);
+    }finally{
+      setLoading(false);
+    }
   };
 
   const HandleScrolling = () => {
@@ -571,7 +477,7 @@ const Navbar = () => {
         >
           {isMegaMenuVisible && (
             <div className=" top-full left-0 mt-2 bg-white text-black shadow-lg">
-              <MegaMenu />
+              <MegaMenu  Categoriesdata = {Categoriesdata} loading = {loading} />
             </div>
           )}
         </div>

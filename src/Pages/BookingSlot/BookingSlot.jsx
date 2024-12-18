@@ -13,16 +13,16 @@ import {
 import PrescriptionUpload from "../../Components/PrescriptionUpload/PrescriptionUpload";
 import Payment from "../../Components/Payment/Payment";
 import { RiNumber1, RiNumber2, RiNumber3 } from "react-icons/ri";
-import Loader from "../../Components/Loading/Loader";
 
 function BookingSlot() {
   const [DrProfile, setDrProfile] = useState(null);
   const { id } = useParams();
   const [step, setStep] = useState(1);
-  const [Loading,setLoading]=useState(false)
+  const [Loading, setLoading] = useState(false)
   const handleNextStep = () => {
     setStep(step + 1);
   };
+
 
   const handlePreviousStep = () => {
     setStep(step - 1);
@@ -31,35 +31,45 @@ function BookingSlot() {
     setStep(stepNumber);
   };
 
-  useEffect(() => {
-    DrProfileFetch();
 
-  }, []);
 
   const DrProfileFetch = async () => {
-   setLoading(true)
+    const currentCurrency = localStorage.getItem("currency") || "INR"; // Fetch currency directly from localStorage
+    setLoading(true);
     try {
       const res = await axios.get(
-        `https://api.assetorix.com/ah/api/v1/dc/user/doctors/${id}`
+        `https://api.assetorix.com/ah/api/v1/dc/user/doctors/${id}?currency=${currentCurrency}`
       );
       setDrProfile(res.data.data);
     } catch (error) {
       console.error("Error fetching doctor profile data:", error);
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
   
 
+  useEffect(() => {
+    // On page load, fetch the profile
+    DrProfileFetch();
+    
+    // Add event listener for currency change
+    window.addEventListener("currencyChange", DrProfileFetch);
+  
+    // Cleanup listener on unmount
+    return () => {
+      window.removeEventListener("currencyChange", DrProfileFetch);
+    };
+  }, []);
 
 
-  if (!DrProfile) {
+
+
+  if (!DrProfile ) {
     return (
-      
-        <div className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-center items-center min-h-screen">
         <div className="loader"></div>
       </div>
-      
     );
   }
 
@@ -169,11 +179,9 @@ function BookingSlot() {
                 title="Address"
                 value={
                   DrProfile?.clinic_hospital_address
-                    ? `${
-                        DrProfile.clinic_hospital_address.permanentAddress || ""
-                      }, ${DrProfile.clinic_hospital_address.state || ""}, ${
-                        DrProfile.clinic_hospital_address.city || ""
-                      }, ${DrProfile.clinic_hospital_address.PinCode || ""}`
+                    ? `${DrProfile.clinic_hospital_address.permanentAddress || ""
+                    }, ${DrProfile.clinic_hospital_address.state || ""}, ${DrProfile.clinic_hospital_address.city || ""
+                    }, ${DrProfile.clinic_hospital_address.PinCode || ""}`
                     : "Not available"
                 }
               />
@@ -185,9 +193,8 @@ function BookingSlot() {
         <div className="relative flex items-center w-full max-w-md justify-between">
           {/* Step 1 */}
           <div
-            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${
-              step >= 1 ? "text-white bg-[#00768A]" : "text-gray-500"
-            } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
+            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${step >= 1 ? "text-white bg-[#00768A]" : "text-gray-500"
+              } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
             onClick={() => handleStepClick(1)}
           >
             <RiNumber1 size={22} />
@@ -206,9 +213,8 @@ function BookingSlot() {
 
           {/* Step 2 */}
           <div
-            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${
-              step >= 2 ? "text-white bg-[#00768A] " : "text-white bg-gray-500"
-            } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
+            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${step >= 2 ? "text-white bg-[#00768A] " : "text-white bg-gray-500"
+              } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20`}
             onClick={() => handleStepClick(2)}
           >
             <RiNumber2 size={22} />
@@ -217,9 +223,8 @@ function BookingSlot() {
 
           {/* Step 3 */}
           <div
-            className={`flex  z-10 flex-col items-center cursor-pointer transition-all duration-300 ${
-              step >= 3 ? "text-white bg-[#00768A]" : "text-white bg-gray-500"
-            } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20 <z-10></z-10>`}
+            className={`flex  z-10 flex-col items-center cursor-pointer transition-all duration-300 ${step >= 3 ? "text-white bg-[#00768A]" : "text-white bg-gray-500"
+              } p-4 rounded-full border border-gray-300 w-16 h-16 md:w-20 md:h-20 <z-10></z-10>`}
             onClick={() => handleStepClick(3)}
           >
             <RiNumber3 size={22} />

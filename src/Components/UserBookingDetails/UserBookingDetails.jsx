@@ -14,10 +14,10 @@ import {
 import { useLocation } from "react-router-dom";
 import Icon from "../../../src/Assests/fav-icon.png";
 import companyLogo from "../../../src/Assests/ametheus-helath-logo.jpg";
-import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import user from "../../../src/Assests/user-bookings.svg";
 import svg from "../../Assests/bookings.png";
+import PrescriptionUpload from "../PrescriptionUpload/PrescriptionUpload";
+
 
 const UserBookingDetails = () => {
   const [bookingDetailsData, setBookingDetailsData] = useState([]);
@@ -25,12 +25,10 @@ const UserBookingDetails = () => {
   const { state } = useLocation();
   const [uploadPdfLoader, setUploadPdfLoader] = useState(false);
   const [pdfBlob, setPdfBlob] = useState(null);
-  const { formData, medicineData, pdfData, bpData } = state || {};
+  const {  pdfData, bpData } = state || {};
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
-
-  console.log(bookingDetailsData?.data?.doctorId?.doctorUserDetails?.name);
 
   const userBookingDetails = async () => {
     try {
@@ -817,11 +815,30 @@ const UserBookingDetails = () => {
                 onClick={handleUploadPdf}
                 className="text-white px-2 py-1"
               >
-                {uploadPdfLoader ? "Uploading..." : "Upload to Health Records"}
+                {uploadPdfLoader ? "Uploading..." : "Upload Prescription to Health Records"}
               </button>
+            </div>
+          )}        </div>
+        <div className="bg-gray-100 p-6 rounded-lg shadow-md">
+          {bookingDetailsData?.data?.healthRecords.length > 0 ? (
+            <div className="text-center bg-green-100 p-4 rounded-lg">
+              <h1 className="text-lg font-semibold text-green-800">
+                You have already shared your health record with the doctor.
+              </h1>
+            </div>
+          ) : (
+            <div >
+              <h1 className="text-lg text-center my-3
+               font-semibold text-red-800">
+                Please upload your prescription to share with the doctor.
+              </h1>
+              <PrescriptionUpload doctorBookingId = {ubid} />
             </div>
           )}
         </div>
+
+
+
       </div>
     </>
   );

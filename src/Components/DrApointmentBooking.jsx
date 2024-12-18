@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef , useMemo } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import Images from '../../src/Assests/images.png'
 import Payment from "./Payment/Payment";
-function DrAppointmentBooking({ IndiProfile, onNext, }) {
+function DrAppointmentBooking({ IndiProfile }) {
   const { doctorAvailability } = IndiProfile;
   const [selectedDate, setSelectedDate] = useState(null);
   const [filter, setFilter] = useState("online");
@@ -26,17 +26,16 @@ function DrAppointmentBooking({ IndiProfile, onNext, }) {
   const sliderRef = useRef(null);
   const token = localStorage.getItem("token");
   const idUser = localStorage.getItem("id");
+
   const userData = async () => {
-    setLoader(true)
+    setLoader(true);
     try {
-      const res = await axios.get(`https://api.assetorix.com/ah/api/v1/user`,
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-            id: idUser,
-          },
-        }
-      )
+      const res = await axios.get(`https://api.assetorix.com/ah/api/v1/user`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+          id: idUser,
+        },
+      });
       setPatientDetails((prevState) => ({
         ...prevState,
         name: res.data.data.name,
@@ -44,16 +43,22 @@ function DrAppointmentBooking({ IndiProfile, onNext, }) {
         dateOfBirth: res.data.data.dateOfBirth,
       }));
     } catch (error) {
-      console.error("Error fetching user data:", error)
+      console.error("Error fetching user data:", error);
     } finally {
-      setLoader(false)
+      setLoader(false);
     }
-  }
+  };
 
-  
+  // Memoize the check to see if patientDetails is already set
+  const shouldFetchData = useMemo(() => {
+    return !patientDetails.name || !patientDetails.dateOfBirth;
+  }, [patientDetails.name, patientDetails.dateOfBirth]);
+
   useEffect(() => {
-    userData()
-  }, []);
+    if (shouldFetchData) {
+      userData();
+    }
+  }, [shouldFetchData]);
 
   const scrollLeft = () => {
     if (sliderRef.current) {
@@ -86,9 +91,10 @@ function DrAppointmentBooking({ IndiProfile, onNext, }) {
     try {
       const id = localStorage.getItem("Id");
       const token = localStorage.getItem("token");
+      const currency = localStorage.getItem("currency");
 
       const response = await axios.post(
-        `https://api.assetorix.com/ah/api/v1/dc/user/booking/${IndiProfile?._id}`,
+        `https://api.assetorix.com/ah/api/v1/dc/user/booking/${IndiProfile?._id}?currency=${currency}`,
         {
           selectMode: filter,
           consultation_formats: "videoCall",
@@ -176,7 +182,7 @@ function DrAppointmentBooking({ IndiProfile, onNext, }) {
       </p>
 
       <p className="text-sm">
-        <span className="font-medium">Charge:</span> ₹ {slot.doctorCharge}
+        <span className="font-medium ">Charge:</span> {slot?.currencyCode} {slot.doctorCharge}
       </p>
       <button
         disabled={slot.isBooked || orderId}

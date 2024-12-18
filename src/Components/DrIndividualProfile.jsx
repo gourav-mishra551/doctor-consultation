@@ -22,10 +22,7 @@ const DrIndividualProfile = () => {
     setActiveNav(navNumber);
   };
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    DrIndiProfile();
-  }, []);
+
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -33,9 +30,10 @@ const DrIndividualProfile = () => {
 
   const DrIndiProfile = async () => {
     try {
+      const currentCurrency = localStorage.getItem("currency") || "INR"; // Fetch currency directly from localStorage
       setIsLoading(true);
       const res = await axios.get(
-        `https://api.assetorix.com/ah/api/v1/dc/user/doctors/${id}`
+        `https://api.assetorix.com/ah/api/v1/dc/user/doctors/${id}?currency=${currentCurrency}`
       );
       setIndiProfile(res.data.data);
      
@@ -45,6 +43,19 @@ const DrIndividualProfile = () => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    DrIndiProfile();
+     // Add event listener for currency change
+     window.addEventListener("currencyChange", DrIndiProfile);
+  
+     // Cleanup listener on unmount
+     return () => {
+       window.removeEventListener("currencyChange", DrIndiProfile);
+     };
+  }, []);
+
   if (isLoading) {
     // Loading state when data is not fetched yet
     return (
