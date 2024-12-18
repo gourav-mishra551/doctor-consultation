@@ -153,15 +153,21 @@ const Navbar = () => {
     setIsOpen(false);
   };
 
+  useEffect(()=>{
+    if(localStorage.getItem("Id")&&  localStorage.getItem("user") && localStorage.getItem("token")){
+      setIsLogin(true);
+    }
+  },[])
+
   const logout = () => {
     localStorage.removeItem("Id");
     localStorage.removeItem("user");
     localStorage.removeItem("signupemail");
-    localStorage.removeItem("token");
+    localStorage.removeItem("token"); 
     setIsLogin(false);
     setIsOpen(false);
     {
-      localStorage.getItem("user") ? navigate("/") : navigate("/auth");
+      localStorage.getItem("token") ? navigate("/") : navigate("/auth");
     }
   };
 
@@ -454,7 +460,7 @@ const Navbar = () => {
                     <AiOutlineLogout className="text-2xl mr-1" />{" "}
                     {/* Increased icon size with margin to separate from text */}
                     <span className="text-md font-medium">
-                      {localStorage.getItem("user") ? (
+                      {localStorage.getItem("Id") && localStorage.getItem("token") ? (
                         <span>Logout</span>
                       ) : (
                         <span>Login</span>
