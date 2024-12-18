@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   tableCell: {
     borderRight: 1,
     borderStyle: "solid",
-    fontSize:"8px",
+    fontSize:"6px",
     padding: 5,
     width: "12.5%", // Adjust as per the number of columns (8 columns = 12.5%)
     textAlign: "center",
@@ -143,14 +143,14 @@ const CommercialInvoicePDF = () => (
       <View style={styles.table}>
         {/* Table Header */}
         <View style={styles.tableHeader}>
-          <Text style={styles.tableCell}>No</Text>
+          <Text style={[styles.tableCell,{width:"35px"}]}>No</Text>
           <Text style={styles.tableCell}>Code</Text>
           <Text style={styles.tableCell}>Description</Text>
           <Text style={styles.tableCell}>HS Code</Text>
           <Text style={styles.tableCell}>Batch No</Text>
           <Text style={styles.tableCell}>MFG Date</Text>
           <Text style={styles.tableCell}>Expiry Date</Text>
-          <Text style={styles.tableCell}>SGST</Text>
+          <Text style={[styles.tableCell,{width:"48px"}]}>SGST</Text>
           <Text style={styles.tableCell}>CGST</Text>
           <Text style={styles.tableCell}>Gross Wt</Text>
           <Text style={styles.tableCell}>Net Wt</Text>
@@ -161,14 +161,14 @@ const CommercialInvoicePDF = () => (
 
         {/* Static Rows */}
         <View style={styles.tableRow}>
-          <Text style={styles.tableCell}>1</Text>
+          <Text style={[styles.tableCell,{width:"35px"}]}>1</Text>
           <Text style={styles.tableCell}>CODE00</Text>
           <Text style={styles.tableCell}>Product A</Text>
           <Text style={styles.tableCell}>1234</Text>
-          <Text style={styles.tableCell}>BATCH001</Text>
+          <Text style={styles.tableCell}>BATCH001 sdfdfhb</Text>
           <Text style={styles.tableCell}>2024-01-01</Text>
           <Text style={styles.tableCell}>2025-01-01</Text>
-          <Text style={styles.tableCell}>5%</Text>
+          <Text style={[styles.tableCell,{width:"48px"}]}>5%</Text>
           <Text style={styles.tableCell}>5%</Text>
           <Text style={styles.tableCell}>10 kg</Text>
           <Text style={styles.tableCell}>9.5 kg</Text>
@@ -178,14 +178,14 @@ const CommercialInvoicePDF = () => (
         </View>
 
         <View style={styles.tableRow}>
-          <Text style={styles.tableCell}>2</Text>
+          <Text style={[styles.tableCell,{width:"35px"}]}>2</Text>
           <Text style={styles.tableCell}>CODE002</Text>
           <Text style={styles.tableCell}>Product B</Text>
           <Text style={styles.tableCell}>5678</Text>
           <Text style={styles.tableCell}>BATCH002</Text>
           <Text style={styles.tableCell}>2024-02-01</Text>
           <Text style={styles.tableCell}>2025-02-01</Text>
-          <Text style={styles.tableCell}>5%</Text>
+          <Text style={[styles.tableCell,{width:"48px"}]}>5%</Text>
           <Text style={styles.tableCell}>5%</Text>
           <Text style={styles.tableCell}>20 kg</Text>
           <Text style={styles.tableCell}>18 kg</Text>
@@ -217,6 +217,16 @@ const CommercialInvoicePDF = () => (
           <Text style={styles.tableCell}>95</Text>
           <Text style={styles.tableCell}>1095</Text>
         </View>
+      </View>
+
+      <View style={{marginTop:"20px"}}>
+        <Text>Terms and Conditions</Text>
+        <Text>{`{other_conditions}`}</Text>
+      </View>
+
+      <View style={{flexDirection:"row",marginTop:"20px",justifyContent:"space-between"}}>
+        <Text>{`{remarks}`}</Text>
+        <Text>Signature and Stamp</Text>
       </View>
     </Page>
   </Document>

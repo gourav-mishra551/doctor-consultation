@@ -68,6 +68,7 @@ import CommercialInvoice from "./Components/AlphaPrescription/commercialInvoice"
 import Proforma from "./Components/AlphaPrescription/Proforma";
 import SoftCorporate from "./Components/AlphaPrescription/SoftCorporate";
 import CommercialInvoicePharma from "./Components/AlphaPrescription/CommercialInvoicePharma";
+import PreformaGoods from "./Components/AlphaPrescription/PreformaGoods";
 
 function App() {
   const location = useLocation();
@@ -171,10 +172,12 @@ function App() {
         <Route path="/alpha-prescription" element={<AlphaPrescription/>}/>
         <Route path="/alpha-packing-list" element={<PackingList/>}/>
         <Route path="/alpha-commercial-invoice" element={<AlphaComercial/>}/>
+        <Route path="/commercial-invoice-pharma" element={<CommercialInvoicePharma/>}/>
         <Route path="/commercial-invoice-goods" element={<CommercialInvoice/>}/>
-        <Route path="/aalphaa-proforma-invoice" element={<Proforma/>}/>
+        <Route path="/aalphaa-proforma-invoice-service" element={<Proforma/>}/>
         <Route path="/Soft-corporate" element={<SoftCorporate/>}/>
         <Route path="/commercial-invoice-pharma" element={<CommercialInvoicePharma/>}/>
+        <Route path="/preforma-invoice-goods" element={<PreformaGoods/>}/>
       </Routes>
     </div>
   );

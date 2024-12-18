@@ -68,7 +68,7 @@ function MegaMenu() {
       "Plan your Trip",
       "Online Consultation",
       "Visa",
-      "Amethus Insurance",
+      "Ametheus Insurance",
     ],
     // HospitalsDetails: [
     //   "Courses",
@@ -91,7 +91,7 @@ function MegaMenu() {
       "Post A Query",
       "Consult Doctor Online",
       "Book Physical Appointment",
-      "Amethus Lifetime",
+      "Ametheus Lifetime",
     ],
   };
 
