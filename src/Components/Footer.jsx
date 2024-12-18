@@ -71,10 +71,9 @@ const Footer = () => {
   const handleSubscribe = async (e) => {
     e.preventDefault();
     if (!email) {
-      alert("Please enter a valid email address.");
+      toast.error("Please enter a valid email address.");
       return;
     }
-
     try {
       const response = await fetch("https://api.assetorix.com/ah/api/v1/subscribe", {
         method: "POST",
@@ -83,18 +82,25 @@ const Footer = () => {
         },
         body: JSON.stringify({ email }),
       });
-
+  
       if (response.ok) {
         toast.success("Thank you for subscribing!");
         setEmail(""); // Clear the input field
       } else {
+        // Handle response errors
         const errorData = await response.json();
-        toast.error(`Error: ${errorData.message}`);
+        console.log(errorData)
+        const errorMessage = errorData?.msg || "Something went wrong.";
+        toast.error(` ${errorMessage}`);
       }
     } catch (error) {
-      toast.error("Subscription failed. Please try again.");
+      // Handle unexpected errors
+      console.error("Error:", error); // Log the error for debugging
+      const errorMessage = error?.message || "An unexpected error occurred.";
+      toast.error(errorMessage);
     }
   };
+  
 
   return (
     <div>
@@ -337,6 +343,7 @@ const Footer = () => {
                       <input
                         type="email"
                         placeholder="Email Address"
+                        autoComplete="off"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="flex-grow px-4  text-black bg-gray-200 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-opacity-50 "

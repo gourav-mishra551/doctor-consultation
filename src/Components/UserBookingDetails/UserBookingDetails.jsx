@@ -12,6 +12,7 @@ import {
   pdf,
 } from "@react-pdf/renderer";
 import { useLocation } from "react-router-dom";
+import { FaFileDownload, FaUpload, FaVideo, FaUserCircle, FaCheckCircle } from "react-icons/fa";
 import Icon from "../../../src/Assests/fav-icon.png";
 import companyLogo from "../../../src/Assests/ametheus-helath-logo.jpg";
 import { toast } from "react-hot-toast";
@@ -25,7 +26,7 @@ const UserBookingDetails = () => {
   const { state } = useLocation();
   const [uploadPdfLoader, setUploadPdfLoader] = useState(false);
   const [pdfBlob, setPdfBlob] = useState(null);
-  const {  pdfData, bpData } = state || {};
+  const { pdfData, bpData } = state || {};
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -687,158 +688,118 @@ const UserBookingDetails = () => {
 
   return (
     <>
-      <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-lg">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          Doctor Details
+      <div className="max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+          <FaUserCircle className="text-blue-500" /> Doctor Details
         </h2>
-        <div className="grid grid-cols-2 gap-4 bg-gray-100 p-5">
-          <div className="flex gap-3">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-100 p-5 rounded-lg">
+          <div className="flex gap-3 items-center">
             <span className="font-medium text-gray-600">Name:</span>
-            <span className="text-gray-800">
-              {bookingDetailsData?.data?.patientDetails.name}
-            </span>
+            <span className="text-gray-800">{bookingDetailsData?.data?.patientDetails.name}</span>
           </div>
-          <div className="flex gap-3">
-            <span className="font-medium text-gray-600">
-              Reason of Appointment:
-            </span>
-            <span className="text-gray-800">
-              {bookingDetailsData?.data?.patientDetails.reasonForAppointment}
-            </span>
+          <div className="flex gap-3 items-center">
+            <span className="font-medium text-gray-600">Reason for Appointment:</span>
+            <span className="text-gray-800">{bookingDetailsData?.data?.patientDetails.reasonForAppointment}</span>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 items-center">
             <span className="font-medium text-gray-600">Gender:</span>
-            <span className="text-gray-800">
-              {bookingDetailsData?.data?.patientDetails.gender}
-            </span>
+            <span className="text-gray-800">{bookingDetailsData?.data?.patientDetails.gender}</span>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 items-center">
             <span className="font-medium text-gray-600">Date of Birth:</span>
-            <span className="text-gray-800">
-              {bookingDetailsData?.data?.patientDetails.dateOfBirth}
-            </span>
+            <span className="text-gray-800">{bookingDetailsData?.data?.patientDetails.dateOfBirth}</span>
           </div>
         </div>
-        <div className="max-w-5xlmx-auto h-[1px] bg-gray-300 bg-opacity-80"></div>
-        <div className="grid grid-cols-2 gap-4 bg-gray-100 p-5">
-          <div className="flex gap-3">
-            <span className="font-medium text-gray-600">Start time:</span>
-            <span className="text-gray-800">
-              {convertTo12HourFormat(
-                bookingDetailsData?.data?.specificSlotData.startTime
-              )}
-            </span>
+
+        <div className="h-px bg-gray-300 my-6"></div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-100 p-5 rounded-lg">
+          <div className="flex gap-3 items-center">
+            <span className="font-medium text-gray-600">Start Time:</span>
+            <span className="text-gray-800">{convertTo12HourFormat(bookingDetailsData?.data?.specificSlotData.startTime)}</span>
           </div>
-          <div className="flex gap-3">
-            <span className="font-medium text-gray-600">End time:</span>
-            <span className="text-gray-800">
-              {convertTo12HourFormat(
-                bookingDetailsData?.data?.specificSlotData.endTime
-              )}
-            </span>
+          <div className="flex gap-3 items-center">
+            <span className="font-medium text-gray-600">End Time:</span>
+            <span className="text-gray-800">{convertTo12HourFormat(bookingDetailsData?.data?.specificSlotData.endTime)}</span>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 items-center">
             <span className="font-medium text-gray-600">Doctor Charge:</span>
-            <span className="text-gray-800">
-              ₹ {bookingDetailsData?.data?.specificSlotData.doctorCharge}
-            </span>
+            <span className="text-gray-800">{bookingDetailsData?.data?.specificSlotData.currencySymbol} {parseFloat(bookingDetailsData?.data?.specificSlotData.currencyAmount || 0).toFixed(2)}</span>
           </div>
-          <div className="flex gap-3">
-            <span className="font-medium text-gray-600">
-              Consultation Date:
-            </span>
-            <span className="text-gray-800">
-              {convertToIST(
-                bookingDetailsData?.data?.availibileTimeSlotsData.selectDate
-              )}
-            </span>
+          <div className="flex gap-3 items-center">
+            <span className="font-medium text-gray-600">Payment Status:</span>
+            <span className= { bookingDetailsData?.data?.status == "Pending" ? "text-gray-100 font-semibold bg-orange-400 p-2 rounded-2xl" : "text-gray-100 font-semibold bg-green-400 p-2 rounded-2xl"}>{bookingDetailsData?.data?.status}</span>
+          </div>
+          <div className="flex gap-3 items-center">
+            <span className="font-medium text-gray-600">Consultation Date:</span>
+            <span className="text-gray-800">{convertToIST(bookingDetailsData?.data?.availibileTimeSlotsData.selectDate)}</span>
+          </div>
+          <div className="flex  items-center">
+            <span className="font-medium text-gray-600 mr-2">OTP for doctor consultation:</span>
+            <span className="text-gray-800">{bookingDetailsData?.data?.otp ? bookingDetailsData?.data?.otp : "You will on the day of consultation" }</span>
           </div>
         </div>
-        {/* Join meeting button */}
+
         {bookingDetailsData?.data?.roomId ? (
-          <div className="mt-1 max-w-5xl mx-auto flex flex-col items-center justify-center p-6 bg-gray-100 rounded-lg shadow-lg">
-            <img
-              src={svg}
-              className="w-[100px] sm:w-[300px] rounded-md shadow-md border border-gray-200"
-              alt="User"
-            />
-            <div className="">
-              {bookingDetailsData?.data?.roomId && (
-                <a
-                  href={`https://doctor-consultation.vercel.app/video-call/join?call_id=${bookingDetailsData?.data?.roomId}&call_type=default`}
-                  target="_blank"
-                >
-                  <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
-                    <button className="text-white px-2 py-1">
-                      Join Meeting
-                    </button>
-                  </div>
-                </a>
-              )}
-            </div>
+          <div className="mt-8 p-6 bg-gray-100 rounded-lg shadow-md flex flex-col items-center">
+            <img src={svg} className="w-[150px] sm:w-[300px] rounded-md shadow-md border border-gray-200" alt="User" />
+            <a
+              href={`https://doctor-consultation.vercel.app/video-call/join?call_id=${bookingDetailsData?.data?.roomId}&call_type=default`}
+              target="_blank"
+              className="mt-5 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition-all duration-300 ease-in-out"
+            >
+              <FaVideo /> Join Meeting
+            </a>
           </div>
         ) : (
-          <div className="mt-5 max-w-4xl mx-auto flex flex-col items-center justify-center p-6 bg-gray-100 rounded-lg shadow-lg">
-            <img
-              src={svg}
-              className="w-[100px] sm:w-[300px] rounded-md shadow-md border border-gray-200"
-              alt="User"
-            />
-            <p className="text-gray-600 text-lg font-medium mt-4">
-              Your metting Link will be shown on your consultation date
+          <div className="mt-8 p-6 bg-gray-100 rounded-lg shadow-md flex flex-col items-center">
+            <img src={svg} className="w-[150px] sm:w-[300px] rounded-md shadow-md border border-gray-200" alt="User" />
+            <p className="text-gray-600 text-lg font-medium mt-4 text-center">
+              Your meeting link will be shown on your consultation date.
             </p>
           </div>
         )}
 
-        {/* Download prescription button */}
-        <div className="flex gap-5">
-          {/* Conditional Rendering for Prescription Data */}
+        <div className="flex flex-wrap gap-5 mt-8">
           {bookingDetailsData?.data?.prescription?._id && (
             <PDFDownloadLink
               document={<PrescriptionPDF />}
               fileName="Prescription.pdf"
-              className="bg-blue-500 text-white mt-5 py-2 px-4 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="bg-green-500 text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-green-600 transition-all duration-300 ease-in-out"
             >
-              {({ loading, blob }) => {
-                if (blob && !pdfBlob) setPdfBlob(blob); // Save blob when it's available
-                return loading
-                  ? "Loading Prescription..."
-                  : "Download Prescription";
-              }}
+              {({ loading }) => (
+                loading ? "Loading Prescription..." : <><FaFileDownload /> Download Prescription</>
+              )}
             </PDFDownloadLink>
           )}
 
           {bookingDetailsData?.data?.prescription?._id && (
-            // Upload Button
-            <div className="bg-[#00768A] hover:bg-[#1b545e] transition-all duration-300 ease-in-out flex justify-center items-center sm:max-w-[200px] rounded-md mt-5">
-              <button
-                onClick={handleUploadPdf}
-                className="text-white px-2 py-1"
-              >
-                {uploadPdfLoader ? "Uploading..." : "Upload Prescription to Health Records"}
-              </button>
-            </div>
-          )}        </div>
-        <div className="bg-gray-100 p-6 rounded-lg shadow-md">
-          {bookingDetailsData?.data?.healthRecords.length > 0 ? (
-            <div className="text-center bg-green-100 p-4 rounded-lg">
-              <h1 className="text-lg font-semibold text-green-800">
-                You have already shared your health record with the doctor.
-              </h1>
-            </div>
-          ) : (
-            <div >
-              <h1 className="text-lg text-center my-3
-               font-semibold text-red-800">
-                Please upload your prescription to share with the doctor.
-              </h1>
-              <PrescriptionUpload doctorBookingId = {ubid} />
-            </div>
+            <button
+              onClick={handleUploadPdf}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-blue-600 transition-all duration-300 ease-in-out"
+            >
+              {uploadPdfLoader ? "Uploading..." : <><FaUpload /> Upload Prescription to Health Records</>}
+            </button>
           )}
         </div>
 
-
-
+        <div className="bg-gray-100 p-6 rounded-lg shadow-md mt-8">
+          {bookingDetailsData?.data?.healthRecords.length > 0 ? (
+            <div className="text-center bg-green-100 p-4 rounded-lg">
+              <h1 className="text-lg font-semibold text-green-800 flex items-center gap-2 justify-center">
+                <FaCheckCircle /> You have already shared your health record with the doctor.
+              </h1>
+            </div>
+          ) : (
+            <div>
+              <h1 className="text-lg text-center my-3 font-semibold text-red-800">
+                Please upload your prescription to share with the doctor.
+              </h1>
+              <PrescriptionUpload doctorBookingId={ubid} />
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
