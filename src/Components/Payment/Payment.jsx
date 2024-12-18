@@ -37,7 +37,7 @@ const Payment = ({ orderId, amount, currency, bookingId }) => {
 
             // Call the payment verification API
             const paymentResponse = await axios.post(
-              'https://api.assetorix.com/ah/api/v1/order/payment-callback',
+              'https://api.assetorix.com/ah/api/v1/dc/user/razorpay/payment-callback',
               {
                 payment_id: razorpay_payment_id,
                 order_id: razorpay_order_id,
