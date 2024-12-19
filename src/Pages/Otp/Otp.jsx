@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -11,6 +11,7 @@ const Otp = () => {
         otp: "",
     });
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleChange = (e) => {
         setFormData({
@@ -18,6 +19,9 @@ const Otp = () => {
             [e.target.name]: e.target.value,
         });
     };
+
+     // Get the previous page from location state or default to home
+  const previousOfPreviousPage = location.state?.previous || "/";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,7 +35,7 @@ const Otp = () => {
                 localStorage.setItem("Id", response.data.x_userid);
             }
 
-            navigate('/');
+            navigate(previousOfPreviousPage);
         } catch (error) {
             // Check if the error response contains an array of errors
             if (Array.isArray(error.response?.data?.errors) && error.response.data.errors.length > 0) {

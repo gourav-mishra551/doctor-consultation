@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { CiLogin } from "react-icons/ci";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import toast from "react-hot-toast"
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
@@ -17,6 +17,8 @@ const Login = () => {
     gender: "male",
     dateOfBirth: "", 
   });
+  const location = useLocation();
+  const previousPage = location.state?.from || "/";
 
   const navigate = useNavigate();
 
@@ -26,12 +28,6 @@ const Login = () => {
       [e.target.name]: e.target.value,
     });
   };
-
-  const validateEmail = (email) => {
-    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return re.test(String(email).toLowerCase());
-  };
-
 
 
   const handleSubmit = async (e) => {
@@ -48,7 +44,6 @@ const Login = () => {
         ? "https://api.assetorix.com/ah/api/v1/user/login"
         : "https://api.assetorix.com/ah/api/v1/user/register";
       const response = await axios.post(endpoint, formData);
-      console.log(response)
       if (response.status === 200) {
         toast.success(response.data?.msg);
         localStorage.setItem("token", response.data.x_auth_token);
@@ -56,7 +51,7 @@ const Login = () => {
         localStorage.setItem("Id", response.data.x_userid);
         localStorage.setItem("role",response.data.x_role)
         if (isLogin) {
-          navigate("/");
+          navigate(previousPage);
 
         } else {
           navigate("/otp");
