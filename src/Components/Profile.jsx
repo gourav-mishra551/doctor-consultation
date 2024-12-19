@@ -72,6 +72,7 @@ const Profile = () => {
 
   const userData = async () => {
     try {
+      setLoading(true)
       const response = await axios.get(
         `https://api.assetorix.com/ah/api/v1/user`,
         {
@@ -83,6 +84,7 @@ const Profile = () => {
       );
       setUserProfileData(response.data);
     } catch (error) {}
+    setLoading(false)
   };
 
   useEffect(() => {
