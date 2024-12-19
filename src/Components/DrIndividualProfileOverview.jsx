@@ -13,7 +13,6 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
 
   // Split the text into words
   const words = aboutText.split(/\s+/);
-  
 
   const toggleDescription = () => {
     setIsExpanded((prev) => !prev);
@@ -51,14 +50,16 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
                 </div>
 
                 {/* Experience */}
-                {
-                  IndiProfile.totalExperience===null? null :(
-                    <p className="font-semibold text-gray-600 mt-2 text-lg md:text-start sm:text-center">
+                {Number(IndiProfile.totalExperience) >= 0 ? (
+                  <p className="font-bold text-[#00768A] text-xl md:text-start sm:text-center">
+                    Passionate Doctor
+                  </p>
+                ) : (
+                  <p className="font-semibold text-gray-600 mt-2 text-lg md:text-start sm:text-center">
                     {IndiProfile.totalExperience}+ years experience
                   </p>
-                  )
-                }
-               
+                )}
+
                 <div className="flex flex-wrap gap-5">
                   {/* Qualifications */}
                   <div className="flex justify-center  gap-2 mt-4 ">
@@ -78,18 +79,24 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
                   </div>
 
                   {/* Languages */}
-                  <div className="flex gap-2 mt-4 items-center">
-                    <FaCommentDots className="text-[#00768A]" size={20} />
-                    <p className="font-semibold text-gray-600">
-                      {(IndiProfile.language || []).join(", ")}
-                    </p>
+                  <div>
+                    {
+                      IndiProfile.language?.length<=0? null :(
+                        <div className="flex gap-2 mt-4 items-center">
+                        <FaCommentDots className="text-[#00768A]" size={20} />
+                        <p className="font-semibold text-gray-600">
+                          {(IndiProfile.language || []).join(", ")}
+                        </p>
+                        </div>
+                      )
+                    }
+                    
                   </div>
 
                   {/* Location */}
 
-                  {
-                    IndiProfile.hospitalName== null ? null:(
-                      <div className="flex  gap-2 mt-4 items-start">
+                  {IndiProfile.hospitalName?.length <= 0 ? null : (
+                    <div className="flex  gap-2 mt-4 items-start">
                       <MdOutlineAddLocation
                         className="text-[#00768A]"
                         size={20}
@@ -100,9 +107,7 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
                         </p>
                       </div>
                     </div>
-                    )
-                  }
-                 
+                  )}
                 </div>
               </div>
 

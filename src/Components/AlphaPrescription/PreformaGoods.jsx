@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
   tableText: {
     fontSize: "10px",
     color: "#333",
+    textAlign: "center",
   },
   tableHeaderText: {
     fontWeight: "bold",
@@ -82,6 +83,8 @@ const styles = StyleSheet.create({
   tableRow: {
     flexDirection: "row",
     width: "100%",
+
+    borderBottom: "1px solid black",
   },
   sNoCell: {
     width: "5%",
@@ -118,6 +121,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 10,
+  },
+  tableContainer: {
+    display: "flex",
+    flexDirection: "column",
+    border: "1px solid black",
   },
 });
 
@@ -317,6 +325,95 @@ const InvoicePDF = () => (
         </View>
       </View>
 
+      {/* Amount Chargeable in Words and Total Value */}
+      <View
+        style={[styles.row, { marginTop: "10px", border: "1px solid black" }]}
+      >
+        {/* Left Section */}
+        <View style={[styles.cell, { flex: 3, padding: "5px" }]}>
+          <Text style={styles.tableText}>
+            Amount Chargeable in Words: {"{amount_chargeable}"}
+          </Text>
+        </View>
+
+        {/* Right Section */}
+        <View
+          style={[
+            styles.cell,
+            { flex: 1, borderLeft: "1px solid black", padding: "5px" },
+          ]}
+        >
+          <Text style={styles.tableHeaderText}>Total Value</Text>
+        </View>
+        <View
+          style={[
+            styles.cell,
+            { flex: 1, borderLeft: "1px solid black", padding: "5px" },
+          ]}
+        >
+          <Text style={styles.tableText}>{`{total_value}`}</Text>
+        </View>
+      </View>
+
+      {/* Advance Received and Receivable Amount Table */}
+      <View style={[styles.tableContainer, { marginTop: "20px" }]}>
+        {/* Table Header */}
+        <View style={styles.tableRow}>
+          <View style={[styles.tableCell, { flex: 1 }]}>
+            <Text style={styles.tableHeaderText}>Advance Received</Text>
+          </View>
+          <View style={[styles.tableCell, { flex: 1 }]}></View>
+          <View style={[styles.tableCell, { flex: 1 }]}>
+            <Text style={styles.tableHeaderText}>Receivable Amount</Text>
+          </View>
+          <View style={[styles.tableCell, { flex: 1 }]}></View>
+        </View>
+
+        {/* Sub-Headers */}
+        <View style={styles.tableRow}>
+          <View style={[styles.tableCell, { flex: 1 }]}>
+            <Text style={styles.tableHeaderText}>Description</Text>
+          </View>
+          <View style={[styles.tableCell, { flex: 1 }]}>
+            <Text style={styles.tableHeaderText}>Amount</Text>
+          </View>
+          <View style={[styles.tableCell, { flex: 1 }]}>
+            <Text style={styles.tableHeaderText}>Description</Text>
+          </View>
+          <View style={[styles.tableCell, { flex: 1 }]}>
+            <Text style={styles.tableHeaderText}>Amount</Text>
+          </View>
+        </View>
+
+        {/* Data Rows */}
+        <View style={styles.tableRow}>
+          <View style={[styles.tableCell, { flex: 1 }]}>
+            <Text style={styles.tableText}>{`{advanceRowsDescription}`}</Text>
+          </View>
+          <View style={[styles.tableCell, { flex: 1 }]}>
+            <Text style={styles.tableText}>{`{advanceRowsAmount}`}</Text>
+          </View>
+          <View style={[styles.tableCell, { flex: 1 }]}>
+            <Text
+              style={styles.tableText}
+            >{`{receivableRowsDescription}`}</Text>
+          </View>
+          <View style={[styles.tableCell, { flex: 1 }]}>
+            <Text style={styles.tableText}>{`{receivableRowsAmount}`}</Text>
+          </View>
+        </View>
+
+        {/* Total Row */}
+        <View style={styles.tableRow}>
+          <View style={[styles.tableCell, { flex: 2 }]}></View>
+          <View style={[styles.tableCell, { flex: 2 }]}>
+            <Text style={styles.tableText}>
+              {`{totalAdvance}`} - {`{totalReceivable}`} =
+            </Text>
+          </View>
+        </View>
+      </View>
+
       {/* footer */}
       <View
         style={{
@@ -324,13 +421,14 @@ const InvoicePDF = () => (
           display: "flex",
           flexDirection: "row",
           height: "auto",
-          
+          marginTop:"82px",
+          borderTop:"none"
         }}
       >
         {/* Left Section */}
         <View style={{ width: "50%", paddingRight: 10 }}>
           <Text
-            style={{ fontSize: "12px", fontWeight: "bold", marginBottom: 10 }}
+            style={{ fontSize: "12px", fontWeight: "bold", marginBottom: 10 ,padding:"5px" }}
           >
             Beneficiary BANK COORDINATES:
           </Text>
@@ -352,7 +450,7 @@ const InvoicePDF = () => (
                   flexDirection: "row",
                   alignItems: "center",
                   borderBottom: "1px solid black",
-                  
+                  padding:"10px"
                 }}
               >
                 <Text style={{ fontSize: "10px", flex: 1 }}>{label}</Text>
@@ -413,7 +511,7 @@ const InvoicePDF = () => (
             border: "1px solid black",
             padding: 10,
             display: "flex",
-            justifyContent: "center",
+           
           }}
         >
           <Text
@@ -426,14 +524,14 @@ const InvoicePDF = () => (
           >
             SIGNATURE AND DATE:
           </Text>
-          <View
+          {/* <View
             style={{
               borderTop: "1px solid black",
               width: "80%",
               alignSelf: "center",
               marginTop: 20,
             }}
-          />
+          /> */}
         </View>
       </View>
     </Page>

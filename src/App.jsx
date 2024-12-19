@@ -69,6 +69,8 @@ import Proforma from "./Components/AlphaPrescription/Proforma";
 import SoftCorporate from "./Components/AlphaPrescription/SoftCorporate";
 import CommercialInvoicePharma from "./Components/AlphaPrescription/CommercialInvoicePharma";
 import PreformaGoods from "./Components/AlphaPrescription/PreformaGoods";
+import SecondOpinion from "./Components/secondOpinion/SecondOpinion";
+import SecondOpinionForm from "./Components/secondOpinion/SecondOpinionForm";
 
 function App() {
   const location = useLocation();
@@ -168,7 +170,9 @@ function App() {
           path="/user-booking-details/:ubid"
           element={<UserBookingDetails />}
         />
-        
+        <Route path="/second-opinion" element={<SecondOpinion/>}/>
+       <Route path="/second-opinion-form" element={<SecondOpinionForm/>}/>
+
         <Route path="/alpha-prescription" element={<AlphaPrescription/>}/>
         <Route path="/alpha-packing-list" element={<PackingList/>}/>
         <Route path="/alpha-commercial-invoice" element={<AlphaComercial/>}/>
