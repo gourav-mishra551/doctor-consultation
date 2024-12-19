@@ -20,10 +20,10 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
   };
 
   return (
-    <div className=" bg-gray-100 md:py-10 md:px-5">
-      <div className=" md:p-6 rounded-xl shadow-lg transition-transform transform md:hover:scale-105">
+    <div className=" bg-gray-100  ">
+      <div className=" rounded-xl shadow-lg transition-transform transform ">
         {/* Profile Section */}
-        <div className=" flex sm:flex-row justify-center items-center  flex-col md:gap-10 mt-5 md:p-6 md:w-auto  mx-auto rounded-xl shadow-lg bg-[#e1f0f3]">
+        <div className=" flex sm:flex-row justify-center items-center  flex-col md:gap-10  md:p-6 md:w-auto  mx-auto rounded-xl shadow-lg bg-[#e1f0f3]">
           {/* Left Section: Doctor Profile */}
           <div className="border-2 border-gray-300 rounded-xl md:p-6 p-2 flex-1 h-auto w-[100%] ">
             <div
@@ -110,7 +110,7 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
                 <img
                   src={IndiProfile?.userData?.avatar || DrAvatar}
                   alt={IndiProfile?.userData?.name}
-                  className="md:max-w-[200px] mx-auto md:rounded-full md:h-auto h-[250px] my-3 md:w-auto w-screen shadow-md"
+                  className="md:max-w-[200px] mx-auto md:rounded-2xl rounded-lg shadow-md shadow-slate-700 md:h-auto h-[250px] my-3 md:w-auto w-screen "
                 />
               </div>
             </div>
@@ -143,7 +143,7 @@ const DrIndividualProfileOverview = ({ IndiProfile }) => {
               <div className="w-full bg-[#00768A] h-[2px] mt-5"></div>
             </div> */}
 
-            <div className="about-dr mt-8 p-6 bg-gray-50 rounded-xl shadow-md transition-colors duration-300 hover:bg-blue-50 w-full max-w-4xl mx-auto">
+            <div className="about-dr mt-8 p-6 bg-gray-50 rounded-xl shadow-md transition-colors duration-300 hover:bg-blue-50 w-full mx-auto">
               <p className="font-bold text-3xl text-[#00768A] mb-4">
                 About Doctor
               </p>
