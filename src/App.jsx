@@ -102,7 +102,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact-us" element={<ContactPage />} />
         <Route path="/all-doctors" element={<DrProfilePage />} />
-        <Route path="/booking-slot/:id" element={<BookingSlot />} />
+        <Route path="/booking-slot/:id" element={<AuthRoute element={BookingSlot}  />} />
         <Route
           path="/doctors-individual-profile/:id"
           element={<DrIndividualProfilePage />}

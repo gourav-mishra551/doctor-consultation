@@ -34,7 +34,7 @@ const ExperienceCard = ({ experience }) => {
         {experience.skills.map((skill, index) => (
           <span
             key={index}
-            className="bg-teal-100 text-teal-800 text-sm font-medium py-1 px-3 rounded-full"
+            className="bg-teal-100 text-teal-800 text-sm font-medium py-1 px-3 rounded-md"
           >
             {skill}
           </span>

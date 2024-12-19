@@ -162,7 +162,7 @@ const DrIndividualProfile = () => {
       </div>
 
       <div className="sm:max-w-6xl w-full mx-auto mt-10 md:p-5">
-        <div className="bg-white rounded-lg shadow-xl transition-shadow hover:shadow-2xl md:p-8 p-4">
+        <div className="bg-white rounded-lg shadow-xl transition-shadow hover:shadow-2xl ">
           <ul className="flex justify-center sm:gap-6 md:gap-6 gap-3 text-gray-600 font-medium text-lg border-b-2 pb-3">
             {["Overview", "Availability", "Locations", "Reviews"].map(
               (tab, index) => (

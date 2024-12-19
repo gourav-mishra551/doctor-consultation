@@ -1,10 +1,20 @@
 import axios from "axios";
+import { div } from "framer-motion/m";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 const BookingDetails = () => {
   const [bookingDetailsData, setBookingDetailsData] = useState();
   const { bid } = useParams();
+  const [selectedRecord, setSelectedRecord] = useState(null);
+
+  const handleRecordClick = (record) => {
+    setSelectedRecord(record);
+  };
+
+  const closePopup = () => {
+    setSelectedRecord(null);
+  };
 
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("id");
@@ -21,7 +31,7 @@ const BookingDetails = () => {
         }
       );
       setBookingDetailsData(response.data);
-      console.log(response.data);
+     
     } catch (error) {
       console.log(error);
     }
@@ -30,24 +40,8 @@ const BookingDetails = () => {
   useEffect(() => {
     bookings();
   }, []);
+  {console.log(bookingDetailsData)}
 
-  console.log(bookingDetailsData);
-
-  const convertToIST = (utcDate) => {
-    if (!utcDate) return "--"; // Return fallback if date is invalid or missing
-    const date = new Date(utcDate);
-    return date.toLocaleString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      ...options,
-    });
-  };
-
-  function formatTime(time) {
-    const [hours, minutes] = time?.split(":").map(Number); // Split and convert to numbers
-    const period = hours >= 12 ? "PM" : "AM"; // Determine AM or PM
-    const formattedHours = hours % 12 || 12; // Convert 24-hour to 12-hour format (handle 0 and 12)
-    return `${formattedHours}:${String(minutes).padStart(2, "0")} ${period}`; // Pad minutes with 0 if needed
-  }
 
   return (
     <div className="mt-5">
@@ -110,6 +104,64 @@ const BookingDetails = () => {
           </div>
         )}
         {/* Make Prescription */}
+        <div className="container mx-auto p-4">
+      <h2 className="text-2xl font-semibold text-center mb-6">Health Records shared by patient</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {bookingDetailsData?.data?.healthRecords?.map((data) => (
+          <div
+            key={data._id}
+            className="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200 cursor-pointer"
+            onClick={() => handleRecordClick(data)}
+          >
+            <div className="relative aspect-w-16 aspect-h-9">
+              <iframe
+                src={data.fileURL}
+                frameBorder="0"
+                className="w-full h-full"
+                title={`Health Record ${data._id}`}
+              ></iframe>
+            </div>
+            <div className="p-4">
+              <h3 className="text-lg font-medium text-gray-800 truncate">
+                {data.title || "Untitled Record"}
+              </h3>
+              <p className="text-sm text-gray-500">
+                type of record: <span className="bg-[#00768A] text-white font-semibold p-2 rounded-md ml-2 text-xs"> {data.typeOfRecord} </span> 
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {selectedRecord && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg overflow-hidden shadow-lg w-11/12 md:w-3/4 lg:w-1/2">
+            <div className="relative aspect-w-16 aspect-h-9">
+              <iframe
+                src={selectedRecord.fileURL}
+                frameBorder="0"
+                className="w-full h-[80vh]"
+                title={`Health Record ${selectedRecord._id}`}
+              ></iframe>
+            </div>
+            <div className="p-4">
+              <h3 className="text-lg font-medium text-gray-800">
+                {selectedRecord.title || "Untitled Record"}
+              </h3>
+              <p className="text-sm text-gray-500 mb-4">
+                Type of record: <span className="bg-[#00768A] text-white font-semibold p-2 rounded-md ml-2 text-xs"> {selectedRecord.typeOfRecord} </span>
+              </p>
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                onClick={closePopup}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
         {/* {bookingDetailsData?.data} */}
         <div className="flex flex-col w-full sm:mt-5">
           <Link to={`/prescription-maker/${bid}`}>

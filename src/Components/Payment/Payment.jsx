@@ -48,7 +48,7 @@ const Payment = ({ orderId, amount, currency, bookingId }) => {
 
             if (paymentResponse.status === 200 && paymentResponse.data.success) {
               toast.success('Payment successful!');
-              navigate('/profile'); // Redirect to the desired page
+              navigate('/profile?section=user-bookings'); // Redirect to the desired page
             } else {
               toast.error('Payment verification failed. Please contact support.');
             }
