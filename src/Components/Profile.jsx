@@ -27,6 +27,7 @@ import UserBookings from "./UserBookings/UserBookings";
 import EditUserDetails from "./EditUserDetails/EditUserDetails";
 import CreateSlotsByDr from "./CreateSlotsByDr/CreateSlotsByDr";
 import AllSlots from "./AllSlots/AllSlots";
+import GetSecondOpinion from "./secondOpinion/GetSecondOpinion";
 const Profile = () => {
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [history, setHistory] = useState([]);
@@ -180,6 +181,15 @@ const Profile = () => {
                         className="block p-2 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
                       >
                         My Bookings
+                      </p>
+                    </li>
+
+                    <li>
+                      <p
+                        onClick={() => handleSectionChange("second-opinion")}
+                        className="block p-2 hover:bg-[#00768A] rounded-md hover:text-white text-black cursor-pointer"
+                      >
+                       Second Opinion
                       </p>
                     </li>
                   </ul>
@@ -559,6 +569,9 @@ const Profile = () => {
               handleSectionChange={handleSectionChange}
             />
           )}
+          {
+            activeSection=="second-opinion" && <GetSecondOpinion/>
+          }
         </div>
       </div>
 

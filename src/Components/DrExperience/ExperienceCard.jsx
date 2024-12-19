@@ -10,13 +10,21 @@ const ExperienceCard = ({ experience }) => {
       className="bg-white shadow-md rounded-lg p-6 mb-4 border-l-4 border-teal-500"
     >
       <div className="flex justify-between items-center">
-        <h3 className="text-xl font-bold text-[#00768A]">{experience.jobTitle}</h3>
-        <span className="text-sm text-gray-500">
-          {experience.startDate.month} {experience.startDate.year} -{" "}
-          {experience.isPresent
-            ? "Present"
-            : `${experience.endDate.month} ${experience.endDate.year}`}
-        </span>
+        <h3 className="text-xl font-bold text-[#00768A]">
+          {experience.jobTitle}
+        </h3>
+        <div className=" w-[180px] p-2">
+          <div className="flex  text-sm text-gray-500">
+            
+              {experience.startDate.month} {experience.startDate.year} - {" "}
+            
+           
+              {experience.endDate.month === "" && experience.endDate.year === ""
+                ? "Present"
+                : `${experience.endDate.month} ${experience.endDate.year}`}
+         
+          </div>
+        </div>
       </div>
       <p className="text-gray-600 font-semibold mt-1">
         {experience.organizationName}, {experience.organizationLocation}

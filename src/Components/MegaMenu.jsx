@@ -46,7 +46,7 @@ function MegaMenu({Categoriesdata , loading}) {
       "Plan your Trip",
       "Online Consultation",
       "Visa",
-      "Amethus Insurance",
+      "Ametheus Insurance",
     ],
     OurServices: [
       "Medicine",
@@ -61,7 +61,7 @@ function MegaMenu({Categoriesdata , loading}) {
       "Post A Query",
       "Consult Doctor Online",
       "Book Physical Appointment",
-      "Amethus Lifetime",
+      "Ametheus Lifetime",
     ],
   };
 
