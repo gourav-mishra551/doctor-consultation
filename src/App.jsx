@@ -75,7 +75,7 @@ import SecondOpinionForm from "./Components/secondOpinion/SecondOpinionForm";
 function App() {
   const location = useLocation();
 
-  const hideNavbar = ["/login", "/signup", "/auth"].includes(location.pathname);
+  const hideNavbar = ["/login", "/signup", "/auth","/otp"].includes(location.pathname);
   return (
     <div className="App">
       {!hideNavbar && <TopHeader />}
