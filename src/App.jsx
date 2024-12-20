@@ -180,7 +180,6 @@ function App() {
         <Route path="/commercial-invoice-goods" element={<CommercialInvoice/>}/>
         <Route path="/aalphaa-proforma-invoice-service" element={<Proforma/>}/>
         <Route path="/Soft-corporate" element={<SoftCorporate/>}/>
-        <Route path="/commercial-invoice-pharma" element={<CommercialInvoicePharma/>}/>
         <Route path="/preforma-invoice-goods" element={<PreformaGoods/>}/>
       </Routes>
     </div>
