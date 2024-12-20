@@ -421,53 +421,166 @@ const InvoicePDF = () => (
           display: "flex",
           flexDirection: "row",
           height: "auto",
-          marginTop:"82px",
-          borderTop:"none"
+          marginTop: "82px",
+          borderTop: "none",
         }}
       >
         {/* Left Section */}
         <View style={{ width: "50%", paddingRight: 10 }}>
           <Text
-            style={{ fontSize: "12px", fontWeight: "bold", marginBottom: 10 ,padding:"5px" }}
+            style={{
+              fontSize: "12px",
+              fontWeight: "bold",
+              marginBottom: 10,
+              padding: "5px",
+            }}
           >
             Beneficiary BANK COORDINATES:
           </Text>
 
           {/* Rows */}
           <View style={{ marginBottom: 10 }}>
-            {[
-              { label: "A/C Name:", value: "{ac_name}" },
-              { label: "Bank Name:", value: "{bank_name}" },
-              { label: "Address of the Bank:", value: "{address_bank}" },
-              { label: "Branch IFSC Code:", value: "{branch}" },
-              { label: "A/C Number:", value: "{account_number}" },
-              { label: "Swift Code:", value: "{consignee_bank_address}" },
-            ].map(({ label, value }, index) => (
+            {/* A/C Name */}
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                borderBottom: "1px solid black",
+                padding: "10px",
+              }}
+            >
+              <Text style={{ fontSize: "10px", flex: 1 }}>A/C Name:</Text>
               <View
-                key={index}
                 style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  borderBottom: "1px solid black",
-                  padding:"10px"
+                  width: 1,
+                  backgroundColor: "black",
+                  marginHorizontal: 10,
+                  height: "80%",
                 }}
-              >
-                <Text style={{ fontSize: "10px", flex: 1 }}>{label}</Text>
+              />
+              <Text style={{ fontSize: "10px", flex: 2 }}>{"{ac_name}"}</Text>
+            </View>
 
-                {/* Vertical Line */}
-                <View
-                  style={{
-                    width: 1,
-                    backgroundColor: "black",
-                    marginHorizontal: 10,
-                    height: "80%",
-                  }}
-                />
+            {/* Bank Name */}
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                borderBottom: "1px solid black",
+                padding: "10px",
+              }}
+            >
+              <Text style={{ fontSize: "10px", flex: 1 }}>Bank Name:</Text>
+              <View
+                style={{
+                  width: 1,
+                  backgroundColor: "black",
+                  marginHorizontal: 10,
+                  height: "80%",
+                }}
+              />
+              <Text style={{ fontSize: "10px", flex: 2 }}>{"{bank_name}"}</Text>
+            </View>
 
-                <Text style={{ fontSize: "10px", flex: 2 }}>{value}</Text>
-              </View>
-            ))}
+            {/* Address of the Bank */}
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                borderBottom: "1px solid black",
+                padding: "10px",
+              }}
+            >
+              <Text style={{ fontSize: "10px", flex: 1 }}>
+                Address of the Bank:
+              </Text>
+              <View
+                style={{
+                  width: 1,
+                  backgroundColor: "black",
+                  marginHorizontal: 10,
+                  height: "80%",
+                }}
+              />
+              <Text style={{ fontSize: "10px", flex: 2 }}>
+                {"{address_bank}"}
+              </Text>
+            </View>
+
+            {/* Branch IFSC Code */}
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                borderBottom: "1px solid black",
+                padding: "10px",
+              }}
+            >
+              <Text style={{ fontSize: "10px", flex: 1 }}>
+                Branch IFSC Code:
+              </Text>
+              <View
+                style={{
+                  width: 1,
+                  backgroundColor: "black",
+                  marginHorizontal: 10,
+                  height: "80%",
+                }}
+              />
+              <Text style={{ fontSize: "10px", flex: 2 }}>{"{branch}"}</Text>
+            </View>
+
+            {/* A/C Number */}
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                borderBottom: "1px solid black",
+                padding: "10px",
+              }}
+            >
+              <Text style={{ fontSize: "10px", flex: 1 }}>A/C Number:</Text>
+              <View
+                style={{
+                  width: 1,
+                  backgroundColor: "black",
+                  marginHorizontal: 10,
+                  height: "80%",
+                }}
+              />
+              <Text style={{ fontSize: "10px", flex: 2 }}>
+                {"{account_number}"}
+              </Text>
+            </View>
+
+            {/* Swift Code */}
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                borderBottom: "1px solid black",
+                padding: "10px",
+              }}
+            >
+              <Text style={{ fontSize: "10px", flex: 1 }}>Swift Code:</Text>
+              <View
+                style={{
+                  width: 1,
+                  backgroundColor: "black",
+                  marginHorizontal: 10,
+                  height: "80%",
+                }}
+              />
+              <Text style={{ fontSize: "10px", flex: 2 }}>
+                {"{consignee_bank_address}"}
+              </Text>
+            </View>
           </View>
 
           {/* Corresponding Bank Coordinates */}
@@ -511,7 +624,6 @@ const InvoicePDF = () => (
             border: "1px solid black",
             padding: 10,
             display: "flex",
-           
           }}
         >
           <Text
