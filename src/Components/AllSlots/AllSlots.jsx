@@ -35,7 +35,7 @@ const AllSlots = ({ setActiveSection, handleSectionChange }) => {
         }
       );
       setSlotsData(response.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   useEffect(() => {
@@ -185,11 +185,10 @@ const AllSlots = ({ setActiveSection, handleSectionChange }) => {
                           {data?.onlineSlots.map((slot) => (
                             <div
                               key={slot._id}
-                              className={`min-w-max px-4 py-2 rounded-lg shadow-md text-center ${
-                                slot?.isBooked
-                                  ? "bg-red-100 text-red-800"
-                                  : "bg-blue-100 text-blue-800"
-                              }`}
+                              className={`min-w-max px-4 py-2 rounded-lg shadow-md text-center ${slot?.isBooked
+                                ? "bg-red-100 text-red-800"
+                                : "bg-blue-100 text-blue-800"
+                                }`}
                             >
                               {slot?.isBooked ? (
                                 <CiBookmarkCheck className="inline-block mr-2" />
@@ -225,11 +224,10 @@ const AllSlots = ({ setActiveSection, handleSectionChange }) => {
                           {data?.offlineSlots.map((slot) => (
                             <div
                               key={slot._id}
-                              className={`min-w-max px-4 py-2 rounded-lg shadow-md text-center ${
-                                slot?.isBooked
-                                  ? "bg-red-100 text-red-800"
-                                  : "bg-green-100 text-green-800"
-                              }`}
+                              className={`min-w-max px-4 py-2 rounded-lg shadow-md text-center ${slot?.isBooked
+                                ? "bg-red-100 text-red-800"
+                                : "bg-green-100 text-green-800"
+                                }`}
                             >
                               {slot?.isBooked ? (
                                 <CiBookmarkCheck className="inline-block mr-2" />

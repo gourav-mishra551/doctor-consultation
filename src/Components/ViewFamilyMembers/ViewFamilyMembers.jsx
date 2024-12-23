@@ -70,7 +70,7 @@ const ViewFamilyMembers = ({ setActiveSection }) => {
       setFamilyData(response.data);
       setisLoading(false);
       console.log(response.data);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   useEffect(() => {
