@@ -85,7 +85,7 @@ const DoctorsProfile = () => {
 
     try {
       const res = await axios.get(endpoint);
-      console.log(res);
+      
 
       setDoctorData(res.data.data);
     } catch (error) {

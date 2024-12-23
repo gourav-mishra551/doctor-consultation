@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Headers = () => {
  const role= localStorage.getItem("role")
- console.log(role);
+
  
   return (
     <>

@@ -248,7 +248,7 @@ const Footer = () => {
             <div className="row">
               <div className="col-xl-4 col-lg-4 mb-50">
                 <div className="footer-widget">
-                  <div className="footer-logo">
+                  {/* <div className="footer-logo">
                     <a href="index.html">
                       <img
                         src={AmethusImage}
@@ -256,7 +256,7 @@ const Footer = () => {
                         alt="logo"
                       />
                     </a>
-                  </div>
+                  </div> */}
                   <div className="footer-text">
                     <p>
                       At Ametheus, we believe that access to affordable prescription medicines is a basic right. We are committed to delivering essential, top-of-the-line medicines at fair prices to patients worldwide.
