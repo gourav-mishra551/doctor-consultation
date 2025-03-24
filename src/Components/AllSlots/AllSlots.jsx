@@ -128,7 +128,7 @@ const navigate=useNavigate()
             </div>
             <div className="green flex items-center gap-1">
               <div className="sm:h-[15px] sm:w-[15px] h-[8px] w-[8px] bg-red-800"></div>
-              <p className="sm:text-[18px] text-[13px]">Booked slots</p>
+              <p className="sm:text-[18px] text-[13px]">Booked slotss</p>
             </div>
             <div className="blue flex items-center gap-1">
               <div className="sm:h-[15px] sm:w-[15px] h-[8px] w-[8px] bg-green-800"></div>
